@@ -15,7 +15,9 @@ entityCrashIds = [12, 16, 17, 33, 34, 36, 50, 51, 52, 53, 55, 57, 62, 71, 77, 78
 entityFuncCount = 122
 
 #for a green title color
-entityGoodIds = [1, 2, 3, 4, 6, 7, 19, 22, 37, 38, 45, 46, 47, 56, 59, 60, 61, 64, 74, 75, 92, 93, 106, 107, 116, 117, 118, 119, 121]
+entityGoodIds = [1, 2, 3, 4, 7, 22, 37, 45, 47, 56, 59, 60, 61, 64, 74, 75, 92, 96, 106, 107, 116, 117, 118, 119, 121]
+#utility invisible entities for orange
+entityUtilIds = [6, 19, 22, 38, 46, 56, 70, 73, 87, 93, 99, 106, 107, 117, 118]
 
 #window types
 WINDOW_NONE = 0
@@ -23,6 +25,9 @@ WINDOW_TILEPALETTE = 1
 WINDOW_ENTITYPALETTE = 2
 WINDOW_TOOLS = 3
 WINDOW_TOOLTIP = 4
+
+STYLE_TOOLTIP_BLACK = 0
+STYLE_TOOLTIP_YELLOW = 1
 
 #TODO... really gotta find somewhere good to put this
 tileScale = 1

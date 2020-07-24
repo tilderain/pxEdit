@@ -2,7 +2,7 @@
 (001) Explode@Regular explosion effect.@
 (002) CloudL@A large cloud.@
 (003) CloudS@A small cloud.@
-(004) Puff@Puff cloud (from your ship in stage start/end)@
+(004) Puff@Puff cloud (from your ship)@
 (005) Hanger@A spinning three-pronged enemy with an eye, launches upwards. The first enemy in the game.@
 (006) CloudGen@Generates big and small clouds from the top of the screen.@
 (007) Powerup@A plain powerup that launches from the bottom of the screen. Does not come with a spinner.@(Parameter: which powerup it is)
@@ -12,8 +12,8 @@
 (011) Wing@Falls from the top of the screen and shoots periodically.@(Parameter: falls twice as fast if set)
 (012) WingCorpse@The body of a Wing.@
 (013) Bullet@A bullet.@(Parameter: Angle, in 1/256th of a circle. 0 = Right, 64 = Down, 128 = Left, 192 = Up, etc.)
-(014) BulletSlow@A slower bullet.@(Parameter: same as Bullet)
-(015) Boss1@The first boss. Title: Boss Wing@
+(014) BulletSlow@A slower bullet.@(Parameter: same as 013Bullet)
+(015) Boss1@Boss Wing@
 (016) Boss1Eye@@
 (017) Boss1BigEye@@
 (018) BulletLong@A long bullet.@(Parameter: direction to spawn in)
@@ -72,8 +72,8 @@
 (071) Blendy@@
 (072) Cycloid2@@
 (073) Cycloid2Gen@@
-(074) PowerupHidden@@
-(075) PowerupAsteroid@@
+(074) PowerupHidden@A hidden powerup.@(Parameter: the powerup)
+(075) PowerupAsteroid@A powerup hidden in a spooky asteroid.@(Parameter: the powerup)
 (076) Boss4@Octopus@
 (077) @@
 (078) @@
@@ -91,10 +91,10 @@
 (090) Missile@@
 (091) @@
 (092) BGRock@@
-(093) ClearRockCloudGen@@
+(093) DeleteRockCloudGen@Removes rock and cloud generators.@
 (094) SandStamper@@
 (095) @@
-(096) Stamp@@
+(096) Stamp@A stamp in the sand.@
 (097) Brick@@
 (098) BulletSquare@@
 (099) BulletSquareGen@@
@@ -116,7 +116,7 @@
 (115) B6Caret@@
 (116) CreditText@@
 (117) CreditReplace@@
-(118) CreditLoadImg@@
+(118) CreditLoadImg@Changes the currently loaded enemy spritesheet.@(Parameter: the stage to switch to)
 (119) CPhoto@@
 (120) CreditGimmick@@
 (121) BonusHidden@@

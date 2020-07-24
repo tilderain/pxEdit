@@ -66,6 +66,24 @@ rectUITooltipRight = (17, 2, 1, 1)
 rectUITooltipBottom = (14, 4, 1, 1)
 rectUITooltipLeft = (12, 2, 1, 1)
 
+rectsUITooltipBlack = (rectUITooltipColorFill, rectUITooltipTopLeft, rectUITooltipTopRight, rectUITooltipBottomLeft, rectUITooltipBottomRight,
+rectUITooltipTop, rectUITooltipRight, rectUITooltipBottom, rectUITooltipLeft)
+
+rectUITooltipYellowColorFill = (20, 2, 1, 1)
+rectUITooltipYellowTopLeft = (18, 0, 2, 2)
+rectUITooltipYellowTopRight = (22, 0, 2, 2)
+rectUITooltipYellowBottomLeft = (18, 3, 2, 2)
+rectUITooltipYellowBottomRight = (22, 3, 2, 2)
+rectUITooltipYellowTop = (20, 0, 1, 1)
+rectUITooltipYellowRight = (23, 2, 1, 1)
+rectUITooltipYellowBottom = (20, 4, 1, 1)
+rectUITooltipYellowLeft = (18, 2, 1, 1)
+
+rectsUITooltipYellow = (rectUITooltipYellowColorFill, rectUITooltipYellowTopLeft, rectUITooltipYellowTopRight, rectUITooltipYellowBottomLeft, rectUITooltipYellowBottomRight,
+rectUITooltipYellowTop, rectUITooltipYellowRight, rectUITooltipYellowBottom, rectUITooltipYellowLeft)
+
+rectsUITooltip = (rectsUITooltipBlack, rectsUITooltipYellow)
+
 rectWindowTextPalette = (0, 53, 68, 12)
 rectWindowTextTools = (0, 64, 54, 12)
 
@@ -99,6 +117,8 @@ class UIElement:
 
 		self.rect = rect
 
+		self.style = style
+
 		self.tooltip = tooltip
 
 		self.parent = parent
@@ -115,6 +135,7 @@ class UIElement:
 
 	def handleMouseOver(self, mouse, gxEdit):
 		gxEdit.tooltipText = self.tooltip
+		gxEdit.tooltipStyle = self.style
 		return True
 
 
@@ -170,6 +191,7 @@ class UIButton:
 
 	def handleMouseOver(self, mouse, gxEdit):
 		gxEdit.tooltipText = self.tooltip
+		gxEdit.tooltipStyle = self.style
 		return True
 
 	def onAction(self, parent, elem):
@@ -232,7 +254,7 @@ class UIWindow:
 		for _, elem in self.elements.items():
 			if util.inWindowElemBoundingBox(mouse, self, elem) and elem.handleMouseOver(mouse, gxEdit):
 				return True
-		gxEdit.tooltipText = None
+		gxEdit.tooltipText = []
 		return False
 
 	def handleMouse2():
@@ -250,15 +272,36 @@ class UIWindow:
 
 sdlColorMagenta = sdl2.SDL_Color(255,100,255)
 sdlColorCyan = sdl2.SDL_Color(100,255,255)
-sdlColorGreen = sdl2.SDL_Color(128,255,150)
-sdlColorGold = sdl2.SDL_Color(255,230,150)
+sdlColorGreen = sdl2.SDL_Color(128,255,0)
+sdlColorGold = sdl2.SDL_Color(255,220,100)
+sdlColorYellow = sdl2.SDL_Color(255,230,150)
+sdlColorOrange = sdl2.SDL_Color(255,150,100)
 sdlColorRed = sdl2.SDL_Color(255,100,100)
 
 sdlColorWhite = sdl2.SDL_Color(255,255,255)
+sdlColorBlack = sdl2.SDL_Color(0,0,0)
+
+
+def renderWindowBox(self, fill, topleft, topright, bottomleft, bottomright, top, right, bottom, left):
+	windowsurf = gSurfaces[SURF_UIWINDOW]
+	gInterface.renderer.copy(windowsurf, srcrect=fill, dstrect=(self.x+1, self.y, self.w-2, self.h))
+	gInterface.renderer.copy(windowsurf, srcrect=fill, dstrect=(self.x, self.y+1, self.w, self.h-2))
+		
+	#corners
+	gInterface.renderer.copy(windowsurf, srcrect=topleft, dstrect=(self.x, self.y, 2, 2))
+	gInterface.renderer.copy(windowsurf, srcrect=topright, dstrect=(self.x+self.w-2, self.y, 2, 2))
+	gInterface.renderer.copy(windowsurf, srcrect=bottomleft, dstrect=(self.x, self.y+self.h-2, 2, 2))
+	gInterface.renderer.copy(windowsurf, srcrect=bottomright, dstrect=(self.x+self.w-2, self.y+self.h-2, 2, 2))
+
+	#border
+	gInterface.renderer.copy(windowsurf, srcrect=top, dstrect=(self.x+1, self.y, self.w-2, 1))
+	gInterface.renderer.copy(windowsurf, srcrect=right, dstrect=(self.x+self.w-1, self.y+1, 1, self.h-2))
+	gInterface.renderer.copy(windowsurf, srcrect=bottom, dstrect=(self.x+1, self.y+self.h-1, self.w-2, 1))
+	gInterface.renderer.copy(windowsurf, srcrect=left, dstrect=(self.x, self.y+1, 1, self.h-2))
 
 
 class UITooltip(UIWindow):
-	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLTIP, style=0):
+	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLTIP, style=const.STYLE_TOOLTIP_BLACK):
 		UIWindow.__init__(self, x, y, w, h, type, style)
 
 	def handleMouse1(self, mouse, gxEdit):
@@ -278,13 +321,6 @@ class UITooltip(UIWindow):
 		x,y = ctypes.c_int(0), ctypes.c_int(0)
 		mouse.button = sdl2.SDL_GetMouseState(x, y)
 		mouse.x, mouse.y = x.value, y.value
-
-		#myString = ctypes.c_char_p(gxEdit.tooltipText.encode("utf-8"))
-		
-		#textSize = getTextSize(gFont, ctypes.c_char_p(gxEdit.tooltipText.encode("utf-8")))
-		#textSize[0] = int(textSize[0] / (textSize[0] / 150))
-
-		boxWidth = 0
 
 		textTexts = []
 		textWidths = []
@@ -314,21 +350,7 @@ class UITooltip(UIWindow):
 		if self.y <= 0:
 			self.y = 0
 
-		windowsurf = gSurfaces[SURF_UIWINDOW]
-		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipColorFill, dstrect=(self.x+1, self.y, self.w-2, self.h))
-		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipColorFill, dstrect=(self.x, self.y+1, self.w, self.h-2))
-			
-		#corners
-		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipTopLeft, dstrect=(self.x, self.y, 2, 2))
-		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipTopRight, dstrect=(self.x+self.w-2, self.y, 2, 2))
-		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipBottomLeft, dstrect=(self.x, self.y+self.h-2, 2, 2))
-		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipBottomRight, dstrect=(self.x+self.w-2, self.y+self.h-2, 2, 2))
-
-		#border
-		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipTop, dstrect=(self.x+1, self.y, self.w-2, 1))
-		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipRight, dstrect=(self.x+self.w-1, self.y+1, 1, self.h-2))
-		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipBottom, dstrect=(self.x+1, self.y+self.h-1, self.w-2, 1))
-		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipLeft, dstrect=(self.x, self.y+1, 1, self.h-2))
+		renderWindowBox(self, *rectsUITooltip[gxEdit.tooltipStyle])
 
 		renderHeight = self.y+6
 		for i in range(len(textTexts)):
@@ -457,13 +479,15 @@ class EntityPaletteWindow(UIWindow):
 			titleColor = sdlColorRed
 		elif index in const.entityGoodIds:
 			titleColor = sdlColorGreen
+		elif index in const.entityUtilIds:
+			titleColor = sdlColorGold
 		else:
 			titleColor = sdlColorMagenta
 		
 		descColor = sdlColorWhite
 
 		if index in const.entityGoodIds:
-			paramColor = sdlColorGold
+			paramColor = sdlColorYellow
 		else:
 			paramColor = sdlColorCyan
 
@@ -473,6 +497,8 @@ class EntityPaletteWindow(UIWindow):
 			 gxEdit.tooltipText.append([gxEdit.entityInfo[index][1], descColor, TTF_STYLE_NORMAL])
 		if gxEdit.entityInfo[index][2] != "":
 			gxEdit.tooltipText.append([gxEdit.entityInfo[index][2], paramColor, TTF_STYLE_NORMAL])
+
+		gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
 		
 		return True
 
@@ -487,7 +513,8 @@ class ToolsWindow(UIWindow):
 
 		self.elements["textTools"] = UIElement(2, 2, 0, 0, self, rectWindowTextTools)
 
-		self.elements["butToggleTilePalette"] = UIButton(4, 24, 16, 16, self, tooltip="i hate pxedit")
+		self.elements["butToggleTilePalette"] = UIButton(4, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
+												tooltip=[["i hate pxedit", sdlColorBlack, TTF_STYLE_NORMAL]])
 		#self.elements["butToggleTilePalette"].onAction = 
 
 
@@ -599,26 +626,55 @@ class Interface:
 			#srcrect = 
 			self.renderer.copy(stage.parts, srcrect=srcrect, dstrect=dstrect)
 
-		#TODO: add hovered over tile border
+		#TODO: fix this
 		mouse = sdl2.SDL_MouseButtonEvent()
 		x,y = ctypes.c_int(0), ctypes.c_int(0)
 		mouse.button = sdl2.SDL_GetMouseState(x, y)
 		mouse.x, mouse.y = x.value, y.value
 
-		x = int(mouse.x // (const.tileWidth * mag))
-		y = int(mouse.y // (const.tileWidth * mag))
+		if gxEdit.currentEditMode == const.EDIT_TILE:
+			x = int(mouse.x // (const.tileWidth * mag))
+			y = int(mouse.y // (const.tileWidth * mag))
 
-		if x >= map.width or y >= map.height: return
+			if x >= map.width or y >= map.height: return
 
-		x *= int(const.tileWidth * mag)
-		y *= int(const.tileWidth * mag)
+			x *= int(const.tileWidth * mag)
+			y *= int(const.tileWidth * mag)
 
-		w = stage.selectedTilesEnd[0] - stage.selectedTilesStart[0] + 1
-		h = stage.selectedTilesEnd[1] - stage.selectedTilesStart[1] + 1
+			w = stage.selectedTilesEnd[0] - stage.selectedTilesStart[0] + 1
+			h = stage.selectedTilesEnd[1] - stage.selectedTilesStart[1] + 1
 
-		w *= int(const.tileWidth * mag)
-		h *= int(const.tileWidth * mag)
+			w *= int(const.tileWidth * mag)
+			h *= int(const.tileWidth * mag)
 
+		elif gxEdit.currentEditMode == const.EDIT_ENTITY:
+			x = int(mouse.x // (const.tileWidth//2 * mag)) 
+			y = int(mouse.y // (const.tileWidth//2 * mag))
+
+			if x >= map.width*2 or y >= map.height*2: return
+
+			gxEdit.tooltipText = []
+			for o in stage.eve.get():
+				#TODO: multiple entities
+				#TODO: highlight hovered in picker
+				if o.x == x + stage.hscroll*2 and o.y == y + stage.scroll*2:
+					index = o.type1
+					if index in const.entityCrashIds:
+						titleColor = sdlColorRed
+					elif index in const.entityGoodIds:
+						titleColor = sdlColorGreen
+					elif index in const.entityUtilIds:
+						titleColor = sdlColorGold
+					else:
+						titleColor = sdlColorMagenta
+					gxEdit.tooltipText.append([gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD])
+					gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
+
+			x *= int(const.tileWidth//2 * mag)
+			y *= int(const.tileWidth//2 * mag)
+
+			w = int(const.tileWidth//2 * mag)
+			h = int(const.tileWidth//2 * mag)
 
 		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
 

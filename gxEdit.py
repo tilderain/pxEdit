@@ -237,7 +237,8 @@ class Editor:
 		self.backupMinutes = 5
 		self.lastBackupTick = 0
 
-		self.tooltipText = None
+		self.tooltipText = []
+		self.tooltipStyle = const.STYLE_TOOLTIP_BLACK
 
 	def readEntityInfo(self):
 		try:
@@ -579,7 +580,7 @@ def main():
 
 		#TODO: do a getticks system
 		renderer.present()
-		sdl2.SDL_Delay(16)
+		sdl2.SDL_Delay(8)
 
 		#window.refresh()
 	return 0

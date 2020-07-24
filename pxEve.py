@@ -39,7 +39,7 @@ class PxEveEntity:
 	type1: int = 0
 #additional info for entity, ex. music for music switcher
 	type2: int = 0
-#unique id for distinguishment, ala cave story
+#editor exclusive, unique id for distinguishment, ala cave story
 	id: int = 0
 
 #EntityInfo2
@@ -67,6 +67,8 @@ class PxEve:
 			output.append(writeVarLength(o.y))
 			output.append(writeVarLength(o.type1))
 			output.append(writeVarLength(o.type2))
+
+		#unwrap the array
 		output = list(itertools.chain(*output))
 
 		try:
@@ -121,13 +123,16 @@ class PxEve:
 				if o.id == id:
 					self._entities.remove(o)
 					break
-
+	
 	def modify(self, ids, x, y, type1, type2):
 		for num in ids:
 			for o in self._entities:
 				if num == o.id:
 					self._entities[self._entities.index(o)] = PxEveEntity(1, x, y, type1, type2, num)
 					break
+		pass
+
+	def move(self, ids, x, y):
 		pass
 
 	def get(self):
