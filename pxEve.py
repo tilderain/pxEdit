@@ -116,9 +116,9 @@ class PxEve:
 		self._entities.append(o)
 		
 	def remove(self, ids):
-		for num in ids:
+		for id in ids:
 			for o in self._entities:
-				if num == o.id:
+				if o.id == id:
 					self._entities.remove(o)
 					break
 

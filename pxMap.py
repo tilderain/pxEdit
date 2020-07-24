@@ -30,9 +30,15 @@ class PxMapAttr: #use the same class for both
 			f.write(bytes(self.tiles))
 		
 	def modify(self, tiles):
-		#[index, tileNo]
+		#[index, [x, y]]
+
 		for tile in tiles:
-			self.tiles[tile[0]] = tile[1]
+			#convert a spritesheet tile index to its representation in the tile array
+			if tile[0] >= len(self.tiles): continue
+			x = tile[1][0]
+			y = tile[1][1] * 16
+			
+			self.tiles[tile[0]] = x+y
 	def get(self):
 		return self.tiles[:]
 

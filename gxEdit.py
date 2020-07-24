@@ -2,6 +2,7 @@
 #The doctor's garage awaits [new members]
 
 import io, mmap, sys, time, math, random
+import ctypes
 from dataclasses import dataclass
 
 import pxEve, pxMap
@@ -26,7 +27,7 @@ modSettingsName = "dgSettings.txt"
 unitsName = "units.bmp"
 
 #spawned from children?
-entityChildIds = [5, 12, 16, 17, 33, 34, 36, 50, 51, 52, 53, 55, 57, 62, 71, 77, 78, 79, 80, 82, 89, 95, 101, 103, 109, 110, 112, 113]
+entityChildIds = [12, 16, 17, 33, 34, 36, 50, 51, 52, 53, 55, 57, 62, 71, 77, 78, 79, 80, 82, 89, 95, 101, 103, 109, 110, 112, 113]
 #total entity ids
 entityFuncCount = 121
 
@@ -59,6 +60,10 @@ pximgPath = "parts{}.pximg"
 #A stage contains an entity list and a map.
 #The map loads a tileset, and tileset attributes.
 #By default, these are hardcoded to be based off the stage number.
+
+#edit mode enums
+EDIT_TILE = 0
+EDIT_ENTITY = 1
 class StagePrj:
 	def __init__(self, stageNo):
 		self.stageNo = stageNo
@@ -68,6 +73,15 @@ class StagePrj:
 		self.parts = None
 		self.backupId = 0
 		self.scroll = 0
+
+		self.selectedTiles = [[0, 0]]
+		self.selectedTilesStartX = 0
+		self.selectedTilesStartY = 0
+		self.selectedTilesEndX = 0
+		self.selectedTilesEndY = 0
+
+		self.selectedEntity = 0
+		self.currentEditMode = EDIT_TILE
 
 	def load(self):
 		#open dialogue box to see if there is a newer backup
@@ -84,11 +98,13 @@ class StagePrj:
 		self.parts = sprfactory.from_image(dataPath + partsPath.format(self.stageNo))
 
 	def save(self):
+		#TODO: only save if there are any changes
+		print("--Saving stage {}...--".format(self.stageNo))
 		self.eve.save(dataPath + eventPath.format(self.stageNo))
 		self.map.save(dataPath + mapPath.format(self.stageNo))
-		self.attr.save(dataPath)
-		#save if there are any changes
-		pass
+		self.attr.save(dataPath + attrPath.format(self.stageNo))
+		print("saved.")
+		
 	def backup(self):
 		#periodic backup...
 		#if there are changes to the file, back it up
@@ -103,7 +119,7 @@ class Editor:
 	def __init__(self):
 		self.entityInfo = []
 		self.stages = []
-		self.curStage = 0
+		self.curStage = 2
 		self.units = None
 		self.magnification = 3
 
@@ -137,12 +153,10 @@ class Editor:
 		self.stages.append(stage)
 		return result
 
-class UIWindow:
-	#Draggable area, relative to the origin.
-	
-	pass
-
-
+	def getStageById(self, stageNo):
+		for stage in self.stages:
+			if stage.stageNo == stageNo:
+				return stage
 
 def main():
 	sdl2.ext.init()
@@ -159,6 +173,18 @@ def main():
 	#colorOrange = sprfactory.from_color(sdl2.ext.Color(250,150,0),(16,16))
 	colorOrange = sdl2.ext.Color(250,150,0)
 	colorOrangeDark = sdl2.ext.Color(160,100,0)
+
+	colorRedTransparent = sprfactory.from_color(sdl2.ext.Color(255,0,0, 80), size=(32, 32),
+                   masks=(0xFF000000,           
+                          0x00FF0000,           
+                          0x0000FF00,           
+                          0x000000FF))          
+
+	colorOrangeTransparent = sprfactory.from_color(sdl2.ext.Color(250,150,0, 128), size=(32, 32),
+                   masks=(0xFF000000,           
+                          0x00FF0000,           
+                          0x0000FF00,           
+                          0x000000FF))   
 
 	windowBg2 = sprfactory.from_image(RESOURCES.get_path("dgBg2.bmp"))
 	
@@ -178,7 +204,10 @@ def main():
 	running = True
 	mouseover = True
 
+	mouseHeld = False
+
 	while running:
+		curStage = gxEdit.stages[gxEdit.curStage]
 		events = sdl2.ext.get_events()
 		for event in events:
 			if event.type == sdl2.SDL_QUIT:
@@ -193,9 +222,15 @@ def main():
 				if event.window.event == sdl2.SDL_WINDOWEVENT_LEAVE:
 					mouseover = False
 			elif event.type == sdl2.SDL_KEYDOWN:
-				tempRunInput(event.key)
+				tempRunInput(curStage, event.key)
 			elif event.type == sdl2.SDL_MOUSEWHEEL:
-				tempRunInputWheel(event.wheel)
+				tempRunInputWheel(curStage, event.wheel)
+			elif event.type == sdl2.SDL_MOUSEBUTTONDOWN:
+				mouseHeld = True
+				tempRunInputMouseClick(curStage, event.button)
+				tempRunInputMouse2(curStage, event.button)
+			elif event.type == sdl2.SDL_MOUSEBUTTONUP:
+				mouseHeld = False
 
 
 		tileScale = 1
@@ -227,16 +262,63 @@ def main():
 				#srcrect = 
 				renderer.copy(stage.parts, srcrect=srcrect, dstrect=dstrect)
 
+			#TODO: add hovered over tile border
+
+
+		def renderTilePalette(stage):
+			mag = gxEdit.magnification
+			srcrect = stage.parts.area
+			
+			dstx = stage.map.width * tileWidth * mag
+			dsty = 0
+
+			#TODO: add dstrect mag
+			dstrect = (dstx, dsty, stage.parts.size[0], stage.parts.size[1])
+			renderer.copy(stage.parts, srcrect=srcrect, dstrect=dstrect)
+
+			#TODO: add selected tile border (properly)
+			if stage.currentEditMode == EDIT_TILE:
+				dstx = dstx + ((stage.selectedTiles[0][0]) * tileWidth)
+				dsty = dsty + ((stage.selectedTiles[0][1]) * tileWidth)
+				w =  (stage.selectedTilesEndX+1 - stage.selectedTilesStartX) * tileWidth
+				h = (stage.selectedTilesEndY+1 - stage.selectedTilesStartY) * tileWidth
+
+				drawBox(renderer, dstx, dsty, w, h)
+
+		def renderEntityPalette(stage):
+			mag = gxEdit.magnification
+			srcrect = gxEdit.units.area
+
+			dstx = stage.map.width * tileWidth * mag
+			dsty = stage.parts.size[1]
+			
+			#TODO: add dstrect mag
+			dstrect = (dstx, dsty, gxEdit.units.size[0], gxEdit.units.size[1])
+			renderer.copy(gxEdit.units, srcrect=srcrect, dstrect=dstrect)
+
+			#TODO: add selected ent border (properly)
+			if stage.currentEditMode == EDIT_ENTITY:
+				dstx = dstx + ((stage.selectedEntity % 16) * tileWidth)
+				dsty = dsty + ((stage.selectedEntity // 16) * tileWidth)
+				drawBox(renderer, dstx, dsty, tileWidth, tileWidth)
+
+			#crashing entities
+			for i in range (entityFuncCount):
+				if i in entityChildIds:
+					dstx = (i % 16) * tileWidth + (stage.map.width * tileWidth * mag)
+					dsty = (i // 16) * tileWidth + stage.parts.size[1]
+					renderer.copy(colorRedTransparent, dstrect=(dstx, dsty, tileWidth, tileWidth))
+
 		def renderEntities(stage):
 			eve = stage.eve.get()
+			xys = []
 			for o in eve:
-				
 				y = o.y
-				if y < stage.scroll:
+				if y < stage.scroll*2:
 					continue
-				if (y - (stage.scroll)) > window.size[1]:	
+				if (y - stage.scroll*2) * tileWidth//2 > window.size[1]:	
 					continue
-				y -= stage.scroll * 2
+				y -= stage.scroll*2
 				x = o.x
 				dstx = x * (tileWidth // 2)
 				dsty = y * (tileWidth // 2)
@@ -248,24 +330,34 @@ def main():
 
 				mag = gxEdit.magnification
 				srcrect = (srcx, srcy, tileWidth, tileWidth)
-				dstrect = (dstx*mag, dsty*mag, tileWidth*mag, tileWidth*mag)
+				dstrect = (dstx*mag, dsty*mag, tileWidth//2*mag, tileWidth//2*mag)
 
 				renderer.copy(gxEdit.units, srcrect=srcrect, dstrect=dstrect)
 
+				if o.type1 in entityChildIds:
+					renderer.copy(colorRedTransparent, dstrect=dstrect)
+
 				#entity borders
-				'''
-				dstrect = (dstx+tileWidth, dsty, dstx, dsty,
-								dstx, dsty, dstx, dsty+tileWidth)
-				dstrect2 = (dstx+tileWidth, dsty+tileWidth, dstx+tileWidth, dsty,
-								dstx+tileWidth, dsty+tileWidth, dstx, dsty+tileWidth)
-				dstrect = [i * mag for i in dstrect]
-				dstrect2 = [i * mag for i in dstrect2]
+				drawBox(renderer, dstx*mag, dsty*mag, tileWidth//2*mag, tileWidth//2*mag)
 
-				renderer.draw_line(dstrect, color=colorOrange)
-				renderer.draw_line(dstrect2, color=colorOrangeDark)'''
+				if (dstx, dsty) in xys: #distinguish layered entities
+					 renderer.copy(colorOrangeTransparent, dstrect=dstrect)
+				xys.append((dstx, dsty))
+				
+		def drawBox(renderer, dstx, dsty, w, h):
+			#mag = gxEdit.magnification
+			mag = 1
+			dstrect = (dstx+w, dsty, dstx, dsty,
+							dstx, dsty, dstx, dsty+h)
+			dstrect2 = (dstx+w, dsty+w, dstx+w, dsty,
+							dstx+w, dsty+w, dstx, dsty+h)
+			dstrect = [i * mag for i in dstrect]
+			dstrect2 = [i * mag for i in dstrect2]
 
-		def scrambleEntities():
-			stage = gxEdit.stages[gxEdit.curStage]
+			renderer.draw_line(dstrect, color=colorOrange)
+			renderer.draw_line(dstrect2, color=colorOrangeDark)
+
+		def scrambleEntities(stage):
 			types = []
 			for o in stage.eve._entities:
 				types.append((o.type1, o.type2))
@@ -279,8 +371,7 @@ def main():
 
 		clampMagnification()
 		scaleFactor = (window.size[1] // tileWidth // gxEdit.magnification)
-		def tempRunInput(key):
-			stage = gxEdit.stages[gxEdit.curStage]
+		def tempRunInput(stage, key):
 			sym = key.keysym.sym
 			if sym == sdl2.SDLK_LEFT:
 				gxEdit.curStage -= 1
@@ -306,20 +397,149 @@ def main():
 			if sym == sdl2.SDLK_EQUALS:
 				gxEdit.magnification += 1
 
-			if sym == sdl2.SDLK_d:
-				scrambleEntities()
-			if sym == sdl2.SDLK_s:
-				stage.save()
+
+			if key.keysym.mod & sdl2.KMOD_CTRL:
+				if sym == sdl2.SDLK_d:
+					scrambleEntities(stage)
+			
+				if sym == sdl2.SDLK_s:
+					#TODO: show flash on save
+					stage.save()
 
 
 			clampCurStage()
 
-		def tempRunInputWheel(wheel):
-			stage = gxEdit.stages[gxEdit.curStage]
+		def tempRunInputWheel(stage, wheel):
 			stage.scroll -= wheel.y
 
-		def clampScroll():
-			stage = gxEdit.stages[gxEdit.curStage]
+
+		def tempRunInputMouseClick(stage, mouse):
+			if mouse.button != sdl2.SDL_BUTTON_LEFT: return False
+
+			map = stage.map
+			eve = stage.eve
+			mag = gxEdit.magnification
+
+			tileEndX = tileWidth * mag * map.width
+
+			if mouse.x > tileEndX:
+				if mouse.y < stage.parts.size[1]:
+					#tile select
+					#TODO: add mag
+					x = (mouse.x - tileEndX) // tileWidth 
+					y = mouse.y // tileWidth
+
+					if x >= stage.attr.width:
+						return
+					if y >= stage.attr.height:
+						return
+					stage.currentEditMode = EDIT_TILE
+					stage.selectedTilesStartX = x
+					stage.selectedTilesStartY = y
+					stage.selectedTiles = [[x, y]]
+				else:
+					#entity select
+					#TODO: add mag
+					x = (mouse.x - tileEndX) // tileWidth
+					y = (mouse.y - stage.parts.size[1]) // tileWidth
+
+					index = x + (y * 16)
+					if index > entityFuncCount:
+						return
+
+					stage.currentEditMode = EDIT_ENTITY
+					stage.selectedEntity = index
+			elif stage.currentEditMode == EDIT_ENTITY:
+				x = (mouse.x // (tileWidth//2 * mag))
+				y = (mouse.y // (tileWidth//2 * mag)) + stage.scroll*2
+
+				if x >= map.width*2 or y >= map.height*2:
+					return
+
+				eve.add(x, y, stage.selectedEntity, 0)
+
+		def tempRunInputMouseDrag(stage):			
+			#it just works
+			mouse = sdl2.SDL_MouseButtonEvent()
+			x,y = ctypes.c_int(0), ctypes.c_int(0)
+			mouse.button = sdl2.SDL_GetMouseState(x, y)
+			mouse.x, mouse.y = x.value, y.value
+
+			if (mouse.button != sdl2.SDL_BUTTON_LEFT): return False
+
+			map = stage.map
+			mag = gxEdit.magnification
+
+			tileEndX = tileWidth * mag * map.width
+
+			if mouse.x > tileEndX:
+				if mouse.y < stage.parts.size[1]:
+					x = (mouse.x - tileEndX) // tileWidth 
+					y = mouse.y // tileWidth
+
+					if x >= stage.attr.width:
+						return
+					if y >= stage.attr.height:
+						return
+					stage.selectedTilesEndX = x
+					stage.selectedTilesEndY = y
+
+			elif stage.currentEditMode == EDIT_TILE:
+
+				x = (mouse.x // (tileWidth * mag))
+				y = (mouse.y // (tileWidth * mag)) + stage.scroll
+
+				if x >= map.width or y >= map.height:
+					return
+
+				if len(stage.selectedTiles) == 1:
+					#don't modify if same
+					index = x + (y * map.width)
+					if map.get()[index] == x + (y * 16):
+						return
+					map.modify( [[index, stage.selectedTiles[0]]] )
+				else:
+					startX = stage.selectedTiles[0][0]
+					startY = stage.selectedTiles[0][0]
+					tiles = []
+					for tile in stage.selectedTiles:
+						xx = startX - tile[0] + x
+						yy = startY - tile[1] + y
+
+						index = xx + (yy * map.width)
+						tiles.append([index, [tile[0], tile[1]]])
+					#TODO: dont modify if grid same
+					map.modify(tiles)
+		def runTileSelection(stage):
+			tiles = []
+
+			if stage.selectedTilesStartX > stage.selectedTilesEndX:
+				stage.selectedTilesStartX, stage.selectedTilesEndX = stage.selectedTilesEndX, stage.selectedTilesStartX
+			if stage.selectedTilesStartY > stage.selectedTilesEndX:
+				stage.selectedTilesStartY, stage.selectedTilesEndY = stage.selectedTilesEndY, stage.selectedTilesStartY
+			for x in range(stage.selectedTilesStartX, stage.selectedTilesEndX+1):
+				for y in range(stage.selectedTilesStartY, stage.selectedTilesEndY+1):
+					tiles.append([x, y])
+
+			if tiles != []: stage.selectedTiles = tiles
+
+		def tempRunInputMouse2(stage, mouse):
+			if (mouse.button != sdl2.SDL_BUTTON_RIGHT): return False
+
+			mag = gxEdit.magnification
+
+			if stage.currentEditMode == EDIT_ENTITY:
+				x = (mouse.x / (tileWidth/2 * mag))
+				y = (mouse.y / (tileWidth/2 * mag)) + stage.scroll*2
+				x = math.floor(x) 
+				y = math.floor(y)
+
+				for o in stage.eve.get():
+					if o.x == x and o.y == y:
+						stage.eve.remove([o.id])
+						return
+
+		def clampScroll(stage):
 			if stage.scroll >= stage.map.height - scaleFactor:
 				stage.scroll = stage.map.height - scaleFactor
 			
@@ -353,12 +573,20 @@ def main():
 		windowBg.y = windowSurface.h//2 - windowBg.size[1]//2
 
 		#renderer.copy(colorBlack, dstrect=(0, math.ceil(window.size[1] * 0.05 * introAnimTimer), windowSurface.w, windowSurface.h))
+		curStage = gxEdit.stages[gxEdit.curStage]
+		tempRunInputMouseDrag(curStage)
+		if mouseHeld: runTileSelection(curStage)
 
-		clampScroll()
+		clampScroll(curStage)
 
+
+		#TODO: render to texture, only make changes when needed
 		renderMainBg()
-		renderTiles(gxEdit.stages[gxEdit.curStage])
-		renderEntities(gxEdit.stages[gxEdit.curStage])
+		renderTiles(curStage)
+		renderEntities(curStage)
+
+		renderTilePalette(curStage)
+		renderEntityPalette(curStage)
 
 
 		if introAnimTimer < 60:
@@ -366,7 +594,7 @@ def main():
 		introAnimTimer += 1
 
 		#TODO: do a getticks system
-		sdl2.SDL_Delay(20)
+		sdl2.SDL_Delay(1)
 		renderer.present()
 		#window.refresh()
 	return 0
@@ -418,16 +646,18 @@ if __name__== "__main__":
 #render intro
 #downwards black line fade
 
-#render entity palette
 # --render entity tooltips (along with description of entity)
 
 #render ver on menu bg (ala ms beta)
 
-#render tile palette
-#render map
-#render entities
+
+
 
 #highlight entities that can be used on this stage
+
+
+#render status text bar
+#flavor text will appear for 8 seconds at a time, alternating every 5 minutes or so..
 
 #tiles to draw = )yscrollbar) 
 
