@@ -13,6 +13,7 @@ from collections import Counter
 import pxEve, pxMap, interface, input
 import const
 import sdl2.ext
+from sdl2.sdlttf import *
 
 #You must agree to the terms of use to continue.
 #Terms of Use
@@ -236,6 +237,8 @@ class Editor:
 		self.backupMinutes = 5
 		self.lastBackupTick = 0
 
+		self.tooltipText = None
+
 	def readEntityInfo(self):
 		try:
 			with open(entityInfoName) as f:
@@ -344,6 +347,16 @@ def main():
 	#To disable texture destruction on window resize
 	sdl2.SDL_SetHint(sdl2.SDL_HINT_RENDER_DRIVER, b"opengl")
 
+	if TTF_Init() == -1:
+		print("Error initting ttf: ", TTF_GetError())
+		return
+
+	interface.gFont = TTF_OpenFont(b"sserife.fon", ctypes.c_int(12))
+
+	if not interface.gFont:
+		print("error opening font:", TTF_GetError())
+		return
+
 	#TODO window.rect
 	defaultWindowWidth = 640
 	defaultWindowHeight = 480
@@ -400,6 +413,8 @@ def main():
 
 	gxEdit.elements.append(interface.ToolsWindow(300, 200, 64, 40, const.WINDOW_TOOLS))
 
+	gxEdit.elements.append(interface.UITooltip(0,0,1,1))
+
 	def renderEditor():
 		#TODO: placeholder
 
@@ -414,6 +429,9 @@ def main():
 	
 		for elem in gxEdit.elements:
 			if elem.visible: elem.render(gxEdit, curStage)
+
+		for elem in gxEdit.elements:
+			if elem.type == const.WINDOW_TOOLTIP and elem.visible: elem.render(gxEdit, curStage)
 
 	#for continuous resizing
 	def resizeEventWatch(data, event):
@@ -533,8 +551,6 @@ def main():
 		#sdl2.ext.fill(windowSurface, sdl2.ext.Color(224,224,224))
 		#sdl2.ext.fill(windowSurface, sdl2.ext.Color(0,0,0))
 
-		gui.fill()
-
 		clampCurStage()
 		clampMagnification()
 		clampScroll(curStage)
@@ -544,6 +560,7 @@ def main():
 		input.runMouseDrag(gxEdit, curStage)
 		if mouseHeld: runTileSelection(curStage)
 
+		gui.fill()
 		if (gxEdit.saveTimer <= 0):
 			renderEditor()
 			

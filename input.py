@@ -115,6 +115,15 @@ def runMouseDrag(gxEdit, stage):
 	mouse.button = sdl2.SDL_GetMouseState(x, y)
 	mouse.x, mouse.y = x.value, y.value
 
+	for i, elem in reversed(list(enumerate(gxEdit.elements))):
+		if not elem.visible: continue
+
+		if util.inWindowBoundingBox(mouse, elem):
+			#move to top
+			gxEdit.elements.append(gxEdit.elements.pop(i))
+			if elem.handleMouseOver(mouse, gxEdit):
+				break
+
 	if (mouse.button != sdl2.SDL_BUTTON_LEFT): return False
 
 	map = stage.map

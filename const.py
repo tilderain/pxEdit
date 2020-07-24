@@ -19,6 +19,7 @@ WINDOW_NONE = 0
 WINDOW_TILEPALETTE = 1
 WINDOW_ENTITYPALETTE = 2
 WINDOW_TOOLS = 3
+WINDOW_TOOLTIP = 4
 
 #TODO... really gotta find somewhere good to put this
 tileScale = 1

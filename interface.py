@@ -7,6 +7,8 @@ import ctypes
 
 import util
 
+from sdl2.sdlttf import *
+
 #from gxEdit import gxEdit as gxEdit
 
 unitsName = "units.bmp"
@@ -27,6 +29,8 @@ SURF_COLOR_BLUE = 10
 SURF_COLOR_WHITE_TRANSPARENT = 11
 SURF_COLOR_GREEN = 12
 
+gSurfaces = [None] * surfaceCount
+
 #rect enums
 rectUIWindow1TopLeft = (0, 0, 2, 2)
 rectUIWindow1TopRight = (4, 0, 2, 2)
@@ -34,7 +38,7 @@ rectUIWindow1BottomLeft = (0, 3, 2, 2)
 rectUIWindow1BottomRight = (4, 3, 2, 2)
 
 rectUIWindow1Top = (2, 0, 1, 1)
-rectUIWindow1Right = (4, 2, 1, 1)
+rectUIWindow1Right = (5, 2, 1, 1)
 rectUIWindow1Bottom = (0, 2, 1, 1)
 rectUIWindow1Left = (0, 2, 1, 1)
 
@@ -47,9 +51,20 @@ rectUIWindow2BottomLeft = (6, 3, 2, 2)
 rectUIWindow2BottomRight = (10, 3, 2, 2)
 
 rectUIWindow2Top = (8, 0, 1, 1)
-rectUIWindow2Right = (10, 2, 1, 1)
+rectUIWindow2Right = (11, 2, 1, 1)
 rectUIWindow2Bottom = (8, 4, 1, 1)
 rectUIWindow2Left = (6, 2, 1, 1)
+
+
+rectUITooltipColorFill = (14, 2, 1, 1)
+rectUITooltipTopLeft = (12, 0, 2, 2)
+rectUITooltipTopRight = (16, 0, 2, 2)
+rectUITooltipBottomLeft = (12, 3, 2, 2)
+rectUITooltipBottomRight = (16, 3, 2, 2)
+rectUITooltipTop = (14, 0, 1, 1)
+rectUITooltipRight = (17, 2, 1, 1)
+rectUITooltipBottom = (14, 4, 1, 1)
+rectUITooltipLeft = (12, 2, 1, 1)
 
 rectWindowTextPalette = (0, 53, 68, 12)
 rectWindowTextTools = (0, 64, 54, 12)
@@ -66,6 +81,8 @@ gWindowWidth = 0
 gWindowHeight = 0
 
 gDrawBoxRect = sdl2.SDL_Rect(0,0,0,0)
+
+gFont = None
 
 class UIElement:
 	def __init__(self, x, y, w, h, parent, rect=(0,0,0,0), style=0, tooltip=None):
@@ -90,12 +107,13 @@ class UIElement:
 	def handleMouse1Up(self, mouse, gxEdit):
 		return False
 
-	def handleMouseOver():
-		return False
+	def handleMouseOver(self, mouse, gxEdit):
+		gxEdit.tooltipText = self.tooltip
+		return True
 
 
 	def render(self, x, y):
-		windowsurf = gInterface.surfaces[SURF_UIWINDOW]
+		windowsurf = gSurfaces[SURF_UIWINDOW]
 		gInterface.renderer.copy(windowsurf, srcrect=self.rect, 
 			dstrect=(self.x + x, self.y + y, self.rect[2], self.rect[3]))
 
@@ -144,8 +162,9 @@ class UIButton:
 		#self.rect = self.rectActive
 		return True
 
-	def handleMouseOver():
-		return False
+	def handleMouseOver(self, mouse, gxEdit):
+		gxEdit.tooltipText = self.tooltip
+		return True
 
 	def onAction(self, parent, elem):
 		pass
@@ -159,9 +178,9 @@ class UIElementStretch(UIElement):
 		UIElement.__init__(self, x, y, w, h, parent, rect, style, tooltip)
 
 	def render(self, x, y):
-		windowsurf = gInterface.surfaces[SURF_UIWINDOW]
+		windowsurf = gSurfaces[SURF_UIWINDOW]
 		gInterface.renderer.copy(windowsurf, srcrect=self.rect, 
-			dstrect=(self.x + x, self.y + y, w, h))
+			dstrect=(self.x + x, self.y + y, self.w, self.h))
 
 
 def minimizeButtonAction(window, elem):
@@ -190,7 +209,6 @@ class UIWindow:
 		self.priority = 0
 
 	def handleMouse1(self, mouse, gxEdit):
-
 		for _, elem in self.elements.items():
 			if util.inWindowElemBoundingBox(mouse, self, elem) and elem.handleMouse1(mouse):
 				self.activeElem = elem
@@ -204,12 +222,81 @@ class UIWindow:
 				return True
 		return False
 
+	def handleMouseOver(self, mouse, gxEdit):
+		for _, elem in self.elements.items():
+			if util.inWindowElemBoundingBox(mouse, self, elem) and elem.handleMouseOver(mouse, gxEdit):
+				return True
+		gxEdit.tooltipText = None
+		return False
+
 	def handleMouse2():
 		return False
 
 	def render(self, gxEdit, stage):
 		for _, elem in self.elements.items():
 			elem.render(self.x, self.y)
+
+class UITooltip(UIWindow):
+	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLTIP, style=0):
+		UIWindow.__init__(self, x, y, w, h, type, style)
+
+	def handleMouse1(self, mouse, gxEdit):
+		return False
+
+	def handleMouse1Up(self, mouse, gxEdit):
+		return False
+
+	def handleMouse2(self, mouse, gxEdit):
+		return False
+
+	def render(self, gxEdit, stage):
+		if not gxEdit.tooltipText:
+			return
+
+		mouse = sdl2.SDL_MouseButtonEvent()
+		x,y = ctypes.c_int(0), ctypes.c_int(0)
+		mouse.button = sdl2.SDL_GetMouseState(x, y)
+		mouse.x, mouse.y = x.value, y.value
+
+		myString = ctypes.c_char_p(gxEdit.tooltipText.encode("utf-8"))
+		textSurf = TTF_RenderText_Solid(gFont, myString, sdl2.SDL_Color(0,0,0))
+		sdlrenderer = gInterface.renderer.sdlrenderer
+		textText = sdl2.SDL_CreateTextureFromSurface(sdlrenderer, textSurf)
+
+		self.w = textSurf.contents.w + 12
+		self.h = textSurf.contents.h + 12
+
+		self.x = mouse.x
+		self.y = mouse.y - self.h
+
+		if self.x + self.w >= gWindowWidth:
+			self.x = gWindowWidth - self.w
+
+		if self.y <= 0:
+			self.y = 0
+
+		windowsurf = gSurfaces[SURF_UIWINDOW]
+		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipColorFill, dstrect=(self.x+1, self.y, self.w-2, self.h))
+		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipColorFill, dstrect=(self.x, self.y+1, self.w, self.h-2))
+			
+		#corners
+		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipTopLeft, dstrect=(self.x, self.y, 2, 2))
+		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipTopRight, dstrect=(self.x+self.w-2, self.y, 2, 2))
+		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipBottomLeft, dstrect=(self.x, self.y+self.h-2, 2, 2))
+		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipBottomRight, dstrect=(self.x+self.w-2, self.y+self.h-2, 2, 2))
+
+		#border
+		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipTop, dstrect=(self.x+1, self.y, self.w-2, 1))
+		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipRight, dstrect=(self.x+self.w-1, self.y+1, 1, self.h-2))
+		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipBottom, dstrect=(self.x+1, self.y+self.h-1, self.w-2, 1))
+		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipLeft, dstrect=(self.x, self.y+1, 1, self.h-2))
+
+		dstRect = sdl2.SDL_Rect(self.x+6, self.y+6, textSurf.contents.w, textSurf.contents.h)
+
+		sdl2.SDL_RenderCopy(sdlrenderer, textText, None, dstRect)
+
+		sdl2.SDL_FreeSurface(textSurf)
+		sdl2.SDL_DestroyTexture(textText)
 		
 
 class TilePaletteWindow(UIWindow):
@@ -290,7 +377,7 @@ class EntityPaletteWindow(UIWindow):
 		UIWindow.render(self, gxEdit, stage)
 
 		mag = gxEdit.entityPaletteMag
-		units = gInterface.surfaces[SURF_UNITS]
+		units = gSurfaces[SURF_UNITS]
 		srcrect = units.area
 
 		dstx = self.x + self.elements["picker"].x
@@ -312,7 +399,7 @@ class EntityPaletteWindow(UIWindow):
 			if i in const.entityChildIds:
 				dstx = (i % 16) * const.tileWidth * mag + (self.x + self.elements["picker"].x)
 				dsty = (i // 16) * const.tileWidth * mag + (self.y + self.elements["picker"].y) 
-				gInterface.renderer.copy(gInterface.surfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=(dstx, dsty, const.tileWidth, const.tileWidth))
+				gInterface.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=(dstx, dsty, const.tileWidth, const.tileWidth))
 
 
 def toggleTilePalette():
@@ -324,7 +411,7 @@ class ToolsWindow(UIWindow):
 
 		self.elements["textTools"] = UIElement(2, 2, 0, 0, self, rectWindowTextTools)
 
-		self.elements["butToggleTilePalette"] = UIButton(4, 24, 16, 16, self)
+		self.elements["butToggleTilePalette"] = UIButton(4, 24, 16, 16, self, tooltip="i hate pxedit")
 		#self.elements["butToggleTilePalette"].onAction = 
 
 
@@ -341,43 +428,41 @@ class Interface:
 		self.window = window
 		self.sprfactory = sprfactory
 
-		self.surfaces = [None] * surfaceCount
-
 	def loadSurfaces(self):
 		RESOURCES = sdl2.ext.Resources(__file__, "BITMAP")
 
-		self.surfaces[SURF_WINDOWBG] = self.sprfactory.from_image(RESOURCES.get_path("dgBg.bmp"))
-		self.surfaces[SURF_WINDOWBG2] = self.sprfactory.from_image(RESOURCES.get_path("dgBg2.bmp"))
-		self.surfaces[SURF_COLOR_BLACK] = self.sprfactory.from_color(sdl2.ext.Color(0,0,0),(32,32))
-		self.surfaces[SURF_COLOR_ORANGE] = sdl2.ext.Color(0,255,0)
-		self.surfaces[SURF_COLOR_ORANGE_DARK] = sdl2.ext.Color(0,255,0)
-		self.surfaces[SURF_COLOR_GREEN] = self.sprfactory.from_color(sdl2.ext.Color(0,255,0),(32,32))
+		gSurfaces[SURF_WINDOWBG] = self.sprfactory.from_image(RESOURCES.get_path("dgBg.bmp"))
+		gSurfaces[SURF_WINDOWBG2] = self.sprfactory.from_image(RESOURCES.get_path("dgBg2.bmp"))
+		gSurfaces[SURF_COLOR_BLACK] = self.sprfactory.from_color(sdl2.ext.Color(0,0,0),(32,32))
+		gSurfaces[SURF_COLOR_ORANGE] = sdl2.ext.Color(0,255,0)
+		gSurfaces[SURF_COLOR_ORANGE_DARK] = sdl2.ext.Color(0,255,0)
+		gSurfaces[SURF_COLOR_GREEN] = self.sprfactory.from_color(sdl2.ext.Color(0,255,0),(32,32))
 
-		self.surfaces[SURF_COLOR_BLUE] = self.sprfactory.from_color(sdl2.ext.Color(84,108,128),(32,32))
+		gSurfaces[SURF_COLOR_BLUE] = self.sprfactory.from_color(sdl2.ext.Color(84,108,128),(32,32))
 
 
-		self.surfaces[SURF_COLOR_RED_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(255,0,0, 80), size=(32, 32),
+		gSurfaces[SURF_COLOR_RED_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(255,0,0, 80), size=(32, 32),
                    masks=(0xFF000000,           
                           0x00FF0000,           
                           0x0000FF00,           
                           0x000000FF))   
 
-		self.surfaces[SURF_COLOR_ORANGE_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(250,150,0, 128), size=(32, 32),
+		gSurfaces[SURF_COLOR_ORANGE_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(250,150,0, 128), size=(32, 32),
                    masks=(0xFF000000,           
                           0x00FF0000,           
                           0x0000FF00,           
                           0x000000FF))   
 
-		self.surfaces[SURF_COLOR_WHITE_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(255,255,255, 128), size=(32, 32),
+		gSurfaces[SURF_COLOR_WHITE_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(255,255,255, 128), size=(32, 32),
            masks=(0xFF000000,           
                   0x00FF0000,           
                   0x0000FF00,           
                   0x000000FF))   
 
-		self.surfaces[SURF_UNITS] = self.sprfactory.from_image(unitsName)
+		gSurfaces[SURF_UNITS] = self.sprfactory.from_image(unitsName)
 
 
-		self.surfaces[SURF_UIWINDOW] = self.sprfactory.from_image(RESOURCES.get_path("Window.bmp"))
+		gSurfaces[SURF_UIWINDOW] = self.sprfactory.from_image(RESOURCES.get_path("Window.bmp"))
 		#TODO error handling when can't find file
 
 	def RenderMapParts(self):
@@ -459,7 +544,7 @@ class Interface:
 		h *= int(const.tileWidth * mag)
 
 
-		self.renderer.copy(gInterface.surfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
+		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
 
 
 
@@ -474,7 +559,7 @@ class Interface:
 	def renderEntities(self, gxEdit, stage):
 		#TODO: render to surface
 		eve = stage.eve.get()
-		units = self.surfaces[SURF_UNITS]
+		units = gSurfaces[SURF_UNITS]
 		xys = []
 		for o in eve:
 			y = o.y
@@ -506,13 +591,13 @@ class Interface:
 			self.renderer.copy(units, srcrect=srcrect, dstrect=dstrect)
 
 			if o.type1 in const.entityChildIds:
-				self.renderer.copy(self.surfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=dstrect)
+				self.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=dstrect)
 
 			#entity borders
 			self.drawBox(self.renderer, int(dstx*mag), int(dsty*mag), int(const.tileWidth//2*mag), int(const.tileWidth//2*mag))
 
 			if (dstx, dsty) in xys: #distinguish layered entities
-				 self.renderer.copy(self.surfaces[SURF_COLOR_ORANGE_TRANSPARENT], dstrect=dstrect)
+				 self.renderer.copy(gSurfaces[SURF_COLOR_ORANGE_TRANSPARENT], dstrect=dstrect)
 			xys.append((dstx, dsty))
 			
 	def drawBox(self, renderer, dstx, dsty, w, h):
@@ -521,31 +606,31 @@ class Interface:
 		gDrawBoxRect.y = dsty
 		gDrawBoxRect.w = 1
 		gDrawBoxRect.h = h
-		sdl2.SDL_RenderCopy(renderer.sdlrenderer, self.surfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
+		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
 		gDrawBoxRect.x = dstx
 		gDrawBoxRect.y = dsty
 		gDrawBoxRect.w = w
 		gDrawBoxRect.h = 1
-		sdl2.SDL_RenderCopy(renderer.sdlrenderer, self.surfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
+		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
 		gDrawBoxRect.x = dstx+w
 		gDrawBoxRect.y = dsty
 		gDrawBoxRect.w = 1
 		gDrawBoxRect.h = h
-		sdl2.SDL_RenderCopy(renderer.sdlrenderer, self.surfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
+		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
 		gDrawBoxRect.x = dstx
 		gDrawBoxRect.y = dsty+h
 		gDrawBoxRect.w = w
 		gDrawBoxRect.h = 1
-		sdl2.SDL_RenderCopy(renderer.sdlrenderer, self.surfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
+		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
 		return
-		renderer.copy(self.surfaces[SURF_COLOR_GREEN], dstrect=dstrect1)
-		renderer.copy(self.surfaces[SURF_COLOR_GREEN], dstrect=dstrect2)
-		renderer.copy(self.surfaces[SURF_COLOR_GREEN], dstrect=dstrect3)
-		renderer.copy(self.surfaces[SURF_COLOR_GREEN], dstrect=dstrect4)
+		renderer.copy(gSurfaces[SURF_COLOR_GREEN], dstrect=dstrect1)
+		renderer.copy(gSurfaces[SURF_COLOR_GREEN], dstrect=dstrect2)
+		renderer.copy(gSurfaces[SURF_COLOR_GREEN], dstrect=dstrect3)
+		renderer.copy(gSurfaces[SURF_COLOR_GREEN], dstrect=dstrect4)
 
 	def renderMainBg(self, introAnimTimer, mouseover):
-		windowBg = self.surfaces[SURF_WINDOWBG]
-		windowBg2 = self.surfaces[SURF_WINDOWBG2]
+		windowBg = gSurfaces[SURF_WINDOWBG]
+		windowBg2 = gSurfaces[SURF_WINDOWBG2]
 		if introAnimTimer > 15 and introAnimTimer < 25 and introAnimTimer % 3 == 0 or introAnimTimer > 25:
 			if mouseover:
 				self.renderer.copy(windowBg, dstrect=(windowBg.x, windowBg.y, windowBg.size[0], windowBg.size[1]))
@@ -557,10 +642,12 @@ class Interface:
 
 	def renderUIWindows(self, gxEdit):
 		#TODO
-		windowsurf = self.surfaces[SURF_UIWINDOW]
+		windowsurf = gSurfaces[SURF_UIWINDOW]
 		scale = 1
 		for elem in gxEdit.elements:
 			if not elem.visible: continue
+			#TODO PLACEHOLDER AGAGHAGH
+			if elem.type == const.WINDOW_TOOLTIP: continue
 			#middle
 			self.renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x+1, elem.y, elem.w-2, elem.h))
 			self.renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x, elem.y+1, elem.w, elem.h-2))
@@ -582,7 +669,7 @@ class Interface:
 
 
 	def fadeout(self, introAnimTimer):
-		colorBlack = self.surfaces[SURF_COLOR_BLACK]
+		colorBlack = gSurfaces[SURF_COLOR_BLACK]
 		windowSurface = self.window.get_surface()
 		window = self.window
 
@@ -592,7 +679,7 @@ class Interface:
 		self.renderer.copy(colorBlack, dstrect=(-gWindowWidth//2 - math.ceil(gWindowWidth * 0.05 * introAnimTimer), 0, windowSurface.w, windowSurface.h))
 	
 	def fill(self):
-		colorBlack = self.surfaces[SURF_COLOR_BLACK]
+		colorBlack = gSurfaces[SURF_COLOR_BLACK]
 		window = self.window
 
 		self.renderer.copy(colorBlack, dstrect=(0, 0, gWindowWidth, gWindowHeight))
