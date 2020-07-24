@@ -242,7 +242,8 @@ class Editor:
 	def readEntityInfo(self):
 		try:
 			with open(entityInfoName) as f:
-				self.entityInfo = f.read().splitlines()
+				self.entityInfo = [line.split("@") for line in f.read().splitlines()]
+				
 		except(IOError, FileNotFoundError) as e:
 			print("Error reading entityInfo! {}".format(e))
 			return False

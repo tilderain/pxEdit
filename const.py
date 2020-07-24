@@ -10,9 +10,12 @@ EDIT_ENTITY = 1
 
 #Entities which can only be spawned from parents
 #used to determine if they crash the game or not
-entityChildIds = [12, 16, 17, 33, 34, 36, 50, 51, 52, 53, 55, 57, 62, 71, 77, 78, 79, 80, 82, 89, 95, 101, 103, 109, 110, 112, 113]
+entityCrashIds = [12, 16, 17, 33, 34, 36, 50, 51, 52, 53, 55, 57, 62, 71, 77, 78, 79, 80, 82, 89, 95, 101, 103, 109, 110, 112, 113]
 #total entity ids
-entityFuncCount = 121
+entityFuncCount = 122
+
+#for a green title color
+entityGoodIds = [1, 2, 3, 4, 6, 7, 19, 22, 37, 38, 45, 46, 47, 56, 59, 60, 61, 64, 74, 75, 92, 93, 106, 107, 116, 117, 118, 119, 121]
 
 #window types
 WINDOW_NONE = 0

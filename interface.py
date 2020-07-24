@@ -84,6 +84,12 @@ gDrawBoxRect = sdl2.SDL_Rect(0,0,0,0)
 
 gFont = None
 
+def getTextSize(font, text):
+	w = ctypes.c_int(0)
+	h = ctypes.c_int(0)
+	TTF_SizeText(font, text, w, h)
+	return [w.value, h.value]
+
 class UIElement:
 	def __init__(self, x, y, w, h, parent, rect=(0,0,0,0), style=0, tooltip=None):
 		self.x = x
@@ -236,6 +242,21 @@ class UIWindow:
 		for _, elem in self.elements.items():
 			elem.render(self.x, self.y)
 
+
+#entity types: crash
+#background entity
+#Background/Beneficial
+#Enemy
+
+sdlColorMagenta = sdl2.SDL_Color(255,100,255)
+sdlColorCyan = sdl2.SDL_Color(100,255,255)
+sdlColorGreen = sdl2.SDL_Color(128,255,150)
+sdlColorGold = sdl2.SDL_Color(255,230,150)
+sdlColorRed = sdl2.SDL_Color(255,100,100)
+
+sdlColorWhite = sdl2.SDL_Color(255,255,255)
+
+
 class UITooltip(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLTIP, style=0):
 		UIWindow.__init__(self, x, y, w, h, type, style)
@@ -258,13 +279,31 @@ class UITooltip(UIWindow):
 		mouse.button = sdl2.SDL_GetMouseState(x, y)
 		mouse.x, mouse.y = x.value, y.value
 
-		myString = ctypes.c_char_p(gxEdit.tooltipText.encode("utf-8"))
-		textSurf = TTF_RenderText_Solid(gFont, myString, sdl2.SDL_Color(0,0,0))
-		sdlrenderer = gInterface.renderer.sdlrenderer
-		textText = sdl2.SDL_CreateTextureFromSurface(sdlrenderer, textSurf)
+		#myString = ctypes.c_char_p(gxEdit.tooltipText.encode("utf-8"))
+		
+		#textSize = getTextSize(gFont, ctypes.c_char_p(gxEdit.tooltipText.encode("utf-8")))
+		#textSize[0] = int(textSize[0] / (textSize[0] / 150))
 
-		self.w = textSurf.contents.w + 12
-		self.h = textSurf.contents.h + 12
+		boxWidth = 0
+
+		textTexts = []
+		textWidths = []
+		textHeights = []
+
+		sdlrenderer = gInterface.renderer.sdlrenderer
+
+		for lines in gxEdit.tooltipText:
+			TTF_SetFontStyle(gFont, lines[2])
+			textSurf = TTF_RenderText_Blended_Wrapped(gFont, ctypes.c_char_p(lines[0].encode("utf-8")), lines[1], ctypes.c_uint(int(200)))
+
+			textWidths.append(textSurf.contents.w)
+			textHeights.append(textSurf.contents.h)
+
+			textTexts.append(sdl2.SDL_CreateTextureFromSurface(sdlrenderer, textSurf))
+			sdl2.SDL_FreeSurface(textSurf)
+
+		self.w = max(textWidths) + 12
+		self.h = sum(textHeights) + 12
 
 		self.x = mouse.x
 		self.y = mouse.y - self.h
@@ -291,12 +330,13 @@ class UITooltip(UIWindow):
 		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipBottom, dstrect=(self.x+1, self.y+self.h-1, self.w-2, 1))
 		gInterface.renderer.copy(windowsurf, srcrect=rectUITooltipLeft, dstrect=(self.x, self.y+1, 1, self.h-2))
 
-		dstRect = sdl2.SDL_Rect(self.x+6, self.y+6, textSurf.contents.w, textSurf.contents.h)
+		renderHeight = self.y+6
+		for i in range(len(textTexts)):
+			dstRect = sdl2.SDL_Rect(self.x+6, renderHeight, textWidths[i], textHeights[i])
+			renderHeight += textHeights[i]
 
-		sdl2.SDL_RenderCopy(sdlrenderer, textText, None, dstRect)
-
-		sdl2.SDL_FreeSurface(textSurf)
-		sdl2.SDL_DestroyTexture(textText)
+			sdl2.SDL_RenderCopy(sdlrenderer, textTexts[i], None, dstRect)
+			sdl2.SDL_DestroyTexture(textTexts[i])
 		
 
 class TilePaletteWindow(UIWindow):
@@ -396,10 +436,46 @@ class EntityPaletteWindow(UIWindow):
 
 		#crashing entities
 		for i in range (const.entityFuncCount):
-			if i in const.entityChildIds:
+			if i in const.entityCrashIds:
 				dstx = (i % 16) * const.tileWidth * mag + (self.x + self.elements["picker"].x)
 				dsty = (i // 16) * const.tileWidth * mag + (self.y + self.elements["picker"].y) 
 				gInterface.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=(dstx, dsty, const.tileWidth, const.tileWidth))
+
+	def handleMouseOver(self, mouse, gxEdit):
+		UIWindow.handleMouseOver(self, mouse, gxEdit)
+
+		x = (mouse.x - self.x - self.elements["picker"].x) // const.tileWidth
+		y = (mouse.y - self.y - self.elements["picker"].y) // const.tileWidth
+
+		index = x + (y * 16)
+		if index >= const.entityFuncCount:
+			return False
+		if index < 0:
+			return False
+
+		if index in const.entityCrashIds:
+			titleColor = sdlColorRed
+		elif index in const.entityGoodIds:
+			titleColor = sdlColorGreen
+		else:
+			titleColor = sdlColorMagenta
+		
+		descColor = sdlColorWhite
+
+		if index in const.entityGoodIds:
+			paramColor = sdlColorGold
+		else:
+			paramColor = sdlColorCyan
+
+		if gxEdit.entityInfo[index][0] != "":
+			gxEdit.tooltipText = ([[gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD]])
+		if gxEdit.entityInfo[index][1] != "":
+			 gxEdit.tooltipText.append([gxEdit.entityInfo[index][1], descColor, TTF_STYLE_NORMAL])
+		if gxEdit.entityInfo[index][2] != "":
+			gxEdit.tooltipText.append([gxEdit.entityInfo[index][2], paramColor, TTF_STYLE_NORMAL])
+		
+		return True
+
 
 
 def toggleTilePalette():
@@ -590,7 +666,7 @@ class Interface:
 
 			self.renderer.copy(units, srcrect=srcrect, dstrect=dstrect)
 
-			if o.type1 in const.entityChildIds:
+			if o.type1 in const.entityCrashIds:
 				self.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=dstrect)
 
 			#entity borders

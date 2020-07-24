@@ -1,121 +1,122 @@
-000
-001_Explode
-002_CloudL
-003_CloudS
-004_Puff
-005_Hanger
-006_CloudGen
-007_Powerup
-008_Climber
-009_Kagome
-010_Unused?
-011_Wing
-012_WingCorpse
-013_Bullet
-014_BulletSlow
-015_Boss1
-016_Boss1Eye
-017_Boss1BigEye
-018_BulletLong
-019_BGM
-020_Asteroid_L
-021_Asteroid_S
-022_ScrollSpdSet
-023_Asteroid_SGravity
-024_Hanger_Wave
-025_Hanger_Shoot
-026_RockHugger
-027_RHAsteroidL
-028_RHAsteroidS
-029_Bullet2?
-030_Elka
-031_Sodi
-032_Boss2
-033_Boss2RocketSpawner
-034_B2ExplosionSpawner?
-035_B2Rocket
-036_Boss2Eye
-037_Stars?
-038_StarGen
-039_Elka2
-040_GuxtFort
-041_CatEye
-042_Slider
-043_Cycloid
-044_Chester
-045_Bonus
-046_BonusGen
-047_CloudXL
-048_Gimmick
-049_Boss3
-050_62
-051_B3Eye1?
-052_B3Eye2?
-053_B3Eye3?
-054_B3BulletBlocker?
-055_B3Target??
-056_Checkpoint
-057_Boss3TurretSpawner
-058_B3Turret
-059_PowerupSpinnerShield
-060_PowerupBox
-061_PowerupStatic
-063_BulletWhite
-064_PowerupSpinner
-065_ClimberShoot
-066_Tri
-067_GuxtTank
-068_MedusaEye
-069_GuxtMine
-070_BlendyGen
-071_Blendy
-072_Cycloid2
-073_Cycloid2Gen
-074_PowerupHidden
-075_PowerupAsteroid
-076_Boss4
-077
-078
-079
-080
-081_SpaceAmeba
-082
-083_B4Bullet
-084_Square
-085_CloudDarkL
-086_CloudDarkS
-087_CloudDarkGen
-088_MissilePot
-089
-090_Missile
-091
-092_BGRock
-093_ClearRockCloudGen
-094_SandStamper
-095
-096_Stamp
-097_Brick
-098_BulletSquare
-099_BulletSquareGen
-100_Boss5
-101
-102_B5Bullet
-103
-104_B5Laser
-105_B5LaserTrail
-106_AzaBonusSpawner?
-107
-108_Boss6
-109
-110
-111_B6Laser
-112
-113
-114_B6Ball
-115_B6Caret
-116_CreditText
-117_CreditReplace
-118_CreditLoadImg
-119_CPhoto
-120_CreditGimmick
-121_BonusHidden
+(000)@@
+(001) Explode@Regular explosion effect.@
+(002) CloudL@A large cloud.@
+(003) CloudS@A small cloud.@
+(004) Puff@Puff cloud (from your ship in stage start/end)@
+(005) Hanger@A spinning three-pronged enemy with an eye, launches upwards. The first enemy in the game.@
+(006) CloudGen@Generates big and small clouds from the top of the screen.@
+(007) Powerup@A plain powerup that launches from the bottom of the screen. Does not come with a spinner.@(Parameter: which powerup it is)
+(008) Climber@An enemy that swims up from the bottom of the screen.@
+(009) Kagome@Pivots in a circle. A kagome lattice.@
+(010) Unused?@@
+(011) Wing@Falls from the top of the screen and shoots periodically.@(Parameter: falls twice as fast if set)
+(012) WingCorpse@The body of a Wing.@
+(013) Bullet@A bullet.@(Parameter: Angle, in 1/256th of a circle. 0 = Right, 64 = Down, 128 = Left, 192 = Up, etc.)
+(014) BulletSlow@A slower bullet.@(Parameter: same as Bullet)
+(015) Boss1@The first boss. Title: Boss Wing@
+(016) Boss1Eye@@
+(017) Boss1BigEye@@
+(018) BulletLong@A long bullet.@(Parameter: direction to spawn in)
+(019) BGM@Switches song.@(Parameter: id of the song)
+(020) Asteroid_L@Large asteroid.@
+(021) Asteroid_S@Small asteroid.@
+(022) ScrollSpdSet@Sets the scroll speed.@(Parameter: speed)
+(023) Asteroid_SGravity@A small asteroid that falls down.@(Parameter: which direction it comes from.)
+(024) Hanger_Wave@A Hanger that moves in a sine wave.@
+(025) Hanger_Shoot@A hanger that comes up and shoots once.@(Parameter: lowers health and score if set.)
+(026) RockHugger@Flies up to the top. Comes with an asteroid.@(Parameter: which asteroid it is)
+(027) RHAsteroidL@The asteroid of a Rock Hugger.@
+(028) RHAsteroidS@The asteroid of a Rock Hugger.@
+(029) Bullet2?@@(Parameter: spawns lower if set)
+(030) Elka@@
+(031) Sodi@@
+(032) Boss2@Missile Tailor@
+(033) Boss2RocketSpawner@@
+(034) B2ExplosionSpawner?@@
+(035) B2Rocket@@
+(036) Boss2Eye@@
+(037) Stars?@@
+(038) StarGen@@
+(039) Elka2@@
+(040) GuxtFort@@
+(041) CatEye@@
+(042) Slider@@
+(043) Cycloid@@
+(044) Chester@@
+(045) Bonus@@
+(046) BonusGen@@
+(047) CloudXL@A REALLY big cloud.@
+(048) Gimmick@@
+(049) Boss3@Three Holes@
+(050) 62@@
+(051) B3Eye1?@@
+(052) B3Eye2?@@
+(053) B3Eye3?@@
+(054) B3BulletBlocker?@@
+(055) B3Target??@@
+(056) Checkpoint@@
+(057) Boss3TurretSpawner@@
+(058) B3Turret@@
+(059) PowerupSpinnerShield@@
+(060) PowerupBox@@
+(061) PowerupStatic@@
+(050) 62@@
+(063) BulletWhite@@
+(064) PowerupSpinner@@
+(065) ClimberShoot@@
+(066) Tri@@
+(067) GuxtTank@@
+(068) MedusaEye@@
+(069) GuxtMine@@
+(070) BlendyGen@@
+(071) Blendy@@
+(072) Cycloid2@@
+(073) Cycloid2Gen@@
+(074) PowerupHidden@@
+(075) PowerupAsteroid@@
+(076) Boss4@Octopus@
+(077) @@
+(078) @@
+(079) @@
+(080) @@
+(081) SpaceAmeba@@
+(082) @@
+(083) B4Bullet@@
+(084) Square@@
+(085) CloudDarkL@@
+(086) CloudDarkS@@
+(087) CloudDarkGen@@
+(088) MissilePot@@
+(089) @@
+(090) Missile@@
+(091) @@
+(092) BGRock@@
+(093) ClearRockCloudGen@@
+(094) SandStamper@@
+(095) @@
+(096) Stamp@@
+(097) Brick@@
+(098) BulletSquare@@
+(099) BulletSquareGen@@
+(100) Boss5@Gas Turbine@
+(101) @@
+(102) B5Bullet@@
+(103) @@
+(104) B5Laser@@
+(105) B5LaserTrail@@
+(106) AzaBonusSpawner?@@
+(107) ToggleShadow@Puts a shadow under the ship. Used in stage 5.@(Parameter: enables shadow)
+(108) Boss6@Ogdobas@The zombie of Octopus.
+(109) @@
+(110) @@
+(111) B6Laser@@
+(112) @@
+(113) @@
+(114) B6Ball@@
+(115) B6Caret@@
+(116) CreditText@@
+(117) CreditReplace@@
+(118) CreditLoadImg@@
+(119) CPhoto@@
+(120) CreditGimmick@@
+(121) BonusHidden@@
