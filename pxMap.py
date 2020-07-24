@@ -39,6 +39,8 @@ class PxMapAttr: #use the same class for both
 			y = tile[1][1] * 16
 			
 			self.tiles[tile[0]] = x+y
+	def resize(self, width, height):
+		pass
 	def get(self):
 		return self.tiles[:]
 

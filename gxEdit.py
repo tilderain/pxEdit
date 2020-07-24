@@ -3,9 +3,15 @@
 
 import io, mmap, sys, time, math, random
 import ctypes
+import glob, os
+from datetime import datetime
+
 from dataclasses import dataclass
 
-import pxEve, pxMap
+from collections import Counter
+
+import pxEve, pxMap, interface, input
+import const
 import sdl2.ext
 
 #You must agree to the terms of use to continue.
@@ -21,22 +27,14 @@ import sdl2.ext
 # I have read and accept the terms of use.
 # I hereby state that all information asserted above is correct.
 
-configName = "dgConf.txt"
-#currently only Graphics Resolution
-modSettingsName = "dgSettings.txt"
-unitsName = "units.bmp"
 
-#spawned from children?
-entityChildIds = [12, 16, 17, 33, 34, 36, 50, 51, 52, 53, 55, 57, 62, 71, 77, 78, 79, 80, 82, 89, 95, 101, 103, 109, 110, 112, 113]
-#total entity ids
-entityFuncCount = 121
 
 dataPath = "./guxt/data/"
 gamePath = "./guxt/"
 
 #for debugging
-dataPath = "/home/god/Desktop/theDoctorsGarage/" + dataPath
-gamePath = "/home/god/Desktop/theDoctorsGarage/" + gamePath
+dataPath = "./" + dataPath
+gamePath = "./" + gamePath
 
 entityInfoName = "entityInfo.txt"
 
@@ -45,6 +43,10 @@ partsPath = "parts{}.bmp"
 attrPath = "parts{}.pxatrb"
 eventPath = "event{}.pxeve"
 pximgPath = "parts{}.pximg"
+
+backupFolderName = "backup"
+backupFormat = "backup/_{}_{}"
+backupTimeFormat = "%Y%m%d-%H%M%S"
 
 #copy tiles
 #takes an xy square and copies it to the clipboard (width, height)
@@ -61,36 +63,53 @@ pximgPath = "parts{}.pximg"
 #The map loads a tileset, and tileset attributes.
 #By default, these are hardcoded to be based off the stage number.
 
-#edit mode enums
-EDIT_TILE = 0
-EDIT_ENTITY = 1
+
 class StagePrj:
 	def __init__(self, stageNo):
 		self.stageNo = stageNo
 		self.eve = pxEve.PxEve()
 		self.map = pxMap.PxMapAttr()
 		self.attr = pxMap.PxMapAttr()
+
+		# tileset texture
 		self.parts = None
-		self.backupId = 0
 		self.scroll = 0
+		self.hscroll = 0
 
+		# x, y of drag selected tiles in the tileset
 		self.selectedTiles = [[0, 0]]
-		self.selectedTilesStartX = 0
-		self.selectedTilesStartY = 0
-		self.selectedTilesEndX = 0
-		self.selectedTilesEndY = 0
+		# x, y of drag selection mousedown
+		self.selectedTilesStart = [0, 0]
+		# x, y of drag selection mouse up
+		self.selectedTilesEnd = [0, 0]
+		#TODO: tile selection offset
 
-		self.selectedEntity = 0
-		self.currentEditMode = EDIT_TILE
+		self.selectedEntities = []
+		self.selectionBoxStartX = -1
+		self.selectionBoxStartY = -1
+
+		self.undoStack = [None]
+		self.undoPos = 0
+
+		self.lastSavePos = 0
+		self.lastBackupPos = 0
+
+		# to not spam edit commands
+		self.lastTileEdit = [None, None]
+
+		self.surface = None
 
 	def load(self):
-		#open dialogue box to see if there is a newer backup
+		#TODO: open dialogue box to see if there is a newer backup
+			#read last modified date
+			#Choose the backup you want to open.
 
 		self.eve.load(dataPath + eventPath.format(self.stageNo))
 		self.map.load(dataPath + mapPath.format(self.stageNo))
 		self.attr.load(dataPath + attrPath.format(self.stageNo))
-		
-		#update the backup number based off the highest id on any of the 3
+
+
+		self.surface = interface.gSprfactory.create_texture_sprite(interface.gRenderer, (self.map.width*const.tileWidth, self.map.height*const.tileWidth), access=sdl2.SDL_TEXTUREACCESS_TARGET)
 
 		return True
 
@@ -98,30 +117,124 @@ class StagePrj:
 		self.parts = sprfactory.from_image(dataPath + partsPath.format(self.stageNo))
 
 	def save(self):
-		#TODO: only save if there are any changes
+		if self.lastSavePos == self.undoPos: #TODO: and pxattr not modified
+			return False
+
 		print("--Saving stage {}...--".format(self.stageNo))
 		self.eve.save(dataPath + eventPath.format(self.stageNo))
 		self.map.save(dataPath + mapPath.format(self.stageNo))
 		self.attr.save(dataPath + attrPath.format(self.stageNo))
+
+		self.lastSavePos = self.undoPos
+		self.lastBackupPos = self.undoPos
 		print("saved.")
+
+		return True
 		
 	def backup(self):
 		#periodic backup...
 		#if there are changes to the file, back it up
+		#should follow format of backup_[mapname]_[yymmddhhmmss]
+		#remove oldest backup (gxedit.backuplimit)
+		#msg Backing up unsaved changes..
 
-		#etc.save()
+		if self.lastBackupPos == self.undoPos:
+			return False
+
+		print("--Backing up stage {}...--".format(self.stageNo))
+
+		date = datetime.now()
+		dateMin = date.strftime(backupTimeFormat)
+
+		eventOut = eventPath.format(self.stageNo)
+		mapOut = mapPath.format(self.stageNo)
+		
+		self.eve.save(dataPath + backupFolderName + "/" + dateMin + "_" + eventOut)
+		self.map.save(dataPath + backupFolderName + "/" + dateMin + "_" + mapOut)
+
+		self.lastBackupPos = self.undoPos
 
 		#backupId += 1
-		pass
+
+		return True
+
+	def renderTilesToSurface(self):
+		map = self.map
+		sdlrenderer = interface.gRenderer.sdlrenderer
+		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surface.texture)
+		for i, tile in enumerate(map.tiles):
+			y = i // map.width
+			x = i % map.width
+			dstx = x * const.tileWidth
+			dsty = y * const.tileWidth
+
+			x = tile % 16 #the magic number so that each 4 bits in a byte corresponds to the x, y position in the tileset
+			y = tile // 16
+			srcx = x * const.tileWidth
+			srcy = y * const.tileWidth
+
+			
+			srcrect = (srcx, srcy, const.tileWidth, const.tileWidth)
+			dstrect = (dstx, dsty, const.tileWidth, const.tileWidth)
+			#srcrect = 
+			
+			#sdl2.SDL_RenderCopy(sdlrenderer, self.parts.texture, (srcrect), dstrect)
+			interface.gRenderer.copy(self.parts, srcrect, dstrect)
+		sdl2.SDL_SetRenderTarget(sdlrenderer, None)
+			
+	
+	def renderTileToSurface(self, x, y, tx, ty):
+		dstx = x * const.tileWidth
+		dsty = y * const.tileWidth
+
+		srcx = tx * const.tileWidth
+		srcy = ty * const.tileWidth
+
+		sdlrenderer = interface.gRenderer.sdlrenderer
+		srcrect = (srcx, srcy, const.tileWidth, const.tileWidth)
+		dstrect = (dstx, dsty, const.tileWidth, const.tileWidth)
+
+		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surface.texture)
+		interface.gRenderer.copy(self.parts, srcrect, dstrect)
+		sdl2.SDL_SetRenderTarget(sdlrenderer, None)
 
 class Editor:
 	
 	def __init__(self):
 		self.entityInfo = []
 		self.stages = []
+		#TODO: remove this
 		self.curStage = 2
-		self.units = None
+
+		# zoom level
 		self.magnification = 3
+		self.tilePaletteMag = 2
+		self.entityPaletteMag = 1
+
+		self.selectedEntity = 0
+		self.currentEditMode = const.EDIT_TILE
+
+		#blinks on save
+		self.saveTimer = 0
+
+		# all ui windows
+		self.elements = []
+
+		self.draggedElem = None
+		self.dragX = 0
+		self.dragY = 0
+
+		# for text input or keyboard navigation
+		self.focussedElem = None
+
+		self.fullscreen = False
+
+		# toggle setting to display bg parallax as ingame
+		self.parallax = True
+
+		self.backupLimit = 5
+		self.backupMinutes = 5
+		self.lastBackupTick = 0
 
 	def readEntityInfo(self):
 		try:
@@ -132,15 +245,9 @@ class Editor:
 			return False
 		return True
 
-	def loadUnits(self, sprfactory):
-		self.units = sprfactory.from_image(unitsName)
-		return True
-		#TODO
-
 	def loadMeta(self, sprfactory):
 		result = True
 		result &= self.readEntityInfo()
-		result &= self.loadUnits(sprfactory)
 		return result
 
 	def loadStage(self, stageNo):
@@ -158,46 +265,123 @@ class Editor:
 			if stage.stageNo == stageNo:
 				return stage
 
+	def executeUndo(self):
+		#TODO: temp, do smarter implementation
+		stage = self.stages[self.curStage]
+		undoStack = stage.undoStack
+		undoPos = stage.undoPos
+		if undoPos == 0:
+			return
+
+		stage.lastTileEdit = [None, None]
+
+		if undoStack[undoPos].action == const.UNDO_TILE:
+			stage.map.modify(undoStack[undoPos].reverse)
+			for index, tile in undoStack[undoPos].reverse:
+				x = index % stage.map.width
+				y = index // stage.map.width
+				stage.renderTileToSurface(x, y, tile[0],
+												tile[1])
+			stage.undoPos -= 1
+
+	def executeRedo(self):
+		stage = self.stages[self.curStage]
+		undoStack = stage.undoStack
+		undoPos = stage.undoPos + 1
+
+		if undoPos > len(undoStack)-1:
+			return
+
+		stage.lastTileEdit = [None, None]
+
+		if undoStack[undoPos].action == const.UNDO_TILE:
+			stage.map.modify(undoStack[undoPos].forward)
+			for index, tile in undoStack[undoPos].forward:
+				x = index % stage.map.width
+				y = index // stage.map.width
+				stage.renderTileToSurface(x, y, tile[0],
+												tile[1])
+			stage.undoPos += 1
+
+	def backupStages(self):
+		if not os.path.exists(dataPath + backupFolderName):
+			os.makedirs(dataPath + backupFolderName)
+
+		for stage in self.stages:
+			if not stage.backup():
+				continue
+
+		#remove oldest backups
+		backupFiles = sorted(glob.glob(dataPath + backupFolderName + "/*"))
+		names = []
+		for backup in backupFiles:
+			basename = os.path.basename(backup)
+			try:
+				suffix = basename.split("_", 1)[1]
+				names.append(suffix)
+			except IndexError:
+				print("Invalid backup name.." + basename)
+				return
+		
+		backupCounts = dict(Counter(names))
+		
+		for suffix, count in backupCounts.items():
+			if count <= gxEdit.backupLimit:
+				continue
+
+			backupsMatching = [x for x in backupFiles if x[-len(suffix):] == suffix]
+			for i in range(count - gxEdit.backupLimit):
+				print("Pruning " + backupsMatching[i])
+				os.remove(backupsMatching[i])
+
+		print("backup complete.")
+
+
+gxEdit = Editor()
+
 def main():
 	sdl2.ext.init()
+	#To disable texture destruction on window resize
+	sdl2.SDL_SetHint(sdl2.SDL_HINT_RENDER_DRIVER, b"opengl")
 
-	RESOURCES = sdl2.ext.Resources(__file__, "BITMAP")
-	window = sdl2.ext.Window("Doctor's Garage", size=(640, 480), flags=sdl2.SDL_WINDOW_RESIZABLE)
+	#TODO window.rect
+	defaultWindowWidth = 640
+	defaultWindowHeight = 480
+
+	interface.gWindow = sdl2.ext.Window("Doctor's Garage", size=(defaultWindowWidth, defaultWindowHeight), flags=sdl2.SDL_WINDOW_RESIZABLE)
+	interface.gWindowWidth = defaultWindowWidth
+	interface.gWindowHeight = defaultWindowHeight
+
+	window = interface.gWindow
 	window.show()
-	renderer = sdl2.ext.Renderer(window, flags=sdl2.SDL_RENDERER_SOFTWARE)
-	sprfactory = sdl2.ext.SpriteFactory(sdl2.ext.TEXTURE, renderer=renderer)
-	uifactory = sdl2.ext.UIFactory(sprfactory)
 
-	windowBg = sprfactory.from_image(RESOURCES.get_path("dgBg.bmp"))
-	colorBlack = sprfactory.from_color(sdl2.ext.Color(0,0,0),(32,32))
-	#colorOrange = sprfactory.from_color(sdl2.ext.Color(250,150,0),(16,16))
-	colorOrange = sdl2.ext.Color(250,150,0)
-	colorOrangeDark = sdl2.ext.Color(160,100,0)
+	interface.gRenderer = sdl2.ext.Renderer(window, flags=sdl2.SDL_RENDERER_ACCELERATED|sdl2.SDL_RENDERER_TARGETTEXTURE)
+	renderer = interface.gRenderer
 
-	colorRedTransparent = sprfactory.from_color(sdl2.ext.Color(255,0,0, 80), size=(32, 32),
-                   masks=(0xFF000000,           
-                          0x00FF0000,           
-                          0x0000FF00,           
-                          0x000000FF))          
+	interface.gSprfactory = sdl2.ext.SpriteFactory(sdl2.ext.TEXTURE, renderer=renderer)
+	sprfactory = interface.gSprfactory
 
-	colorOrangeTransparent = sprfactory.from_color(sdl2.ext.Color(250,150,0, 128), size=(32, 32),
-                   masks=(0xFF000000,           
-                          0x00FF0000,           
-                          0x0000FF00,           
-                          0x000000FF))   
+	interface.gInterface = interface.Interface(renderer, window, sprfactory)
+	gui = interface.gInterface
+	gui.loadSurfaces()
 
-	windowBg2 = sprfactory.from_image(RESOURCES.get_path("dgBg2.bmp"))
-	
+
+	#uifactory = sdl2.ext.UIFactory(sprfactory)
+
+	'''
 	windowBg._size = (windowBg.size[0] * 2, windowBg.size[1] * 2)
-	windowBg2._size = (windowBg2.size[0] * 2, windowBg2.size[1] * 2)
+	windowBg2._size = (windowBg2.size[0] * 2, windowBg2.size[1] * 2)'''
 	#easy
 
-	gxEdit = Editor()
 	gxEdit.loadMeta(sprfactory)
 	for i in range(1,7):
 		if i == 5: print("stage... FIVE")
 		gxEdit.loadStage(i)
 		gxEdit.stages[i-1].loadParts(sprfactory)
+		gxEdit.stages[i-1].renderTilesToSurface()
+
+
+		
 
 	introAnimTimer = 0
 
@@ -206,9 +390,57 @@ def main():
 
 	mouseHeld = False
 
+
+	#gxEdit.elements.append(UIWindow(100, 100, 128, 64))
+	#gxEdit.elements.append(interface.UIWindow(22, 22, 256, 256))
+	#gxEdit.elements.append(interface.UIWindow(300, 300, 260, 272, const.WINDOW_TILEPALETTE))
+
+	gxEdit.elements.append(interface.TilePaletteWindow(300, 300, 256, 280, const.WINDOW_TILEPALETTE))
+	gxEdit.elements.append(interface.EntityPaletteWindow(300, 0, 256, 156, const.WINDOW_ENTITYPALETTE))
+
+	gxEdit.elements.append(interface.ToolsWindow(300, 200, 64, 40, const.WINDOW_TOOLS))
+
+	def renderEditor():
+		#TODO: placeholder
+
+		gui.renderMainBg(introAnimTimer, mouseover)
+		gui.renderTiles(gxEdit, curStage)
+		gui.renderEntities(gxEdit, curStage)
+	
+		gui.renderEntityPalette(gxEdit, curStage)
+	
+		gui.renderUIWindows(gxEdit)
+		gui.renderTilePalette(gxEdit, curStage)
+	
+		for elem in gxEdit.elements:
+			if elem.visible: elem.render(gxEdit, curStage)
+
+	#for continuous resizing
+	def resizeEventWatch(data, event):
+		if event.contents.type == sdl2.SDL_WINDOWEVENT:
+			if event.contents.window.event == sdl2.SDL_WINDOWEVENT_SIZE_CHANGED:
+				interface.gWindowWidth = event.contents.window.data1
+				interface.gWindowHeight = event.contents.window.data2
+				
+				renderEditor()
+				renderer.present()
+		return 0
+	reFunc = sdl2.SDL_EventFilter(resizeEventWatch)
+	sdl2.SDL_AddEventWatch(reFunc, window.window)
+
+	tickCount = sdl2.timer.SDL_GetTicks()
+	gxEdit.lastBackupTick = tickCount
+
 	while running:
+
+		tickCount = sdl2.timer.SDL_GetTicks()
+		
 		curStage = gxEdit.stages[gxEdit.curStage]
+		
+		#height of window in tiles
+		scaleFactor = (interface.gWindowHeight // const.tileWidth // gxEdit.magnification)
 		events = sdl2.ext.get_events()
+		
 		for event in events:
 			if event.type == sdl2.SDL_QUIT:
 				running = False
@@ -222,140 +454,41 @@ def main():
 				if event.window.event == sdl2.SDL_WINDOWEVENT_LEAVE:
 					mouseover = False
 			elif event.type == sdl2.SDL_KEYDOWN:
-				tempRunInput(curStage, event.key)
+				input.runKeyboard(gxEdit, curStage, scaleFactor, event.key)
 			elif event.type == sdl2.SDL_MOUSEWHEEL:
-				tempRunInputWheel(curStage, event.wheel)
+				input.runMouseWheel(curStage, event.wheel)
 			elif event.type == sdl2.SDL_MOUSEBUTTONDOWN:
 				mouseHeld = True
-				tempRunInputMouseClick(curStage, event.button)
-				tempRunInputMouse2(curStage, event.button)
+				input.runMouse1(gxEdit, curStage, event.button)
+				input.runMouse2(gxEdit, curStage, event.button)
 			elif event.type == sdl2.SDL_MOUSEBUTTONUP:
+				input.runMouseUp(gxEdit, curStage, event.button)
 				mouseHeld = False
+				gxEdit.draggedElem = None
+			elif event.type == sdl2.SDL_TEXTINPUT:
+				pass
 
-
-		tileScale = 1
-		tileWidth = 16 * tileScale
-
-		def renderTiles(stage):
-			map = stage.map
-			for i, tile in enumerate(map.tiles):
-				
-				y = i // map.width
-				if y < stage.scroll:
-					continue
-				if (y - stage.scroll) * tileWidth > window.size[1]:	
-					continue
-				y -= stage.scroll
-
-				x = i % map.width
-				dstx = x * tileWidth
-				dsty = y * tileWidth
-
-				x = tile % 16 #the magic number so that each 4 bits in a byte corresponds to the x, y position in the tileset
-				y = tile // 16
-				srcx = x * tileWidth
-				srcy = y * tileWidth
-
-				mag = gxEdit.magnification
-				srcrect = (srcx, srcy, tileWidth, tileWidth)
-				dstrect = (dstx*mag, dsty*mag, tileWidth*mag, tileWidth*mag)
-				#srcrect = 
-				renderer.copy(stage.parts, srcrect=srcrect, dstrect=dstrect)
-
-			#TODO: add hovered over tile border
-
-
-		def renderTilePalette(stage):
-			mag = gxEdit.magnification
-			srcrect = stage.parts.area
+		#TODO figure out a better way to do this
+		def clampCurStage():
+			if gxEdit.curStage >= len(gxEdit.stages):
+				gxEdit.curStage = len(gxEdit.stages) - 1 
+			if gxEdit.curStage < 0:
+				gxEdit.curStage = 0
+		def clampScroll(stage):
+			if stage.scroll >= stage.map.height - scaleFactor:
+				stage.scroll = stage.map.height - scaleFactor
 			
-			dstx = stage.map.width * tileWidth * mag
-			dsty = 0
+			if stage.scroll < 0:
+				stage.scroll = 0
 
-			#TODO: add dstrect mag
-			dstrect = (dstx, dsty, stage.parts.size[0], stage.parts.size[1])
-			renderer.copy(stage.parts, srcrect=srcrect, dstrect=dstrect)
-
-			#TODO: add selected tile border (properly)
-			if stage.currentEditMode == EDIT_TILE:
-				dstx = dstx + ((stage.selectedTiles[0][0]) * tileWidth)
-				dsty = dsty + ((stage.selectedTiles[0][1]) * tileWidth)
-				w =  (stage.selectedTilesEndX+1 - stage.selectedTilesStartX) * tileWidth
-				h = (stage.selectedTilesEndY+1 - stage.selectedTilesStartY) * tileWidth
-
-				drawBox(renderer, dstx, dsty, w, h)
-
-		def renderEntityPalette(stage):
-			mag = gxEdit.magnification
-			srcrect = gxEdit.units.area
-
-			dstx = stage.map.width * tileWidth * mag
-			dsty = stage.parts.size[1]
+			if stage.hscroll >= stage.map.width - scaleFactor:
+				stage.hscroll = stage.map.width - scaleFactor
 			
-			#TODO: add dstrect mag
-			dstrect = (dstx, dsty, gxEdit.units.size[0], gxEdit.units.size[1])
-			renderer.copy(gxEdit.units, srcrect=srcrect, dstrect=dstrect)
-
-			#TODO: add selected ent border (properly)
-			if stage.currentEditMode == EDIT_ENTITY:
-				dstx = dstx + ((stage.selectedEntity % 16) * tileWidth)
-				dsty = dsty + ((stage.selectedEntity // 16) * tileWidth)
-				drawBox(renderer, dstx, dsty, tileWidth, tileWidth)
-
-			#crashing entities
-			for i in range (entityFuncCount):
-				if i in entityChildIds:
-					dstx = (i % 16) * tileWidth + (stage.map.width * tileWidth * mag)
-					dsty = (i // 16) * tileWidth + stage.parts.size[1]
-					renderer.copy(colorRedTransparent, dstrect=(dstx, dsty, tileWidth, tileWidth))
-
-		def renderEntities(stage):
-			eve = stage.eve.get()
-			xys = []
-			for o in eve:
-				y = o.y
-				if y < stage.scroll*2:
-					continue
-				if (y - stage.scroll*2) * tileWidth//2 > window.size[1]:	
-					continue
-				y -= stage.scroll*2
-				x = o.x
-				dstx = x * (tileWidth // 2)
-				dsty = y * (tileWidth // 2)
-
-				x = o.type1 % 16 #row size in units.bmp
-				y = o.type1 // 16
-				srcx = x * tileWidth
-				srcy = y * tileWidth
-
-				mag = gxEdit.magnification
-				srcrect = (srcx, srcy, tileWidth, tileWidth)
-				dstrect = (dstx*mag, dsty*mag, tileWidth//2*mag, tileWidth//2*mag)
-
-				renderer.copy(gxEdit.units, srcrect=srcrect, dstrect=dstrect)
-
-				if o.type1 in entityChildIds:
-					renderer.copy(colorRedTransparent, dstrect=dstrect)
-
-				#entity borders
-				drawBox(renderer, dstx*mag, dsty*mag, tileWidth//2*mag, tileWidth//2*mag)
-
-				if (dstx, dsty) in xys: #distinguish layered entities
-					 renderer.copy(colorOrangeTransparent, dstrect=dstrect)
-				xys.append((dstx, dsty))
-				
-		def drawBox(renderer, dstx, dsty, w, h):
-			#mag = gxEdit.magnification
-			mag = 1
-			dstrect = (dstx+w, dsty, dstx, dsty,
-							dstx, dsty, dstx, dsty+h)
-			dstrect2 = (dstx+w, dsty+w, dstx+w, dsty,
-							dstx+w, dsty+w, dstx, dsty+h)
-			dstrect = [i * mag for i in dstrect]
-			dstrect2 = [i * mag for i in dstrect2]
-
-			renderer.draw_line(dstrect, color=colorOrange)
-			renderer.draw_line(dstrect2, color=colorOrangeDark)
+			if stage.hscroll < 0:
+				stage.hscroll = 0
+		def clampMagnification():
+			if gxEdit.magnification <= 0:
+				gxEdit.magnification = 0.5
 
 		def scrambleEntities(stage):
 			types = []
@@ -364,258 +497,74 @@ def main():
 			random.shuffle(types)
 			for i, o in enumerate(stage.eve._entities):
 				o.type1, o.type2 = types[i]
+
 			
-		def clampMagnification():
-			if gxEdit.magnification <= 0:
-				gxEdit.magnification = 1
-
-		clampMagnification()
-		scaleFactor = (window.size[1] // tileWidth // gxEdit.magnification)
-		def tempRunInput(stage, key):
-			sym = key.keysym.sym
-			if sym == sdl2.SDLK_LEFT:
-				gxEdit.curStage -= 1
-			if sym == sdl2.SDLK_RIGHT:
-				gxEdit.curStage += 1
-
-			if sym == sdl2.SDLK_DOWN:
-				stage.scroll += 1
-			if sym == sdl2.SDLK_UP:
-				stage.scroll -= 1
-			if sym == sdl2.SDLK_HOME:
-				stage.scroll = 0
-			if sym == sdl2.SDLK_END:
-				stage.scroll = stage.map.height - scaleFactor
-			if sym == sdl2.SDLK_PAGEDOWN:
-				stage.scroll += int(scaleFactor // 1.5)
-			if sym == sdl2.SDLK_PAGEUP:
-				stage.scroll -= int(scaleFactor // 1.5)
-
-			if sym == sdl2.SDLK_MINUS:
-				gxEdit.magnification -= 1
-
-			if sym == sdl2.SDLK_EQUALS:
-				gxEdit.magnification += 1
-
-
-			if key.keysym.mod & sdl2.KMOD_CTRL:
-				if sym == sdl2.SDLK_d:
-					scrambleEntities(stage)
-			
-				if sym == sdl2.SDLK_s:
-					#TODO: show flash on save
-					stage.save()
-
-
-			clampCurStage()
-
-		def tempRunInputWheel(stage, wheel):
-			stage.scroll -= wheel.y
-
-
-		def tempRunInputMouseClick(stage, mouse):
-			if mouse.button != sdl2.SDL_BUTTON_LEFT: return False
-
-			map = stage.map
-			eve = stage.eve
-			mag = gxEdit.magnification
-
-			tileEndX = tileWidth * mag * map.width
-
-			if mouse.x > tileEndX:
-				if mouse.y < stage.parts.size[1]:
-					#tile select
-					#TODO: add mag
-					x = (mouse.x - tileEndX) // tileWidth 
-					y = mouse.y // tileWidth
-
-					if x >= stage.attr.width:
-						return
-					if y >= stage.attr.height:
-						return
-					stage.currentEditMode = EDIT_TILE
-					stage.selectedTilesStartX = x
-					stage.selectedTilesStartY = y
-					stage.selectedTiles = [[x, y]]
-				else:
-					#entity select
-					#TODO: add mag
-					x = (mouse.x - tileEndX) // tileWidth
-					y = (mouse.y - stage.parts.size[1]) // tileWidth
-
-					index = x + (y * 16)
-					if index > entityFuncCount:
-						return
-
-					stage.currentEditMode = EDIT_ENTITY
-					stage.selectedEntity = index
-			elif stage.currentEditMode == EDIT_ENTITY:
-				x = (mouse.x // (tileWidth//2 * mag))
-				y = (mouse.y // (tileWidth//2 * mag)) + stage.scroll*2
-
-				if x >= map.width*2 or y >= map.height*2:
-					return
-
-				eve.add(x, y, stage.selectedEntity, 0)
-
-		def tempRunInputMouseDrag(stage):			
-			#it just works
-			mouse = sdl2.SDL_MouseButtonEvent()
-			x,y = ctypes.c_int(0), ctypes.c_int(0)
-			mouse.button = sdl2.SDL_GetMouseState(x, y)
-			mouse.x, mouse.y = x.value, y.value
-
-			if (mouse.button != sdl2.SDL_BUTTON_LEFT): return False
-
-			map = stage.map
-			mag = gxEdit.magnification
-
-			tileEndX = tileWidth * mag * map.width
-
-			if mouse.x > tileEndX:
-				if mouse.y < stage.parts.size[1]:
-					x = (mouse.x - tileEndX) // tileWidth 
-					y = mouse.y // tileWidth
-
-					if x >= stage.attr.width:
-						return
-					if y >= stage.attr.height:
-						return
-					stage.selectedTilesEndX = x
-					stage.selectedTilesEndY = y
-
-			elif stage.currentEditMode == EDIT_TILE:
-
-				x = (mouse.x // (tileWidth * mag))
-				y = (mouse.y // (tileWidth * mag)) + stage.scroll
-
-				if x >= map.width or y >= map.height:
-					return
-
-				if len(stage.selectedTiles) == 1:
-					#don't modify if same
-					index = x + (y * map.width)
-					if map.get()[index] == x + (y * 16):
-						return
-					map.modify( [[index, stage.selectedTiles[0]]] )
-				else:
-					startX = stage.selectedTiles[0][0]
-					startY = stage.selectedTiles[0][0]
-					tiles = []
-					for tile in stage.selectedTiles:
-						xx = startX - tile[0] + x
-						yy = startY - tile[1] + y
-
-						index = xx + (yy * map.width)
-						tiles.append([index, [tile[0], tile[1]]])
-					#TODO: dont modify if grid same
-					map.modify(tiles)
 		def runTileSelection(stage):
 			tiles = []
+			start = stage.selectedTilesStart
+			end = stage.selectedTilesEnd
 
-			if stage.selectedTilesStartX > stage.selectedTilesEndX:
-				stage.selectedTilesStartX, stage.selectedTilesEndX = stage.selectedTilesEndX, stage.selectedTilesStartX
-			if stage.selectedTilesStartY > stage.selectedTilesEndX:
-				stage.selectedTilesStartY, stage.selectedTilesEndY = stage.selectedTilesEndY, stage.selectedTilesStartY
-			for x in range(stage.selectedTilesStartX, stage.selectedTilesEndX+1):
-				for y in range(stage.selectedTilesStartY, stage.selectedTilesEndY+1):
+			#TODO: fix dragging to the left and up
+			if end[0] < start[0]:
+				start[0], end[0] = end[0], start[0]
+			if end[1] < start[1]:
+				start[1], end[1] = end[1], start[1]
+			for x in range(start[0], end[0]+1):
+				for y in range(start[1], end[1]+1):
 					tiles.append([x, y])
 
 			if tiles != []: stage.selectedTiles = tiles
 
-		def tempRunInputMouse2(stage, mouse):
-			if (mouse.button != sdl2.SDL_BUTTON_RIGHT): return False
+		def clampUiWindows():
+			for elem in gxEdit.elements:
+				if elem.y <= 0:
+					elem.y = 0
+				if elem.x + elem.w - 25 < 0:
+					elem.x = -elem.w + 25
+				if elem.y + elem.h - 25 < 0:
+					elem.x = -elem.w + 25
+				if elem.x + 25 > interface.gWindowWidth:
+					elem.x = interface.gWindowWidth - 25
+				if elem.y + 25 > interface.gWindowHeight:
+					elem.y = interface.gWindowHeight - 25
 
-			mag = gxEdit.magnification
+		#windowSurface = window.get_surface()
 
-			if stage.currentEditMode == EDIT_ENTITY:
-				x = (mouse.x / (tileWidth/2 * mag))
-				y = (mouse.y / (tileWidth/2 * mag)) + stage.scroll*2
-				x = math.floor(x) 
-				y = math.floor(y)
+		#sdl2.ext.fill(windowSurface, sdl2.ext.Color(224,224,224))
+		#sdl2.ext.fill(windowSurface, sdl2.ext.Color(0,0,0))
 
-				for o in stage.eve.get():
-					if o.x == x and o.y == y:
-						stage.eve.remove([o.id])
-						return
+		gui.fill()
 
-		def clampScroll(stage):
-			if stage.scroll >= stage.map.height - scaleFactor:
-				stage.scroll = stage.map.height - scaleFactor
-			
-			if stage.scroll < 0:
-				stage.scroll = 0
-		def clampCurStage():
-			if gxEdit.curStage >= len(gxEdit.stages):
-				gxEdit.curStage = len(gxEdit.stages) - 1 
-			if gxEdit.curStage < 0:
-				gxEdit.curStage = 0
+		clampCurStage()
+		clampMagnification()
+		clampScroll(curStage)
+		clampUiWindows()
 
-		def renderMainBg():
-			if introAnimTimer > 15 and introAnimTimer < 25 and introAnimTimer % 3 == 0 or introAnimTimer > 25:
-				if mouseover:
-					renderer.copy(windowBg, dstrect=(windowBg.x, windowBg.y, windowBg.size[0], windowBg.size[1]))
-				else:
-					renderer.copy(windowBg2, dstrect=(windowBg.x, windowBg.y, windowBg.size[0], windowBg.size[1]))
-
-		def fadeout():
-			renderer.copy(colorBlack, dstrect=(0, window.size[1]//2 + math.ceil(window.size[1] * 0.05 * introAnimTimer), windowSurface.w, windowSurface.h))
-			renderer.copy(colorBlack, dstrect=(0, -window.size[1]//2 - math.ceil(window.size[1] * 0.05 * introAnimTimer), windowSurface.w, windowSurface.h))
-			renderer.copy(colorBlack, dstrect=(window.size[0]//2 + math.ceil(window.size[0] * 0.05 * introAnimTimer), 0, windowSurface.w, windowSurface.h))
-			renderer.copy(colorBlack, dstrect=(-window.size[0]//2 - math.ceil(window.size[0] * 0.05 * introAnimTimer), 0, windowSurface.w, windowSurface.h))
-
-		windowSurface = window.get_surface()
-
-		sdl2.ext.fill(windowSurface, sdl2.ext.Color(224,224,224))
-		#windowBg._size = (math.ceil(windowBg._size[0] * 1.5), math.floor(windowBg._size[1] * 1.5))
-
-		windowBg.x = windowSurface.w//2 - windowBg.size[0]//2
-		windowBg.y = windowSurface.h//2 - windowBg.size[1]//2
-
-		#renderer.copy(colorBlack, dstrect=(0, math.ceil(window.size[1] * 0.05 * introAnimTimer), windowSurface.w, windowSurface.h))
 		curStage = gxEdit.stages[gxEdit.curStage]
-		tempRunInputMouseDrag(curStage)
+		input.runMouseDrag(gxEdit, curStage)
 		if mouseHeld: runTileSelection(curStage)
 
-		clampScroll(curStage)
-
-
-		#TODO: render to texture, only make changes when needed
-		renderMainBg()
-		renderTiles(curStage)
-		renderEntities(curStage)
-
-		renderTilePalette(curStage)
-		renderEntityPalette(curStage)
-
+		if (gxEdit.saveTimer <= 0):
+			renderEditor()
+			
+		gxEdit.saveTimer -= 1
 
 		if introAnimTimer < 60:
-			fadeout()
+			gui.fadeout(introAnimTimer)
 		introAnimTimer += 1
 
+		if tickCount >= gxEdit.lastBackupTick + (gxEdit.backupMinutes * 60 * 1000):
+			gxEdit.backupStages()
+			gxEdit.lastBackupTick = tickCount
+			
+
+
 		#TODO: do a getticks system
-		sdl2.SDL_Delay(1)
 		renderer.present()
+		sdl2.SDL_Delay(16)
+
 		#window.refresh()
 	return 0
-	
-
-
-	'''
-	for i in range(1,6):
-		if i == 5: print("stage... FIVE")
-		gxEdit.loadStage(i)
-
-	for stage in gxEdit.stages:
-		print("====stage {}=====".format(stage.stageNo))
-		events = stage.eve.get()
-		for o in events:
-			pxEve.printEntity(o, gxEdit.entityInfo)
-			#pass
-	'''
-
-	#gxEdit.stages[1].eve.save(dataPath, 7)
-
 
 if __name__== "__main__":
   sys.exit(main())
@@ -637,14 +586,85 @@ if __name__== "__main__":
 #launch directly into level -- coop option
 
 #launch directly into level with powerups at scroll, scrollspeed etc
+#write debugstart.bin & writeprocessmemory (virtualprotect?) jmp to level load instead of going to menu
 
 #show mouse position of other users
+
+#ruler??
+#export map to png
+
+
+#next on the itnerary
+#tooltips
+#entity info boxes
+#rectangle paint
+#copy paint
+#undo
+
+#windowtype stage selection
+#hidden toolbar at top for open maps../ file view about
+
+#fullscreen mode??!?!?!?!?
+
+
+#port
+#ip
+#name
+#color
+
+
+#show grid
+
+#reload tileset button
+
+#bg parallax scrolling
+
+#0.5x zoom type
+#/(1*divideFactor)
+
+#statustext
+#Hosting...
+#() connected! (ip)
+#sending .pxm .bmp etc
+
+#pxEdit [00boot]
+
+'''
+DONE!!!
+
+#render entity palette
+#render tile palette
+
+#render map
+#render entities
+
+'''
+
+
+'''
+EditorApp.25=Far back
+EditorApp.26=Back
+EditorApp.27=Front
+EditorApp.28=Far Front
+EditorApp.29=Physical
+EditorApp.3=By Noxid - 25/09/2012\n
+EditorApp.30=Draw
+EditorApp.31=Fill
+EditorApp.32=Replace
+EditorApp.33=Rectangle
+EditorApp.34=Copy
+EditorApp.35=Show Tile Types
+EditorApp.36=Show Grid
+EditorApp.37=Show Entity Boxes
+EditorApp.38=Show Entity Sprites
+EditorApp.39=Show Entity Names'''
 
 #edit bullet atr
 #edit npc attr
 
 #render intro
 #downwards black line fade
+
 
 # --render entity tooltips (along with description of entity)
 
@@ -654,10 +674,12 @@ if __name__== "__main__":
 
 
 #highlight entities that can be used on this stage
+#guxt only? or figure out which entity goes on which sheet for cs..
 
 
 #render status text bar
 #flavor text will appear for 8 seconds at a time, alternating every 5 minutes or so..
+
 
 #tiles to draw = )yscrollbar) 
 
@@ -666,6 +688,7 @@ if __name__== "__main__":
 #normal entity ui (instant tooltips)
 
 #longform entity placement (large unit bitmaps)
+# 	display large bitmaps from RECT table..
 
 #Unsaved changes... Do you wish to save? "Yes, Cancel"
 
@@ -676,3 +699,18 @@ if __name__== "__main__":
 
 #copy images to bkupfolder in data
 
+#Various tasks are repeated over and over until the game is completed.
+#When you want to open the stage next to the stage you are editing,
+#select "Open File" from the menu, and the simple action of selecting the stage
+#repeats thousands of times until the game is completed, which makes you uneasy.
+#
+#The next stage can be set for each stage data so that the next stage can be
+#opened with the cursor keys up/down/left/right.
+#I want to bring extra energy to the washing machine, clothesline, and closet.
+
+#Arrangement of parts to put between the block and the other place.
+#Up until now, I have placed each one by hand, but since
+#it is too workable, I added an automatic placement function to the editor.
+#It's just now, but I was impressed when it worked properly with one touch.
+#It's been about 4 months since I made it.
+#Is it going to be completed in the summer? I have to think about efficiency.
