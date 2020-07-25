@@ -15,7 +15,7 @@ entityCrashIds = [12, 16, 17, 33, 34, 36, 50, 51, 52, 53, 55, 57, 62, 71, 77, 78
 entityFuncCount = 122
 
 #for a green title color
-entityGoodIds = [1, 2, 3, 4, 7, 22, 37, 45, 47, 56, 59, 60, 61, 64, 74, 75, 92, 96, 106, 107, 116, 117, 118, 119, 121]
+entityGoodIds = [1, 2, 3, 4, 7, 37, 45, 47, 59, 60, 61, 64, 74, 75, 91, 92, 96, 106, 107, 116, 119, 121]
 #utility invisible entities for orange
 entityUtilIds = [6, 19, 22, 38, 46, 56, 70, 73, 87, 93, 99, 106, 107, 117, 118]
 

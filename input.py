@@ -81,7 +81,7 @@ def runMouse1(gxEdit, stage, mouse):
 		gxEdit.currentEditMode = const.EDIT_ENTITY
 		gxEdit.selectedEntity = index
 
-	if gxEdit.currentEditMode == const.EDIT_ENTITY:
+	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 		#entity place
 		x = int(mouse.x // (const.tileWidth//2 * mag)) + stage.hscroll*2
 		y = int(mouse.y // (const.tileWidth//2 * mag)) + stage.scroll*2

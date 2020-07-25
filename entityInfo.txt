@@ -28,27 +28,27 @@
 (027) RHAsteroidL@The asteroid of a Rock Hugger.@
 (028) RHAsteroidS@The asteroid of a Rock Hugger.@
 (029) Bullet2?@@(Parameter: spawns lower if set)
-(030) Elka@@
-(031) Sodi@@
+(030) Elka@A big square enemy that moves along the screen and shoots.@
+(031) Sodi@Comes down and shoots, then leaves.@
 (032) Boss2@Missile Tailor@
 (033) Boss2RocketSpawner@@
 (034) B2ExplosionSpawner?@@
 (035) B2Rocket@@
 (036) Boss2Eye@@
-(037) Stars?@@
-(038) StarGen@@
-(039) Elka2@@
-(040) GuxtFort@@
-(041) CatEye@@
-(042) Slider@@
-(043) Cycloid@@
-(044) Chester@@
-(045) Bonus@@
-(046) BonusGen@@
+(037) Star@Twinkle@(Parameter: the kind of star it is)
+(038) StarGen@Makes stars randomly.@
+(039) Elka2@An Elka that stays in place and explodes on death.@
+(040) GuxtFort@A ground unit that fires in three-round burst.@
+(041) CatEye@A ground unit that opens and shoots after a while.@(Parameter: how many seconds to wait after appearing)
+(042) Slider@Slides around. Starts shooting after a delay.@
+(043) Cycloid@Flies around the screen in a U shape.@(Parameter:todo)
+(044) Chester@Moves around in bursts, opening and closing.@
+(045) Bonus@A bonus that drops down slowly.@(Parameter: which bonus it is.)
+(046) BonusGen@Spawns an Ikachan bonus when two powerups are collected in quick succession.@(Parameter: makes it useless if set.)
 (047) CloudXL@A REALLY big cloud.@
-(048) Gimmick@@
+(048) Gimmick@Sleeps on the wall. Moves to the other side if shot.@(Parameter: direction)
 (049) Boss3@Three Holes@
-(050) 62@@
+(050/62) PowerupHelper@@
 (051) B3Eye1?@@
 (052) B3Eye2?@@
 (053) B3Eye3?@@
@@ -57,21 +57,21 @@
 (056) Checkpoint@@
 (057) Boss3TurretSpawner@@
 (058) B3Turret@@
-(059) PowerupSpinnerShield@@
-(060) PowerupBox@@
-(061) PowerupStatic@@
-(050) 62@@
-(063) BulletWhite@@
-(064) PowerupSpinner@@
-(065) ClimberShoot@@
-(066) Tri@@
-(067) GuxtTank@@
-(068) MedusaEye@@
-(069) GuxtMine@@
-(070) BlendyGen@@
+(059) PowerupSpinnerShield@A hanger with one health.@(Parameter: turns it into a powerup spinner)
+(060) PowerupBox@A shootable ground powerup.@(Parameter: the powerup)
+(061) PowerupStatic@A plain ground powerup.@(Parameter:)
+(050/62) PowerupHelper@@
+(063) BulletWhite@A white bullet.@(Parameter: same as 013Bullet)
+(064) PowerupSpinner@A spinning powerup that launches up.@(Parameter:)
+(065) ClimberShoot@Digs up from under the ground, falls out and shoots.@
+(066) Tri@A strong unit that flies up diagonally, opens, then shoots.@
+(067) GuxtTank@A submarine that swims before shooting.@(Parameter: vertical offset)
+(068) MedusaEye@A strong ground unit that fires rapidly.@(Parameter: delay in half seconds before opening.)
+(069) GuxtMine@Ground unit that explodes on death.@
+(070) BlendyGen@Slow falling ball and chain.@(Parameter: position of the ball)
 (071) Blendy@@
-(072) Cycloid2@@
-(073) Cycloid2Gen@@
+(072) Cycloid2@Spins around in a circle then flies towards the player.@
+(073) Cycloid2Gen@Creates 4 Cycloid2s in succession.@
 (074) PowerupHidden@A hidden powerup.@(Parameter: the powerup)
 (075) PowerupAsteroid@A powerup hidden in a spooky asteroid.@(Parameter: the powerup)
 (076) Boss4@Octopus@
@@ -79,32 +79,32 @@
 (078) @@
 (079) @@
 (080) @@
-(081) SpaceAmeba@@
+(081) SpaceAmeba@Like a chester, but fades into the background.@
 (082) @@
 (083) B4Bullet@@
-(084) Square@@
-(085) CloudDarkL@@
-(086) CloudDarkS@@
-(087) CloudDarkGen@@
-(088) MissilePot@@
+(084) Square@A rotating square that winds up and flies in a cardinal direction..@(Parameter: the direction to fly in.)
+(085) CloudDarkL@A large dark cloud.@
+(086) CloudDarkS@A small dark cloud.@
+(087) CloudDarkGen@Generates large and small dark clouds.@
+(088) MissilePot@Comes up slowly and fires a string of missiles.@
 (089) @@
-(090) Missile@@
-(091) @@
-(092) BGRock@@
-(093) DeleteRockCloudGen@Removes rock and cloud generators.@
-(094) SandStamper@@
+(090) Missile@The missile of a Missile Pot.@(Parameter: which direction to go in.)
+(091) BGRock@@(Parameter: rect?)
+(092) BGRockGen@Generates rocks in the background.@
+(093) DeleteRockDarkCloudGen@Removes rock and dark cloud generators.@
+(094) SandStamper@Hops along the ground.@(Parameter: how fast to stamp)
 (095) @@
 (096) Stamp@A stamp in the sand.@
-(097) Brick@@
-(098) BulletSquare@@
-(099) BulletSquareGen@@
-(100) Boss5@Gas Turbine@
+(097) Brick@A destroyable ground unit.@
+(098) BulletSquare@A menacing square bullet.@(Parameter: the angle)
+(099) BulletSquareGen@A ground unit that fires square bullets in the direction of the player.@
+(100) Boss5@Gas Turbine@(Parameter: the angle?????)
 (101) @@
-(102) B5Bullet@@
+(102) B5Bullet@@(Parameter: angle)
 (103) @@
-(104) B5Laser@@
+(104) B5Laser@@(Parameter: angle)
 (105) B5LaserTrail@@
-(106) AzaBonusSpawner?@@
+(106) AzaBonusSpawner@Spawns an Azarashi dart bonus after 20 asteroids are killed.@
 (107) ToggleShadow@Puts a shadow under the ship. Used in stage 5.@(Parameter: enables shadow)
 (108) Boss6@Ogdobas@The zombie of Octopus.
 (109) @@
@@ -114,9 +114,9 @@
 (113) @@
 (114) B6Ball@@
 (115) B6Caret@@
-(116) CreditText@@
-(117) CreditReplace@@
+(116) CreditText@Text that pops in during the credits, in sequential order. Pauses the game for 1 second.@
+(117) CreditReplace@Removes all entities of a certain type.@(Parameter: the entity id to remove)
 (118) CreditLoadImg@Changes the currently loaded enemy spritesheet.@(Parameter: the stage to switch to)
-(119) CPhoto@@
-(120) CreditGimmick@@
-(121) BonusHidden@@
+(119) CPhoto@A photo of a boss that flies in from the side. Switches direction every other boss.@(Parameter: which boss)
+(120) CreditGimmick@The Gimmick in the credits that opens its eye. Comes with a perch.@
+(121) BonusHidden@A hidden bonus that peeps when shot.@(Parameter: the bonus.)

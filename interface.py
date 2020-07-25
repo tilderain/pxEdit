@@ -29,6 +29,11 @@ SURF_COLOR_BLUE = 10
 SURF_COLOR_WHITE_TRANSPARENT = 11
 SURF_COLOR_GREEN = 12
 
+SURF_SDLCOLOR_MAGENTA = 13
+SURF_SDLCOLOR_GREEN = 14
+SURF_SDLCOLOR_GOLD = 15
+SURF_SDLCOLOR_RED = 16
+
 gSurfaces = [None] * surfaceCount
 
 #rect enums
@@ -338,8 +343,8 @@ class UITooltip(UIWindow):
 			textTexts.append(sdl2.SDL_CreateTextureFromSurface(sdlrenderer, textSurf))
 			sdl2.SDL_FreeSurface(textSurf)
 
-		self.w = max(textWidths) + 12
-		self.h = sum(textHeights) + 12
+		self.w = (max(textWidths) + 12) * gxEdit.tooltipMag
+		self.h = (sum(textHeights) + 12) * gxEdit.tooltipMag
 
 		self.x = mouse.x
 		self.y = mouse.y - self.h
@@ -354,8 +359,8 @@ class UITooltip(UIWindow):
 
 		renderHeight = self.y+6
 		for i in range(len(textTexts)):
-			dstRect = sdl2.SDL_Rect(self.x+6, renderHeight, textWidths[i], textHeights[i])
-			renderHeight += textHeights[i]
+			dstRect = sdl2.SDL_Rect(self.x+6, renderHeight, textWidths[i]*gxEdit.tooltipMag, textHeights[i]*gxEdit.tooltipMag)
+			renderHeight += textHeights[i]*gxEdit.tooltipMag
 
 			sdl2.SDL_RenderCopy(sdlrenderer, textTexts[i], None, dstRect)
 			sdl2.SDL_DestroyTexture(textTexts[i])
@@ -402,7 +407,7 @@ class TilePaletteWindow(UIWindow):
 			w = (stage.selectedTilesEnd[0]+1 - stage.selectedTilesStart[0]) * const.tileWidth * mag
 			h =  (stage.selectedTilesEnd[1]+1 - stage.selectedTilesStart[1]) * const.tileWidth * mag
 
-			gInterface.drawBox(gInterface.renderer, dstx, dsty, w, h)
+			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, w, h)
 
 		#show current tile box
 		pass
@@ -454,7 +459,7 @@ class EntityPaletteWindow(UIWindow):
 		if gxEdit.currentEditMode == const.EDIT_ENTITY:
 			dstx = dstx + ((gxEdit.selectedEntity % 16) * const.tileWidth * mag)
 			dsty = dsty + ((gxEdit.selectedEntity // 16) * const.tileWidth * mag)
-			gInterface.drawBox(gInterface.renderer, dstx, dsty, const.tileWidth * mag, const.tileWidth * mag)
+			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, const.tileWidth * mag, const.tileWidth * mag)
 
 		#crashing entities
 		for i in range (const.entityFuncCount):
@@ -542,6 +547,12 @@ class Interface:
 		gSurfaces[SURF_COLOR_GREEN] = self.sprfactory.from_color(sdl2.ext.Color(0,255,0),(32,32))
 
 		gSurfaces[SURF_COLOR_BLUE] = self.sprfactory.from_color(sdl2.ext.Color(84,108,128),(32,32))
+
+		gSurfaces[SURF_SDLCOLOR_MAGENTA] = self.sprfactory.from_color(sdlColorMagenta,(32,32))
+		gSurfaces[SURF_SDLCOLOR_GOLD] = self.sprfactory.from_color(sdlColorGold,(32,32))
+		gSurfaces[SURF_SDLCOLOR_GREEN] = self.sprfactory.from_color(sdlColorGreen,(32,32))
+		gSurfaces[SURF_SDLCOLOR_RED] = self.sprfactory.from_color(sdlColorRed,(32,32))
+
 
 
 		gSurfaces[SURF_COLOR_RED_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(255,0,0, 80), size=(32, 32),
@@ -667,8 +678,11 @@ class Interface:
 						titleColor = sdlColorGold
 					else:
 						titleColor = sdlColorMagenta
+
 					gxEdit.tooltipText.append([gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD])
 					gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
+
+					gxEdit.tooltipText.append(["Param: " + str(o.type2), sdlColorWhite, TTF_STYLE_NORMAL])
 
 			x *= int(const.tileWidth//2 * mag)
 			y *= int(const.tileWidth//2 * mag)
@@ -725,35 +739,43 @@ class Interface:
 			if o.type1 in const.entityCrashIds:
 				self.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=dstrect)
 
+			if o.type1 in const.entityCrashIds:
+				titleColor = SURF_SDLCOLOR_MAGENTA
+			elif o.type1 in const.entityGoodIds:
+				titleColor = SURF_SDLCOLOR_GREEN
+			elif o.type1 in const.entityUtilIds:
+				titleColor = SURF_SDLCOLOR_GOLD
+			else:
+				titleColor = SURF_SDLCOLOR_RED
 			#entity borders
-			self.drawBox(self.renderer, int(dstx*mag), int(dsty*mag), int(const.tileWidth//2*mag), int(const.tileWidth//2*mag))
+			self.drawBox(self.renderer, titleColor, int(dstx*mag), int(dsty*mag), int(const.tileWidth//2*mag), int(const.tileWidth//2*mag))
 
 			if (dstx, dsty) in xys: #distinguish layered entities
 				 self.renderer.copy(gSurfaces[SURF_COLOR_ORANGE_TRANSPARENT], dstrect=dstrect)
 			xys.append((dstx, dsty))
 			
-	def drawBox(self, renderer, dstx, dsty, w, h):
+	def drawBox(self, renderer, surf, dstx, dsty, w, h):
 		#mag = gxEdit.magnification
 		gDrawBoxRect.x = dstx
 		gDrawBoxRect.y = dsty
 		gDrawBoxRect.w = 1
 		gDrawBoxRect.h = h
-		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
+		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[surf].texture, None, gDrawBoxRect)
 		gDrawBoxRect.x = dstx
 		gDrawBoxRect.y = dsty
 		gDrawBoxRect.w = w
 		gDrawBoxRect.h = 1
-		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
+		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[surf].texture, None, gDrawBoxRect)
 		gDrawBoxRect.x = dstx+w
 		gDrawBoxRect.y = dsty
 		gDrawBoxRect.w = 1
 		gDrawBoxRect.h = h
-		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
+		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[surf].texture, None, gDrawBoxRect)
 		gDrawBoxRect.x = dstx
 		gDrawBoxRect.y = dsty+h
 		gDrawBoxRect.w = w
 		gDrawBoxRect.h = 1
-		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[SURF_COLOR_GREEN].texture, None, gDrawBoxRect)
+		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[surf].texture, None, gDrawBoxRect)
 		return
 		renderer.copy(gSurfaces[SURF_COLOR_GREEN], dstrect=dstrect1)
 		renderer.copy(gSurfaces[SURF_COLOR_GREEN], dstrect=dstrect2)

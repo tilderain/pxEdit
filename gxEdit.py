@@ -49,6 +49,8 @@ backupFolderName = "backup"
 backupFormat = "backup/_{}_{}"
 backupTimeFormat = "%Y%m%d-%H%M%S"
 
+windowName = "Doctor's Garage"
+
 #copy tiles
 #takes an xy square and copies it to the clipboard (width, height)
 
@@ -118,8 +120,8 @@ class StagePrj:
 		self.parts = sprfactory.from_image(dataPath + partsPath.format(self.stageNo))
 
 	def save(self):
-		if self.lastSavePos == self.undoPos: #TODO: and pxattr not modified
-			return False
+		#if self.lastSavePos == self.undoPos: #TODO: and pxattr not modified
+		#	return False
 
 		print("--Saving stage {}...--".format(self.stageNo))
 		self.eve.save(dataPath + eventPath.format(self.stageNo))
@@ -239,6 +241,7 @@ class Editor:
 
 		self.tooltipText = []
 		self.tooltipStyle = const.STYLE_TOOLTIP_BLACK
+		self.tooltipMag = 1
 
 	def readEntityInfo(self):
 		try:
@@ -363,7 +366,7 @@ def main():
 	defaultWindowWidth = 640
 	defaultWindowHeight = 480
 
-	interface.gWindow = sdl2.ext.Window("Doctor's Garage", size=(defaultWindowWidth, defaultWindowHeight), flags=sdl2.SDL_WINDOW_RESIZABLE)
+	interface.gWindow = sdl2.ext.Window(windowName, size=(defaultWindowWidth, defaultWindowHeight), flags=sdl2.SDL_WINDOW_RESIZABLE)
 	interface.gWindowWidth = defaultWindowWidth
 	interface.gWindowHeight = defaultWindowHeight
 
@@ -460,6 +463,9 @@ def main():
 		#height of window in tiles
 		scaleFactor = (interface.gWindowHeight // const.tileWidth // gxEdit.magnification)
 		events = sdl2.ext.get_events()
+
+		#set windowname
+		interface.gWindow.title = windowName + " [" + "map" + str(gxEdit.curStage+1) + "]"
 		
 		for event in events:
 			if event.type == sdl2.SDL_QUIT:
