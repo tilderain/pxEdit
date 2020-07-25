@@ -34,6 +34,8 @@ SURF_SDLCOLOR_GREEN = 14
 SURF_SDLCOLOR_GOLD = 15
 SURF_SDLCOLOR_RED = 16
 
+SURF_NUMBER = 17
+
 gSurfaces = [None] * surfaceCount
 
 #rect enums
@@ -89,11 +91,26 @@ rectUITooltipYellowTop, rectUITooltipYellowRight, rectUITooltipYellowBottom, rec
 
 rectsUITooltip = (rectsUITooltipBlack, rectsUITooltipYellow)
 
+rectUIConcaveColorFill = (26, 2, 1, 1)
+rectUIConcaveTopLeft = (24, 0, 2, 2)
+rectUIConcaveTopRight = (28, 0, 2, 2)
+rectUIConcaveBottomLeft = (24, 3, 2, 2)
+rectUIConcaveBottomRight = (28, 3, 2, 2)
+rectUIConcaveTop = (26, 0, 1, 1)
+rectUIConcaveRight = (29, 2, 1, 1)
+rectUIConcaveBottom = (26, 4, 1, 1)
+rectUIConcaveLeft = (24, 2, 1, 1)
+
+rectsUIConcave = (rectUIConcaveColorFill, rectUIConcaveTopLeft, rectUIConcaveTopRight, rectUIConcaveBottomLeft, rectUIConcaveBottomRight,
+rectUIConcaveTop, rectUIConcaveRight, rectUIConcaveBottom, rectUIConcaveLeft)
+
 rectWindowTextPalette = (0, 53, 68, 12)
 rectWindowTextTools = (0, 64, 54, 12)
 
 rectButtonMinimizeNormal = (80, 5, 16, 16)
 rectButtonMinimizeClicked = (96, 5, 16, 16)
+
+
 
 gRenderer = None
 gWindow = None
@@ -113,6 +130,26 @@ def getTextSize(font, text):
 	TTF_SizeText(font, text, w, h)
 	return [w.value, h.value]
 
+#lazy function
+def renderText(text, color, style, x, y):
+	if text == "" or text == None: return
+
+	sdlrenderer = gInterface.renderer.sdlrenderer
+
+	TTF_SetFontStyle(gFont, style)
+	textSurf = TTF_RenderText_Blended(gFont, ctypes.c_char_p(text.encode("utf-8")), color)
+
+	textWidth = textSurf.contents.w
+	textHeight = textSurf.contents.h
+
+	textText = (sdl2.SDL_CreateTextureFromSurface(sdlrenderer, textSurf))
+	sdl2.SDL_FreeSurface(textSurf)
+
+	dstRect = sdl2.SDL_Rect(x, y, textWidth, textHeight)
+
+	sdl2.SDL_RenderCopy(sdlrenderer, textText, None, dstRect)
+	sdl2.SDL_DestroyTexture(textText)
+
 class UIElement:
 	def __init__(self, x, y, w, h, parent, rect=(0,0,0,0), style=0, tooltip=None):
 		self.x = x
@@ -129,7 +166,7 @@ class UIElement:
 		self.parent = parent
 
 
-	def handleMouse1():
+	def handleMouse1(self, mouse, gxEdit):
 		return False
 
 	def handleMouse2():
@@ -143,11 +180,64 @@ class UIElement:
 		gxEdit.tooltipStyle = self.style
 		return True
 
+	def handleTextInput(self, text):
+		return False
 
 	def render(self, x, y):
 		windowsurf = gSurfaces[SURF_UIWINDOW]
 		gInterface.renderer.copy(windowsurf, srcrect=self.rect, 
 			dstrect=(self.x + x, self.y + y, self.rect[2], self.rect[3]))
+
+
+
+class UIText(UIElement):
+	def __init__(self, x, y, text, color, fontStyle, parent, rect=(0,0,0,0), style=0, tooltip=None, type=None):
+		UIElement.__init__(self, x, y, 1, 1, parent, rect, style, tooltip)
+
+		self.text = text
+		self.color = color
+		self.fontStyle = fontStyle
+	
+	def render(self, x, y):
+		renderText(self.text, self.color, self.fontStyle, self.x + x, self.y + y)
+		
+class UITextInput(UIElement):
+	def __init__(self, x, y, w, h, text, color, fontStyle, parent, rect=(0,0,0,0), style=const.TEXTINPUTTYPE_NORMAL, tooltip=None):
+		UIElement.__init__(self, x, y, w, h, parent, rect, style, tooltip)
+
+		self.text = text
+		self.color = color
+		self.fontStyle = fontStyle
+
+		self.focussed = False
+		self.blinkTimer = 0
+
+	def handleMouse1(self, mouse, gxEdit):
+		gxEdit.focussedElem = self
+		self.focussed = True
+		return True
+	
+	def handleTextInput(self, text):
+		if self.style == const.TEXTINPUTTYPE_NUMBER:
+			if not text.isdigit():
+				return False
+
+		self.text += text
+		return True
+
+	def render(self, x, y):
+		renderWindowBox(self, *rectsUIConcave, self.parent.x, self.parent.y)
+
+		text = self.text
+		if self.focussed:
+			self.blinkTimer += 1
+			if self.blinkTimer % 100 < 50:
+				text += "_"
+		else:
+			self.blinkTimer = 0
+
+		renderText(text, self.color, self.fontStyle, self.x + x + 5, self.y + y + (self.h // 8))
+
 
 BUTTON_NORMAL = 0
 BUTTON_CLICKED = 1
@@ -173,7 +263,7 @@ class UIButton:
 
 		self.type = type
 
-	def handleMouse1(self, mouse):
+	def handleMouse1(self, mouse, gxEdit):
 		self.state = BUTTON_CLICKED
 		self.rect = self.rectClick
 		return True
@@ -243,9 +333,12 @@ class UIWindow:
 
 	def handleMouse1(self, mouse, gxEdit):
 		for _, elem in self.elements.items():
-			if util.inWindowElemBoundingBox(mouse, self, elem) and elem.handleMouse1(mouse):
+			if util.inWindowElemBoundingBox(mouse, self, elem) and elem.handleMouse1(mouse, gxEdit):
 				self.activeElem = elem
 				return True
+		if gxEdit.focussedElem:
+			gxEdit.focussedElem.focussed = False
+		gxEdit.focussedElem = None
 		return False
 
 	def handleMouse1Up(self, mouse, gxEdit):
@@ -287,22 +380,22 @@ sdlColorWhite = sdl2.SDL_Color(255,255,255)
 sdlColorBlack = sdl2.SDL_Color(0,0,0)
 
 
-def renderWindowBox(self, fill, topleft, topright, bottomleft, bottomright, top, right, bottom, left):
+def renderWindowBox(self, fill, topleft, topright, bottomleft, bottomright, top, right, bottom, left, xoff=0, yoff=0):
 	windowsurf = gSurfaces[SURF_UIWINDOW]
-	gInterface.renderer.copy(windowsurf, srcrect=fill, dstrect=(self.x+1, self.y, self.w-2, self.h))
-	gInterface.renderer.copy(windowsurf, srcrect=fill, dstrect=(self.x, self.y+1, self.w, self.h-2))
+	gInterface.renderer.copy(windowsurf, srcrect=fill, dstrect=(self.x+xoff+1, self.y+yoff, self.w-2, self.h))
+	gInterface.renderer.copy(windowsurf, srcrect=fill, dstrect=(self.x+xoff, self.y+yoff+1, self.w, self.h-2))
 		
 	#corners
-	gInterface.renderer.copy(windowsurf, srcrect=topleft, dstrect=(self.x, self.y, 2, 2))
-	gInterface.renderer.copy(windowsurf, srcrect=topright, dstrect=(self.x+self.w-2, self.y, 2, 2))
-	gInterface.renderer.copy(windowsurf, srcrect=bottomleft, dstrect=(self.x, self.y+self.h-2, 2, 2))
-	gInterface.renderer.copy(windowsurf, srcrect=bottomright, dstrect=(self.x+self.w-2, self.y+self.h-2, 2, 2))
+	gInterface.renderer.copy(windowsurf, srcrect=topleft, dstrect=(self.x+xoff, self.y+yoff, 2, 2))
+	gInterface.renderer.copy(windowsurf, srcrect=topright, dstrect=(self.x+xoff+self.w-2, self.y+yoff, 2, 2))
+	gInterface.renderer.copy(windowsurf, srcrect=bottomleft, dstrect=(self.x+xoff, self.y+yoff+self.h-2, 2, 2))
+	gInterface.renderer.copy(windowsurf, srcrect=bottomright, dstrect=(self.x+xoff+self.w-2, self.y+yoff+self.h-2, 2, 2))
 
 	#border
-	gInterface.renderer.copy(windowsurf, srcrect=top, dstrect=(self.x+1, self.y, self.w-2, 1))
-	gInterface.renderer.copy(windowsurf, srcrect=right, dstrect=(self.x+self.w-1, self.y+1, 1, self.h-2))
-	gInterface.renderer.copy(windowsurf, srcrect=bottom, dstrect=(self.x+1, self.y+self.h-1, self.w-2, 1))
-	gInterface.renderer.copy(windowsurf, srcrect=left, dstrect=(self.x, self.y+1, 1, self.h-2))
+	gInterface.renderer.copy(windowsurf, srcrect=top, dstrect=(self.x+xoff+1, self.y+yoff, self.w-2, 1))
+	gInterface.renderer.copy(windowsurf, srcrect=right, dstrect=(self.x+xoff+self.w-1, self.y+yoff+1, 1, self.h-2))
+	gInterface.renderer.copy(windowsurf, srcrect=bottom, dstrect=(self.x+xoff+1, self.y+yoff+self.h-1, self.w-2, 1))
+	gInterface.renderer.copy(windowsurf, srcrect=left, dstrect=(self.x+xoff, self.y+yoff+1, 1, self.h-2))
 
 
 class UITooltip(UIWindow):
@@ -522,6 +615,18 @@ class ToolsWindow(UIWindow):
 												tooltip=[["i hate pxedit", sdlColorBlack, TTF_STYLE_NORMAL]])
 		#self.elements["butToggleTilePalette"].onAction = 
 
+class EntityEditWindow(UIWindow):
+	def __init__(self, x, y, w, h, type=const.WINDOW_ENTITYEDIT, style=0):
+		UIWindow.__init__(self, x, y, w, h, type, style)
+
+		self.elements["textParam"] = UIText(5, 5, "Parameter:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["paramEdit"] = UITextInput(60, 5, 80, 18, "testestest", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER)
+
+		#self.elements["textTools"] = UIElement(2, 2, 0, 0, self, rectWindowTextTools)
+
+		#self.elements["butToggleTilePalette"] = UIButton(4, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
+		#										tooltip=[["i hate pxedit", sdlColorBlack, TTF_STYLE_NORMAL]])
+		#self.elements["butToggleTilePalette"].onAction = 
 
 class YesNoCancelDialog(UIWindow):
 	pass
@@ -577,6 +682,8 @@ class Interface:
 
 
 		gSurfaces[SURF_UIWINDOW] = self.sprfactory.from_image(RESOURCES.get_path("Window.bmp"))
+
+		gSurfaces[SURF_NUMBER] = self.sprfactory.from_image(RESOURCES.get_path("Number.bmp"))
 		#TODO error handling when can't find file
 
 	def RenderMapParts(self):

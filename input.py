@@ -293,6 +293,10 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	elif sym == sdl2.SDLK_BACKSLASH:
 		gxEdit.entityPaletteMag += 1
 
+	elif sym == sdl2.SDLK_BACKSPACE:
+		if gxEdit.focussedElem:
+			gxEdit.focussedElem.text = gxEdit.focussedElem.text[:-1]
+
 	elif key.keysym.mod & sdl2.KMOD_CTRL:
 		if sym == sdl2.SDLK_d:
 			#scrambleEntities(stage)

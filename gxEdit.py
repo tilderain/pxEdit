@@ -420,6 +420,8 @@ def main():
 
 	gxEdit.elements.append(interface.UITooltip(0,0,1,1))
 
+	gxEdit.elements.append(interface.EntityEditWindow(20,20,150,25))
+
 	def renderEditor():
 		#TODO: placeholder
 
@@ -492,7 +494,8 @@ def main():
 				mouseHeld = False
 				gxEdit.draggedElem = None
 			elif event.type == sdl2.SDL_TEXTINPUT:
-				pass
+				if gxEdit.focussedElem:
+					gxEdit.focussedElem.handleTextInput(event.text.text.decode("utf-8"))
 
 		#TODO figure out a better way to do this
 		def clampCurStage():
