@@ -249,6 +249,8 @@ def runMouse2(gxEdit, stage, mouse):
 def runKeyboard(gxEdit, stage, scaleFactor, key):
 	sym = key.keysym.sym
 
+	#todo: when focussed elem do not do things you can type
+
 	if sym == sdl2.SDLK_j:
 		gxEdit.curStage -= 1
 	elif sym == sdl2.SDLK_k:
@@ -313,6 +315,13 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		elif sym == sdl2.SDLK_y:
 			gxEdit.executeRedo()
 
+		elif sym == sdl2.SDLK_v:
+			if gxEdit.focussedElem:
+				text = sdl2.SDL_GetClipboardText()
+				gxEdit.focussedElem.handleTextInput(text.decode("utf-8"))
+
+
+
 	elif sym == sdl2.SDLK_F11:
 		gxEdit.fullscreen ^= 1
 
@@ -324,6 +333,6 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	#e = toggle entity palette
 	#t = toggle tile palette
 
-	elif sym == sdl2.SDLK_r:
-		stage.renderTilesToSurface()
+	#elif sym == sdl2.SDLK_r:
+	#	stage.renderTilesToSurface()
 			

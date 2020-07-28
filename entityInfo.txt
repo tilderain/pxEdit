@@ -33,7 +33,7 @@
 (032) Boss2@Missile Tailor@
 (033) Boss2RocketSpawner@@
 (034) B2ExplosionSpawner?@@
-(035) B2Rocket@@
+(035) B2Rocket@@(Parameter: what direction it will go in)
 (036) Boss2Eye@@
 (037) Star@Twinkle@(Parameter: the kind of star it is)
 (038) StarGen@Makes stars randomly.@
@@ -57,7 +57,7 @@
 (056) Checkpoint@@
 (057) Boss3TurretSpawner@@
 (058) B3Turret@@
-(059) PowerupSpinnerShield@A hanger with one health.@(Parameter: turns it into a powerup spinner)
+(059) Hanger_Soft@A hanger with one health.@(Parameter: turns it into a powerup spinner)
 (060) PowerupBox@A shootable ground powerup.@(Parameter: the powerup)
 (061) PowerupStatic@A plain ground powerup.@(Parameter:)
 (050/62) PowerupHelper@@
@@ -114,7 +114,7 @@
 (113) @@
 (114) B6Ball@@
 (115) B6Caret@@
-(116) CreditText@Text that pops in during the credits, in sequential order. Pauses the game for 1 second.@
+(116) CreditText@Text that pops in during the credits, in sequential order. Pauses the game for 50 frames.@
 (117) CreditReplace@Removes all entities of a certain type.@(Parameter: the entity id to remove)
 (118) CreditLoadImg@Changes the currently loaded enemy spritesheet.@(Parameter: the stage to switch to)
 (119) CPhoto@A photo of a boss that flies in from the side. Switches direction every other boss.@(Parameter: which boss)

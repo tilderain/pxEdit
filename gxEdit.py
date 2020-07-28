@@ -426,6 +426,7 @@ def main():
 		#TODO: placeholder
 
 		gui.renderMainBg(introAnimTimer, mouseover)
+		gui.renderEditorBg()
 		gui.renderTiles(gxEdit, curStage)
 		gui.renderEntities(gxEdit, curStage)
 	

@@ -36,6 +36,8 @@ SURF_SDLCOLOR_RED = 16
 
 SURF_NUMBER = 17
 
+SURF_EDITORBG = 18
+
 gSurfaces = [None] * surfaceCount
 
 #rect enums
@@ -219,7 +221,7 @@ class UITextInput(UIElement):
 	
 	def handleTextInput(self, text):
 		if self.style == const.TEXTINPUTTYPE_NUMBER:
-			if not text.isdigit():
+			if not text.isdigit() and not (self.text == "" and text == "-"):
 				return False
 
 		self.text += text
@@ -238,6 +240,9 @@ class UITextInput(UIElement):
 
 		renderText(text, self.color, self.fontStyle, self.x + x + 5, self.y + y + (self.h // 8))
 
+
+class UIScrollbar(UIElement):
+	pass
 
 BUTTON_NORMAL = 0
 BUTTON_CLICKED = 1
@@ -619,8 +624,13 @@ class EntityEditWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_ENTITYEDIT, style=0):
 		UIWindow.__init__(self, x, y, w, h, type, style)
 
-		self.elements["textParam"] = UIText(5, 5, "Parameter:", sdlColorBlack, TTF_STYLE_NORMAL, self)
-		self.elements["paramEdit"] = UITextInput(60, 5, 80, 18, "testestest", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER)
+
+		self.elements["textParamShadow"] = UIText(6, 6, "Parameter:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textParam"] = UIText(5, 5, "Parameter:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["paramEdit"] = UITextInput(60, 5, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER)
+
+		#self.elements["buttonMinimize"] = UIButton(180, 4, 16, 16, self)
+		#self.elements["buttonMinimize"].onAction = minimizeButtonAction
 
 		#self.elements["textTools"] = UIElement(2, 2, 0, 0, self, rectWindowTextTools)
 
@@ -684,6 +694,9 @@ class Interface:
 		gSurfaces[SURF_UIWINDOW] = self.sprfactory.from_image(RESOURCES.get_path("Window.bmp"))
 
 		gSurfaces[SURF_NUMBER] = self.sprfactory.from_image(RESOURCES.get_path("Number.bmp"))
+
+		gSurfaces[SURF_EDITORBG] = self.sprfactory.from_image(RESOURCES.get_path("Background.bmp"))
+
 		#TODO error handling when can't find file
 
 	def RenderMapParts(self):
@@ -708,8 +721,8 @@ class Interface:
 
 		#TODO: render tiles out onto a surface once and just draw the relevant part
 
-		srcx = stage.hscroll * const.tileWidth
-		srcy = stage.scroll * const.tileWidth
+		srcx = int(stage.hscroll * const.tileWidth)
+		srcy = int(stage.scroll * const.tileWidth)
 
 		sizex = min(gWindowWidth*max(1, int(1/gxEdit.magnification)), stage.surface.size[0], stage.surface.size[0] - srcx)
 		sizey = min(gWindowHeight*max(1, int(1/gxEdit.magnification)), stage.surface.size[1], stage.surface.size[1] - srcy)
@@ -897,6 +910,12 @@ class Interface:
 				self.renderer.copy(windowBg, dstrect=(windowBg.x, windowBg.y, windowBg.size[0], windowBg.size[1]))
 			else:
 				self.renderer.copy(windowBg2, dstrect=(windowBg.x, windowBg.y, windowBg.size[0], windowBg.size[1]))
+
+	def renderEditorBg(self):
+		editorBg = gSurfaces[SURF_EDITORBG]
+		for x in range(gWindowWidth // editorBg.size[0] + 1):
+			for y in range(gWindowHeight // editorBg.size[1] + 1):
+				self.renderer.copy(editorBg, dstrect=(x*editorBg.size[0], y*editorBg.size[1], editorBg.size[0], editorBg.size[1]))
 
 	def renderFade(self):
 		pass
