@@ -79,20 +79,36 @@ def runMouse1(gxEdit, stage, mouse):
 		if index < 0:
 			return
 		gxEdit.currentEditMode = const.EDIT_ENTITY
-		gxEdit.selectedEntity = index
+		gxEdit.currentEntity = index
 
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 		#entity place
-		x = int(mouse.x // (const.tileWidth//2 * mag)) + stage.hscroll*2
-		y = int(mouse.y // (const.tileWidth//2 * mag)) + stage.scroll*2
+		#x = int(mouse.x // (const.tileWidth//2 * mag)) + stage.hscroll*2
+		#y = int(mouse.y // (const.tileWidth//2 * mag)) + stage.scroll*2
+		x = mouse.x
+		y = mouse.y
+		#if x >= map.width*2 or y >= map.height*2:
+		#	return
 
-		if x >= map.width*2 or y >= map.height*2:
-			return
-
-		eve.add(x, y, gxEdit.selectedEntity, 0)
+		if stage.selectedEntities != []:
+			xe = int(mouse.x // (const.tileWidth//2 * mag)) + stage.hscroll*2
+			ye = int(mouse.y // (const.tileWidth//2 * mag)) + stage.scroll*2
+			for o in stage.selectedEntities:
+				if o.x == xe and o.y == ye:
+					gxEdit.draggingEntities = True
+					gxEdit.entDragPos = [xe, ye]
+					return
+		gxEdit.selectionBoxStart = [x, y]
+		gxEdit.selectionBoxEnd = [x, y]
+		#eve.add(x, y, gxEdit.currentEntity, 0)
 
 def runMouseUp(gxEdit, curStage, mouse):
 	if mouse.button != sdl2.SDL_BUTTON_LEFT: return False
+
+	if gxEdit.currentEditMode == const.EDIT_ENTITY:
+		gxEdit.selectionBoxStart = [-1, -1]
+		gxEdit.selectionBoxEnd = [-1, -1]
+		gxEdit.draggingEntities = False
 
 	for i, elem in reversed(list(enumerate(gxEdit.elements))):
 		if elem.activeElem:
@@ -227,7 +243,77 @@ def runMouseDrag(gxEdit, stage):
 			stage.undoPos += 1
 			stage.undoStack = stage.undoStack[:stage.undoPos]
 			stage.undoStack.append(undo)
+	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
+		x = mouse.x
+		y = mouse.y
+		scale = (const.tileWidth//2 * mag)
+
+		if gxEdit.draggingEntities:
+			x = int((mouse.x // scale) + stage.hscroll*2)
+			y = int((mouse.y // scale) + stage.scroll*2)
+
+			xe = gxEdit.entDragPos[0]
+			ye = gxEdit.entDragPos[1]
+
 			
+			for o in stage.selectedEntities:
+				if o.x + x-xe < 0: return
+				if o.y + y-ye < 0: return
+				if o.x + x-xe > (stage.map.width * 2)-1: return
+				if o.y + y-ye > (stage.map.height * 2)-1: return
+			gxEdit.entDragPos = [x, y]
+
+			ids = [o.id for o in stage.selectedEntities]
+			stage.eve.move(ids, x-xe, y-ye)
+			return
+
+		x1 = int((gxEdit.selectionBoxStart[0] // scale) + stage.hscroll*2)
+		y1 = int((gxEdit.selectionBoxStart[1] // scale) + stage.scroll*2)
+
+		x2 = int((gxEdit.selectionBoxEnd[0] // scale) + stage.hscroll*2)
+		y2 = int((gxEdit.selectionBoxEnd[1] // scale) + stage.scroll*2)
+
+		if x1 > x2: x1, x2 = x2, x1
+		if y1 > y2: y1, y2 = y2, y1
+
+		if x1 > map.width*2 or y1 > map.height*2: return
+		if x2 > map.width*2 or y2 > map.height*2: return
+
+		gxEdit.selectionBoxEnd = [x, y]
+		
+		selectedEntities = []
+		for o in stage.eve.get():
+			#if o.x > x2 or o.y > y2: continue
+
+			if o.x >= x1 and o.y >= y1 \
+				and o.x <= x2 and o.y <= y2:
+				selectedEntities.append(o)
+		stage.selectedEntities = selectedEntities
+		if selectedEntities == []:
+			for elem in gxEdit.elements:
+				try:
+					if elem.elements["paramEdit"]:
+						elem.visible = False
+				except KeyError:
+					pass
+		else:
+			for elem in gxEdit.elements:
+				try:
+					if len(selectedEntities) == 1:
+						elem.elements["paramEdit"].text = str(selectedEntities[0].type2)
+					else:
+						elem.elements["paramEdit"].text = ""
+						elem.elements["paramEdit"].placeholderText = "\n\n\n\n"
+					elem.visible = True
+					elem.x = (selectedEntities[0].x - (stage.hscroll*2))* (const.tileWidth // 2) * mag + const.tileWidth*2
+					elem.y = (selectedEntities[0].y - (stage.scroll*2))* (const.tileWidth // 2) * mag
+					#gxEdit.focussedElem = elem.elements["paramEdit"]
+					break
+				except KeyError:
+					pass
+			
+				
+
 
 					
 def runMouse2(gxEdit, stage, mouse):
@@ -250,7 +336,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	sym = key.keysym.sym
 
 	#todo: when focussed elem do not do things you can type
-
+	
 	if sym == sdl2.SDLK_j:
 		gxEdit.curStage -= 1
 	elif sym == sdl2.SDLK_k:
@@ -298,6 +384,27 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	elif sym == sdl2.SDLK_BACKSPACE:
 		if gxEdit.focussedElem:
 			gxEdit.focussedElem.text = gxEdit.focussedElem.text[:-1]
+			if gxEdit.focussedElem.onAction:
+				gxEdit.focussedElem.onAction(gxEdit.focussedElem, gxEdit)
+	elif sym == sdl2.SDLK_i:
+		if gxEdit.currentEditMode == const.EDIT_ENTITY:
+			#entity place
+			mouse = sdl2.SDL_MouseButtonEvent()
+			x,y = ctypes.c_int(0), ctypes.c_int(0)
+			mouse.button = sdl2.SDL_GetMouseState(x, y)
+			mouse.x, mouse.y = x.value, y.value
+			mag = gxEdit.magnification
+
+			x = int(mouse.x // (const.tileWidth//2 * mag)) + stage.hscroll*2
+			y = int(mouse.y // (const.tileWidth//2 * mag)) + stage.scroll*2
+			if x >= stage.map.width*2 or y >= stage.map.height*2:
+				return
+
+			stage.eve.add(x, y, gxEdit.currentEntity, 0)
+	elif sym == sdl2.SDLK_DELETE:
+		if stage.selectedEntities:
+			ids = [o.id for o in stage.selectedEntities]
+			stage.eve.remove(ids)
 
 	elif key.keysym.mod & sdl2.KMOD_CTRL:
 		if sym == sdl2.SDLK_d:
@@ -318,7 +425,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		elif sym == sdl2.SDLK_v:
 			if gxEdit.focussedElem:
 				text = sdl2.SDL_GetClipboardText()
-				gxEdit.focussedElem.handleTextInput(text.decode("utf-8"))
+				gxEdit.focussedElem.handleTextInput(text.decode("utf-8"), gxEdit)
 
 
 

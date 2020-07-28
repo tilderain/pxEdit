@@ -38,6 +38,8 @@ SURF_NUMBER = 17
 
 SURF_EDITORBG = 18
 
+SURF_SDLCOLOR_CYAN = 19
+
 gSurfaces = [None] * surfaceCount
 
 #rect enums
@@ -208,23 +210,28 @@ class UITextInput(UIElement):
 		UIElement.__init__(self, x, y, w, h, parent, rect, style, tooltip)
 
 		self.text = text
+		self.placeholderText = None
 		self.color = color
 		self.fontStyle = fontStyle
 
 		self.focussed = False
 		self.blinkTimer = 0
 
+		self.onAction = None
+
 	def handleMouse1(self, mouse, gxEdit):
 		gxEdit.focussedElem = self
 		self.focussed = True
 		return True
 	
-	def handleTextInput(self, text):
+	def handleTextInput(self, text, gxEdit):
 		if self.style == const.TEXTINPUTTYPE_NUMBER:
 			if not text.isdigit() and not (self.text == "" and text == "-"):
 				return False
 
 		self.text += text
+		if self.onAction: 
+			self.onAction(self, gxEdit)
 		return True
 
 	def render(self, x, y):
@@ -237,6 +244,9 @@ class UITextInput(UIElement):
 				text += "_"
 		else:
 			self.blinkTimer = 0
+
+		if text == "" and not self.focussed:
+			text = self.placeholderText
 
 		renderText(text, self.color, self.fontStyle, self.x + x + 5, self.y + y + (self.h // 8))
 
@@ -555,8 +565,8 @@ class EntityPaletteWindow(UIWindow):
 
 		#TODO: add selected ent border (properly)
 		if gxEdit.currentEditMode == const.EDIT_ENTITY:
-			dstx = dstx + ((gxEdit.selectedEntity % 16) * const.tileWidth * mag)
-			dsty = dsty + ((gxEdit.selectedEntity // 16) * const.tileWidth * mag)
+			dstx = dstx + ((gxEdit.currentEntity % 16) * const.tileWidth * mag)
+			dsty = dsty + ((gxEdit.currentEntity // 16) * const.tileWidth * mag)
 			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, const.tileWidth * mag, const.tileWidth * mag)
 
 		#crashing entities
@@ -620,14 +630,30 @@ class ToolsWindow(UIWindow):
 												tooltip=[["i hate pxedit", sdlColorBlack, TTF_STYLE_NORMAL]])
 		#self.elements["butToggleTilePalette"].onAction = 
 
+def editEntityAttributes(control, gxEdit):
+	param = control.text
+	try:
+		int(param)
+	except ValueError:
+		param = 0
+	stage = gxEdit.stages[gxEdit.curStage]
+	select = stage.selectedEntities
+
+	ids = [o.id for o in select]
+
+	stage.eve.modify(ids, type2=int(param))
+
+
 class EntityEditWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_ENTITYEDIT, style=0):
 		UIWindow.__init__(self, x, y, w, h, type, style)
 
+		self.selectedEntities = []
 
 		self.elements["textParamShadow"] = UIText(6, 6, "Parameter:", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textParam"] = UIText(5, 5, "Parameter:", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["paramEdit"] = UITextInput(60, 5, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER)
+		self.elements["paramEdit"].onAction = editEntityAttributes
 
 		#self.elements["buttonMinimize"] = UIButton(180, 4, 16, 16, self)
 		#self.elements["buttonMinimize"].onAction = minimizeButtonAction
@@ -667,6 +693,7 @@ class Interface:
 		gSurfaces[SURF_SDLCOLOR_GOLD] = self.sprfactory.from_color(sdlColorGold,(32,32))
 		gSurfaces[SURF_SDLCOLOR_GREEN] = self.sprfactory.from_color(sdlColorGreen,(32,32))
 		gSurfaces[SURF_SDLCOLOR_RED] = self.sprfactory.from_color(sdlColorRed,(32,32))
+		gSurfaces[SURF_SDLCOLOR_CYAN] = self.sprfactory.from_color(sdlColorCyan,(32,32))
 
 
 
@@ -810,6 +837,20 @@ class Interface:
 			w = int(const.tileWidth//2 * mag)
 			h = int(const.tileWidth//2 * mag)
 
+			if gxEdit.selectionBoxStart != [-1, -1]:
+				x1 = gxEdit.selectionBoxStart[0]
+				y1 = gxEdit.selectionBoxStart[1]
+				x2 = gxEdit.selectionBoxEnd[0]
+				y2 = gxEdit.selectionBoxEnd[1]
+				
+				if x1 > x2: x1, x2 = x2, x1
+				if y1 > y2: y1, y2 = y2, y1
+				
+				self.drawBox(self.renderer, SURF_SDLCOLOR_CYAN, x1, y1, 
+															x2 - x1, 
+															y2 - y1)
+															
+
 		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
 
 
@@ -856,45 +897,48 @@ class Interface:
 
 			self.renderer.copy(units, srcrect=srcrect, dstrect=dstrect)
 
-			if o.type1 in const.entityCrashIds:
-				self.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=dstrect)
-
-			if o.type1 in const.entityCrashIds:
-				titleColor = SURF_SDLCOLOR_MAGENTA
-			elif o.type1 in const.entityGoodIds:
-				titleColor = SURF_SDLCOLOR_GREEN
-			elif o.type1 in const.entityUtilIds:
-				titleColor = SURF_SDLCOLOR_GOLD
+			if o in stage.selectedEntities:
+				self.drawBox(self.renderer, SURF_SDLCOLOR_CYAN, int(dstx*mag)-3, int(dsty*mag)-3, int(const.tileWidth//2*mag)+4, int(const.tileWidth//2*mag)+4, 2)
 			else:
-				titleColor = SURF_SDLCOLOR_RED
-			#entity borders
-			self.drawBox(self.renderer, titleColor, int(dstx*mag), int(dsty*mag), int(const.tileWidth//2*mag), int(const.tileWidth//2*mag))
+				if o.type1 in const.entityCrashIds:
+					self.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=dstrect)
+
+				if o.type1 in const.entityCrashIds:
+					titleColor = SURF_SDLCOLOR_MAGENTA
+				elif o.type1 in const.entityGoodIds:
+					titleColor = SURF_SDLCOLOR_GREEN
+				elif o.type1 in const.entityUtilIds:
+					titleColor = SURF_SDLCOLOR_GOLD
+				else:
+					titleColor = SURF_SDLCOLOR_RED
+				#entity borders
+				self.drawBox(self.renderer, titleColor, int(dstx*mag), int(dsty*mag), int(const.tileWidth//2*mag), int(const.tileWidth//2*mag))
 
 			if (dstx, dsty) in xys: #distinguish layered entities
 				 self.renderer.copy(gSurfaces[SURF_COLOR_ORANGE_TRANSPARENT], dstrect=dstrect)
 			xys.append((dstx, dsty))
 			
-	def drawBox(self, renderer, surf, dstx, dsty, w, h):
+	def drawBox(self, renderer, surf, dstx, dsty, w, h, size=1):
 		#mag = gxEdit.magnification
 		gDrawBoxRect.x = dstx
 		gDrawBoxRect.y = dsty
-		gDrawBoxRect.w = 1
+		gDrawBoxRect.w = size
 		gDrawBoxRect.h = h
 		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[surf].texture, None, gDrawBoxRect)
 		gDrawBoxRect.x = dstx
 		gDrawBoxRect.y = dsty
 		gDrawBoxRect.w = w
-		gDrawBoxRect.h = 1
+		gDrawBoxRect.h = size
 		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[surf].texture, None, gDrawBoxRect)
 		gDrawBoxRect.x = dstx+w
 		gDrawBoxRect.y = dsty
-		gDrawBoxRect.w = 1
+		gDrawBoxRect.w = size
 		gDrawBoxRect.h = h
 		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[surf].texture, None, gDrawBoxRect)
 		gDrawBoxRect.x = dstx
 		gDrawBoxRect.y = dsty+h
-		gDrawBoxRect.w = w
-		gDrawBoxRect.h = 1
+		gDrawBoxRect.w = w+size #????????????????????
+		gDrawBoxRect.h = size
 		sdl2.SDL_RenderCopy(renderer.sdlrenderer, gSurfaces[surf].texture, None, gDrawBoxRect)
 		return
 		renderer.copy(gSurfaces[SURF_COLOR_GREEN], dstrect=dstrect1)

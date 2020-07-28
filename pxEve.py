@@ -124,16 +124,28 @@ class PxEve:
 					self._entities.remove(o)
 					break
 	
-	def modify(self, ids, x, y, type1, type2):
+	def modify(self, ids, x=None, y=None, type1=None, type2=None):
 		for num in ids:
 			for o in self._entities:
 				if num == o.id:
-					self._entities[self._entities.index(o)] = PxEveEntity(1, x, y, type1, type2, num)
+					if x != None: o.x = x
+					if y != None: o.y = y
+					if type1 != None: o.type1 = type1
+					if type2 != None: o.type2 = type2
 					break
-		pass
 
-	def move(self, ids, x, y):
-		pass
+	def replace(self, ents):
+		for ent in ents:
+			for o in self._entities:
+				if ent.id == o.id:
+					self._entities[self._entities.index(o)] = ent
+
+	def move(self, ids, xoffset, yoffset):
+		for num in ids:
+			for o in self._entities:
+				if num == o.id:
+					o.x += xoffset
+					o.y += yoffset
 
 	def get(self):
 		return self._entities[:]

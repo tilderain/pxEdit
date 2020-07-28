@@ -88,8 +88,6 @@ class StagePrj:
 		#TODO: tile selection offset
 
 		self.selectedEntities = []
-		self.selectionBoxStartX = -1
-		self.selectionBoxStartY = -1
 
 		self.undoStack = [None]
 		self.undoPos = 0
@@ -214,8 +212,14 @@ class Editor:
 		self.tilePaletteMag = 2
 		self.entityPaletteMag = 1
 
-		self.selectedEntity = 0
+		self.currentEntity = 0
 		self.currentEditMode = const.EDIT_TILE
+
+		self.selectionBoxStart = [-1, -1]
+		self.selectionBoxEnd = [-1, -1]
+
+		self.draggingEntities = False
+		self.entDragPos = []
 
 		#blinks on save
 		self.saveTimer = 0
@@ -281,16 +285,21 @@ class Editor:
 		if undoPos == 0:
 			return
 
-		stage.lastTileEdit = [None, None]
+		undo = undoStack[undoPos]
 
-		if undoStack[undoPos].action == const.UNDO_TILE:
-			stage.map.modify(undoStack[undoPos].reverse)
-			for index, tile in undoStack[undoPos].reverse:
+		if undo.action == const.UNDO_TILE:
+			stage.lastTileEdit = [None, None]
+			stage.map.modify(undo.reverse)
+			for index, tile in undo.reverse:
 				x = index % stage.map.width
 				y = index // stage.map.width
 				stage.renderTileToSurface(x, y, tile[0],
 												tile[1])
-			stage.undoPos -= 1
+		elif undo.action == const.UNDO_ENTITY_MOVE:
+			stage.eve.replace(undo.reverse)
+
+		stage.undoPos -= 1
+		
 
 	def executeRedo(self):
 		stage = self.stages[self.curStage]
@@ -300,16 +309,19 @@ class Editor:
 		if undoPos > len(undoStack)-1:
 			return
 
-		stage.lastTileEdit = [None, None]
+		redo = undoStack[undoPos]
 
-		if undoStack[undoPos].action == const.UNDO_TILE:
-			stage.map.modify(undoStack[undoPos].forward)
-			for index, tile in undoStack[undoPos].forward:
+		if redo.action == const.UNDO_TILE:
+			stage.lastTileEdit = [None, None]
+			stage.map.modify(redo.forward)
+			for index, tile in redo.forward:
 				x = index % stage.map.width
 				y = index // stage.map.width
 				stage.renderTileToSurface(x, y, tile[0],
 												tile[1])
-			stage.undoPos += 1
+		elif redo.action == const.UNDO_ENTITY_MOVE:
+			stage.eve.replace(redo.forward)												
+		stage.undoPos += 1
 
 	def backupStages(self):
 		if not os.path.exists(dataPath + backupFolderName):
@@ -420,7 +432,9 @@ def main():
 
 	gxEdit.elements.append(interface.UITooltip(0,0,1,1))
 
-	gxEdit.elements.append(interface.EntityEditWindow(20,20,150,25))
+	entEdit = interface.EntityEditWindow(20,20,150,25)
+	entEdit.visible = False
+	gxEdit.elements.append(entEdit)
 
 	def renderEditor():
 		#TODO: placeholder
@@ -496,7 +510,7 @@ def main():
 				gxEdit.draggedElem = None
 			elif event.type == sdl2.SDL_TEXTINPUT:
 				if gxEdit.focussedElem:
-					gxEdit.focussedElem.handleTextInput(event.text.text.decode("utf-8"))
+					gxEdit.focussedElem.handleTextInput(event.text.text.decode("utf-8"), gxEdit)
 
 		#TODO figure out a better way to do this
 		def clampCurStage():
