@@ -870,16 +870,17 @@ class Interface:
 		xys = []
 		for o in eve:
 			y = o.y
+			mag = gxEdit.magnification
 			if y < stage.scroll*2:
 				continue
-			if (y - stage.scroll*2) * const.tileWidth//2 > gWindowHeight:	
+			if (y - stage.scroll*2) * const.tileWidth//2 * mag > gWindowHeight:	
 				continue
 			y -= stage.scroll*2
 
 			x = o.x
 			if x < stage.hscroll*2:
 				continue
-			if (y - stage.hscroll*2) * const.tileWidth//2 > gWindowWidth:
+			if (y - stage.hscroll*2) * const.tileWidth//2 * mag > gWindowWidth:
 				continue
 			x -= stage.hscroll*2
 
@@ -891,7 +892,6 @@ class Interface:
 			srcx = x * const.tileWidth
 			srcy = y * const.tileWidth
 
-			mag = gxEdit.magnification
 			srcrect = (srcx, srcy, const.tileWidth, const.tileWidth)
 			dstrect = (int(dstx*mag), int(dsty*mag), int(const.tileWidth//2*mag), int(const.tileWidth//2*mag))
 
