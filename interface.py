@@ -838,10 +838,10 @@ class Interface:
 			h = int(const.tileWidth//2 * mag)
 
 			if gxEdit.selectionBoxStart != [-1, -1]:
-				x1 = gxEdit.selectionBoxStart[0]
-				y1 = gxEdit.selectionBoxStart[1]
-				x2 = gxEdit.selectionBoxEnd[0]
-				y2 = gxEdit.selectionBoxEnd[1]
+				x1 = gxEdit.selectionBoxStart[0] -  int(stage.hscroll * const.tileWidth * mag)
+				y1 = gxEdit.selectionBoxStart[1] -  int(stage.scroll * const.tileWidth * mag)
+				x2 = gxEdit.selectionBoxEnd[0] -  int(stage.hscroll * const.tileWidth * mag)
+				y2 = gxEdit.selectionBoxEnd[1] -  int(stage.scroll * const.tileWidth * mag)
 				
 				if x1 > x2: x1, x2 = x2, x1
 				if y1 > y2: y1, y2 = y2, y1

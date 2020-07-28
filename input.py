@@ -82,13 +82,8 @@ def runMouse1(gxEdit, stage, mouse):
 		gxEdit.currentEntity = index
 
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
-		#entity place
-		#x = int(mouse.x // (const.tileWidth//2 * mag)) + stage.hscroll*2
-		#y = int(mouse.y // (const.tileWidth//2 * mag)) + stage.scroll*2
-		x = mouse.x
-		y = mouse.y
-		#if x >= map.width*2 or y >= map.height*2:
-		#	return
+		x = int(mouse.x + (stage.hscroll * const.tileWidth * mag))
+		y = int(mouse.y + (stage.scroll * const.tileWidth * mag))
 
 		if stage.selectedEntities != []:
 			xe = int(mouse.x // (const.tileWidth//2 * mag)) + stage.hscroll*2
@@ -100,7 +95,6 @@ def runMouse1(gxEdit, stage, mouse):
 					return
 		gxEdit.selectionBoxStart = [x, y]
 		gxEdit.selectionBoxEnd = [x, y]
-		#eve.add(x, y, gxEdit.currentEntity, 0)
 
 def runMouseUp(gxEdit, curStage, mouse):
 	if mouse.button != sdl2.SDL_BUTTON_LEFT: return False
@@ -115,13 +109,6 @@ def runMouseUp(gxEdit, curStage, mouse):
 			if(elem.activeElem.handleMouse1Up(mouse, gxEdit)):
 				elem.activeElem = None
 			return
-
-	#for i, elem in reversed(list(enumerate(gxEdit.elements))):
-	#	if util.inWindowBoundingBox(mouse, elem):
-	#		#move to top
-	#		gxEdit.elements.append(gxEdit.elements.pop(i))
-	#		if elem.handleMouse1Up(mouse, gxEdit):
-	#			return
 
 
 def runMouseDrag(gxEdit, stage):			
@@ -244,8 +231,8 @@ def runMouseDrag(gxEdit, stage):
 			stage.undoStack = stage.undoStack[:stage.undoPos]
 			stage.undoStack.append(undo)
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
-		x = mouse.x
-		y = mouse.y
+		x = int(mouse.x + (stage.hscroll * const.tileWidth * mag))
+		y = int(mouse.y + (stage.scroll * const.tileWidth * mag))
 		scale = (const.tileWidth//2 * mag)
 
 		if gxEdit.draggingEntities:
@@ -267,11 +254,11 @@ def runMouseDrag(gxEdit, stage):
 			stage.eve.move(ids, x-xe, y-ye)
 			return
 
-		x1 = int((gxEdit.selectionBoxStart[0] // scale) + stage.hscroll*2)
-		y1 = int((gxEdit.selectionBoxStart[1] // scale) + stage.scroll*2)
+		x1 = int(gxEdit.selectionBoxStart[0] // scale)
+		y1 = int(gxEdit.selectionBoxStart[1] // scale)
 
-		x2 = int((gxEdit.selectionBoxEnd[0] // scale) + stage.hscroll*2)
-		y2 = int((gxEdit.selectionBoxEnd[1] // scale) + stage.scroll*2)
+		x2 = int(gxEdit.selectionBoxEnd[0] // scale)
+		y2 = int(gxEdit.selectionBoxEnd[1] // scale)
 
 		if x1 > x2: x1, x2 = x2, x1
 		if y1 > y2: y1, y2 = y2, y1
@@ -305,8 +292,8 @@ def runMouseDrag(gxEdit, stage):
 						elem.elements["paramEdit"].text = ""
 						elem.elements["paramEdit"].placeholderText = "\n\n\n\n"
 					elem.visible = True
-					elem.x = (selectedEntities[0].x - (stage.hscroll*2))* (const.tileWidth // 2) * mag + const.tileWidth*2
-					elem.y = (selectedEntities[0].y - (stage.scroll*2))* (const.tileWidth // 2) * mag
+					elem.x = int((selectedEntities[0].x - (stage.hscroll*2))* (const.tileWidth // 2) * mag + const.tileWidth*2)
+					elem.y = int((selectedEntities[0].y - (stage.scroll*2))* (const.tileWidth // 2) * mag)
 					#gxEdit.focussedElem = elem.elements["paramEdit"]
 					break
 				except KeyError:
