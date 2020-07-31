@@ -238,6 +238,7 @@ class UITextInput(UIElement):
 		renderWindowBox(self, *rectsUIConcave, self.parent.x, self.parent.y)
 
 		text = self.text
+		color = self.color
 		if self.focussed:
 			self.blinkTimer += 1
 			if self.blinkTimer % 100 < 50:
@@ -247,8 +248,9 @@ class UITextInput(UIElement):
 
 		if text == "" and not self.focussed:
 			text = self.placeholderText
+			color = sdlColorOlive
 
-		renderText(text, self.color, self.fontStyle, self.x + x + 5, self.y + y + (self.h // 8))
+		renderText(text, color, self.fontStyle, self.x + x + 5, self.y + y + (self.h // 8))
 
 
 class UIScrollbar(UIElement):
@@ -264,7 +266,7 @@ BUTTON_TYPE_RADIO = 1
 
 
 class UIButton:
-	def __init__(self, x, y, w, h, parent, rect=(0,0,0,0), style=0, tooltip=None, type=None):
+	def __init__(self, x, y, w, h, parent, group=0, rect=(0,0,0,0), style=0, tooltip=None, type=None):
 		UIElement.__init__(self, x, y, w, h, parent, rect, style, tooltip)
 
 		self.rectNormal = rectButtonMinimizeNormal
@@ -277,6 +279,8 @@ class UIButton:
 		self.state = BUTTON_NORMAL
 
 		self.type = type
+		
+		self.group = group
 
 	def handleMouse1(self, mouse, gxEdit):
 		self.state = BUTTON_CLICKED
@@ -386,6 +390,7 @@ class UIWindow:
 sdlColorMagenta = sdl2.SDL_Color(255,100,255)
 sdlColorCyan = sdl2.SDL_Color(100,255,255)
 sdlColorGreen = sdl2.SDL_Color(128,255,0)
+sdlColorOlive = sdl2.SDL_Color(128,180,0)
 sdlColorGold = sdl2.SDL_Color(255,220,100)
 sdlColorYellow = sdl2.SDL_Color(255,230,150)
 sdlColorOrange = sdl2.SDL_Color(255,150,100)
@@ -636,6 +641,7 @@ def editEntityAttributes(control, gxEdit):
 		int(param)
 	except ValueError:
 		param = 0
+	
 	stage = gxEdit.stages[gxEdit.curStage]
 	select = stage.selectedEntities
 
@@ -668,6 +674,9 @@ class YesNoCancelDialog(UIWindow):
 	pass
 
 class YesNoDialog(UIWindow):
+	pass
+
+class ResizeControl(UIElement):
 	pass
 
 #this probably shouldn't be a class but i don't want to refactor it again
@@ -790,6 +799,20 @@ class Interface:
 		mouse.button = sdl2.SDL_GetMouseState(x, y)
 		mouse.x, mouse.y = x.value, y.value
 
+		if gxEdit.selectionBoxStart != [-1, -1]:
+			x1 = gxEdit.selectionBoxStart[0] -  int(stage.hscroll * const.tileWidth * mag)
+			y1 = gxEdit.selectionBoxStart[1] -  int(stage.scroll * const.tileWidth * mag)
+			x2 = gxEdit.selectionBoxEnd[0] -  int(stage.hscroll * const.tileWidth * mag)
+			y2 = gxEdit.selectionBoxEnd[1] -  int(stage.scroll * const.tileWidth * mag)
+			
+			if x1 > x2: x1, x2 = x2, x1
+			if y1 > y2: y1, y2 = y2, y1
+			
+			self.drawBox(self.renderer, SURF_SDLCOLOR_CYAN, x1, y1, 
+														x2 - x1, 
+														y2 - y1)
+															
+
 		if gxEdit.currentEditMode == const.EDIT_TILE:
 			x = int(mouse.x // (const.tileWidth * mag))
 			y = int(mouse.y // (const.tileWidth * mag))
@@ -806,6 +829,7 @@ class Interface:
 			h *= int(const.tileWidth * mag)
 
 		elif gxEdit.currentEditMode == const.EDIT_ENTITY:
+			if gxEdit.draggingEntities: return
 			x = int(mouse.x // (const.tileWidth//2 * mag)) 
 			y = int(mouse.y // (const.tileWidth//2 * mag))
 
@@ -836,20 +860,6 @@ class Interface:
 
 			w = int(const.tileWidth//2 * mag)
 			h = int(const.tileWidth//2 * mag)
-
-			if gxEdit.selectionBoxStart != [-1, -1]:
-				x1 = gxEdit.selectionBoxStart[0] -  int(stage.hscroll * const.tileWidth * mag)
-				y1 = gxEdit.selectionBoxStart[1] -  int(stage.scroll * const.tileWidth * mag)
-				x2 = gxEdit.selectionBoxEnd[0] -  int(stage.hscroll * const.tileWidth * mag)
-				y2 = gxEdit.selectionBoxEnd[1] -  int(stage.scroll * const.tileWidth * mag)
-				
-				if x1 > x2: x1, x2 = x2, x1
-				if y1 > y2: y1, y2 = y2, y1
-				
-				self.drawBox(self.renderer, SURF_SDLCOLOR_CYAN, x1, y1, 
-															x2 - x1, 
-															y2 - y1)
-															
 
 		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
 

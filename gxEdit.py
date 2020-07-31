@@ -163,24 +163,23 @@ class StagePrj:
 		map = self.map
 		sdlrenderer = interface.gRenderer.sdlrenderer
 		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surface.texture)
-		for i, tile in enumerate(map.tiles):
-			y = i // map.width
-			x = i % map.width
-			dstx = x * const.tileWidth
-			dsty = y * const.tileWidth
+		for x in range(map.width):
+			for y in range(map.height):
+				dstx = x * const.tileWidth
+				dsty = y * const.tileWidth
 
-			x = tile % 16 #the magic number so that each 4 bits in a byte corresponds to the x, y position in the tileset
-			y = tile // 16
-			srcx = x * const.tileWidth
-			srcy = y * const.tileWidth
+				xx = map.tiles[y][x] % 16 #the magic number so that each 4 bits in a byte corresponds to the x, y position in the tileset
+				yy = map.tiles[y][x] // 16
+				srcx = xx * const.tileWidth
+				srcy = yy * const.tileWidth
 
-			
-			srcrect = (srcx, srcy, const.tileWidth, const.tileWidth)
-			dstrect = (dstx, dsty, const.tileWidth, const.tileWidth)
-			#srcrect = 
-			
-			#sdl2.SDL_RenderCopy(sdlrenderer, self.parts.texture, (srcrect), dstrect)
-			interface.gRenderer.copy(self.parts, srcrect, dstrect)
+
+				srcrect = (srcx, srcy, const.tileWidth, const.tileWidth)
+				dstrect = (dstx, dsty, const.tileWidth, const.tileWidth)
+				#srcrect = 
+
+				#sdl2.SDL_RenderCopy(sdlrenderer, self.parts.texture, (srcrect), dstrect)
+				interface.gRenderer.copy(self.parts, srcrect, dstrect)
 		sdl2.SDL_SetRenderTarget(sdlrenderer, None)
 			
 	
@@ -290,10 +289,8 @@ class Editor:
 		if undo.action == const.UNDO_TILE:
 			stage.lastTileEdit = [None, None]
 			stage.map.modify(undo.reverse)
-			for index, tile in undo.reverse:
-				x = index % stage.map.width
-				y = index // stage.map.width
-				stage.renderTileToSurface(x, y, tile[0],
+			for pos, tile in undo.reverse:
+				stage.renderTileToSurface(pos[0], pos[1], tile[0],
 												tile[1])
 		elif undo.action == const.UNDO_ENTITY_MOVE:
 			stage.eve.replace(undo.reverse)
@@ -314,10 +311,8 @@ class Editor:
 		if redo.action == const.UNDO_TILE:
 			stage.lastTileEdit = [None, None]
 			stage.map.modify(redo.forward)
-			for index, tile in redo.forward:
-				x = index % stage.map.width
-				y = index // stage.map.width
-				stage.renderTileToSurface(x, y, tile[0],
+			for pos, tile in redo.forward:
+				stage.renderTileToSurface(pos[0], pos[1], tile[0],
 												tile[1])
 		elif redo.action == const.UNDO_ENTITY_MOVE:
 			stage.eve.replace(redo.forward)												
@@ -425,10 +420,10 @@ def main():
 	#gxEdit.elements.append(interface.UIWindow(22, 22, 256, 256))
 	#gxEdit.elements.append(interface.UIWindow(300, 300, 260, 272, const.WINDOW_TILEPALETTE))
 
-	gxEdit.elements.append(interface.TilePaletteWindow(300, 300, 256, 280, const.WINDOW_TILEPALETTE))
-	gxEdit.elements.append(interface.EntityPaletteWindow(300, 0, 256, 156, const.WINDOW_ENTITYPALETTE))
+	gxEdit.elements.append(interface.TilePaletteWindow(400, 300, 256, 280, const.WINDOW_TILEPALETTE))
+	gxEdit.elements.append(interface.EntityPaletteWindow(400, 0, 256, 156, const.WINDOW_ENTITYPALETTE))
 
-	gxEdit.elements.append(interface.ToolsWindow(300, 200, 64, 40, const.WINDOW_TOOLS))
+	gxEdit.elements.append(interface.ToolsWindow(400, 200, 64, 40, const.WINDOW_TOOLS))
 
 	gxEdit.elements.append(interface.UITooltip(0,0,1,1))
 

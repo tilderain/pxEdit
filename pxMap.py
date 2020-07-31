@@ -5,7 +5,6 @@ class PxMapAttr: #use the same class for both
 		self.width = None
 		self.height = None
 		self.tiles = []
-		pass
 	def load(self, path):
 		try:
 			f = open(path, 'rb')
@@ -16,7 +15,10 @@ class PxMapAttr: #use the same class for both
 		
 		self.width = int.from_bytes(data[0:2], byteorder='little')
 		self.height = int.from_bytes(data[2:4], byteorder='little')
-		self.tiles = list(data[4:])
+		for i in range(self.height):
+			self.tiles.append(list( data[4+i*self.width:\
+									4+(i*self.width)+self.width] ))
+		return True
 		
 	def save(self, path):
 		try:
@@ -27,18 +29,22 @@ class PxMapAttr: #use the same class for both
 		else:
 			f.write(struct.pack("<h", self.width))
 			f.write(struct.pack("<h", self.height))
-			f.write(bytes(self.tiles))
+			for y in self.tiles:
+				f.write(bytes(y))
+
+			return True
 		
 	def modify(self, tiles):
-		#[index, [x, y]]
+		#[[x,y], [x, y]]
 
 		for tile in tiles:
 			#convert a spritesheet tile index to its representation in the tile array
-			if tile[0] >= len(self.tiles): continue
+			if tile[0][0] >= self.width: continue
+			if tile[0][1] >= self.height: continue
 			x = tile[1][0]
 			y = tile[1][1] * 16
 			
-			self.tiles[tile[0]] = x+y
+			self.tiles[tile[0][1]][tile[0][0]] = x+y
 	def resize(self, width, height):
 		pass
 	def get(self):

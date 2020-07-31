@@ -57,7 +57,7 @@
 (056) Checkpoint@@
 (057) Boss3TurretSpawner@@
 (058) B3Turret@@
-(059) Hanger_Soft@A hanger with one health.@(Parameter: turns it into a powerup spinner)
+(059) Hanger_Soft@A hanger with one health.@(Parameter: turns it into a powerup spinner that doesn't work)
 (060) PowerupBox@A shootable ground powerup.@(Parameter: the powerup)
 (061) PowerupStatic@A plain ground powerup.@(Parameter:)
 (050/62) PowerupHelper@@

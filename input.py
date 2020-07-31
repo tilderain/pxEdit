@@ -143,6 +143,8 @@ def runMouseDrag(gxEdit, stage):
 		if util.inBoundingBox(mouse.x, mouse.y, elem.x, elem.y, elem.w, elem.h):
 			if gxEdit.draggedElem:
 				return
+			if elem.type != const.WINDOW_TILEPALETTE and elem.type != const.WINDOW_TOOLTIP:
+				return
 
 	tilePalette = None
 	for elem in gxEdit.elements:
@@ -178,17 +180,15 @@ def runMouseDrag(gxEdit, stage):
 				return
 			stage.lastTileEdit = [x, y]
 
-			index = x + (y * map.width)
+			oldTileX = map.tiles[y][x] % 16
+			oldTileY = map.tiles[y][x] // 16
+			oldTiles = [[[x,y], [oldTileX, oldTileY]]] 
 
-			oldTileX = map.tiles[index] % 16
-			oldTileY = map.tiles[index] // 16
-			oldTiles = [[index, [oldTileX, oldTileY]]] 
-
-			map.modify( [[index, stage.selectedTiles[0]]] )
+			map.modify( [[[x,y], stage.selectedTiles[0]]] )
 			stage.renderTileToSurface(x, y, stage.selectedTiles[0][0],
 											stage.selectedTiles[0][1])
 
-			undo = UndoAction(const.UNDO_TILE, oldTiles, [[index, stage.selectedTiles[0]]])
+			undo = UndoAction(const.UNDO_TILE, oldTiles, [[[x,y], stage.selectedTiles[0]]])
 		
 			stage.undoPos += 1
 			stage.undoStack = stage.undoStack[:stage.undoPos]
@@ -210,17 +210,14 @@ def runMouseDrag(gxEdit, stage):
 				if xx >= map.width or yy >= map.height: 
 					continue
 
-				index = xx + (yy * map.width)
-				tiles.append([index, [tile[0], tile[1]]])
+				tiles.append([[xx,yy], [tile[0], tile[1]]])
 
-				oldTileX = map.tiles[index] % 16
-				oldTileY = map.tiles[index] // 16
-				oldTiles.append([index, [oldTileX, oldTileY]])
+				oldTileX = map.tiles[yy][xx] % 16
+				oldTileY = map.tiles[yy][xx] // 16
+				oldTiles.append([[xx,yy], [oldTileX, oldTileY]])
 
-			for index, tile in tiles:
-				x = index % map.width
-				y = index // map.width
-				stage.renderTileToSurface(x, y, tile[0],
+			for pos, tile in tiles:
+				stage.renderTileToSurface(pos[0], pos[1], tile[0],
 												tile[1])
 			map.modify(tiles)
 			#TODO: disable undo while dragging
@@ -263,9 +260,10 @@ def runMouseDrag(gxEdit, stage):
 		if x1 > x2: x1, x2 = x2, x1
 		if y1 > y2: y1, y2 = y2, y1
 
-		if x1 > map.width*2 or y1 > map.height*2: return
-		if x2 > map.width*2 or y2 > map.height*2: return
+		#if x1 > map.width*2 or y1 > map.height*2: return
+		#if x2 > map.width*2 or y2 > map.height*2: return
 
+		#if x > int(map.width*const.tileWidth*mag)
 		gxEdit.selectionBoxEnd = [x, y]
 		
 		selectedEntities = []
