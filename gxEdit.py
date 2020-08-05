@@ -552,10 +552,9 @@ def main():
 			
 		def runTileSelection(stage):
 			tiles = []
-			start = stage.selectedTilesStart
-			end = stage.selectedTilesEnd
+			start = stage.selectedTilesStart[:]
+			end = stage.selectedTilesEnd[:]
 
-			#TODO: fix dragging to the left and up
 			if end[0] < start[0]:
 				start[0], end[0] = end[0], start[0]
 			if end[1] < start[1]:

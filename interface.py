@@ -523,10 +523,18 @@ class TilePaletteWindow(UIWindow):
 
 		#TODO: add selected tile border (properly)
 		if gxEdit.currentEditMode == const.EDIT_TILE:
-			dstx = dstx + ((stage.selectedTilesStart[0] * const.tileWidth) * mag)
-			dsty = dsty + ((stage.selectedTilesStart[1] * const.tileWidth) * mag)
-			w = (stage.selectedTilesEnd[0]+1 - stage.selectedTilesStart[0]) * const.tileWidth * mag
-			h =  (stage.selectedTilesEnd[1]+1 - stage.selectedTilesStart[1]) * const.tileWidth * mag
+			start = stage.selectedTilesStart[:]
+			end = stage.selectedTilesEnd[:]
+
+			if start[0] > end[0]:
+				start[0], end[0] = end[0], start[0]
+			if end[1] < start[1]:
+				start[1], end[1] = end[1], start[1]
+
+			dstx = dstx + ((start[0] * const.tileWidth) * mag)
+			dsty = dsty + ((start[1] * const.tileWidth) * mag)
+			w = (end[0]+1 - start[0]) * const.tileWidth * mag
+			h =  (end[1]+1 - start[1]) * const.tileWidth * mag
 
 			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, w, h)
 
@@ -892,11 +900,25 @@ class Interface:
 
 			if x >= map.width or y >= map.height: return
 
+			start = stage.selectedTilesStart[:]
+			end = stage.selectedTilesEnd[:]
+
+			negX = negY = False
+			if start[0] > end[0]:
+				start[0], end[0] = end[0], start[0]
+				negX = True
+			if end[1] < start[1]:
+				start[1], end[1] = end[1], start[1]
+				negY = True
+
+			w = end[0] - start[0] + 1
+			h = end[1] - start[1] + 1
+
+			if negX: x -= w - 1
+			if negY: y -= h - 1
+
 			x *= int(const.tileWidth * mag)
 			y *= int(const.tileWidth * mag)
-
-			w = stage.selectedTilesEnd[0] - stage.selectedTilesStart[0] + 1
-			h = stage.selectedTilesEnd[1] - stage.selectedTilesStart[1] + 1
 
 			w *= int(const.tileWidth * mag)
 			h *= int(const.tileWidth * mag)
