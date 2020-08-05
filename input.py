@@ -23,17 +23,17 @@ def runMouse1(gxEdit, stage, mouse):
 	eve = stage.eve
 	mag = gxEdit.magnification
 
-	for i, elem in reversed(list(enumerate(gxEdit.elements))):
+	for i, elem in reversed(list(gxEdit.elements.items())):
 		if not elem.visible: continue
 
 		if util.inWindowBoundingBox(mouse, elem):
 			#move to top
-			gxEdit.elements.append(gxEdit.elements.pop(i))
+			gxEdit.elements[i] = gxEdit.elements.pop(i)
 			if elem.handleMouse1(mouse, gxEdit):
 				return
 		if util.inDragHitbox(mouse, elem):
 			#move to top
-			gxEdit.elements.append(gxEdit.elements.pop(i))
+			gxEdit.elements[i] = gxEdit.elements.pop(i)
 			
 			gxEdit.draggedElem = elem
 			gxEdit.dragX = mouse.x - elem.x
@@ -41,10 +41,7 @@ def runMouse1(gxEdit, stage, mouse):
 			return
 
 	#TODO: placeholder
-	tilePalette = None
-	for elem in gxEdit.elements:
-		if elem.type == const.WINDOW_TILEPALETTE:
-			tilePalette = elem
+	tilePalette = gxEdit.elements["tilePalette"]
 	if tilePalette.visible and util.inWindowBoundingBox(mouse, tilePalette):
 		#tile select
 		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // const.tileWidth // gxEdit.tilePaletteMag
@@ -63,10 +60,7 @@ def runMouse1(gxEdit, stage, mouse):
 		stage.selectedTiles = [[x, y]]
 
 		stage.lastTileEdit = [None, None]
-	tilePalette = None
-	for elem in gxEdit.elements:
-		if elem.type == const.WINDOW_ENTITYPALETTE:
-			tilePalette = elem
+	tilePalette = gxEdit.elements["entityPalette"]
 	if tilePalette.visible and util.inWindowBoundingBox(mouse, tilePalette):
 		#entity select
 		#TODO: add mag
@@ -104,7 +98,7 @@ def runMouseUp(gxEdit, curStage, mouse):
 		gxEdit.selectionBoxEnd = [-1, -1]
 		gxEdit.draggingEntities = False
 
-	for i, elem in reversed(list(enumerate(gxEdit.elements))):
+	for i, elem in reversed(list(gxEdit.elements.items())):
 		if elem.activeElem:
 			if(elem.activeElem.handleMouse1Up(mouse, gxEdit)):
 				elem.activeElem = None
@@ -118,12 +112,10 @@ def runMouseDrag(gxEdit, stage):
 	mouse.button = sdl2.SDL_GetMouseState(x, y)
 	mouse.x, mouse.y = x.value, y.value
 
-	for i, elem in reversed(list(enumerate(gxEdit.elements))):
+	for i, elem in reversed(list(gxEdit.elements.items())):
 		if not elem.visible: continue
 
 		if util.inWindowBoundingBox(mouse, elem):
-			#move to top
-			gxEdit.elements.append(gxEdit.elements.pop(i))
 			if elem.handleMouseOver(mouse, gxEdit):
 				break
 
@@ -139,18 +131,14 @@ def runMouseDrag(gxEdit, stage):
 		gxEdit.draggedElem.y = mouse.y - gxEdit.dragY
 		return
 	
-	for elem in gxEdit.elements:
+	for _, elem in gxEdit.elements.items():
 		if util.inBoundingBox(mouse.x, mouse.y, elem.x, elem.y, elem.w, elem.h):
 			if gxEdit.draggedElem:
 				return
 			if elem.type != const.WINDOW_TILEPALETTE and elem.type != const.WINDOW_TOOLTIP:
 				return
 
-	tilePalette = None
-	for elem in gxEdit.elements:
-		if elem.type == const.WINDOW_TILEPALETTE:
-			tilePalette = elem
-
+	tilePalette = gxEdit.elements["tilePalette"]
 	#Tiles selection
 	if util.inWindowBoundingBox(mouse, tilePalette):
 		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // const.tileWidth // gxEdit.tilePaletteMag
@@ -275,27 +263,19 @@ def runMouseDrag(gxEdit, stage):
 				selectedEntities.append(o)
 		stage.selectedEntities = selectedEntities
 		if selectedEntities == []:
-			for elem in gxEdit.elements:
-				try:
-					if elem.elements["paramEdit"]:
-						elem.visible = False
-				except KeyError:
-					pass
+			gxEdit.elements["entEdit"].visible = False
 		else:
-			for elem in gxEdit.elements:
-				try:
-					if len(selectedEntities) == 1:
-						elem.elements["paramEdit"].text = str(selectedEntities[0].type2)
-					else:
-						elem.elements["paramEdit"].text = ""
-						elem.elements["paramEdit"].placeholderText = "\n\n\n\n"
-					elem.visible = True
-					elem.x = int((selectedEntities[0].x - (stage.hscroll*2))* (const.tileWidth // 2) * mag + const.tileWidth*2)
-					elem.y = int((selectedEntities[0].y - (stage.scroll*2))* (const.tileWidth // 2) * mag)
-					#gxEdit.focussedElem = elem.elements["paramEdit"]
-					break
-				except KeyError:
-					pass
+			elem = gxEdit.elements["entEdit"]
+			if len(selectedEntities) == 1:
+				elem.elements["paramEdit"].text = str(selectedEntities[0].type2)
+			else:
+				elem.elements["paramEdit"].text = ""
+				elem.elements["paramEdit"].placeholderText = "\n\n\n\n"
+			elem.visible = True
+			elem.x = int((selectedEntities[0].x - (stage.hscroll*2))* (const.tileWidth // 2) * mag + const.tileWidth*2)
+			elem.y = int((selectedEntities[0].y - (stage.scroll*2))* (const.tileWidth // 2) * mag)
+			#gxEdit.focussedElem = elem.elements["paramEdit"]
+			
 			
 				
 
@@ -390,6 +370,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		if stage.selectedEntities:
 			ids = [o.id for o in stage.selectedEntities]
 			stage.eve.remove(ids)
+			gxEdit.elements["entEdit"].visible = False
 
 	elif key.keysym.mod & sdl2.KMOD_CTRL:
 		if sym == sdl2.SDLK_d:

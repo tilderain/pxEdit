@@ -66,6 +66,9 @@ rectUIWindow2Right = (11, 2, 1, 1)
 rectUIWindow2Bottom = (8, 4, 1, 1)
 rectUIWindow2Left = (6, 2, 1, 1)
 
+rectsUIWindow2 = (rectUIWindow1ColorFill, rectUIWindow2TopLeft, rectUIWindow2TopRight, rectUIWindow2BottomLeft, rectUIWindow2BottomRight, 
+rectUIWindow2Top, rectUIWindow2Right, rectUIWindow2Bottom, rectUIWindow2Left)
+
 
 rectUITooltipColorFill = (14, 2, 1, 1)
 rectUITooltipTopLeft = (12, 0, 2, 2)
@@ -169,6 +172,8 @@ class UIElement:
 
 		self.parent = parent
 
+		#TODO: self.draggable
+
 
 	def handleMouse1(self, mouse, gxEdit):
 		return False
@@ -220,6 +225,9 @@ class UITextInput(UIElement):
 		self.onAction = None
 
 	def handleMouse1(self, mouse, gxEdit):
+		#TODO: fix this
+		if gxEdit.focussedElem:
+			gxEdit.focussedElem.focussed = False
 		gxEdit.focussedElem = self
 		self.focussed = True
 		return True
@@ -299,7 +307,7 @@ class UIButton:
 				self.state = BUTTON_ACTIVE
 				self.rect = self.rectActive
 
-			self.onAction(self.parent, self)				
+			self.onAction(self.parent, self, gxEdit)				
 		#self.rect = self.rectActive
 		return True
 
@@ -308,7 +316,7 @@ class UIButton:
 		gxEdit.tooltipStyle = self.style
 		return True
 
-	def onAction(self, parent, elem):
+	def onAction(self, parent, elem, gxEdit):
 		pass
 
 	def render(self, x, y):
@@ -325,7 +333,7 @@ class UIElementStretch(UIElement):
 			dstrect=(self.x + x, self.y + y, self.w, self.h))
 
 
-def minimizeButtonAction(window, elem):
+def minimizeButtonAction(window, elem, gxEdit):
 	window.visible = False
 
 class UIWindow:
@@ -622,8 +630,19 @@ class EntityPaletteWindow(UIWindow):
 
 
 
-def toggleTilePalette():
-	pass	
+def toggleTilePalette(window, elem, gxEdit):
+	gxEdit.elements["tilePalette"].visible ^= 1	
+
+def toggleResizeDialog(window, elem, gxEdit):
+	elem = gxEdit.elements["mapSizeDialog"]
+	curStage = gxEdit.stages[gxEdit.curStage]
+	elem.elements["paramX"].text = str(curStage.map.width)
+	elem.elements["paramY"].text = str(curStage.map.height)
+
+	elem.x = gWindowWidth // 2 - elem.w // 2
+	elem.y = gWindowHeight // 2 - elem.h // 2
+	gxEdit.elements["mapSizeDialog"] = gxEdit.elements.pop("mapSizeDialog")
+	elem.visible ^= 1
 
 class ToolsWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLS, style=0):
@@ -633,6 +652,12 @@ class ToolsWindow(UIWindow):
 
 		self.elements["butToggleTilePalette"] = UIButton(4, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
 												tooltip=[["i hate pxedit", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butToggleTilePalette"].onAction = toggleTilePalette								
+
+		self.elements["butToggleResize"] = UIButton(24, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
+												tooltip=[["resize map", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butToggleResize"].onAction = toggleResizeDialog			
+																						
 		#self.elements["butToggleTilePalette"].onAction = 
 
 def editEntityAttributes(control, gxEdit):
@@ -678,6 +703,54 @@ class YesNoDialog(UIWindow):
 
 class ResizeControl(UIElement):
 	pass
+
+def mapResizeAction(window, elem, gxEdit):
+	paramX = window.elements["paramX"].text
+	paramY = window.elements["paramY"].text
+	curStage = gxEdit.stages[gxEdit.curStage]
+	try:
+		x = int(paramX)
+	except:
+		x = curStage.map.width
+	try:
+		y = int(paramY)
+	except:
+		y = curStage.map.height
+
+	if x == curStage.map.width and y == curStage.map.height:
+		window.visible = False
+		return
+
+	#"max texture dimensions are 16384x16384"
+	if x * const.tileWidth > 16384: x = 16384 // const.tileWidth
+	if y * const.tileWidth > 16384: y = 16384 // const.tileWidth
+
+	curStage.map.resize(x, y)
+	curStage.createMapSurface()
+	curStage.renderTilesToSurface()
+	window.visible = False
+
+class MapResizeDialog(UIWindow):
+	def __init__(self, x, y, w, h, type=const.WINDOW_ENTITYEDIT, style=0):
+		UIWindow.__init__(self, x, y, w, h, type, style)
+
+		self.elements["textXs"] = UIText(6, 6, "X:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textX"] = UIText(7, 7, "X:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["textYs"] = UIText(6, 30, "Y:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textY"] = UIText(7, 31, "Y:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+
+		self.elements["paramX"] = UITextInput(20, 5, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER)
+		self.elements["paramY"] = UITextInput(20, 28, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER)
+
+		self.elements["textOk"] = UIText(16, 68, "Ok", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textCancel"] = UIText(54, 68, "Cancel", sdlColorYellow, TTF_STYLE_NORMAL, self)
+
+		self.elements["buttonOk"] = UIButton(15, 50, 16, 16, self)
+		self.elements["buttonOk"].onAction = mapResizeAction
+		self.elements["buttonCancel"] = UIButton(60, 50, 16, 16, self)
+		self.elements["buttonCancel"].onAction = minimizeButtonAction
+
+		#TODO: stage parameter
 
 #this probably shouldn't be a class but i don't want to refactor it again
 class Interface:
@@ -974,32 +1047,30 @@ class Interface:
 	def renderFade(self):
 		pass
 
-	def renderUIWindows(self, gxEdit):
+	def renderUIWindow(self, gxEdit, elem):
 		#TODO
 		windowsurf = gSurfaces[SURF_UIWINDOW]
 		scale = 1
-		for elem in gxEdit.elements:
-			if not elem.visible: continue
-			#TODO PLACEHOLDER AGAGHAGH
-			if elem.type == const.WINDOW_TOOLTIP: continue
-			#middle
-			self.renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x+1, elem.y, elem.w-2, elem.h))
-			self.renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x, elem.y+1, elem.w, elem.h-2))
-			
-			#corners
-			self.renderer.copy(windowsurf, srcrect=rectUIWindow2TopLeft, dstrect=(elem.x, elem.y, 2, 2))
-			self.renderer.copy(windowsurf, srcrect=rectUIWindow2TopRight, dstrect=(elem.x+elem.w-2, elem.y, 2, 2))
-			self.renderer.copy(windowsurf, srcrect=rectUIWindow2BottomLeft, dstrect=(elem.x, elem.y+elem.h-2, 2, 2))
-			self.renderer.copy(windowsurf, srcrect=rectUIWindow2BottomRight, dstrect=(elem.x+elem.w-2, elem.y+elem.h-2, 2, 2))
+		if not elem.visible: return
+		#TODO PLACEHOLDER AGAGHAGH
+		if elem.type == const.WINDOW_TOOLTIP: return
+		#middle
+		self.renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x+1, elem.y, elem.w-2, elem.h))
+		self.renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x, elem.y+1, elem.w, elem.h-2))
+		
+		#corners
+		self.renderer.copy(windowsurf, srcrect=rectUIWindow2TopLeft, dstrect=(elem.x, elem.y, 2, 2))
+		self.renderer.copy(windowsurf, srcrect=rectUIWindow2TopRight, dstrect=(elem.x+elem.w-2, elem.y, 2, 2))
+		self.renderer.copy(windowsurf, srcrect=rectUIWindow2BottomLeft, dstrect=(elem.x, elem.y+elem.h-2, 2, 2))
+		self.renderer.copy(windowsurf, srcrect=rectUIWindow2BottomRight, dstrect=(elem.x+elem.w-2, elem.y+elem.h-2, 2, 2))
 
-			#border
-			self.renderer.copy(windowsurf, srcrect=rectUIWindow2Top, dstrect=(elem.x+1, elem.y, elem.w-2, 1))
-			self.renderer.copy(windowsurf, srcrect=rectUIWindow2Right, dstrect=(elem.x+elem.w-1, elem.y+1, 1, elem.h-2))
-			self.renderer.copy(windowsurf, srcrect=rectUIWindow2Bottom, dstrect=(elem.x+1, elem.y+elem.h-1, elem.w-2, 1))
-			self.renderer.copy(windowsurf, srcrect=rectUIWindow2Left, dstrect=(elem.x, elem.y+1, 1, elem.h-2))
+		#border
+		self.renderer.copy(windowsurf, srcrect=rectUIWindow2Top, dstrect=(elem.x+1, elem.y, elem.w-2, 1))
+		self.renderer.copy(windowsurf, srcrect=rectUIWindow2Right, dstrect=(elem.x+elem.w-1, elem.y+1, 1, elem.h-2))
+		self.renderer.copy(windowsurf, srcrect=rectUIWindow2Bottom, dstrect=(elem.x+1, elem.y+elem.h-1, elem.w-2, 1))
+		self.renderer.copy(windowsurf, srcrect=rectUIWindow2Left, dstrect=(elem.x, elem.y+1, 1, elem.h-2))
 
-			#render
-		pass
+		#render
 
 
 	def fadeout(self, introAnimTimer):

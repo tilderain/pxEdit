@@ -46,7 +46,21 @@ class PxMapAttr: #use the same class for both
 			
 			self.tiles[tile[0][1]][tile[0][0]] = x+y
 	def resize(self, width, height):
-		pass
+		if width <= 0: return
+		if height <= 0: return
+
+		tiles = []
+		for y in range(height):
+			if y > self.height-1:
+				tiles.append([0] * width)
+			else:
+				tiles.append( self.tiles[y][:width] + [0]*(width - self.width))
+			
+		self.tiles = tiles
+
+		self.width = width
+		self.height = height
+		
 	def get(self):
 		return self.tiles[:]
 

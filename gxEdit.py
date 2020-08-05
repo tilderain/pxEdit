@@ -100,6 +100,10 @@ class StagePrj:
 
 		self.surface = None
 
+	def createMapSurface(self):
+		if self.surface: del self.surface
+		self.surface = interface.gSprfactory.create_texture_sprite(interface.gRenderer, (self.map.width*const.tileWidth, self.map.height*const.tileWidth), access=sdl2.SDL_TEXTUREACCESS_TARGET)
+	
 	def load(self):
 		#TODO: open dialogue box to see if there is a newer backup
 			#read last modified date
@@ -109,8 +113,7 @@ class StagePrj:
 		self.map.load(dataPath + mapPath.format(self.stageNo))
 		self.attr.load(dataPath + attrPath.format(self.stageNo))
 
-
-		self.surface = interface.gSprfactory.create_texture_sprite(interface.gRenderer, (self.map.width*const.tileWidth, self.map.height*const.tileWidth), access=sdl2.SDL_TEXTUREACCESS_TARGET)
+		self.createMapSurface()
 
 		return True
 
@@ -163,8 +166,12 @@ class StagePrj:
 		map = self.map
 		sdlrenderer = interface.gRenderer.sdlrenderer
 		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surface.texture)
+		srcrect = sdl2.SDL_Rect(0,0,const.tileWidth,const.tileWidth)
+		dstrect = sdl2.SDL_Rect(0,0,const.tileWidth,const.tileWidth)
 		for x in range(map.width):
 			for y in range(map.height):
+				#TODO: detect if blank tile
+				#if map.tiles[y][x] == 0: continue
 				dstx = x * const.tileWidth
 				dsty = y * const.tileWidth
 
@@ -174,12 +181,13 @@ class StagePrj:
 				srcy = yy * const.tileWidth
 
 
-				srcrect = (srcx, srcy, const.tileWidth, const.tileWidth)
-				dstrect = (dstx, dsty, const.tileWidth, const.tileWidth)
-				#srcrect = 
+				srcrect.x = srcx
+				srcrect.y = srcy
+				dstrect.x = dstx
+				dstrect.y = dsty
 
-				#sdl2.SDL_RenderCopy(sdlrenderer, self.parts.texture, (srcrect), dstrect)
-				interface.gRenderer.copy(self.parts, srcrect, dstrect)
+				sdl2.SDL_RenderCopy(sdlrenderer, self.parts.texture, srcrect, dstrect)
+				#interface.gRenderer.copy(self.parts, srcrect, dstrect)
 		sdl2.SDL_SetRenderTarget(sdlrenderer, None)
 			
 	
@@ -224,7 +232,7 @@ class Editor:
 		self.saveTimer = 0
 
 		# all ui windows
-		self.elements = []
+		self.elements = {}
 
 		self.draggedElem = None
 		self.dragX = 0
@@ -420,16 +428,20 @@ def main():
 	#gxEdit.elements.append(interface.UIWindow(22, 22, 256, 256))
 	#gxEdit.elements.append(interface.UIWindow(300, 300, 260, 272, const.WINDOW_TILEPALETTE))
 
-	gxEdit.elements.append(interface.TilePaletteWindow(400, 300, 256, 280, const.WINDOW_TILEPALETTE))
-	gxEdit.elements.append(interface.EntityPaletteWindow(400, 0, 256, 156, const.WINDOW_ENTITYPALETTE))
+	gxEdit.elements["tilePalette"] = interface.TilePaletteWindow(400, 300, 256, 280, const.WINDOW_TILEPALETTE)
+	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(400, 0, 256, 156, const.WINDOW_ENTITYPALETTE)
 
-	gxEdit.elements.append(interface.ToolsWindow(400, 200, 64, 40, const.WINDOW_TOOLS))
+	gxEdit.elements["toolsWindow"] = interface.ToolsWindow(400, 200, 64, 40, const.WINDOW_TOOLS)
 
-	gxEdit.elements.append(interface.UITooltip(0,0,1,1))
+	gxEdit.elements["uiTooltip"] = interface.UITooltip(0,0,1,1)
 
 	entEdit = interface.EntityEditWindow(20,20,150,25)
 	entEdit.visible = False
-	gxEdit.elements.append(entEdit)
+	gxEdit.elements["entEdit"] = entEdit
+
+	mapSizeEdit = interface.MapResizeDialog(20,20,104,88)
+	mapSizeEdit.visible = False
+	gxEdit.elements["mapSizeDialog"] = mapSizeEdit
 
 	def renderEditor():
 		#TODO: placeholder
@@ -440,14 +452,14 @@ def main():
 		gui.renderEntities(gxEdit, curStage)
 	
 		gui.renderEntityPalette(gxEdit, curStage)
-	
-		gui.renderUIWindows(gxEdit)
 		gui.renderTilePalette(gxEdit, curStage)
 	
-		for elem in gxEdit.elements:
-			if elem.visible: elem.render(gxEdit, curStage)
+		for _, elem in gxEdit.elements.items():
+			if elem.visible: 
+				gui.renderUIWindow(gxEdit, elem)
+				elem.render(gxEdit, curStage)
 
-		for elem in gxEdit.elements:
+		for _, elem in gxEdit.elements.items():
 			if elem.type == const.WINDOW_TOOLTIP and elem.visible: elem.render(gxEdit, curStage)
 
 	#for continuous resizing
@@ -555,7 +567,7 @@ def main():
 			if tiles != []: stage.selectedTiles = tiles
 
 		def clampUiWindows():
-			for elem in gxEdit.elements:
+			for _, elem in gxEdit.elements.items():
 				if elem.y <= 0:
 					elem.y = 0
 				if elem.x + elem.w - 25 < 0:

@@ -98,7 +98,7 @@
 (097) Brick@A destroyable ground unit.@
 (098) BulletSquare@A menacing square bullet.@(Parameter: the angle)
 (099) BulletSquareGen@A ground unit that fires square bullets in the direction of the player.@
-(100) Boss5@Gas Turbine@(Parameter: the angle?????)
+(100) Boss5@Gas Turbine@(Parameter: affects spawn position of the laser by minsiscule amounts (% 256))
 (101) @@
 (102) B5Bullet@@(Parameter: angle)
 (103) @@
