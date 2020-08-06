@@ -462,8 +462,8 @@ def renderWindowBox(self, fill, topleft, topright, bottomleft, bottomright, top,
 
 
 class UITooltip(UIWindow):
-	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLTIP, style=const.STYLE_TOOLTIP_BLACK):
-		UIWindow.__init__(self, x, y, w, h, type, style)
+	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLTIP, style=const.STYLE_TOOLTIP_BLACK, visible=True):
+		UIWindow.__init__(self, x, y, w, h, type, style, visible)
 
 	def handleMouse1(self, mouse, gxEdit):
 		return False
