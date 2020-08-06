@@ -259,6 +259,7 @@ class UITextInput(UIElement):
 
 		text = self.text
 		color = self.color
+		style = self.fontStyle
 		if self.focussed:
 			self.blinkTimer += 1
 			if self.blinkTimer % 100 < 50:
@@ -269,8 +270,9 @@ class UITextInput(UIElement):
 		if text == "" and not self.focussed:
 			text = self.placeholderText
 			color = sdlColorOlive
+			style = TTF_STYLE_ITALIC
 
-		renderText(text, color, self.fontStyle, self.x + x + 5, self.y + y + (self.h // 8))
+		renderText(text, color, style, self.x + x + 5, self.y + y + (self.h // 8))
 
 
 class UIScrollbar(UIElement):
@@ -288,7 +290,8 @@ BUTTON_TYPE_RADIO = 2
 
 
 class UIButton:
-	def __init__(self, x, y, w, h, parent, group=0, rects=rectsButtonNormal, style=0, tooltip=None, type=BUTTON_TYPE_NORMAL):
+	def __init__(self, x, y, w, h, parent, group=0, rects=rectsButtonNormal, style=0, tooltip=None, type=BUTTON_TYPE_NORMAL,
+				 text=None, fontStyle=None, fontColor=None):
 		
 		UIElement.__init__(self, x, y, w, h, parent, None, style, tooltip)
 
@@ -299,6 +302,10 @@ class UIButton:
 		self.type = type
 		
 		self.group = group
+
+		self.text=text
+		self.fontStyle=fontStyle
+		self.fontColor=fontColor
 
 	def handleMouse1(self, mouse, gxEdit):
 		if self.type == BUTTON_TYPE_RADIO or self.type == BUTTON_TYPE_CHECKBOX:
@@ -344,6 +351,12 @@ class UIButton:
 		self.rect = self.rects[self.state]
 		UIElement.render(self, x, y)
 
+		if self.text:
+			xx = self.x + x
+			yy = self.y + y
+			renderText(self.text, self.color, self.fontStyle, xx, yy)
+
+
 
 class UIElementStretch(UIElement):
 	def __init__(self, x, y, w, h, parent, rect, style=0, tooltip=None):
@@ -359,7 +372,7 @@ def minimizeButtonAction(window, elem, gxEdit):
 	window.visible = False
 
 class UIWindow:
-	def __init__(self, x, y, w, h, type=const.WINDOW_NONE, style=0):
+	def __init__(self, x, y, w, h, type=const.WINDOW_NONE, style=0, visible=False):
 		self.x = x
 		self.y = y
 		self.w = w
@@ -376,7 +389,7 @@ class UIWindow:
 
 		self.activeElem = None
 
-		self.visible = True
+		self.visible = visible
 
 		self.priority = 0
 
@@ -510,8 +523,8 @@ class UITooltip(UIWindow):
 		
 
 class TilePaletteWindow(UIWindow):
-	def __init__(self, x, y, w, h, type=const.WINDOW_TILEPALETTE, style=0):
-		UIWindow.__init__(self, x, y, w, h, type, style)
+	def __init__(self, x, y, w, h, type=const.WINDOW_TILEPALETTE, style=0, visible=True):
+		UIWindow.__init__(self, x, y, w, h, type, style, visible)
 
 		self.elements["picker"] = UIElement(0, 24, 0, 0, self, (0,0,0,0))
 		self.elements["textPalette"] = UIElement(6, 6, 1, 1, self, rectWindowTextPalette)
@@ -585,8 +598,8 @@ class TilePaletteWindow(UIWindow):
 
 
 class EntityPaletteWindow(UIWindow):
-	def __init__(self, x, y, w, h, type=const.WINDOW_TILEPALETTE, style=0):
-		UIWindow.__init__(self, x, y, w, h, type, style)
+	def __init__(self, x, y, w, h, type=const.WINDOW_TILEPALETTE, style=0, visible=True):
+		UIWindow.__init__(self, x, y, w, h, type, style, visible)
 
 		self.elements["picker"] = UIElement(0, 24, 0, 0, self, (0,0,0,0))
 		self.elements["textPalette"] = UIElement(6, 6, 1, 1, self, rectWindowTextPalette)
@@ -674,15 +687,46 @@ def toggleResizeDialog(window, elem, gxEdit):
 	gxEdit.elements["mapSizeDialog"] = gxEdit.elements.pop("mapSizeDialog")
 	elem.visible ^= 1
 
-class ToolsWindow(UIWindow):
-	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLS, style=0):
+def toggleMultiplayerMenu(window, elem, gxEdit):
+	elem = gxEdit.elements["dialogMultiplayer"]
+	elem.x = gWindowWidth // 2 - elem.w // 2
+	elem.y = gWindowHeight // 2 - elem.h // 2
+	gxEdit.elements["dialogMultiplayer"] = gxEdit.elements.pop("dialogMultiplayer")
+	elem.visible ^= 1
+
+class MultiplayerWindow(UIWindow):
+	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLS, style=0,):
 		UIWindow.__init__(self, x, y, w, h, type, style)
 
+		self.elements["paramIP"] = UITextInput(40, 5, 160, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self)
+		self.elements["paramIP"].placeholderText = "pixeltellsthetruth.solutions"
+		self.elements["paramPort"] = UITextInput(40, 30, 40, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self, style=const.TEXTINPUTTYPE_NUMBER)
+		self.elements["paramPort"].placeholderText = "7777"
+
+		self.elements["textXs"] = UIText(6, 6, "IP:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textX"] = UIText(7, 7, "IP:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["textYs"] = UIText(6, 30, "Port:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textY"] = UIText(7, 31, "Port:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+
+		self.elements["textHost"] = UIText(12, 68, "Host", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textConnect"] = UIText(48, 68, "Connect", sdlColorBlack, TTF_STYLE_NORMAL, self)
+
+		self.elements["buttonHost"] = UIButton(12, 54, 16, 16, self)
+		self.elements["buttonConnect"] = UIButton(54, 54, 16, 16, self)
+	
+	
+class ToolsWindow(UIWindow):
+	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLS, style=0, visible=True):
+		UIWindow.__init__(self, x, y, w, h, type, style, visible)
+
 		self.elements["textTools"] = UIElement(2, 2, 0, 0, self, rectWindowTextTools)
+
 
 		self.elements["butToggleTilePalette"] = UIButton(4, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
 												tooltip=[["i hate pxedit", sdlColorBlack, TTF_STYLE_NORMAL]])
 		self.elements["butToggleTilePalette"].onAction = toggleTilePalette								
+
+		
 
 		self.elements["butToggleResize"] = UIButton(24, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
 												tooltip=[["resize map", sdlColorBlack, TTF_STYLE_NORMAL]])
@@ -692,6 +736,10 @@ class ToolsWindow(UIWindow):
 
 		self.elements["butRadio"] = UIButton(20, 48, 16, 12, self, group=1, rects=rectsButtonCheckbox, type=BUTTON_TYPE_RADIO)
 		self.elements["butRadio2"] = UIButton(36, 48, 16, 12, self, group=1, rects=rectsButtonCheckbox, type=BUTTON_TYPE_RADIO)
+
+		self.elements["butToggleMultiplayer"] = UIButton(40, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
+												tooltip=[["multiplayer", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butToggleMultiplayer"].onAction = toggleMultiplayerMenu
 																						
 		#self.elements["butToggleTilePalette"].onAction = 
 

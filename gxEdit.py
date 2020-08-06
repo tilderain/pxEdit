@@ -435,13 +435,11 @@ def main():
 
 	gxEdit.elements["uiTooltip"] = interface.UITooltip(0,0,1,1)
 
-	entEdit = interface.EntityEditWindow(20,20,150,25)
-	entEdit.visible = False
-	gxEdit.elements["entEdit"] = entEdit
+	gxEdit.elements["entEdit"] = interface.EntityEditWindow(20,20,150,25)
 
-	mapSizeEdit = interface.MapResizeDialog(20,20,104,88)
-	mapSizeEdit.visible = False
-	gxEdit.elements["mapSizeDialog"] = mapSizeEdit
+	gxEdit.elements["mapSizeDialog"] = interface.MapResizeDialog(20,20,104,88)
+
+	gxEdit.elements["dialogMultiplayer"] = interface.MultiplayerWindow(0,0,220,80)
 
 	def renderEditor():
 		#TODO: placeholder
