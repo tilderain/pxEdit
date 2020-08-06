@@ -111,13 +111,21 @@ rectUIConcaveLeft = (24, 2, 1, 1)
 rectsUIConcave = (rectUIConcaveColorFill, rectUIConcaveTopLeft, rectUIConcaveTopRight, rectUIConcaveBottomLeft, rectUIConcaveBottomRight,
 rectUIConcaveTop, rectUIConcaveRight, rectUIConcaveBottom, rectUIConcaveLeft)
 
-rectWindowTextPalette = (0, 53, 68, 12)
-rectWindowTextTools = (0, 64, 54, 12)
+rectWindowTextPalette = (80, 48, 68, 12)
+rectWindowTextTools = (80, 64, 54, 12)
 
-rectButtonMinimizeNormal = (80, 5, 16, 16)
-rectButtonMinimizeClicked = (96, 5, 16, 16)
+rectButtonMinimizeNormal = (80, 16, 16, 16)
+rectButtonMinimizeClicked = (96, 16, 16, 16)
 
+rectButtonCheckbox = (80, 0, 16, 12)
+rectButtonCheckboxChecked = (96, 0, 16, 12)
 
+rectButtonNormal = (0, 16, 16, 16)
+rectButtonNormalDisabled = (16, 16, 16, 16)
+rectButtonNormalClicked = (32, 16, 16, 16)
+rectButtonNormalActive = (48, 16, 16, 16)
+
+rectsButtonNormal = rectButtonNormal, rectButtonNormalDisabled, rectButtonNormalClicked, rectButtonNormalActive
 
 gRenderer = None
 gWindow = None
