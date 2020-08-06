@@ -15,6 +15,8 @@ import const
 import sdl2.ext
 from sdl2.sdlttf import *
 
+import multi
+
 #You must agree to the terms of use to continue.
 #Terms of Use
 #THIS INDEPENDANT
@@ -261,6 +263,7 @@ class Editor:
 		#ip, name, color? curstage:, mousexy pos, ping, last response time
 		self.players = {}
 		self.playerId = 0
+		self.lastMousePosTick = 0
 
 	def readEntityInfo(self):
 		try:
@@ -619,8 +622,16 @@ def main():
 			gxEdit.backupStages()
 			gxEdit.lastBackupTick = tickCount
 			
-		if gxEdit.socket:
-			pass
+		if gxEdit.socket and tickCount >= gxEdit.lastMousePosTick:
+			if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
+				mouse = sdl2.SDL_MouseButtonEvent()
+				x,y = ctypes.c_int(0), ctypes.c_int(0)
+				mouse.button = sdl2.SDL_GetMouseState(x, y)
+				mouse.x, mouse.y = x.value, y.value
+
+				if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
+					multi.sendMousePosPacket(gxEdit, mouse.x, mouse.y)
+					gxEdit.lastMousePosTick = tickCount
 
 		#TODO: do a getticks system
 		renderer.present()

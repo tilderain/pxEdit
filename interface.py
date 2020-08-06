@@ -708,10 +708,15 @@ class MultiplayerWindow(UIWindow):
 		self.elements["paramPort"] = UITextInput(40, 30, 40, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self, style=const.TEXTINPUTTYPE_NUMBER)
 		self.elements["paramPort"].placeholderText = "7777"
 
+		self.elements["paramName"] = UITextInput(120, 30, 80, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self)
+
 		self.elements["textXs"] = UIText(6, 6, "IP:", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textX"] = UIText(7, 7, "IP:", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["textYs"] = UIText(6, 30, "Port:", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textY"] = UIText(7, 31, "Port:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+
+		self.elements["textNames"] = UIText(84, 30, "Name:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textName"] = UIText(85, 31, "Name:", sdlColorYellow, TTF_STYLE_NORMAL, self)
 
 		self.elements["textHost"] = UIText(12, 68, "Host", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textConnect"] = UIText(48, 68, "Connect", sdlColorBlack, TTF_STYLE_NORMAL, self)
@@ -1039,6 +1044,15 @@ class Interface:
 			h = int(const.tileWidth//2 * mag)
 
 		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
+
+		for _, player in gxEdit.players.items():
+			if "mousepos" not in player: continue
+			x = player["mousepos"][0]
+			y = player["mousepos"][1]
+			self.renderer.copy(gSurfaces[SURF_UIWINDOW], srcrect=rectMultiplayerCursor, 
+								dstrect=(x, y, rectMultiplayerCursor[2], rectMultiplayerCursor[3]))
+			renderText(player["name"], sdlColorBlack, TTF_STYLE_NORMAL, x + 6, y + 6)
+			renderText(player["name"], sdlColorWhite, TTF_STYLE_NORMAL, x + 5, y + 5)
 
 
 

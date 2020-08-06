@@ -3,13 +3,32 @@ import socket
 import threading
 import const
 import sys
+import json
 
 DEFAULT_PORT = 7777
 
+PACKET_CONNECT = 1
+PACKET_MOUSEPOS = 2
+
 class PxEditServerHandler(socketserver.BaseRequestHandler):
 	def handle(self):
+		while True:
+			data = self.request.recv(1024)
+			data = data.decode("utf-8")
+			datas = []
 
-		pass
+			while data.find("}") != -1:
+				datas.append(data[0:data.find("}")+1])
+				data = data[data.find("}")+1:]
+
+			gxEdit = self.server.gxEdit
+
+			for data in datas:
+				data = json.loads(data)
+				if data["type"] == PACKET_CONNECT:
+					gxEdit.players[self.playerId]["name"] = data["name"]
+				elif data["type"] == PACKET_MOUSEPOS:
+					gxEdit.players[self.playerId]["mousepos"] = data["x"], data["y"]
 
 	def setup(self):
 		gxEdit = self.server.gxEdit
@@ -26,6 +45,10 @@ class PxEditServer(socketserver.ThreadingTCPServer):
 def hostButtonAction(window, elem, gxEdit):
 	if gxEdit.socket:
 		return
+	paramName = window.elements["paramName"].text
+	#TODO:
+	#if paramName == "":
+	#	return
 
 	paramIP = window.elements["paramIP"].text
 	paramPort = window.elements["paramPort"].text
@@ -38,7 +61,6 @@ def hostButtonAction(window, elem, gxEdit):
 		sock = socketserver.ThreadingTCPServer((paramIP, port), PxEditServerHandler)
 	except OSError as e:
 		print(e)
-		del sock
 		return
 	gxEdit.socket = sock
 	gxEdit.multiplayerState = const.MULTIPLAYER_HOST
@@ -55,9 +77,19 @@ def hostButtonAction(window, elem, gxEdit):
 def clientMethod(gxEdit):
 	pass
 
+def sendMousePosPacket(gxEdit, x, y):
+	mousePosPacket = {"type":PACKET_MOUSEPOS, "x": x, "y": y}
+	data = json.dumps(mousePosPacket)
+	gxEdit.socket.sendall(bytes(data,encoding="utf-8"))
+	
+
 def connectButtonAction(window, elem, gxEdit):
 	if gxEdit.socket:
 		return
+	paramName = window.elements["paramName"].text
+	#TODO:
+	#if paramName == "":
+	#	return
 
 	paramIP = window.elements["paramIP"].text
 	paramPort = window.elements["paramPort"].text
@@ -76,10 +108,13 @@ def connectButtonAction(window, elem, gxEdit):
 		sock.connect((ip, port))
 	except OSError as e:
 		print(e)
-		del sock
 		return
 	gxEdit.socket = sock
 	gxEdit.multiplayerState = const.MULTIPLAYER_CLIENT
+
+	connectPacket = {"type":PACKET_CONNECT, "name": paramName}
+	data = json.dumps(connectPacket)
+	gxEdit.socket.sendall(bytes(data,encoding="utf-8"))
 
 	gxEdit.socket_thread = threading.Thread(target=clientMethod, args=([gxEdit]))
 	gxEdit.socket_thread.daemon = True
