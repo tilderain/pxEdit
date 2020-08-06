@@ -7,6 +7,9 @@ import ctypes
 
 import util
 
+import socketio
+import multi
+
 from sdl2.sdlttf import *
 
 #from gxEdit import gxEdit as gxEdit
@@ -130,6 +133,8 @@ rectButtonNormalClicked = (32, 16, 16, 16)
 rectButtonNormalActive = (48, 16, 16, 16)
 
 rectsButtonNormal = rectButtonNormal, rectButtonNormalDisabled, rectButtonNormalClicked, rectButtonNormalActive, None
+
+rectMultiplayerCursor = (128, 0, 16, 16)
 
 gRenderer = None
 gWindow = None
@@ -712,7 +717,9 @@ class MultiplayerWindow(UIWindow):
 		self.elements["textConnect"] = UIText(48, 68, "Connect", sdlColorBlack, TTF_STYLE_NORMAL, self)
 
 		self.elements["buttonHost"] = UIButton(12, 54, 16, 16, self)
+		self.elements["buttonHost"].onAction = multi.hostButtonAction
 		self.elements["buttonConnect"] = UIButton(54, 54, 16, 16, self)
+		self.elements["buttonConnect"].onAction = multi.connectButtonAction
 	
 	
 class ToolsWindow(UIWindow):

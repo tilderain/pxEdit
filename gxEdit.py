@@ -254,6 +254,14 @@ class Editor:
 		self.tooltipStyle = const.STYLE_TOOLTIP_BLACK
 		self.tooltipMag = 1
 
+
+		self.multiplayerState = const.MULTIPLAYER_NONE
+		self.socket = None
+		self.socket_thread = None
+		#ip, name, color? curstage:, mousexy pos, ping, last response time
+		self.players = {}
+		self.playerId = 0
+
 	def readEntityInfo(self):
 		try:
 			with open(entityInfoName) as f:
@@ -486,8 +494,15 @@ def main():
 		scaleFactor = (interface.gWindowHeight // const.tileWidth // gxEdit.magnification)
 		events = sdl2.ext.get_events()
 
+		multiwindowstring = ""
+		if gxEdit.multiplayerState:
+			if gxEdit.multiplayerState == const.MULTIPLAYER_HOST:
+				multiwindowstring = "**Hosting**"
+			elif gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
+				multiwindowstring = "**Connected**"
+
 		#set windowname
-		interface.gWindow.title = windowName + " [" + "map" + str(gxEdit.curStage+1) + "]"
+		interface.gWindow.title = windowName + " [" + "map" + str(gxEdit.curStage+1) + "]" + " " + multiwindowstring
 		
 		for event in events:
 			if event.type == sdl2.SDL_QUIT:
@@ -604,7 +619,8 @@ def main():
 			gxEdit.backupStages()
 			gxEdit.lastBackupTick = tickCount
 			
-
+		if gxEdit.socket:
+			pass
 
 		#TODO: do a getticks system
 		renderer.present()
