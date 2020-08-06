@@ -431,7 +431,7 @@ def main():
 	gxEdit.elements["tilePalette"] = interface.TilePaletteWindow(400, 300, 256, 280, const.WINDOW_TILEPALETTE)
 	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(400, 0, 256, 156, const.WINDOW_ENTITYPALETTE)
 
-	gxEdit.elements["toolsWindow"] = interface.ToolsWindow(400, 200, 64, 40, const.WINDOW_TOOLS)
+	gxEdit.elements["toolsWindow"] = interface.ToolsWindow(400, 200, 80, 64, const.WINDOW_TOOLS)
 
 	gxEdit.elements["uiTooltip"] = interface.UITooltip(0,0,1,1)
 

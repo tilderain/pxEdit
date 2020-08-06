@@ -117,15 +117,19 @@ rectWindowTextTools = (80, 64, 54, 12)
 rectButtonMinimizeNormal = (80, 16, 16, 16)
 rectButtonMinimizeClicked = (96, 16, 16, 16)
 
+rectsButtonMinimize = rectButtonMinimizeNormal, None, rectButtonMinimizeClicked, None, None
+
 rectButtonCheckbox = (80, 0, 16, 12)
 rectButtonCheckboxChecked = (96, 0, 16, 12)
+
+rectsButtonCheckbox = rectButtonCheckbox, None, rectButtonCheckboxChecked, rectButtonCheckboxChecked, None
 
 rectButtonNormal = (0, 16, 16, 16)
 rectButtonNormalDisabled = (16, 16, 16, 16)
 rectButtonNormalClicked = (32, 16, 16, 16)
 rectButtonNormalActive = (48, 16, 16, 16)
 
-rectsButtonNormal = rectButtonNormal, rectButtonNormalDisabled, rectButtonNormalClicked, rectButtonNormalActive
+rectsButtonNormal = rectButtonNormal, rectButtonNormalDisabled, rectButtonNormalClicked, rectButtonNormalActive, None
 
 gRenderer = None
 gWindow = None
@@ -272,51 +276,60 @@ class UITextInput(UIElement):
 class UIScrollbar(UIElement):
 	pass
 
-BUTTON_NORMAL = 0
-BUTTON_CLICKED = 1
-BUTTON_ACTIVE = 2
+BUTTON_STATE_NORMAL = 0
+BUTTON_STATE_DISABLED = 1
+BUTTON_STATE_CLICKED = 2
+BUTTON_STATE_ACTIVE = 3
+BUTTON_STATE_HOVERED = 4
 
 BUTTON_TYPE_NORMAL = 0
-BUTTON_TYPE_RADIO = 1
-
+BUTTON_TYPE_CHECKBOX = 1
+BUTTON_TYPE_RADIO = 2
 
 
 class UIButton:
-	def __init__(self, x, y, w, h, parent, group=0, rect=(0,0,0,0), style=0, tooltip=None, type=None):
-		UIElement.__init__(self, x, y, w, h, parent, rect, style, tooltip)
+	def __init__(self, x, y, w, h, parent, group=0, rects=rectsButtonNormal, style=0, tooltip=None, type=BUTTON_TYPE_NORMAL):
+		
+		UIElement.__init__(self, x, y, w, h, parent, None, style, tooltip)
 
-		self.rectNormal = rectButtonMinimizeNormal
-		self.rectActive = None
-		self.rectHover = None
-		self.rectClick = rectButtonMinimizeClicked
+		self.rects = rects
 
-		self.rect = self.rectNormal
-
-		self.state = BUTTON_NORMAL
+		self.state = BUTTON_STATE_NORMAL
 
 		self.type = type
 		
 		self.group = group
 
 	def handleMouse1(self, mouse, gxEdit):
-		self.state = BUTTON_CLICKED
-		self.rect = self.rectClick
+		if self.type == BUTTON_TYPE_RADIO or self.type == BUTTON_TYPE_CHECKBOX:
+			if self.type == BUTTON_TYPE_RADIO:
+				self.state = BUTTON_STATE_ACTIVE
+				for _, elem in self.parent.elements.items(): #uncheck other radios
+					try:
+						if elem != self and elem.group == self.group:
+							elem.state = BUTTON_STATE_NORMAL
+					except:
+						pass
+			else:
+				if self.state == BUTTON_STATE_ACTIVE: #toggle check
+					self.state = BUTTON_STATE_NORMAL
+				else:
+					self.state = BUTTON_STATE_ACTIVE
+			self.onAction(self.parent, self, gxEdit)		
+		else:
+			self.state = BUTTON_STATE_CLICKED
 		return True
 
 	def handleMouse2(self):
 		return False
 
 	def handleMouse1Up(self, mouse, gxEdit):
-		self.state = BUTTON_NORMAL
-		self.rect = rectButtonMinimizeNormal
+		if self.type == BUTTON_TYPE_RADIO or self.type == BUTTON_TYPE_CHECKBOX:
+			return True
+		self.state = BUTTON_STATE_NORMAL
 
 		if util.inWindowElemBoundingBox(mouse, self.parent, self):
-			if self.type == BUTTON_TYPE_RADIO:
-				self.state = BUTTON_ACTIVE
-				self.rect = self.rectActive
-
 			self.onAction(self.parent, self, gxEdit)				
-		#self.rect = self.rectActive
 		return True
 
 	def handleMouseOver(self, mouse, gxEdit):
@@ -328,6 +341,7 @@ class UIButton:
 		pass
 
 	def render(self, x, y):
+		self.rect = self.rects[self.state]
 		UIElement.render(self, x, y)
 
 
@@ -502,7 +516,7 @@ class TilePaletteWindow(UIWindow):
 		self.elements["picker"] = UIElement(0, 24, 0, 0, self, (0,0,0,0))
 		self.elements["textPalette"] = UIElement(6, 6, 1, 1, self, rectWindowTextPalette)
 
-		self.elements["buttonMinimize"] = UIButton(0, 4, 16, 16, self)
+		self.elements["buttonMinimize"] = UIButton(0, 4, 16, 16, self, rects=rectsButtonMinimize)
 		self.elements["buttonMinimize"].onAction = minimizeButtonAction
 
 	def render(self, gxEdit, stage):
@@ -673,6 +687,11 @@ class ToolsWindow(UIWindow):
 		self.elements["butToggleResize"] = UIButton(24, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
 												tooltip=[["resize map", sdlColorBlack, TTF_STYLE_NORMAL]])
 		self.elements["butToggleResize"].onAction = toggleResizeDialog			
+
+		self.elements["butCheckbox"] = UIButton(4, 48, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX)
+
+		self.elements["butRadio"] = UIButton(20, 48, 16, 12, self, group=1, rects=rectsButtonCheckbox, type=BUTTON_TYPE_RADIO)
+		self.elements["butRadio2"] = UIButton(36, 48, 16, 12, self, group=1, rects=rectsButtonCheckbox, type=BUTTON_TYPE_RADIO)
 																						
 		#self.elements["butToggleTilePalette"].onAction = 
 
