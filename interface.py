@@ -228,7 +228,7 @@ class UIText(UIElement):
 		renderText(self.text, self.color, self.fontStyle, self.x + x, self.y + y)
 		
 class UITextInput(UIElement):
-	def __init__(self, x, y, w, h, text, color, fontStyle, parent, rect=(0,0,0,0), style=const.TEXTINPUTTYPE_NORMAL, tooltip=None):
+	def __init__(self, x, y, w, h, text, color, fontStyle, parent, rect=(0,0,0,0), style=const.TEXTINPUTTYPE_NORMAL, tooltip=None, maxlen=0):
 		UIElement.__init__(self, x, y, w, h, parent, rect, style, tooltip)
 
 		self.text = text
@@ -240,6 +240,8 @@ class UITextInput(UIElement):
 		self.blinkTimer = 0
 
 		self.onAction = None
+
+		self.maxlen = maxlen
 
 	def handleMouse1(self, mouse, gxEdit):
 		#TODO: fix this
@@ -253,7 +255,8 @@ class UITextInput(UIElement):
 		if self.style == const.TEXTINPUTTYPE_NUMBER:
 			if not text.isdigit() and not (self.text == "" and text == "-"):
 				return False
-
+		if self.maxlen and len(self.text) + len(text) > self.maxlen:
+			return False
 		self.text += text
 		if self.onAction: 
 			self.onAction(self, gxEdit)
@@ -469,6 +472,7 @@ def renderWindowBox(self, fill, topleft, topright, bottomleft, bottomright, top,
 class UITooltip(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLTIP, style=const.STYLE_TOOLTIP_BLACK, visible=True):
 		UIWindow.__init__(self, x, y, w, h, type, style, visible)
+		self.draghitbox = [0, 0, 0, 0]
 
 	def handleMouse1(self, mouse, gxEdit):
 		return False
@@ -705,10 +709,10 @@ class MultiplayerWindow(UIWindow):
 
 		self.elements["paramIP"] = UITextInput(40, 5, 160, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self)
 		self.elements["paramIP"].placeholderText = "pixeltellsthetruth.solutions"
-		self.elements["paramPort"] = UITextInput(40, 30, 40, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self, style=const.TEXTINPUTTYPE_NUMBER)
+		self.elements["paramPort"] = UITextInput(40, 30, 40, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self, style=const.TEXTINPUTTYPE_NUMBER, maxlen=5)
 		self.elements["paramPort"].placeholderText = "7777"
 
-		self.elements["paramName"] = UITextInput(120, 30, 80, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self)
+		self.elements["paramName"] = UITextInput(120, 30, 80, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self, maxlen=16)
 
 		self.elements["textXs"] = UIText(6, 6, "IP:", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textX"] = UIText(7, 7, "IP:", sdlColorYellow, TTF_STYLE_NORMAL, self)

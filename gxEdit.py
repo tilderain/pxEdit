@@ -264,6 +264,7 @@ class Editor:
 		self.players = {}
 		self.playerId = 0
 		self.lastMousePosTick = 0
+		self.lastMousePos = (0, 0)
 
 	def readEntityInfo(self):
 		try:
@@ -622,16 +623,18 @@ def main():
 			gxEdit.backupStages()
 			gxEdit.lastBackupTick = tickCount
 			
-		if gxEdit.socket and tickCount >= gxEdit.lastMousePosTick:
+		if gxEdit.socket and tickCount >= gxEdit.lastMousePosTick + 100:
 			if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
 				mouse = sdl2.SDL_MouseButtonEvent()
 				x,y = ctypes.c_int(0), ctypes.c_int(0)
 				mouse.button = sdl2.SDL_GetMouseState(x, y)
 				mouse.x, mouse.y = x.value, y.value
 
-				if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
+				if(mouse.x, mouse.y) not gxEdit.lastMousePos:
 					multi.sendMousePosPacket(gxEdit, mouse.x, mouse.y)
 					gxEdit.lastMousePosTick = tickCount
+					gxEdit.lastMousePos = (mouse.x, mouse.y)
+				
 
 		#TODO: do a getticks system
 		renderer.present()

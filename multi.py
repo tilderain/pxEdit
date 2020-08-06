@@ -13,7 +13,7 @@ PACKET_MOUSEPOS = 2
 class PxEditServerHandler(socketserver.BaseRequestHandler):
 	def handle(self):
 		while True:
-			data = self.request.recv(1024)
+			data = self.request.recv(32768)
 			data = data.decode("utf-8")
 			datas = []
 
@@ -24,7 +24,12 @@ class PxEditServerHandler(socketserver.BaseRequestHandler):
 			gxEdit = self.server.gxEdit
 
 			for data in datas:
-				data = json.loads(data)
+				try:
+					data = json.loads(data)
+				except:
+					print("Got invalid data..", data)
+					continue
+				
 				if data["type"] == PACKET_CONNECT:
 					gxEdit.players[self.playerId]["name"] = data["name"]
 				elif data["type"] == PACKET_MOUSEPOS:

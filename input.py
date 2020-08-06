@@ -132,6 +132,7 @@ def runMouseDrag(gxEdit, stage):
 		return
 	
 	for _, elem in gxEdit.elements.items():
+		if not elem.visible: continue
 		if util.inBoundingBox(mouse.x, mouse.y, elem.x, elem.y, elem.w, elem.h):
 			if gxEdit.draggedElem:
 				return
@@ -161,60 +162,39 @@ def runMouseDrag(gxEdit, stage):
 		if x >= map.width or y >= map.height:
 			return
 
-		#TODO make this obsolete
-		if len(stage.selectedTiles) == 1:
-			#don't modify if same
-			if stage.lastTileEdit == [x, y]:
-				return
-			stage.lastTileEdit = [x, y]
+		if stage.lastTileEdit == [x, y]:
+			return
+		stage.lastTileEdit = [x, y]
 
-			oldTileX = map.tiles[y][x] % 16
-			oldTileY = map.tiles[y][x] // 16
-			oldTiles = [[[x,y], [oldTileX, oldTileY]]] 
+		startX = stage.selectedTilesStart[0]
+		startY = stage.selectedTilesStart[1]
+		tiles = []
+		oldTiles = []
+		for tile in stage.selectedTiles:
+			xx = tile[0] - startX + x
+			yy = tile[1] - startY + y
 
-			map.modify( [[[x,y], stage.selectedTiles[0]]] )
-			stage.renderTileToSurface(x, y, stage.selectedTiles[0][0],
-											stage.selectedTiles[0][1])
+			if xx >= map.width or yy >= map.height: 
+				continue
 
-			undo = UndoAction(const.UNDO_TILE, oldTiles, [[[x,y], stage.selectedTiles[0]]])
+			tiles.append([[xx,yy], [tile[0], tile[1]]])
+
+			oldTileX = map.tiles[yy][xx] % 16
+			oldTileY = map.tiles[yy][xx] // 16
+			oldTiles.append([[xx,yy], [oldTileX, oldTileY]])
+
+		for pos, tile in tiles:
+			stage.renderTileToSurface(pos[0], pos[1], tile[0],
+											tile[1])
+		map.modify(tiles)
+		#TODO: disable undo while dragging
+		#TODO: commit undo action only when mouseup
+		undo = UndoAction(const.UNDO_TILE, oldTiles, tiles)
+
+		stage.undoPos += 1
+		stage.undoStack = stage.undoStack[:stage.undoPos]
+		stage.undoStack.append(undo)
 		
-			stage.undoPos += 1
-			stage.undoStack = stage.undoStack[:stage.undoPos]
-			stage.undoStack.append(undo)
-			
-		else:
-			if stage.lastTileEdit == [x, y]:
-				return
-			stage.lastTileEdit = [x, y]
-
-			startX = stage.selectedTilesStart[0]
-			startY = stage.selectedTilesStart[1]
-			tiles = []
-			oldTiles = []
-			for tile in stage.selectedTiles:
-				xx = tile[0] - startX + x
-				yy = tile[1] - startY + y
-
-				if xx >= map.width or yy >= map.height: 
-					continue
-
-				tiles.append([[xx,yy], [tile[0], tile[1]]])
-
-				oldTileX = map.tiles[yy][xx] % 16
-				oldTileY = map.tiles[yy][xx] // 16
-				oldTiles.append([[xx,yy], [oldTileX, oldTileY]])
-
-			for pos, tile in tiles:
-				stage.renderTileToSurface(pos[0], pos[1], tile[0],
-												tile[1])
-			map.modify(tiles)
-			#TODO: disable undo while dragging
-			#TODO: commit undo action only when mouseup
-			undo = UndoAction(const.UNDO_TILE, oldTiles, tiles)
-
-			stage.undoPos += 1
-			stage.undoStack = stage.undoStack[:stage.undoPos]
-			stage.undoStack.append(undo)
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 		x = int(mouse.x + (stage.hscroll * const.tileWidth * mag))
 		y = int(mouse.y + (stage.scroll * const.tileWidth * mag))
