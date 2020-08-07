@@ -157,8 +157,8 @@ def runMouseDrag(gxEdit, stage):
 	#tiles Paint
 	elif gxEdit.currentEditMode == const.EDIT_TILE:
 
-		x = int(mouse.x // (const.tileWidth * mag)) + stage.hscroll
-		y = int(mouse.y // (const.tileWidth * mag)) + stage.scroll
+		x = int(mouse.x // (const.tileWidth * mag) + stage.hscroll)
+		y = int(mouse.y // (const.tileWidth * mag) + stage.scroll)
 
 		if x >= map.width or y >= map.height:
 			return
@@ -182,11 +182,14 @@ def runMouseDrag(gxEdit, stage):
 
 			oldTileX = map.tiles[yy][xx] % 16
 			oldTileY = map.tiles[yy][xx] // 16
+
 			oldTiles.append([[xx,yy], [oldTileX, oldTileY]])
 
 		if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
 			multi.sendTileEditPacket(gxEdit, gxEdit.curStage, tiles)
 			return
+		if gxEdit.multiplayerState == const.MULTIPLAYER_HOST:
+			multi.serverSendTileEdit(gxEdit, gxEdit.curStage, tiles)
 		for pos, tile in tiles:
 			stage.renderTileToSurface(pos[0], pos[1], tile[0],
 											tile[1])

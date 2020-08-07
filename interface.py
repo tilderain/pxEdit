@@ -289,6 +289,8 @@ class UITextInput(UIElement):
 
 
 class UIScrollbar(UIElement):
+	def __init__(self, x, y, w, h, parent, control, rect=(0,0,0,0), style=0, tooltip=None):
+		UIElement.__init__(self, x, y, w, h, parent, rect, style, tooltip)
 	pass
 
 BUTTON_STATE_NORMAL = 0
@@ -856,6 +858,12 @@ class MapResizeDialog(UIWindow):
 
 		#TODO: stage parameter
 
+def safe_div(a, b):
+	return 0 if b == 0 else a / b
+
+def lerp(a, b, percent):
+	return a * (1 - percent) + b * percent
+
 #this probably shouldn't be a class but i don't want to refactor it again
 class Interface:
 	def __init__(self, renderer, window, sprfactory):
@@ -971,12 +979,21 @@ class Interface:
 															
 		for _, player in gxEdit.players.items():
 			if "mousepos" not in player: continue
+			if "lerpmousepos" not in player:
+				player["lerpmousepos"] = [0, 0]
 
 			xBound = int(stage.hscroll * const.tileWidth * mag)
 			yBound = int(stage.scroll * const.tileWidth * mag)
 			#TODO: interp
-			x = int(player["mousepos"][0] * mag) - xBound
-			y = int(player["mousepos"][1] * mag) - yBound
+			targetX = int(player["mousepos"][0] * mag) - xBound
+			targetY = int(player["mousepos"][1] * mag) - yBound
+			x = player["lerpmousepos"][0]
+			y = player["lerpmousepos"][1]
+			
+			x = int(lerp(x, targetX, 0.16))
+			y = int(lerp(y, targetY, 0.16))
+
+			player["lerpmousepos"] = [x, y]
 
 			#if it is offscreen
 			dir = -1

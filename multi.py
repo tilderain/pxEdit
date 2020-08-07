@@ -158,8 +158,14 @@ def hostButtonAction(window, elem, gxEdit):
 
 	print("Now hosting!")
 
-def serverBroadcastAll(gxEdit, packet, sock): #playerid?
-	pass
+def serverBroadcastAll(gxEdit, packet): #playerid?
+	for _, player in gxEdit.players.items():
+		serverSendPacket(packet, player["sock"].request)
+
+def serverSendTileEdit(gxEdit, curStage, tiles):
+	packet = {"type":PACKET_TILEEDIT, "stage": curStage, "tiles": tiles}
+	serverBroadcastAll(gxEdit, packet)
+	
 
 def serverSendPacket(packet, sock):
 	#TODO: malformed packet data (extreneous, length?)
