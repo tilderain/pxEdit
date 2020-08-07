@@ -7,7 +7,6 @@ import ctypes
 
 import util
 
-import socketio
 import multi
 
 from sdl2.sdlttf import *

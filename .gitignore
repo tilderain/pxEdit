@@ -8,3 +8,4 @@ SDL2_ttf.dll
 *.spec
 build/
 dist/
+testBuild/
