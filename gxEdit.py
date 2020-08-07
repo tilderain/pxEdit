@@ -632,10 +632,13 @@ def main():
 				mouse.button = sdl2.SDL_GetMouseState(x, y)
 				mouse.x, mouse.y = x.value, y.value
 
-				if(mouse.x, mouse.y) is not gxEdit.lastMousePos:
-					multi.sendMousePosPacket(gxEdit, mouse.x, mouse.y)
+				#maybe it'd be fun to send their zoom level
+				x = int(mouse.x // gxEdit.magnification) + int(curStage.hscroll * const.tileWidth)
+				y = int(mouse.y // gxEdit.magnification) + int(curStage.scroll * const.tileWidth)
+				if(x, y) is not gxEdit.lastMousePos:
+					multi.sendMousePosPacket(gxEdit, x, y)
 					gxEdit.lastMousePosTick = tickCount
-					gxEdit.lastMousePos = (mouse.x, mouse.y)
+					gxEdit.lastMousePos = (x, y)
 				
 
 		#TODO: do a getticks system

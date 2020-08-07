@@ -158,7 +158,11 @@ def hostButtonAction(window, elem, gxEdit):
 
 	print("Now hosting!")
 
+def serverBroadcastAll(gxEdit, packet, sock): #playerid?
+	pass
+
 def serverSendPacket(packet, sock):
+	#TODO: malformed packet data (extreneous, length?)
 	try:
 		data = json.dumps(packet)
 		sock.sendall(bytes(data,encoding="utf-8"))

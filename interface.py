@@ -135,6 +135,12 @@ rectButtonNormalActive = (48, 16, 16, 16)
 rectsButtonNormal = rectButtonNormal, rectButtonNormalDisabled, rectButtonNormalClicked, rectButtonNormalActive, None
 
 rectMultiplayerCursor = (128, 0, 16, 16)
+rectMultiplayerArrowLeft = (128, 16, 16, 16)
+rectMultiplayerArrowUp = (144, 16, 16, 16)
+rectMultiplayerArrowRight = (160, 16, 16, 16)
+rectMultiplayerArrowDown = (176, 16, 16, 16)
+
+rectsMultiplayerArrow = rectMultiplayerArrowLeft, rectMultiplayerArrowUp, rectMultiplayerArrowRight, rectMultiplayerArrowDown
 
 gRenderer = None
 gWindow = None
@@ -148,10 +154,10 @@ gDrawBoxRect = sdl2.SDL_Rect(0,0,0,0)
 
 gFont = None
 
-def getTextSize(font, text):
+def getTextSize(text, font):
 	w = ctypes.c_int(0)
 	h = ctypes.c_int(0)
-	TTF_SizeText(font, text, w, h)
+	TTF_SizeText(font, ctypes.c_char_p(text.encode("utf-8")), w, h)
 	return [w.value, h.value]
 
 #lazy function
@@ -966,13 +972,50 @@ class Interface:
 															
 		for _, player in gxEdit.players.items():
 			if "mousepos" not in player: continue
+
+			xBound = int(stage.hscroll * const.tileWidth * mag)
+			yBound = int(stage.scroll * const.tileWidth * mag)
 			#TODO: interp
-			x = player["mousepos"][0]
-			y = player["mousepos"][1]
-			self.renderer.copy(gSurfaces[SURF_UIWINDOW], srcrect=rectMultiplayerCursor, 
+			x = int(player["mousepos"][0] * mag) - xBound
+			y = int(player["mousepos"][1] * mag) - yBound
+
+			#if it is offscreen
+			dir = -1
+			size = (0, 0)
+			if x > gWindowWidth or y > gWindowHeight \
+									or x < 0 or y < 0: 
+				size = getTextSize(player["name"], gFont)
+				if x < 0: #left
+					x = 2
+					dir = 0
+				if y < 0: 
+					y = 2
+					dir = 1
+				if x + size[0] > gWindowWidth: #right
+					x = gWindowWidth - (size[0] // 2)
+					dir = 2
+				if y > gWindowHeight: #down
+					y = gWindowHeight - 8 - size[1]
+					dir = 3
+
+				self.renderer.copy(gSurfaces[SURF_UIWINDOW], srcrect=rectsMultiplayerArrow[dir], dstrect=(x, y, rectsMultiplayerArrow[dir][2], rectsMultiplayerArrow[dir][3]))
+			else:
+				self.renderer.copy(gSurfaces[SURF_UIWINDOW], srcrect=rectMultiplayerCursor, 
 								dstrect=(x, y, rectMultiplayerCursor[2], rectMultiplayerCursor[3]))
-			renderText(player["name"], sdlColorBlack, TTF_STYLE_NORMAL, x + 6, y + 6)
-			renderText(player["name"], sdlColorWhite, TTF_STYLE_NORMAL, x + 5, y + 5)
+
+			if dir == 0:
+				x += 4
+			elif dir == 1:
+				y += 8
+				x -= size[0] // 2
+			elif dir == 2:
+				x -= size[0] + (size[0] // 4)
+			elif dir == 3:
+				y -= 8
+				x -= size[0] // 2
+			
+			renderText(player["name"], sdlColorBlack, TTF_STYLE_NORMAL, x + 9, y + 1)
+			renderText(player["name"], sdlColorWhite, TTF_STYLE_NORMAL, x + 8, y)
 
 		if gxEdit.currentEditMode == const.EDIT_TILE:
 			x = int(mouse.x // (const.tileWidth * mag))
