@@ -262,7 +262,8 @@ class Editor:
 		self.socket_thread = None
 		#ip, name, color? curstage:, mousexy pos, ping, last response time
 		self.players = {}
-		self.playerId = 0
+		#unique id count of connected clients
+		self.playerId = 1
 		self.lastMousePosTick = 0
 		self.lastMousePos = (0, 0)
 		self.tileRenderQueue = []

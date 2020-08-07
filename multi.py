@@ -13,70 +13,90 @@ PACKET_TILEEDIT = 3
 #with undostack
 PACKET_SENDSTAGE = 4
 PACKET_SENDPARTS = 5
+PACKET_MOUSEPOSFORCLIENT = 6
 
 VERSION_MAGIC = 10
 
 BUFFER_SIZE = 1024
 
+def packetAcceptor(gxEdit, sock):
+	while True:
+		sock.setblocking(1)
+		try:
+			data = sock.recv(BUFFER_SIZE)
+			if len(data) == BUFFER_SIZE:
+				while True:
+					try:
+						sock.setblocking(0)
+						data += sock.recv(BUFFER_SIZE)
+					except:
+						break
+		except OSError as e:
+			print(e)
+			return None
+		data = data.decode("utf-8")
+		datas = []
+
+		while data.find("}") != -1:
+			datas.append(data[0:data.find("}")+1])
+			data = data[data.find("}")+1:]
+
+		datas2 = []
+		for data in datas:
+			try:
+				data = json.loads(data)
+				datas2.append(data)
+			except:
+				print("Got invalid data..", data)
+				continue
+		return datas2
+
+def packetHandler(gxEdit, sock, playerId, datas):
+	for data in datas:
+		if data["type"] == PACKET_CONNECT: #should only be recieved by server
+			gxEdit.players[playerId]["name"] = data["name"]
+			ip = gxEdit.players[playerId]["ip"]
+
+			print(data["name"] + " connected. (" + ip[0] + ":" + str(ip[1]) + ")")
+			#TODO: send message to player
+			if data["version"] != VERSION_MAGIC:
+				print("but their version did not match. ", str(data["version"]))
+				return False
+
+			#TODO: kick if name already exists
+
+			#TODO: broadcast new players to all others
+
+		elif data["type"] == PACKET_MOUSEPOS:
+			gxEdit.players[playerId]["mousepos"] = data["x"], data["y"]
+		elif data["type"] == PACKET_TILEEDIT:
+			stage = gxEdit.stages[data["stage"]]
+			stage.map.modify(data["tiles"])
+			
+			#TODO: UNDO
+			gxEdit.tileRenderQueue.append((data["stage"], data["tiles"]))
+
+			if playerId:
+				for _, player in gxEdit.players.items():
+					serverSendPacket(data, player["sock"].request)
+		else:
+			print("unknown packet")
+			print(data)
+			return False
+	return True
+			
+
 class PxEditServerHandler(socketserver.BaseRequestHandler):
 	def handle(self):
 		gxEdit = self.server.gxEdit
 		while True:
-			self.request.setblocking(1)
-			try:
-				data = self.request.recv(BUFFER_SIZE)
-				if len(data) == BUFFER_SIZE:
-					while True:
-						try:
-							self.request.setblocking(0)
-							data += self.request.recv(BUFFER_SIZE)
-						except:
-							break
-			except OSError as e:
-				print(e)
+			datas = packetAcceptor(gxEdit, self.request)
+			if datas == None:
 				self.removePlayer()
 				return
-			data = data.decode("utf-8")
-			datas = []
-
-			while data.find("}") != -1:
-				datas.append(data[0:data.find("}")+1])
-				data = data[data.find("}")+1:]
-
-			for data in datas:
-				try:
-					data = json.loads(data)
-				except:
-					print("Got invalid data..", data)
-					continue
-
-				if data["type"] == PACKET_CONNECT:
-					gxEdit.players[self.playerId]["name"] = data["name"]
-					ip = gxEdit.players[self.playerId]["ip"]
-
-					print(data["name"] + " connected. (" + ip[0] + ":" + str(ip[1]) + ")")
-					#TODO: send message to player
-					if data["version"] != VERSION_MAGIC:
-						print("but their version did not match. ", str(data["version"]))
-						self.removePlayer()
-						return
-
-				elif data["type"] == PACKET_MOUSEPOS:
-					gxEdit.players[self.playerId]["mousepos"] = data["x"], data["y"]
-				elif data["type"] == PACKET_TILEEDIT:
-					stage = gxEdit.stages[data["stage"]]
-					stage.map.modify(data["tiles"])
-					
-					#TODO: UNDO
-					gxEdit.tileRenderQueue.append((data["stage"], data["tiles"]))
-
-					for _, player in gxEdit.players.items():
-						serverSendPacket(data, player["sock"].request)
-				else:
-					print("unknown packet")
-					print(data)
-					self.removePlayer()
-					return
+			if not packetHandler(gxEdit, self.request, self.playerId, datas):
+				self.removePlayer()
+				return
 
 	def setup(self):
 		gxEdit = self.server.gxEdit
@@ -95,39 +115,11 @@ class PxEditServerHandler(socketserver.BaseRequestHandler):
 def clientMethod(gxEdit):
 	sock = gxEdit.socket
 	while True:
-		try:
-			sock.setblocking(1)
-			data = sock.recv(BUFFER_SIZE)
-			if len(data) == BUFFER_SIZE:
-				while True:
-					try:
-						sock.setblocking(0)
-						data += sock.recv(BUFFER_SIZE)
-					except:
-						break
-		except OSError as e:
-			print(e)
+		datas = packetAcceptor(gxEdit, sock)
+		if datas == None:
 			return
-		data = data.decode("utf-8")
-		datas = []
-
-		while data.find("}") != -1:
-			datas.append(data[0:data.find("}")+1])
-			data = data[data.find("}")+1:]
-		for data in datas:
-			try:
-				data = json.loads(data)
-			except:
-				print("Got invalid data..", data)
-				continue
-			if data["type"] == PACKET_TILEEDIT:
-				stage = gxEdit.stages[data["stage"]]
-				stage.map.modify(data["tiles"])
-				
-				#TODO: UNDO
-				gxEdit.tileRenderQueue.append((data["stage"], data["tiles"]))
-
-		
+		if not packetHandler(gxEdit, sock, 0, datas):
+			return
 
 class PxEditServer(socketserver.ThreadingTCPServer):
 	pass
@@ -195,7 +187,7 @@ def sendMousePosPacket(gxEdit, x, y):
 	sendPacket(gxEdit, packet)
 	
 def sendTileEditPacket(gxEdit, curStage, tiles):
-	packet = {"type":PACKET_TILEEDIT, "stage":curStage, "tiles": tiles}
+	packet = {"type":PACKET_TILEEDIT, "stage": curStage, "tiles": tiles}
 	sendPacket(gxEdit, packet)
 
 def connectButtonAction(window, elem, gxEdit):
