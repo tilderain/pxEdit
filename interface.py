@@ -865,10 +865,10 @@ class Interface:
 		self.sprfactory = sprfactory
 
 	def loadSurfaces(self):
-		RESOURCES = sdl2.ext.Resources(__file__, "BITMAP")
+		RESOURCES = "./BITMAP/"
 
-		gSurfaces[SURF_WINDOWBG] = self.sprfactory.from_image(RESOURCES.get_path("dgBg.bmp"))
-		gSurfaces[SURF_WINDOWBG2] = self.sprfactory.from_image(RESOURCES.get_path("dgBg2.bmp"))
+		gSurfaces[SURF_WINDOWBG] = self.sprfactory.from_image(RESOURCES + "dgBg.bmp")
+		gSurfaces[SURF_WINDOWBG2] = self.sprfactory.from_image(RESOURCES + "dgBg2.bmp")
 		gSurfaces[SURF_COLOR_BLACK] = self.sprfactory.from_color(sdl2.ext.Color(0,0,0),(32,32))
 		gSurfaces[SURF_COLOR_ORANGE] = sdl2.ext.Color(0,255,0)
 		gSurfaces[SURF_COLOR_ORANGE_DARK] = sdl2.ext.Color(0,255,0)
@@ -905,11 +905,11 @@ class Interface:
 		gSurfaces[SURF_UNITS] = self.sprfactory.from_image(unitsName)
 
 
-		gSurfaces[SURF_UIWINDOW] = self.sprfactory.from_image(RESOURCES.get_path("Window.bmp"))
+		gSurfaces[SURF_UIWINDOW] = self.sprfactory.from_image(RESOURCES + "Window.bmp")
 
-		gSurfaces[SURF_NUMBER] = self.sprfactory.from_image(RESOURCES.get_path("Number.bmp"))
+		gSurfaces[SURF_NUMBER] = self.sprfactory.from_image(RESOURCES + "Number.bmp")
 
-		gSurfaces[SURF_EDITORBG] = self.sprfactory.from_image(RESOURCES.get_path("Background.bmp"))
+		gSurfaces[SURF_EDITORBG] = self.sprfactory.from_image(RESOURCES + "Background.bmp")
 
 		#TODO error handling when can't find file
 
