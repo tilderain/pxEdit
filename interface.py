@@ -924,10 +924,15 @@ class Interface:
 
 
 	def renderTiles(self, gxEdit, stage):
+		for bit in gxEdit.tileRenderQueue:
+			stg = gxEdit.stages[bit[0]]
+			for pos, tile in bit[1]:
+				stg.renderTileToSurface(pos[0], pos[1], tile[0],
+											tile[1])
+		gxEdit.tileRenderQueue = []
+
 		map = stage.map
 		mag = gxEdit.magnification
-
-		#TODO: render tiles out onto a surface once and just draw the relevant part
 
 		srcx = int(stage.hscroll * const.tileWidth)
 		srcy = int(stage.scroll * const.tileWidth)
@@ -939,31 +944,6 @@ class Interface:
 		dstrect = (0, 0, int(sizex*mag), int(sizey*mag))
 
 		self.renderer.copy(stage.surface.texture, srcrect=srcrect, dstrect=dstrect)
-
-		for i, tile in enumerate(map.tiles):
-			break
-			map = stage.map
-			y = i // map.width
-			if y < stage.scroll:
-				continue
-			if (y - stage.scroll) * const.tileWidth > gWindowHeight:	
-				continue
-			y -= stage.scroll
-
-			x = i % map.width
-			dstx = x * const.tileWidth
-			dsty = y * const.tileWidth
-
-			x = tile % 16 #the magic number so that each 4 bits in a byte corresponds to the x, y position in the tileset
-			y = tile // 16
-			srcx = x * const.tileWidth
-			srcy = y * const.tileWidth
-
-			
-			srcrect = (srcx, srcy, const.tileWidth, const.tileWidth)
-			dstrect = (dstx*mag, dsty*mag, const.tileWidth*mag, const.tileWidth*mag)
-			#srcrect = 
-			self.renderer.copy(stage.parts, srcrect=srcrect, dstrect=dstrect)
 
 		#TODO: fix this
 		mouse = sdl2.SDL_MouseButtonEvent()
@@ -984,6 +964,15 @@ class Interface:
 														x2 - x1, 
 														y2 - y1)
 															
+		for _, player in gxEdit.players.items():
+			if "mousepos" not in player: continue
+			#TODO: interp
+			x = player["mousepos"][0]
+			y = player["mousepos"][1]
+			self.renderer.copy(gSurfaces[SURF_UIWINDOW], srcrect=rectMultiplayerCursor, 
+								dstrect=(x, y, rectMultiplayerCursor[2], rectMultiplayerCursor[3]))
+			renderText(player["name"], sdlColorBlack, TTF_STYLE_NORMAL, x + 6, y + 6)
+			renderText(player["name"], sdlColorWhite, TTF_STYLE_NORMAL, x + 5, y + 5)
 
 		if gxEdit.currentEditMode == const.EDIT_TILE:
 			x = int(mouse.x // (const.tileWidth * mag))
@@ -1048,17 +1037,6 @@ class Interface:
 			h = int(const.tileWidth//2 * mag)
 
 		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
-
-		for _, player in gxEdit.players.items():
-			if "mousepos" not in player: continue
-			x = player["mousepos"][0]
-			y = player["mousepos"][1]
-			self.renderer.copy(gSurfaces[SURF_UIWINDOW], srcrect=rectMultiplayerCursor, 
-								dstrect=(x, y, rectMultiplayerCursor[2], rectMultiplayerCursor[3]))
-			renderText(player["name"], sdlColorBlack, TTF_STYLE_NORMAL, x + 6, y + 6)
-			renderText(player["name"], sdlColorWhite, TTF_STYLE_NORMAL, x + 5, y + 5)
-
-
 
 
 	def renderTilePalette(self, gxEdit, stage):

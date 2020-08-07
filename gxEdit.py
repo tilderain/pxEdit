@@ -265,6 +265,7 @@ class Editor:
 		self.playerId = 0
 		self.lastMousePosTick = 0
 		self.lastMousePos = (0, 0)
+		self.tileRenderQueue = []
 
 	def readEntityInfo(self):
 		try:
@@ -630,7 +631,7 @@ def main():
 				mouse.button = sdl2.SDL_GetMouseState(x, y)
 				mouse.x, mouse.y = x.value, y.value
 
-				if(mouse.x, mouse.y) not gxEdit.lastMousePos:
+				if(mouse.x, mouse.y) is not gxEdit.lastMousePos:
 					multi.sendMousePosPacket(gxEdit, mouse.x, mouse.y)
 					gxEdit.lastMousePosTick = tickCount
 					gxEdit.lastMousePos = (mouse.x, mouse.y)

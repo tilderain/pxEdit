@@ -4,6 +4,7 @@ import ctypes
 import math
 import interface
 import util
+import multi
 
 #TODO: find a better place for this
 class UndoAction:
@@ -183,6 +184,9 @@ def runMouseDrag(gxEdit, stage):
 			oldTileY = map.tiles[yy][xx] // 16
 			oldTiles.append([[xx,yy], [oldTileX, oldTileY]])
 
+		if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
+			multi.sendTileEditPacket(gxEdit, gxEdit.curStage, tiles)
+			return
 		for pos, tile in tiles:
 			stage.renderTileToSurface(pos[0], pos[1], tile[0],
 											tile[1])
