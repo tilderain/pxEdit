@@ -8,7 +8,9 @@ import ctypes
 import util
 
 import multi
+import os
 
+os.environ["PYSDL2_DLL_PATH"] = "./"
 from sdl2.sdlttf import *
 
 #from gxEdit import gxEdit as gxEdit
@@ -291,6 +293,8 @@ class UITextInput(UIElement):
 class UIScrollbar(UIElement):
 	def __init__(self, x, y, w, h, parent, control, rect=(0,0,0,0), style=0, tooltip=None):
 		UIElement.__init__(self, x, y, w, h, parent, rect, style, tooltip)
+
+		self.control = control
 	pass
 
 BUTTON_STATE_NORMAL = 0
@@ -979,19 +983,33 @@ class Interface:
 															
 		for _, player in gxEdit.players.items():
 			if "mousepos" not in player: continue
+			if "curStage" not in player: continue
+			if player["curStage"] is not gxEdit.curStage: continue
 			if "lerpmousepos" not in player:
 				player["lerpmousepos"] = [0, 0]
+				player["lerpxm"] = 0
+				player["lerpym"] = 1
 
 			xBound = int(stage.hscroll * const.tileWidth * mag)
 			yBound = int(stage.scroll * const.tileWidth * mag)
 			#TODO: interp
 			targetX = int(player["mousepos"][0] * mag) - xBound
 			targetY = int(player["mousepos"][1] * mag) - yBound
-			x = player["lerpmousepos"][0]
+			x = player["lerpmousepos"][0] 
 			y = player["lerpmousepos"][1]
+
+			dx = targetX - x
+			dy = targetY - y
 			
-			x = int(lerp(x, targetX, 0.16))
-			y = int(lerp(y, targetY, 0.16))
+			player["lerpxm"] += int(dx * 0.16)
+			player["lerpym"] += int(dy * 0.16)
+
+			if abs(player["lerpxm"]) > abs(int(dx * 0.1)): player["lerpxm"] = int(dx * 0.16)
+			if abs(player["lerpym"]) > abs(int(dy * 0.1)): player["lerpym"] = int(dy * 0.16)
+			
+
+			x += player["lerpxm"]
+			y += player["lerpym"]
 
 			player["lerpmousepos"] = [x, y]
 

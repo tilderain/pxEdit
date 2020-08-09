@@ -12,6 +12,7 @@ from collections import Counter
 
 import pxEve, pxMap, interface, input
 import const
+os.environ["PYSDL2_DLL_PATH"] = "./"
 import sdl2.ext
 from sdl2.sdlttf import *
 
@@ -636,7 +637,7 @@ def main():
 				x = int(mouse.x // gxEdit.magnification) + int(curStage.hscroll * const.tileWidth)
 				y = int(mouse.y // gxEdit.magnification) + int(curStage.scroll * const.tileWidth)
 				if(x, y) is not gxEdit.lastMousePos:
-					multi.sendMousePosPacket(gxEdit, x, y)
+					multi.sendMousePosPacket(gxEdit, x, y, gxEdit.curStage)
 					gxEdit.lastMousePosTick = tickCount
 					gxEdit.lastMousePos = (x, y)
 				

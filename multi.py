@@ -69,6 +69,7 @@ def packetHandler(gxEdit, sock, playerId, datas):
 
 		elif data["type"] == PACKET_MOUSEPOS:
 			gxEdit.players[playerId]["mousepos"] = data["x"], data["y"]
+			gxEdit.players[playerId]["curStage"] = data["curStage"]
 		elif data["type"] == PACKET_TILEEDIT:
 			stage = gxEdit.stages[data["stage"]]
 			stage.map.modify(data["tiles"])
@@ -192,8 +193,8 @@ def sendConnectPacket(gxEdit, name, version):
 	packet = {"type":PACKET_CONNECT, "name": name, "version": version}
 	sendPacket(gxEdit, packet)
 
-def sendMousePosPacket(gxEdit, x, y):
-	packet = {"type":PACKET_MOUSEPOS, "x": x, "y": y}
+def sendMousePosPacket(gxEdit, x, y, curStage):
+	packet = {"type":PACKET_MOUSEPOS, "x": x, "y": y, "curStage": curStage}
 	sendPacket(gxEdit, packet)
 	
 def sendTileEditPacket(gxEdit, curStage, tiles):
