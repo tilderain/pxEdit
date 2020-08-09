@@ -647,6 +647,7 @@ def main():
 		sdl2.SDL_Delay(8)
 
 		#window.refresh()
+	sdl2.ext.quit()
 	return 0
 
 if __name__== "__main__":
