@@ -266,6 +266,9 @@ def runMouseDrag(gxEdit, stage):
 			elem.x = int((selectedEntities[0].x - (stage.hscroll*2))* (const.tileWidth // 2) * mag + const.tileWidth*2)
 			elem.y = int((selectedEntities[0].y - (stage.scroll*2))* (const.tileWidth // 2) * mag)
 			#gxEdit.focussedElem = elem.elements["paramEdit"]
+
+			#TODO: scroll into view for expanded entity list
+			gxEdit.currentEntity = selectedEntities[0].type1
 			
 			
 				
@@ -286,7 +289,7 @@ def runMouse2(gxEdit, stage, mouse):
 		for o in stage.eve.get():
 			if o.x == x and o.y == y:
 				stage.eve.remove([o.id])
-				
+
 				undo = UndoAction(const.UNDO_ENTITY_REMOVE, 0, [o])
 				stage.addUndo(undo)
 				return
@@ -370,6 +373,8 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 
 			undo = UndoAction(const.UNDO_ENTITY_REMOVE, 0, stage.selectedEntities)
 			stage.addUndo(undo)
+
+			stage.selectedEntities = []
 
 	elif key.keysym.mod & sdl2.KMOD_CTRL:
 		if sym == sdl2.SDLK_d:
