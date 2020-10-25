@@ -116,6 +116,7 @@ class PxEve:
 		o = PxEveEntity(0, x, y, type1, type2, self._count)
 		self._count += 1
 		self._entities.append(o)
+		return o
 		
 	def remove(self, ids):
 		for id in ids:

@@ -101,12 +101,13 @@ class PxEditServerHandler(socketserver.BaseRequestHandler):
 
 	def setup(self):
 		gxEdit = self.server.gxEdit
+		gxEdit.playerId +=1
 		self.playerId = gxEdit.playerId
 		playerinfo = {}
 		playerinfo["ip"] = self.client_address
 		playerinfo["sock"] = self
 		gxEdit.players[self.playerId] = playerinfo
-		gxEdit.playerId +=1
+
 
 	def removePlayer(self):
 		gxEdit = self.server.gxEdit

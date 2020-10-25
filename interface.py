@@ -9,6 +9,7 @@ import util
 
 import multi
 import os
+import copy
 
 os.environ["PYSDL2_DLL_PATH"] = "./"
 from sdl2.sdlttf import *
@@ -117,23 +118,49 @@ rectUIConcaveTop, rectUIConcaveRight, rectUIConcaveBottom, rectUIConcaveLeft)
 
 rectWindowTextPalette = (80, 48, 68, 12)
 rectWindowTextTools = (80, 64, 54, 12)
+rectWindowTextLayer = (80, 80, 64, 16)
+
+rectWindowTextLVMP = (192, 32, 16, 16)
 
 rectButtonMinimizeNormal = (80, 16, 16, 16)
 rectButtonMinimizeClicked = (96, 16, 16, 16)
 
-rectsButtonMinimize = rectButtonMinimizeNormal, None, rectButtonMinimizeClicked, None, None
+rectsButtonMinimize = [rectButtonMinimizeNormal, None, rectButtonMinimizeClicked, None, None]
 
 rectButtonCheckbox = (80, 0, 16, 12)
 rectButtonCheckboxChecked = (96, 0, 16, 12)
 
 rectsButtonCheckbox = rectButtonCheckbox, None, rectButtonCheckboxChecked, rectButtonCheckboxChecked, None
 
-rectButtonNormal = (0, 16, 16, 16)
-rectButtonNormalDisabled = (16, 16, 16, 16)
-rectButtonNormalClicked = (32, 16, 16, 16)
-rectButtonNormalActive = (48, 16, 16, 16)
 
-rectsButtonNormal = rectButtonNormal, rectButtonNormalDisabled, rectButtonNormalClicked, rectButtonNormalActive, None
+#y+=16
+BUTTON_NORMAL = 0
+BUTTON_DRAW = 1
+BUTTON_ERASE = 2
+BUTTON_COPY = 3
+BUTTON_SCRIPT = 4
+BUTTON_EXIT = 5
+BUTTON_CURRENTLAYER = 6
+BUTTON_SAVE = 7
+BUTTON_UNITS = 8
+BUTTON_TILETYPE = 9
+BUTTON_EDITATTRIBUTE = 10
+BUTTON_EDITIMAGE = 11
+BUTTON_RELOAD = 12
+BUTTON_FILL = 13
+BUTTON_REPLACE = 14
+BUTTON_MAP0 = 15
+BUTTON_MAP1 = 16
+BUTTON_MAP2 = 17
+BUTTON_MULTIPLAYER = 18
+
+rectButtonNormal = [0, 16, 16, 16]
+rectButtonNormalDisabled = [16, 16, 16, 16]
+rectButtonNormalClicked = [32, 16, 16, 16]
+rectButtonNormalActive = [48, 16, 16, 16]
+rectButtonNormalHovered = [64, 16, 16, 16]
+
+rectsButtonNormal = [rectButtonNormal, rectButtonNormalDisabled, rectButtonNormalClicked, rectButtonNormalActive, rectButtonNormalHovered]
 
 rectMultiplayerCursor = (128, 0, 16, 16)
 rectMultiplayerArrowLeft = (128, 16, 16, 16)
@@ -310,11 +337,12 @@ BUTTON_TYPE_RADIO = 2
 
 class UIButton:
 	def __init__(self, x, y, w, h, parent, group=0, rects=rectsButtonNormal, style=0, tooltip=None, type=BUTTON_TYPE_NORMAL,
+				 enum=BUTTON_NORMAL,
 				 text=None, fontStyle=None, fontColor=None):
 		
 		UIElement.__init__(self, x, y, w, h, parent, None, style, tooltip)
 
-		self.rects = rects
+		self.rects = copy.deepcopy(rects)
 
 		self.state = BUTTON_STATE_NORMAL
 
@@ -325,6 +353,12 @@ class UIButton:
 		self.text=text
 		self.fontStyle=fontStyle
 		self.fontColor=fontColor
+
+		self.enum = enum
+
+		if self.enum:
+			for i in range(len(self.rects)):
+				self.rects[i][1] = 16 + (self.enum * 16)
 
 	def handleMouse1(self, mouse, gxEdit):
 		if self.type == BUTTON_TYPE_RADIO or self.type == BUTTON_TYPE_CHECKBOX:
@@ -406,8 +440,6 @@ class UIWindow:
 
 		self.surface = gSprfactory.from_color(sdl2.ext.Color(0,0,0),(w,h))
 
-		self.activeElem = None
-
 		self.visible = visible
 
 		self.priority = 0
@@ -415,7 +447,7 @@ class UIWindow:
 	def handleMouse1(self, mouse, gxEdit):
 		for _, elem in self.elements.items():
 			if util.inWindowElemBoundingBox(mouse, self, elem) and elem.handleMouse1(mouse, gxEdit):
-				self.activeElem = elem
+				gxEdit.activeElem = elem
 				return True
 		if gxEdit.focussedElem:
 			gxEdit.focussedElem.focussed = False
@@ -425,7 +457,7 @@ class UIWindow:
 	def handleMouse1Up(self, mouse, gxEdit):
 		for _, elem in self.elements.items():
 			if(util.inWindowElemBoundingBox(mouse, self, elem) and elem.handleMouse1Up(mouse, gxEdit)):
-				self.activeElem = None
+				gxEdit.activeElem = None
 				return True
 		return False
 
@@ -433,7 +465,6 @@ class UIWindow:
 		for _, elem in self.elements.items():
 			if util.inWindowElemBoundingBox(mouse, self, elem) and elem.handleMouseOver(mouse, gxEdit):
 				return True
-		gxEdit.tooltipText = []
 		return False
 
 	def handleMouse2():
@@ -522,8 +553,8 @@ class UITooltip(UIWindow):
 		self.w = (max(textWidths) + 12) * gxEdit.tooltipMag
 		self.h = (sum(textHeights) + 12) * gxEdit.tooltipMag
 
-		self.x = mouse.x
-		self.y = mouse.y - self.h
+		self.x = mouse.x + 4
+		self.y = mouse.y - self.h - 16
 
 		if self.x + self.w >= gWindowWidth:
 			self.x = gWindowWidth - self.w
@@ -746,9 +777,55 @@ class ToolsWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLS, style=0, visible=True):
 		UIWindow.__init__(self, x, y, w, h, type, style, visible)
 
-		self.elements["textTools"] = UIElement(2, 2, 0, 0, self, rectWindowTextTools)
+		#---TOOLS
+		self.elements["textTools"] = UIElement(4, 2, 0, 0, self, rectWindowTextTools)
+
+		self.elements["butDraw"] = UIButton(8, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_DRAW, type=BUTTON_TYPE_RADIO, group=2,
+										tooltip=[["Paint", sdlColorBlack, TTF_STYLE_NORMAL]])
+
+		self.elements["butErase"] = UIButton(28, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_ERASE, type=BUTTON_TYPE_RADIO, group=2,
+										tooltip=[["Erase", sdlColorBlack, TTF_STYLE_NORMAL]])
+
+		self.elements["butCopy"] = UIButton(48, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_COPY, type=BUTTON_TYPE_RADIO, group=2,
+										tooltip=[["Copy", sdlColorBlack, TTF_STYLE_NORMAL]])
+
+		self.elements["butFill"] = UIButton(20, 36, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_FILL, type=BUTTON_TYPE_RADIO, group=2,
+										tooltip=[["Fill", sdlColorBlack, TTF_STYLE_NORMAL]])
+
+		self.elements["butReplace"] = UIButton(40, 36, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_REPLACE, type=BUTTON_TYPE_RADIO, group=2,
+										tooltip=[["Replace", sdlColorBlack, TTF_STYLE_NORMAL]])
 
 
+		#---LAYER
+
+				#---TOOLS
+		self.elements["textLayer"] = UIElement(88, 2, 0, 0, self, rectWindowTextLayer)
+
+		self.elements["butMap0"] = UIButton(88, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_MAP0, type=BUTTON_TYPE_CHECKBOX,
+										tooltip=[["Display foreground", sdlColorBlack, TTF_STYLE_NORMAL]])
+
+		self.elements["butMap1"] = UIButton(104, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_MAP1, type=BUTTON_TYPE_CHECKBOX, 
+										tooltip=[["Display midground", sdlColorBlack, TTF_STYLE_NORMAL]])
+
+		self.elements["butMap2"] = UIButton(120, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_MAP2, type=BUTTON_TYPE_CHECKBOX,
+										tooltip=[["Display background", sdlColorBlack, TTF_STYLE_NORMAL]])
+
+		self.elements["textLVMP"] = UIElement(136, 20, 0, 0, self, rectWindowTextLVMP)
+
+		self.elements["butUnits"] = UIButton(152, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_UNITS, type=BUTTON_TYPE_CHECKBOX,
+										tooltip=[["Display entities (units)", sdlColorBlack, TTF_STYLE_NORMAL]])
+
+		self.elements["butGrid"] = UIButton(168, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_TILETYPE, type=BUTTON_TYPE_CHECKBOX,
+										tooltip=[["Display tile attributes", sdlColorBlack, TTF_STYLE_NORMAL]])
+
+
+		self.elements["butToggleMultiplayer"] = UIButton(40, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
+												tooltip=[["multiplayer", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butToggleMultiplayer"].onAction = toggleMultiplayerMenu
+
+		
+
+		'''
 		self.elements["butToggleTilePalette"] = UIButton(4, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
 												tooltip=[["i hate pxedit", sdlColorBlack, TTF_STYLE_NORMAL]])
 		self.elements["butToggleTilePalette"].onAction = toggleTilePalette								
@@ -764,11 +841,10 @@ class ToolsWindow(UIWindow):
 		self.elements["butRadio"] = UIButton(20, 48, 16, 12, self, group=1, rects=rectsButtonCheckbox, type=BUTTON_TYPE_RADIO)
 		self.elements["butRadio2"] = UIButton(36, 48, 16, 12, self, group=1, rects=rectsButtonCheckbox, type=BUTTON_TYPE_RADIO)
 
-		self.elements["butToggleMultiplayer"] = UIButton(40, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
-												tooltip=[["multiplayer", sdlColorBlack, TTF_STYLE_NORMAL]])
-		self.elements["butToggleMultiplayer"].onAction = toggleMultiplayerMenu
+
 																						
 		#self.elements["butToggleTilePalette"].onAction = 
+		'''
 
 def editEntityAttributes(control, gxEdit):
 	param = control.text
@@ -837,7 +913,7 @@ def mapResizeAction(window, elem, gxEdit):
 
 	curStage.map.resize(x, y)
 	curStage.createMapSurface()
-	curStage.renderTilesToSurface()
+	curStage.renderMapToSurface()
 	window.visible = False
 
 class MapResizeDialog(UIWindow):
@@ -861,6 +937,9 @@ class MapResizeDialog(UIWindow):
 		self.elements["buttonCancel"].onAction = minimizeButtonAction
 
 		#TODO: stage parameter
+
+class StartGameDialog(UIWindow):
+	pass
 
 def safe_div(a, b):
 	return 0 if b == 0 else a / b
@@ -1140,7 +1219,7 @@ class Interface:
 			x = o.x
 			if x < stage.hscroll*2:
 				continue
-			if (y - stage.hscroll*2) * const.tileWidth//2 * mag > gWindowWidth:
+			if (x - stage.hscroll*2) * const.tileWidth//2 * mag > gWindowWidth:
 				continue
 			x -= stage.hscroll*2
 
@@ -1252,13 +1331,12 @@ class Interface:
 
 	def fadeout(self, introAnimTimer):
 		colorBlack = gSurfaces[SURF_COLOR_BLACK]
-		windowSurface = self.window.get_surface()
 		window = self.window
 
-		self.renderer.copy(colorBlack, dstrect=(0, gWindowHeight//2 + math.ceil(gWindowHeight * 0.05 * introAnimTimer), windowSurface.w, windowSurface.h))
-		self.renderer.copy(colorBlack, dstrect=(0, -gWindowHeight//2 - math.ceil(gWindowHeight * 0.05 * introAnimTimer), windowSurface.w, windowSurface.h))
-		self.renderer.copy(colorBlack, dstrect=(gWindowWidth//2 + math.ceil(gWindowWidth * 0.05 * introAnimTimer), 0, windowSurface.w, windowSurface.h))
-		self.renderer.copy(colorBlack, dstrect=(-gWindowWidth//2 - math.ceil(gWindowWidth * 0.05 * introAnimTimer), 0, windowSurface.w, windowSurface.h))
+		self.renderer.copy(colorBlack, dstrect=(0, gWindowHeight//2 + math.ceil(gWindowHeight * 0.05 * introAnimTimer), gWindowWidth, gWindowHeight))
+		self.renderer.copy(colorBlack, dstrect=(0, -gWindowHeight//2 - math.ceil(gWindowHeight * 0.05 * introAnimTimer), gWindowWidth, gWindowHeight))
+		self.renderer.copy(colorBlack, dstrect=(gWindowWidth//2 + math.ceil(gWindowWidth * 0.05 * introAnimTimer), 0, gWindowWidth, gWindowHeight))
+		self.renderer.copy(colorBlack, dstrect=(-gWindowWidth//2 - math.ceil(gWindowWidth * 0.05 * introAnimTimer), 0, gWindowWidth, gWindowHeight))
 	
 	def fill(self):
 		colorBlack = gSurfaces[SURF_COLOR_BLACK]

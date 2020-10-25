@@ -4,6 +4,8 @@
 import io, mmap, sys, time, math, random
 import ctypes
 import glob, os
+import copy
+
 from datetime import datetime
 
 from dataclasses import dataclass
@@ -77,8 +79,13 @@ class StagePrj:
 		self.map = pxMap.PxMapAttr()
 		self.attr = pxMap.PxMapAttr()
 
+		#TODO: for multiplayer
+		self.oldEve = None
+		self.oldMap = None
+
 		# tileset texture
 		self.parts = None
+
 		self.scroll = 0
 		self.hscroll = 0
 
@@ -88,9 +95,9 @@ class StagePrj:
 		self.selectedTilesStart = [0, 0]
 		# x, y of drag selection mouse up
 		self.selectedTilesEnd = [0, 0]
-		#TODO: tile selection offset
 
 		self.selectedEntities = []
+		self.selectedEntitiesDragStart = []
 
 		self.undoStack = [None]
 		self.undoPos = 0
@@ -165,7 +172,7 @@ class StagePrj:
 
 		return True
 
-	def renderTilesToSurface(self):
+	def renderMapToSurface(self):
 		map = self.map
 		sdlrenderer = interface.gRenderer.sdlrenderer
 		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surface.texture)
@@ -209,6 +216,12 @@ class StagePrj:
 		interface.gRenderer.copy(self.parts, srcrect, dstrect)
 		sdl2.SDL_SetRenderTarget(sdlrenderer, None)
 
+	def addUndo(self, undo):
+		self.undoPos += 1
+		self.undoStack = self.undoStack[:self.undoPos]
+		self.undoStack.append(undo)
+
+
 class Editor:
 	
 	def __init__(self):
@@ -244,9 +257,12 @@ class Editor:
 		# for text input or keyboard navigation
 		self.focussedElem = None
 
+		# currently mouse drag element
+		self.activeElem = None
+
 		self.fullscreen = False
 
-		# toggle setting to display bg parallax as ingame
+		#TODO: toggle setting to display bg parallax as ingame
 		self.parallax = True
 
 		self.backupLimit = 5
@@ -256,15 +272,22 @@ class Editor:
 		self.tooltipText = []
 		self.tooltipStyle = const.STYLE_TOOLTIP_BLACK
 		self.tooltipMag = 1
-
+		#TODO:
+		self.tooltipTimer = 0
+		self.tooltipThreshold = 0
 
 		self.multiplayerState = const.MULTIPLAYER_NONE
 		self.socket = None
 		self.socket_thread = None
+
+		self.server_socket = None
+		self.server_thread = None
+
 		#ip, name, color? curstage:, mousexy pos, ping, last response time
 		self.players = {}
 		#unique id count of connected clients
-		self.playerId = 1
+		#just like in source the host is playerId 1
+		self.playerId = 0
 		self.lastMousePosTick = 0
 		self.lastMousePos = (0, 0)
 		self.tileRenderQueue = []
@@ -317,6 +340,14 @@ class Editor:
 												tile[1])
 		elif undo.action == const.UNDO_ENTITY_MOVE:
 			stage.eve.replace(undo.reverse)
+			stage.selectedEntities = undo.reverse
+
+		elif undo.action == const.UNDO_ENTITY_ADD:
+			stage.eve.remove([undo.forward.id])
+
+		elif undo.action == const.UNDO_ENTITY_REMOVE:
+			for o in undo.forward:
+				stage.eve._entities.append(o)
 
 		stage.undoPos -= 1
 		
@@ -338,7 +369,15 @@ class Editor:
 				stage.renderTileToSurface(pos[0], pos[1], tile[0],
 												tile[1])
 		elif redo.action == const.UNDO_ENTITY_MOVE:
-			stage.eve.replace(redo.forward)												
+			stage.eve.replace(redo.forward)	
+			stage.selectedEntities = redo.forward
+		elif redo.action == const.UNDO_ENTITY_ADD:
+			stage.eve._entities.append(redo.forward)
+		elif redo.action == const.UNDO_ENTITY_REMOVE:
+			ids = [o.id for o in redo.forward]
+			stage.eve.remove(ids)
+
+											
 		stage.undoPos += 1
 
 	def backupStages(self):
@@ -426,10 +465,7 @@ def main():
 		if i == 5: print("stage... FIVE")
 		gxEdit.loadStage(i)
 		gxEdit.stages[i-1].loadParts(sprfactory)
-		gxEdit.stages[i-1].renderTilesToSurface()
-
-
-		
+		gxEdit.stages[i-1].renderMapToSurface()
 
 	introAnimTimer = 0
 
@@ -446,7 +482,7 @@ def main():
 	gxEdit.elements["tilePalette"] = interface.TilePaletteWindow(400, 300, 256, 280, const.WINDOW_TILEPALETTE)
 	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(400, 0, 256, 156, const.WINDOW_ENTITYPALETTE)
 
-	gxEdit.elements["toolsWindow"] = interface.ToolsWindow(400, 200, 80, 64, const.WINDOW_TOOLS)
+	gxEdit.elements["toolsWindow"] = interface.ToolsWindow(400, 200, 190, 86, const.WINDOW_TOOLS)
 
 	gxEdit.elements["uiTooltip"] = interface.UITooltip(0,0,1,1)
 
@@ -502,11 +538,10 @@ def main():
 		events = sdl2.ext.get_events()
 
 		multiwindowstring = ""
-		if gxEdit.multiplayerState:
-			if gxEdit.multiplayerState == const.MULTIPLAYER_HOST:
-				multiwindowstring = "**Hosting**"
-			elif gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
-				multiwindowstring = "**Connected**"
+		if gxEdit.multiplayerState == const.MULTIPLAYER_HOST:
+			multiwindowstring = "**Hosting**"
+		elif gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
+			multiwindowstring = "**Connected**"
 
 		#set windowname
 		interface.gWindow.title = windowName + " [" + "map" + str(gxEdit.curStage+1) + "]" + " " + multiwindowstring
@@ -586,6 +621,7 @@ def main():
 			if tiles != []: stage.selectedTiles = tiles
 
 		def clampUiWindows():
+			#TODO: restore original position if user did not move it
 			for _, elem in gxEdit.elements.items():
 				if elem.y <= 0:
 					elem.y = 0

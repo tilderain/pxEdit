@@ -6,12 +6,14 @@ import interface
 import util
 import multi
 
+import copy
+
 #TODO: find a better place for this
 class UndoAction:
 	def __init__(self, action, reverse, forward):
 		self.action = action
-		self.reverse = reverse
-		self.forward = forward
+		self.reverse = copy.deepcopy(reverse)
+		self.forward = copy.deepcopy(forward)
 
 def runMouseWheel(stage, wheel):
 	stage.scroll -= wheel.y
@@ -87,6 +89,8 @@ def runMouse1(gxEdit, stage, mouse):
 				if o.x == xe and o.y == ye:
 					gxEdit.draggingEntities = True
 					gxEdit.entDragPos = [xe, ye]
+
+					stage.selectedEntitiesDragStart = copy.deepcopy(stage.selectedEntities)
 					return
 		gxEdit.selectionBoxStart = [x, y]
 		gxEdit.selectionBoxEnd = [x, y]
@@ -97,12 +101,17 @@ def runMouseUp(gxEdit, curStage, mouse):
 	if gxEdit.currentEditMode == const.EDIT_ENTITY:
 		gxEdit.selectionBoxStart = [-1, -1]
 		gxEdit.selectionBoxEnd = [-1, -1]
-		gxEdit.draggingEntities = False
+		if gxEdit.draggingEntities:
+			gxEdit.draggingEntities = False
+
+			stage = gxEdit.stages[gxEdit.curStage]
+			undo = UndoAction(const.UNDO_ENTITY_MOVE, stage.selectedEntitiesDragStart, stage.selectedEntities)
+			stage.addUndo(undo)
 
 	for i, elem in reversed(list(gxEdit.elements.items())):
-		if elem.activeElem:
-			if(elem.activeElem.handleMouse1Up(mouse, gxEdit)):
-				elem.activeElem = None
+		if gxEdit.activeElem:
+			if(gxEdit.activeElem.handleMouse1Up(mouse, gxEdit)):
+				gxEdit.activeElem = None
 			return
 
 
@@ -119,6 +128,9 @@ def runMouseDrag(gxEdit, stage):
 		if util.inWindowBoundingBox(mouse, elem):
 			if elem.handleMouseOver(mouse, gxEdit):
 				break
+	else:
+		gxEdit.tooltipText = []
+	
 
 	if (mouse.button != sdl2.SDL_BUTTON_LEFT): return False
 
@@ -197,10 +209,7 @@ def runMouseDrag(gxEdit, stage):
 		#TODO: disable undo while dragging
 		#TODO: commit undo action only when mouseup
 		undo = UndoAction(const.UNDO_TILE, oldTiles, tiles)
-
-		stage.undoPos += 1
-		stage.undoStack = stage.undoStack[:stage.undoPos]
-		stage.undoStack.append(undo)
+		stage.addUndo(undo)
 		
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 		x = int(mouse.x + (stage.hscroll * const.tileWidth * mag))
@@ -213,7 +222,6 @@ def runMouseDrag(gxEdit, stage):
 
 			xe = gxEdit.entDragPos[0]
 			ye = gxEdit.entDragPos[1]
-
 			
 			for o in stage.selectedEntities:
 				if o.x + x-xe < 0: return
@@ -352,12 +360,20 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			if x >= stage.map.width*2 or y >= stage.map.height*2:
 				return
 
-			stage.eve.add(x, y, gxEdit.currentEntity, 0)
+			o = stage.eve.add(x, y, gxEdit.currentEntity, 0)
+
+			undo = UndoAction(const.UNDO_ENTITY_ADD, 0, o)
+			stage.addUndo(undo)
+
+
 	elif sym == sdl2.SDLK_DELETE:
 		if stage.selectedEntities:
 			ids = [o.id for o in stage.selectedEntities]
 			stage.eve.remove(ids)
 			gxEdit.elements["entEdit"].visible = False
+
+			undo = UndoAction(const.UNDO_ENTITY_REMOVE, 0, stage.selectedEntities)
+			stage.addUndo(undo)
 
 	elif key.keysym.mod & sdl2.KMOD_CTRL:
 		if sym == sdl2.SDLK_d:
@@ -370,7 +386,11 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 				gxEdit.saveTimer = 5
 
 		elif sym == sdl2.SDLK_z:
-			gxEdit.executeUndo()
+			if key.keysym.mod & sdl2.KMOD_SHIFT:
+				gxEdit.executeRedo()
+			else:
+				gxEdit.executeUndo()
+
 
 		elif sym == sdl2.SDLK_y:
 			gxEdit.executeRedo()
@@ -394,5 +414,5 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	#t = toggle tile palette
 
 	#elif sym == sdl2.SDLK_r:
-	#	stage.renderTilesToSurface()
+	#	stage.renderMapToSurface()
 			
