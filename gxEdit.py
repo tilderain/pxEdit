@@ -244,6 +244,8 @@ class Editor:
 		self.draggingEntities = False
 		self.entDragPos = []
 
+		self.copiedEntities = []
+
 		#blinks on save
 		self.saveTimer = 0
 
@@ -343,7 +345,8 @@ class Editor:
 			stage.selectedEntities = undo.reverse
 
 		elif undo.action == const.UNDO_ENTITY_ADD:
-			stage.eve.remove([undo.forward.id])
+			ids = [o.id for o in undo.forward]
+			stage.eve.remove(ids)
 
 		elif undo.action == const.UNDO_ENTITY_REMOVE:
 			for o in undo.forward:
@@ -372,7 +375,8 @@ class Editor:
 			stage.eve.replace(redo.forward)	
 			stage.selectedEntities = redo.forward
 		elif redo.action == const.UNDO_ENTITY_ADD:
-			stage.eve._entities.append(redo.forward)
+			for o in redo.forward:
+				stage.eve._entities.append(o)
 		elif redo.action == const.UNDO_ENTITY_REMOVE:
 			ids = [o.id for o in redo.forward]
 			stage.eve.remove(ids)
@@ -664,10 +668,7 @@ def main():
 			
 		if gxEdit.socket and tickCount >= gxEdit.lastMousePosTick + 100:
 			if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
-				mouse = sdl2.SDL_MouseButtonEvent()
-				x,y = ctypes.c_int(0), ctypes.c_int(0)
-				mouse.button = sdl2.SDL_GetMouseState(x, y)
-				mouse.x, mouse.y = x.value, y.value
+				mouse = util.getMouseState()
 
 				#maybe it'd be fun to send their zoom level
 				x = int(mouse.x // gxEdit.magnification) + int(curStage.hscroll * const.tileWidth)

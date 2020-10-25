@@ -116,11 +116,7 @@ def runMouseUp(gxEdit, curStage, mouse):
 
 
 def runMouseDrag(gxEdit, stage):			
-	#it just works
-	mouse = sdl2.SDL_MouseButtonEvent()
-	x,y = ctypes.c_int(0), ctypes.c_int(0)
-	mouse.button = sdl2.SDL_GetMouseState(x, y)
-	mouse.x, mouse.y = x.value, y.value
+	mouse = util.getMouseState()
 
 	for i, elem in reversed(list(gxEdit.elements.items())):
 		if not elem.visible: continue
@@ -290,6 +286,9 @@ def runMouse2(gxEdit, stage, mouse):
 		for o in stage.eve.get():
 			if o.x == x and o.y == y:
 				stage.eve.remove([o.id])
+				
+				undo = UndoAction(const.UNDO_ENTITY_REMOVE, 0, [o])
+				stage.addUndo(undo)
 				return
 
 def runKeyboard(gxEdit, stage, scaleFactor, key):
@@ -349,10 +348,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	elif sym == sdl2.SDLK_i:
 		if gxEdit.currentEditMode == const.EDIT_ENTITY:
 			#entity place
-			mouse = sdl2.SDL_MouseButtonEvent()
-			x,y = ctypes.c_int(0), ctypes.c_int(0)
-			mouse.button = sdl2.SDL_GetMouseState(x, y)
-			mouse.x, mouse.y = x.value, y.value
+			mouse = util.getMouseState()
 			mag = gxEdit.magnification
 
 			x = int(mouse.x // (const.tileWidth//2 * mag)) + stage.hscroll*2
@@ -362,7 +358,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 
 			o = stage.eve.add(x, y, gxEdit.currentEntity, 0)
 
-			undo = UndoAction(const.UNDO_ENTITY_ADD, 0, o)
+			undo = UndoAction(const.UNDO_ENTITY_ADD, 0, [o])
 			stage.addUndo(undo)
 
 
@@ -379,7 +375,16 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		if sym == sdl2.SDLK_d:
 			#scrambleEntities(stage)
 			pass
-	
+
+		elif sym == sdl2.SDLK_c:
+			if stage.selectedEntities:
+				gxEdit.copiedEntities = copy.deepcopy(stage.selectedEntities)
+				basex = min([o.x for o in gxEdit.copiedEntities])
+				basey = min([o.y for o in gxEdit.copiedEntities])
+
+				for o in gxEdit.copiedEntities:
+					o.x -= basex
+					o.y -= basey
 		elif sym == sdl2.SDLK_s:
 			#TODO: show flash on save (goodly)
 			if stage.save():
@@ -399,8 +404,34 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			if gxEdit.focussedElem:
 				text = sdl2.SDL_GetClipboardText()
 				gxEdit.focussedElem.handleTextInput(text.decode("utf-8"), gxEdit)
+			else:
+				mouse = util.getMouseState()
 
+				scale = (const.tileWidth//2 * gxEdit.magnification)
+				x = int((mouse.x // scale) + stage.hscroll*2)
+				y = int((mouse.y // scale) + stage.scroll*2)
 
+				#todo print Paste failed!
+				for o in gxEdit.copiedEntities:
+					if o.x + x < 0: return
+					if o.y + y < 0: return
+					if o.x + x > (stage.map.width * 2)-1: return
+					if o.y + y > (stage.map.height * 2)-1: return
+
+				ents = []
+				for o in gxEdit.copiedEntities:
+					o2 = copy.deepcopy(o)
+					o2.id = stage.eve._count
+					o2.x += x
+					o2.y += y
+					stage.eve._count += 1
+					stage.eve._entities.append(o2)
+					ents.append(o2)
+
+				undo = UndoAction(const.UNDO_ENTITY_ADD, 0, ents)
+				stage.addUndo(undo)
+
+				
 
 	elif sym == sdl2.SDLK_F11:
 		gxEdit.fullscreen ^= 1

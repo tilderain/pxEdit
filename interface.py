@@ -529,10 +529,7 @@ class UITooltip(UIWindow):
 		if not gxEdit.tooltipText:
 			return
 
-		mouse = sdl2.SDL_MouseButtonEvent()
-		x,y = ctypes.c_int(0), ctypes.c_int(0)
-		mouse.button = sdl2.SDL_GetMouseState(x, y)
-		mouse.x, mouse.y = x.value, y.value
+		mouse = util.getMouseState()
 
 		textTexts = []
 		textWidths = []
@@ -1042,10 +1039,7 @@ class Interface:
 		self.renderer.copy(stage.surface.texture, srcrect=srcrect, dstrect=dstrect)
 
 		#TODO: fix this
-		mouse = sdl2.SDL_MouseButtonEvent()
-		x,y = ctypes.c_int(0), ctypes.c_int(0)
-		mouse.button = sdl2.SDL_GetMouseState(x, y)
-		mouse.x, mouse.y = x.value, y.value
+		mouse = util.getMouseState()
 
 		if gxEdit.selectionBoxStart != [-1, -1]:
 			x1 = gxEdit.selectionBoxStart[0] -  int(stage.hscroll * const.tileWidth * mag)

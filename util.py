@@ -1,4 +1,16 @@
 
+import sdl2.ext
+import ctypes
+
+def getMouseState():
+	#it just works
+	mouse = sdl2.SDL_MouseButtonEvent()
+	x,y = ctypes.c_int(0), ctypes.c_int(0)
+	mouse.button = sdl2.SDL_GetMouseState(x, y)
+	mouse.x, mouse.y = x.value, y.value
+
+	return mouse
+
 def inBoundingBox(x1, y1, x2, y2, w, h):
 	if x1 >= x2 and y1 >= y2 \
 		and x1 <= x2 + w and y1 <= y2 + h:
