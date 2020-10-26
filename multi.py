@@ -14,6 +14,18 @@ PACKET_TILEEDIT = 3
 PACKET_SENDSTAGE = 4
 PACKET_SENDPARTS = 5
 PACKET_MOUSEPOSFORCLIENT = 6
+PACKET_REQUESTUNDO = 7
+PACKET_REQUESTREDO = 8
+PACKET_TILESTART = 9
+PACKET_TILEEND = 10
+
+PACKET_DISCONNECT_REASON = 11
+
+REASON_KICKED = "You were kicked from the server"
+REASON_OUTDATED = "Your version did not match the server's."
+REASON_NAME = "You have an invalid name."
+REASON_NAME_EXISTS = "That name is already in use."
+
 
 VERSION_MAGIC = 10
 
@@ -53,19 +65,35 @@ def packetAcceptor(gxEdit, sock):
 
 def packetHandler(gxEdit, sock, playerId, datas):
 	for data in datas:
-		if data["type"] == PACKET_CONNECT: #should only be recieved by server
+		#########################################
+		### --- SERVER RECIEVING PACKETS --- ####
+		#########################################
+
+		if data["type"] == PACKET_CONNECT:
 			gxEdit.players[playerId]["name"] = data["name"]
 			ip = gxEdit.players[playerId]["ip"]
 
 			print(data["name"] + " connected. (" + ip[0] + ":" + str(ip[1]) + ")")
+
 			#TODO: send message to player
 			if data["version"] != VERSION_MAGIC:
 				print("but their version did not match. ", str(data["version"]))
 				return False
 
-			#TODO: kick if name already exists
+			if len(data["name"]) == 0 or len(data["name"]) > 32:
+				print("the name was illegal.")
+				return False
+
+			for player in gxEdit.players:
+				if player["name"] == data["name"]:
+					print("the name already exists.")
+					return False
 
 			#TODO: broadcast new players to all others
+
+		#########################################
+		### --- SERVER RECIEVING PACKETS --- ####
+		#########################################
 
 		elif data["type"] == PACKET_MOUSEPOS:
 			gxEdit.players[playerId]["mousepos"] = data["x"], data["y"]
@@ -77,13 +105,14 @@ def packetHandler(gxEdit, sock, playerId, datas):
 			#TODO: UNDO
 			gxEdit.tileRenderQueue.append((data["stage"], data["tiles"]))
 
-			if playerId:
+			if playerId: #i am a server
 				for _, player in gxEdit.players.items():
 					serverSendPacket(data, player["sock"].request)
 		else:
 			print("unknown packet")
 			print(data)
 			return False
+
 	return True
 			
 
@@ -128,6 +157,7 @@ class PxEditServer(socketserver.ThreadingTCPServer):
 
 def hostButtonAction(window, elem, gxEdit):
 	if gxEdit.socket:
+		#TODO: message
 		return
 	paramName = window.elements["paramName"].text
 	#TODO:
@@ -159,6 +189,7 @@ def hostButtonAction(window, elem, gxEdit):
 	window.visible = False
 
 	print("Now hosting!")
+	print("Multiplayer version: " + str(VERSION_MAGIC))
 
 def serverBroadcastAll(gxEdit, packet): #playerid?
 	for _, player in gxEdit.players.items():

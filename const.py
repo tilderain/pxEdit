@@ -8,6 +8,13 @@ modSettingsName = "dgSettings.txt"
 EDIT_TILE = 0
 EDIT_ENTITY = 1
 
+#paint modes
+PAINT_NORMAL = 0
+PAINT_RECTANGLE = 1
+PAINT_FILL = 2
+PAINT_REPLACE = 3
+PAINT_COPY = 4
+
 #Entities which can only be spawned from parents
 #used to determine if they crash the game or not
 entityCrashIds = [12, 16, 17, 33, 34, 36, 50, 51, 52, 53, 55, 57, 62, 71, 77, 78, 79, 80, 82, 89, 95, 101, 103, 109, 110, 112, 113]
@@ -27,6 +34,12 @@ WINDOW_TOOLS = 3
 WINDOW_TOOLTIP = 4
 WINDOW_ENTITYEDIT = 5
 
+PARAM_TYPE1 = 0
+PARAM_FLAG = 1
+PARAM_DIRECTION = 2
+PARAM_STRING = 3
+PARAM_APPEARFLAG = 4
+
 STYLE_TOOLTIP_BLACK = 0
 STYLE_TOOLTIP_YELLOW = 1
 
@@ -35,7 +48,10 @@ TEXTINPUTTYPE_NUMBER = 1
 
 #TODO... really gotta find somewhere good to put this
 tileScale = 1
-tileWidth = 16 * tileScale
+tileWidth = 8 * tileScale
+tileWidth2 = 16 * tileScale
+
+ENTITY_SCALE = 1
 
 
 #undo thing

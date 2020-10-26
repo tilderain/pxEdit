@@ -1,0 +1,333 @@
+
+*-- Game Profile Flags (0~255)---------------
+
+000: off
+001: on 
+
+002: cleared normal.      "kbEndNormal"                  v107
+003: title uzo complete.  "kbTitleUzoComp"               v107
+004: cleared Zangyou.     "kbEndZangyou"                 v140
+005: cleared boss rush.   "kbEndBossRush"                v107
+006:                      "kbExpZangyou"                 v140
+007: zangyou fanfare      "kbZangyouFanf"                v140
+008: unlock Zangyou       "kbUnlockZangyou"              v141
+
+064,065,066 introduction Zangyou "kbZanIntroCnt" [ 3 ]   v140
+
+  -- achievements -- 080 ~ 099 (100 ~ 119)
+
+                       (+20)
+081: achvClrN_Normal    101                              v140
+082: achvClrN_NoGOvr    102                              v140
+083: achvClrN_Life2     103                              v140
+084: achvClrN_Jacket    104                              v140
+085: achvClrY_Normal    105                              v140
+086: achvClrY_Jacket    106                              v140
+087: achvClrZ_Normal    107                              v140
+088: achvClrZ_NoGOvr    108                              v140
+089: achvClrZ_Life2     109                              v140
+090: achvClrZ_Jacket    110                              v140
+
+120: achvment fanfale                                    v140
+
+  -- once exec -- 240 ~ 255
+240: once intro zangyou mode."kbOnceIntroZan"            v140
+
+
+*-- User Profile Flags ( 16384(2048byte) )-----
+
+* : ON  when game  start.
+*Y: on  when omake start.
++ : ON  when stage start
+- : OFF when stage start
+\ : KuroBlaster
+
+
+0000: off
+0001: on 
+
+0010: core..
+
+	--10 title mode      (system!)                   v107
+	--11 debug mode      (system!)                   v107
+	--12 mute voices     (system!)                   v107
+	--13 skipable.       (system!) "Skipable"        v107
+	--14 gero yellow     (system!) "Yellow"          v107
+	--15 time attack     (system!)                   v107
+	--16 no damage       (system!)                   v107
+
+	--17 explain keys    (system!)                   v140 
+	--18 game over       (system!)                   v140 
+	--19 hard mode       (system!)                   v140 
+
+0020 - 0039: all stage.
+
+	--21 show time attack(system!)                   v107
+	--22 boss rush       (system!)                   v107
+	--23 Kitchen         (system!)                   v140 
+	--25 jacket          (SYSYEM!)                   v107
+	--26 hospice         (system!)                   v107
+	--27 heart price hike(system!)                   v107
+	--28 coin 1 -> 10    (system!)                   v107
+	--29 kiosk           (system!)                   v107
+	--30 modoki          (system!)                   v140 
+	--31 retry19         (system!)                   v140 
+
+0040    --40 teki takusan    "Takusan"                   v140 
+	--41 exprience gover                             v140 
+	--42 kero blue       "Blue"                      v140
+
+*-- title  stage -------------
+
+0050: phone.                                             v107
+
+*-- normal stage -------------
+
+0050 : Area00
+
+	--51 病院1回目         00hospital                v107
+
+	--60 flower vase                                 v107
+	--61                                             v107
+	--62                   00hospital                v107
+	
+	--80 call small        10KaishaB2                v140 
+
+
+0100-: Area01 [01]
+
+	--00: //新規ゲームRelay                          v107
+	--01: must money       01field1                  v107
+	--02: must money       01field1                  v107
+	--03: chest(coins)     01field2                  v107
+*	--04: シャッター       01boss                    v107
+-	--05: must heart       01rest                    v107
+	--06: ボス(アイテム)   01boss                    v107
+\	--07: kurob            01chika                   v107
+	--08: chest(coins)     01field4                  v107
+	--09: アルター         01goal                    v107
+-	--10: 1UP              11field4                  v140 
+*Y	--11: BugStage1        01field2                  v140 
+
+
+0200-: Area02 [02]
+
+	--01: chest(coins)     02field1                  v107
+*	--02: shutter          02bridge                  v107
+	--03: chest(coins)     02bridge                  v107
+	--04: boss(item)       02bridge                  v107
+	--05: xx                                         v107
+	--06: アルター         02goal                    v107
+	--07: アルター         02goal                    v107
+//\	--08: kurob            02goal                    v107
+
+
+
+0300-: Area03 [03]
+
+	--01: shatter(test)    03field1                  v107
+	--02: shatter          03boss1                   v107
+	--03: boss call        03boss1                   v107
+	--04: strong box       03water2                  v107
+-	--05: 1UP              03field1                  v107
+	--06: strong box       03water2                  v107
+	--07: Reception        03reception               v107
+	--08: strong box       03cave1                   v107
+	--09: TheTire block    03boss2                   v107
+	--10: Beat Boss2(item) 03boss2                   v107
+	--11: shutter right    03boss2                   v107
+-	--12: shutter left     03boss2                   v107
+        --13: call recept      03reception               v107
+	--14: altar uzo        03goal                    v107
+	--15: altar uzo drop   03goal                    v107
+	--16: altar uzo        03goal                    v107
+\	--17: kurob            03okujou                  v107
+
+	--25: gate fall light  03goal                    v107
+	--26: after beat       03boss1                   v107
+	--27: kinko            13cave1                   v140 
+	--28: chest            13taiya                   v140 
+	--29: chest            13taiya                   v140 
+
+0400-: Area04 [04]
+
+-	--01: tire and wall    04taiya                   v107
+	--02: beat GMole2      04boss01                  v107
+	--03: shutter          04boss01                  v107
+-	--04: 1UP              04building2               v107
+	--05: strongbox        04building3               v107
+*Y	--06: beat mole-jet    04jetpacktest             v107
+	--07: strongbox        04building3               v107
+	--08: strongbox        04building3               v107
+	--09: wake             04reception               v107
+
+	--10 - 13 panel                                  v107
+
+	--14: reception        04reception               v107
+*Y	--15: steps            04jetpackmole             v107
+*	--16: shutter R        04boss02                  v107
+	--17: touch panel      04start0                  v107
+*	--18: shutter L        04boss02                  v107
+	--19: boss2 beat       04boss02                  v107
+
+	--21: アルター         04goal                    v107
+	--22: 1UP              04tires                   v107
+-	--23: spike coin       04tires                   v107
+\	--24: Kurob            04jetpackmole             v107
+	--25: kinko            04building1               v107
+-	--26: 1UP              04building2               v140
+	--27: kinko            04building2               v140
+
+	--30: Titan                                      v140
+-	--31: 1UP              14taiya                   v140
+	--32: kinko            14building3               v140
+	--33: chest            04jetpackmole             v140
+
+0500-: Area05 [05]
+	--01: elevator05       05boss1                   v107
+-	--02: boss2/閉じ込め   05boss2                   v107
+-	--03: 1up              05okunai2                 v107
+*	--04: shutter          05boss2                   v107
+	--05: go to stage 6    05boss2mae                v107
+	--06: kinko            05okunai2                 v107
+-	--07: 1up              05unkai                   v107
+ 	--08: chest            05unkai                   v107
+ 	--09: 1up              05start                   v107
+-	--10: bear core        05tani02                  v107
+-	--11: bear core        05tani02                  v107
+-	--12: bear core        05tani02                  v107
+        --13: chest            05okunai1                 v107
+	--14: call small       05boss2                   v107
+-Nrml	--15: 閉じ込め         05unkai                   v107
+-	--16: 1up              15ryuhyou                 v140
+-	--17: bear core        15tani02                  v140
+-	--18: 閉じ込め(残業)   15boss2                   v140
+
+0600-: Area06
+
+*       --01: shutter next     06boss1	                 v107
+	--02: shutter boss     06boss1                   v107
+	--03: beat puddie      06boss1                   v107
+	--04: train arrival    06platform                v107
+	--05: 1up              06naizou3                 v107
+	--06: first visit      06start                   v107
+
+	--10: locker(5)        06station1                v107
+	--11: locker(50)       06station1                v107
+	--12: locker(21)       06station1                v107
+-	--13: locker(heart)    06station1                v107
+	--14: reserve          06station1                v107
+
+-	--15: locker(1UP)     06reception                v107
+	--16: locker(15)      06reception                v107
+	--17: locker(21)      06reception                v107
+	--18: locker(50)      06reception                v107
+	--19: locker(10)      06reception                v107
+	--20: locker(50)      06reception                v107
+
+	--21: reception       06reception                v107
+	--22: reception coin  06reception                v107
+
+	--30: chest1          16naizou2                  v140
+	--31: chest2          16naizou2                  v140
+	--32: locker(115)     16station1                 v140
+-	--33: 1UP             16naizou4                  v140
+	--34: chest3          16naizou3                  v140
+
+0700-: Area07
+
+-	--01: 1UP             07okujou                   v107
+-	--02: 1UP             07kaidanO                  v107
+	--03: Kinko           07kaisha1                  v107
+-	--04: Jacket                                     v107
+	--05: Kinko           07kaidan                   v107
+	--06: Shacho C on     07okujou                   v107
+	--07: shacho eaten    00office7                  v107
+	--08: Plate hide      07okujou2                  v107
+	--09: Plate Set       07okujou2                  v107
+
+-	--10: Shield Plant 1  07douro4                   v107
+-	--11: Shield Plant 2  07douro4                   v107
+//+	--12: Kiosk Started   07kiosk                    v107
+
+        --20: black snow      07                         v107
+
+	--30: rmv cartonbox   07office8                  v107
+	--31: kajiya          07okujou4                  v107
+	--32: oki cartonbox   07okujou4                  v107
+	--33: Kajiya Door     07okujou4                  v107
+
+
+0800 : Area08
+	
+	--01: shutter         08boss4                    v107
+	--02: first boss rush                            v107
+-	--03: 1up             08kaishaB2                 v107
+	
+	--20: flower pink     08result                   v107
+	--21: flower white    08result                   v107
+	--22: flower blue     08result                   v107
+	--23: flower sun      08result                   v107
+	--24: pink            08result                   v107
+	--25: blue            08result                   v107
+	--26: shacho          08result                   v107
+	--27: sasuke          08result                   v107
+	--28: uzo brain       08result                   v107
+	--29: barricade       08result                   v107
+	--30: animal bone     08result                   v107
+	--31: bug blue        08result                   v107
+	--32: bug kajiya      08result                   v107
+
+	Boss Rush!--
+	--40:
+	--41: fight Gorgon                               v107
+	--42: fight Dekaigyo                             v107
+	--43: fight N577                                 v107
+	--44: fight Dark2                                v107
+	--45: fight ClockMan                             v107
+	--46: fight Shacho                               v107
+	--47: fight BossPlate                            v107
+
+	--61: bug floor       18field31                  v107
+	--62: boss            18boss                     v107
+	--63: ladder          18boss                     v107
+	--64: boss            18field38                  v107
+	--65: chest           18start                    v107
+	--66: 1UP             18field4                   v107
+	--67: chest           18field5                   v107
+	--68: 1UP             18field25                  v107
+
+0900-: Area09
+
+-	--01: タライ下1UP     19towerF1                  v140
+	--02: シャッター      19towerTop                 v140
+	--03: 木のバリケード  19keepout                  v140
+-	--04: 1UP             19start                    v140
+-	--05: 1UP             19bridge1                  v140
+        --06: シャッター      19boss1                    v140
+	--07: 金庫            19tunnelUe                 v140
+	--10: ボス2撃破       19towerTop                 v140
+	--11: 積み上げ        19towerTop                 v140
+//-	--12: 1UP             19tidepool                 v140
+	--13: 宝箱            19nando                    v140
+	--14: 宝箱            19jacket                   v140
+-	--15: ジャケット      19jacket                   v140
+	--16: 宝箱            19tidepool                 v140
+	--17: 初黒野戦        19cloud                    v140
+	--18: とびこみ黒      19elecEnter                v140
+	--19: 宝箱            19jacket                   v140
+	--20: 宝箱            19jacket                   v140
+	--21: 宝箱 　　       19nando                    v140
+	--22: 大島電話        19towerTop                 v140
+
+3200-: Area Permission (FLAGNO_ISLANDAREA) -3399 (area00 - area19)
+
+	--00: Permit Area00 show
+	--01: Permit Area00 help
+	--02: Cleared Area00
+
+	--10: Permit Area01
+	--20: Permit Area02
+
+	--72: UFO on Area 7
+	--82: UFO on Area 8

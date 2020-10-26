@@ -1,0 +1,250 @@
+-
+Empty
+Trush Box
+Event (p2: 0=stop 1=mv-h 2=mv-v 3=mv-H 4=mv-V 10=mem block)
+Anchor ( <swtN:2=up p2:speed )
+Shutter (p2: parts / Flag: On=Close / Name: L=left or U,R,D )
+Long Weed
+Kankisen 1
+Trunk
+Test
+Block Generator
+Kurobo-
+Snow Trunk
+Cat & Frog Step
+Gearshift
+Timer Kun
+Kajiya
+Endless Ice
+MiniSpiral
+Elevator Door (p2: 10=stop)
+BigPress
+Train
+Drop
+Green Fish
+Shield Plant
+Kani mini
+Relay
+toL2
+toU2
+toR2
+toD2
+FirePlant
+LadderBox
+Debug Link
+ComboCue
+Kinko
+The Tire
+Doro Hole
+Heart
+Doro Jump
+Lift V3
+Ice Spike
+Camp Gate
+Chibi Uzo
+Uzo Void layer 0
+Tar
+Block Eater
+Uzo Void layer 1
+HiddenChest
+Call Missile Bird 7
+Trunk Mini
+Kani 7
+Kani Chibi 7
+Phone
+Nurse
+Fire bubble Set
+Mole
+Uzo Void layer 2
+comic balloon
+Rolling Fiber
+Barbwire
+Domino
+Explain
+Door A
+Walking Black
+Focus Control(0=Nrml V 1=UnderMPC)
+Uzo Flame (prm2: 0=左 1=上 2=右 3=下)
+Creeper
+Shacho Act stage 7 office
+Room Locker
+Bent Plate
+Boss Desk
+Barricade
+Uzo Tank
+Elevator 00
+Kani
+Tokobushi
+Anemone
+to Back
+Position Half Up
+Door Vertical
+Line Censor
+Route Arrow
+Fly Wave
+Spin
+Altar
+Call Small
+Snow Setter
+Icicle
+Uzo Slime
+Goldrush
+Ebi Flower 7
+Nikubae
+Uzo Gray (layer0)
+4 Boss Barricade.
+Quaker
+Flag Mine
+Uzo Red
+Saucer
+Uzo Over Fence
+Fluo Lamp
+Gravity Block 3
+Uzo Chibi Red
+Uzo Gray (layer2)
+Sparker
+Bacteria
+Digesty
+Roof Worm
+Big Worm
+Silhoette
+Zombie
+Leather
+White Setter
+Egg Worm (prm2: 0=左上 1=右上 2=左下 3=右下)
+Stone Gate(swt 1:key coming, 2:keep close, 3:to open 4:key short)
+Frog Plant
+Weak Weed
+Ebi Floser
+Bubble 1UP
+Shacho A
+Frozen Fish
+Uzo Elec
+Flower Vase
+Gray Spiral
+Time Attack Display
+Metalmushi
+The Bar
+Gravity Ice
+EarthFly
+Walking Moss
+Mob Stand
+Spike Plant
+Sidewinder
+Katanakaji
+Chest2
+Walk Plant
+Blue Fish
+Dragon Flower
+Set Birds( 0:room 1:tree 2:two birds )
+Fly Evade
+Gravity Block 2
+Doronko
+Tumbleweed
+New Arms
+Bat ceiling
+Strong Box
+Chandelier
+Bubble Lift
+Call Bats
+Booster
+Bat Passing
+Orange Fish
+Echinus
+KillerSensor
+Moving Box Horizontal
+BomBox
+Edge Coin (s)
+Edge Medal
+Fall Light
+Intro
+Uzouzo
+Office Fly
+Sister
+Sasuke
+Hanger
+Rolling Snow
+Ball Flyer (prm2: 動きをバラつかせる)
+Rolling Big
+Refrigerator
+Ice Hillock
+Bear Core
+Animal Bone
+Kankisen 2
+Carton Box L
+Carton Box s
+Broken Plant
+Phone Dark
+Core Debug
+Spike Plant Fly
+Call Glider Bird (Fire)
+Spike Plant Side.
+Doroman
+Doronko Turn
+Vertical Beam
+Moving Box Vertical
+Propeller Fish
+Hopper
+Zundou Lift
+Slip Lift
+Maruta Lift
+Sliding Block
+Frost Generic
+zan Bito bag 1=walk, 2~8=walk(cnt), 9=run, 10=run(swt)
+Wind Hopper
+zan Bito type
+Hazy Worm
+Pink Hopper
+Rolling Spark (prm2: 1=slow 3=fast)
+Spike Plant2
+Puddie Lift
+Walking Box
+Steel Spiral
+Junk Hopper
+Togetoge
+Masamune
+Datsu
+Carry(color)
+Sheaf(color)
+Seagull
+Beach Mole
+Sea Dragon
+Garbage Bag
+Tarai
+za Crew 1=run, 2=walk(slow), 3=talk, 4=walk, 6=nod, 10=run(swt)
+Togemushi
+Seagull Fly
+za Nakai
+Position (prm2: 3 = ypos-3)
+Oshima
+Ashidaka
+Puti Step
+Dark Ameba
+Side Snail
+Tower Cloud
+Orange Fish 9
+Umineko
+Entrance
+Spider
+Weak Web
+Hinotama
+Cabinet Monster
+Step Books
+Step Desk
+Step Cabinet1
+Step Cabinet2
+Circle Kurono
+Sky Kurono
+Sky Kurono cloud 0
+Sky Kurono cloud 1
+Random Flash.
+Work Books(color)
+effect Smokes
+effect Dust
+Hidden Sheaf(color)
+Work Books(gray)
+Carry(gray)
+Sheaf(gray)
+Hidden Sheaf(gray)
+Uzo(car3)
+Sky Kurono cloud 2

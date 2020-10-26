@@ -1,5 +1,246 @@
 import io, os, struct
+import mmap
 from ctypes import c_short
+
+def readPixelString(stream):
+	length = stream.read_byte()
+	if length >= 32: return ""
+	string = stream.read(length)
+	return string.decode("shift-jis")
+
+def readInt(stream, length):
+	return int.from_bytes(stream.read(length), byteorder="little")
+
+class PxPackUnit:
+	def __init__(self, flag, code_char, direction, x, y, appearflag, string, id):
+		self.flag = flag
+		self.type1 = code_char
+		self.direction = direction
+		self.x = x
+		self.y = y
+		self.appearflag = appearflag
+		self.string = string
+		self.id = id
+
+class PxEve:
+	def __init__(self):
+		self.units = []
+		self._count = 0
+
+	def replace(self, ents):
+		for ent in ents:
+			for o in self.units:
+				if ent.id == o.id:
+					self.units[self.units.index(o)] = ent
+
+	def move(self, ids, xoffset, yoffset):
+		for num in ids:
+			for o in self.units:
+				if num == o.id:
+					o.x += xoffset
+					o.y += yoffset
+
+	def modify(self, ids, x=None, y=None, code_char=None, flag=None, direction=None, appearflag=None, string=None):
+		for num in ids:
+			for o in self.units:
+				if num == o.id:
+					if x != None: o.x = x
+					if y != None: o.y = y
+					if code_char != None: o.type1 = code_char
+					if flag != None: o.flag = flag
+					if direction != None: o.direction = direction
+					if appearflag != None: o.appearflag = appearflag
+					if string != None: o.string = string
+					break
+	def remove(self, ids):
+		for id in ids:
+			for o in self.units:
+				if o.id == id:
+					self.units.remove(o)
+					break
+			
+	def add(self, x, y, code_char, flag=0, direction=0, appearflag=0, string=""):
+		o = PxPackUnit(flag, code_char, direction, x, y, appearflag, string, self._count)
+		self._count += 1
+		self.units.append(o)
+		return o
+		
+	
+class PxPackLayer:
+	def __init__(self):
+
+		self.partsName = None
+		self.scrolltype = None
+		self.visibility = None
+
+		self.width = None
+		self.height = None
+		self.type = None
+
+
+		self.tiles = []
+	
+	def loadFromPack(self, stream):
+		stream.read(8) #PXMAP01
+		self.width = readInt(stream, 2)
+		self.height = readInt(stream, 2)
+
+		if self.width * self.height == 0: return
+
+		self.type = readInt(stream, 1)
+		if self.type == 0:
+			for i in range(self.height):
+				byt = stream.read(self.width)
+				self.tiles.append([tile for tile in byt])
+	
+	def load(self, path): #readEntities
+		try:
+			f = open(path, 'rb')
+			stream = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+		except (OSError, IOError) as e:
+			print("Error while opening {}: {}".format(path, e))
+			return False
+
+		self.loadFromPack(stream)
+
+	def modify(self, tiles):
+		#[[x,y], [x, y]]
+
+		for tile in tiles:
+			#convert a spritesheet tile index to its representation in the tile array
+			if tile[0][0] >= self.width: continue
+			if tile[0][1] >= self.height: continue
+			x = tile[1][0]
+			y = tile[1][1] * 16
+			
+			self.tiles[tile[0][1]][tile[0][0]] = x+y
+	
+
+class PxPack:
+	def __init__(self):
+		self.description = None
+		self.left_field = None
+		self.right_field = None
+		self.up_field = None
+		self.down_field = None
+
+		self.spritesheet = None
+
+		self.area_x = None
+		self.area_y = None
+
+		self.area_no = None
+
+		self.bg_r = None
+		self.bg_g = None 
+		self.bg_b = None
+
+		self.layers = []
+
+		self.eve = PxEve()
+
+	def load(self, path): #readEntities
+		try:
+			f = open(path, 'rb')
+			stream = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+		except (OSError, IOError) as e:
+			print("Error while opening {}: {}".format(path, e))
+			return False
+
+		LAYER_COUNT = 3
+
+		stream.seek(16)
+
+		self.description = readPixelString(stream)
+		self.left_field = readPixelString(stream)
+		self.right_field = readPixelString(stream)
+		self.up_field = readPixelString(stream)
+		self.down_field = readPixelString(stream)
+		self.spritesheet = readPixelString(stream)
+
+		self.area_x = readInt(stream, 2)
+		self.area_y = readInt(stream, 2)
+		self.area_no = readInt(stream, 1)
+
+		self.bg_r = readInt(stream, 1)
+		self.bg_g = readInt(stream, 1)
+		self.bg_b = readInt(stream, 1)
+
+		for i in range(LAYER_COUNT):
+			layer = PxPackLayer()
+
+			layer.partsName = readPixelString(stream)
+			layer.visibility = readInt(stream, 1)
+			layer.scrolltype = readInt(stream, 1)
+			self.layers.append(layer)
+
+		for i in range(LAYER_COUNT):
+			layer = self.layers[i]
+			layer.loadFromPack(stream)
+		
+		entityCount = readInt(stream, 2)
+		for i in range(entityCount):
+			flag = readInt(stream, 1)
+			code_char = readInt(stream, 1)
+			direction = readInt(stream, 1)
+
+			x = readInt(stream, 2)
+			y = readInt(stream, 2)
+			appearflag = readInt(stream, 2)
+
+			string = readPixelString(stream)
+			self.eve.units.append(PxPackUnit(flag,code_char,direction,x,y,appearflag,string, self.eve._count))
+			self.eve._count += 1
+
+		stream.close()
+		f.close()
+		return True
+		
+	def save(self, path):
+		try:
+			f = open(path, 'wb')
+		except (OSError, IOError) as e:
+			print("Error while opening {}: {}".format(path, e))
+			return False
+		else:
+			f.write(struct.pack("<h", self.width))
+			f.write(struct.pack("<h", self.height))
+			for y in self.tiles:
+				f.write(bytes(y))
+
+			return True
+		
+	def modify(self, tiles):
+		#[[x,y], [x, y]]
+
+		for tile in tiles:
+			#convert a spritesheet tile index to its representation in the tile array
+			if tile[0][0] >= self.width: continue
+			if tile[0][1] >= self.height: continue
+			x = tile[1][0]
+			y = tile[1][1] * 16
+			
+			self.tiles[tile[0][1]][tile[0][0]] = x+y
+	def resize(self, width, height):
+		if width <= 0: return
+		if height <= 0: return
+
+		tiles = []
+		for y in range(height):
+			if y > self.height-1:
+				tiles.append([0] * width)
+			else:
+				tiles.append( self.tiles[y][:width] + [0]*(width - self.width))
+			
+		self.tiles = tiles
+
+		self.width = width
+		self.height = height
+		
+	def get(self):
+		return self.tiles[:]
+
+
 class PxMapAttr: #use the same class for both
 	def __init__(self):
 		self.width = None

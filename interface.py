@@ -16,7 +16,7 @@ from sdl2.sdlttf import *
 
 #from gxEdit import gxEdit as gxEdit
 
-unitsName = "units.bmp"
+unitsName = "assist/unittype.png"
 
 surfaceCount = 64
 #surface enum
@@ -203,7 +203,7 @@ def renderText(text, color, style, x, y):
 	textText = (sdl2.SDL_CreateTextureFromSurface(sdlrenderer, textSurf))
 	sdl2.SDL_FreeSurface(textSurf)
 
-	dstRect = sdl2.SDL_Rect(x, y, textWidth, textHeight)
+	dstRect = sdl2.SDL_Rect(int(x), int(y), textWidth, textHeight)
 
 	sdl2.SDL_RenderCopy(sdlrenderer, textText, None, dstRect)
 	sdl2.SDL_DestroyTexture(textText)
@@ -262,7 +262,8 @@ class UIText(UIElement):
 		renderText(self.text, self.color, self.fontStyle, self.x + x, self.y + y)
 		
 class UITextInput(UIElement):
-	def __init__(self, x, y, w, h, text, color, fontStyle, parent, rect=(0,0,0,0), style=const.TEXTINPUTTYPE_NORMAL, tooltip=None, maxlen=0):
+	def __init__(self, x, y, w, h, text, color, fontStyle, parent, rect=(0,0,0,0), style=const.TEXTINPUTTYPE_NORMAL, 
+		tooltip=None, maxlen=0, paramtype=None):
 		UIElement.__init__(self, x, y, w, h, parent, rect, style, tooltip)
 
 		self.text = text
@@ -276,6 +277,8 @@ class UITextInput(UIElement):
 		self.onAction = None
 
 		self.maxlen = maxlen
+
+		self.paramtype = paramtype
 
 	def handleMouse1(self, mouse, gxEdit):
 		#TODO: fix this
@@ -585,15 +588,17 @@ class TilePaletteWindow(UIWindow):
 
 		mag = gxEdit.tilePaletteMag
 
+
 		#reset width
-		self.w = (gxEdit.stages[gxEdit.curStage].attr.width * const.tileWidth) * mag
-		self.h = (gxEdit.stages[gxEdit.curStage].attr.height * const.tileWidth) * mag + 24 + 2
+		self.w = (gxEdit.stages[gxEdit.curStage].attrs[gxEdit.currentLayer].width * const.tileWidth2) * mag
+		self.h = (gxEdit.stages[gxEdit.curStage].attrs[gxEdit.currentLayer].height * const.tileWidth2) * mag + 24 + 2
+
 		self.draghitbox = [0, 0, self.w, 24]
 
 		self.elements["buttonMinimize"].x = self.w - 24
 		##
 
-		srcrect = stage.parts.area
+		srcrect = stage.parts[gxEdit.currentLayer].area
 		
 		dstx = self.x + self.elements["picker"].x
 		dsty = self.y + self.elements["picker"].y
@@ -601,8 +606,8 @@ class TilePaletteWindow(UIWindow):
 
 
 		#TODO: add dstrect mag
-		dstrect = (dstx, dsty, stage.parts.size[0] * mag, stage.parts.size[1] * mag)
-		gInterface.renderer.copy(stage.parts, srcrect=srcrect, dstrect=dstrect)
+		dstrect = (dstx, dsty, stage.parts[gxEdit.currentLayer].size[0] * mag, stage.parts[gxEdit.currentLayer].size[1] * mag)
+		gInterface.renderer.copy(stage.parts[gxEdit.currentLayer], srcrect=srcrect, dstrect=dstrect)
 
 		#TODO: add selected tile border (properly)
 		if gxEdit.currentEditMode == const.EDIT_TILE:
@@ -669,9 +674,9 @@ class EntityPaletteWindow(UIWindow):
 
 		#TODO: add selected ent border (properly)
 		if gxEdit.currentEditMode == const.EDIT_ENTITY:
-			dstx = dstx + ((gxEdit.currentEntity % 16) * const.tileWidth * mag)
-			dsty = dsty + ((gxEdit.currentEntity // 16) * const.tileWidth * mag)
-			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, const.tileWidth * mag, const.tileWidth * mag)
+			dstx = dstx + ((gxEdit.currentEntity % 16) * const.tileWidth2 * mag)
+			dsty = dsty + ((gxEdit.currentEntity // 16) * const.tileWidth2 * mag)
+			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, const.tileWidth2 * mag, const.tileWidth2 * mag)
 
 		#crashing entities
 		for i in range (const.entityFuncCount):
@@ -855,8 +860,22 @@ def editEntityAttributes(control, gxEdit):
 
 	ids = [o.id for o in select]
 
-	stage.eve.modify(ids, type2=int(param))
+	if control.paramtype == const.PARAM_APPEARFLAG:
+		stage.pack.eve.modify(ids, appearflag=int(param))
+	elif control.paramtype == const.PARAM_DIRECTION:
+		stage.pack.eve.modify(ids, direction=int(param))
+	elif control.paramtype == const.PARAM_FLAG:
+		stage.pack.eve.modify(ids, flag=int(param))
 
+	#stage.pack.eve.modify(ids, type2=int(param))
+
+def editEntityString(control, gxEdit):
+	param = control.text
+	stage = gxEdit.stages[gxEdit.curStage]
+	select = stage.selectedEntities
+
+	ids = [o.id for o in select]
+	stage.pack.eve.modify(ids, string=param)
 
 class EntityEditWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_ENTITYEDIT, style=0):
@@ -864,11 +883,29 @@ class EntityEditWindow(UIWindow):
 
 		self.selectedEntities = []
 
-		self.elements["textParamShadow"] = UIText(6, 6, "Parameter:", sdlColorBlack, TTF_STYLE_NORMAL, self)
-		self.elements["textParam"] = UIText(5, 5, "Parameter:", sdlColorYellow, TTF_STYLE_NORMAL, self)
-		self.elements["paramEdit"] = UITextInput(60, 5, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER)
-		self.elements["paramEdit"].onAction = editEntityAttributes
+		self.elements["textAppearShadow"] = UIText(6, 6, "AppearFlag:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textAppear"] = UIText(5, 5, "AppearFlag:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["appearEdit"] = UITextInput(60, 5, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			paramtype=const.PARAM_APPEARFLAG)
+		self.elements["appearEdit"].onAction = editEntityAttributes
 
+		self.elements["textFlagShadow"] = UIText(6, 25, "Flag:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textFlag"] = UIText(5, 25, "Flag:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["flagEdit"] = UITextInput(60, 25, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			paramtype=const.PARAM_FLAG)
+		self.elements["flagEdit"].onAction = editEntityAttributes
+
+		self.elements["textDirShadow"] = UIText(6, 45, "Direction:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textDir"] = UIText(5, 45, "Direction:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["dirEdit"] = UITextInput(60, 45, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			paramtype=const.PARAM_DIRECTION)
+		self.elements["dirEdit"].onAction = editEntityAttributes
+
+		self.elements["textStrShadow"] = UIText(6, 65, "String:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textStr"] = UIText(5, 65, "String:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["stringEdit"] = UITextInput(60, 65, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
+			paramtype=const.PARAM_STRING)
+		self.elements["stringEdit"].onAction = editEntityString
 		#self.elements["buttonMinimize"] = UIButton(180, 4, 16, 16, self)
 		#self.elements["buttonMinimize"].onAction = minimizeButtonAction
 
@@ -983,7 +1020,7 @@ class Interface:
                           0x0000FF00,           
                           0x000000FF))   
 
-		gSurfaces[SURF_COLOR_WHITE_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(255,255,255, 128), size=(32, 32),
+		gSurfaces[SURF_COLOR_WHITE_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(255,255,255, 100), size=(32, 32),
            masks=(0xFF000000,           
                   0x00FF0000,           
                   0x0000FF00,           
@@ -1016,27 +1053,30 @@ class Interface:
 		return
 
 
-	def renderTiles(self, gxEdit, stage):
+	def renderTiles(self, gxEdit, stage, layerNo):
 		for bit in gxEdit.tileRenderQueue:
 			stg = gxEdit.stages[bit[0]]
 			for pos, tile in bit[1]:
 				stg.renderTileToSurface(pos[0], pos[1], tile[0],
-											tile[1])
+											tile[1], gxEdit.currentLayer)
+
+		if not stage.surfaces[layerNo]: return
+		
 		gxEdit.tileRenderQueue = []
 
-		map = stage.map
+		map = stage.pack.layers[layerNo]
 		mag = gxEdit.magnification
 
 		srcx = int(stage.hscroll * const.tileWidth)
 		srcy = int(stage.scroll * const.tileWidth)
 
-		sizex = min(gWindowWidth*max(1, int(1/gxEdit.magnification)), stage.surface.size[0], stage.surface.size[0] - srcx)
-		sizey = min(gWindowHeight*max(1, int(1/gxEdit.magnification)), stage.surface.size[1], stage.surface.size[1] - srcy)
+		sizex = min(gWindowWidth*max(1, int(1/gxEdit.magnification)), stage.surfaces[layerNo].size[0], stage.surfaces[layerNo].size[0] - srcx)
+		sizey = min(gWindowHeight*max(1, int(1/gxEdit.magnification)), stage.surfaces[layerNo].size[1], stage.surfaces[layerNo].size[1] - srcy)
 
 		srcrect = (srcx, srcy, sizex, sizey)
 		dstrect = (0, 0, int(sizex*mag), int(sizey*mag))
 
-		self.renderer.copy(stage.surface.texture, srcrect=srcrect, dstrect=dstrect)
+		self.renderer.copy(stage.surfaces[layerNo].texture, srcrect=srcrect, dstrect=dstrect)
 
 		#TODO: fix this
 		mouse = util.getMouseState()
@@ -1155,16 +1195,16 @@ class Interface:
 
 		elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 			if gxEdit.draggingEntities: return
-			x = int(mouse.x // (const.tileWidth//2 * mag)) 
-			y = int(mouse.y // (const.tileWidth//2 * mag))
+			x = int(mouse.x // (const.tileWidth2//2 * mag)) 
+			y = int(mouse.y // (const.tileWidth2//2 * mag))
 
-			if x >= map.width*2 or y >= map.height*2: return
+			if x >= map.width*const.ENTITY_SCALE or y >= map.height*const.ENTITY_SCALE: return
 
 			gxEdit.tooltipText = []
-			for o in stage.eve.get():
+			for o in stage.pack.eve.units:
 				#TODO: multiple entities
 				#TODO: highlight hovered in picker
-				if o.x == x + stage.hscroll*2 and o.y == y + stage.scroll*2:
+				if o.x == x + stage.hscroll*const.ENTITY_SCALE and o.y == y + stage.scroll*const.ENTITY_SCALE:
 					index = o.type1
 					if index in const.entityCrashIds:
 						titleColor = sdlColorRed
@@ -1175,16 +1215,16 @@ class Interface:
 					else:
 						titleColor = sdlColorMagenta
 
-					gxEdit.tooltipText.append([gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD])
+					#gxEdit.tooltipText.append([gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD])
 					gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
 
-					gxEdit.tooltipText.append(["Param: " + str(o.type2), sdlColorWhite, TTF_STYLE_NORMAL])
+					#gxEdit.tooltipText.append(["Param: " + str(o.type2), sdlColorWhite, TTF_STYLE_NORMAL])
 
-			x *= int(const.tileWidth//2 * mag)
-			y *= int(const.tileWidth//2 * mag)
+			x *= int(const.tileWidth2//2 * mag)
+			y *= int(const.tileWidth2//2 * mag)
 
-			w = int(const.tileWidth//2 * mag)
-			h = int(const.tileWidth//2 * mag)
+			w = int(const.tileWidth2//2 * mag)
+			h = int(const.tileWidth2//2 * mag)
 
 		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
 
@@ -1198,40 +1238,40 @@ class Interface:
 
 	def renderEntities(self, gxEdit, stage):
 		#TODO: render to surface
-		eve = stage.eve.get()
+		eve = stage.pack.eve.units
 		units = gSurfaces[SURF_UNITS]
 		xys = []
 		for o in eve:
 			y = o.y
 			mag = gxEdit.magnification
-			if y < stage.scroll*2:
+			if y < stage.scroll*const.ENTITY_SCALE:
 				continue
-			if (y - stage.scroll*2) * const.tileWidth//2 * mag > gWindowHeight:	
+			if (y - stage.scroll*const.ENTITY_SCALE) * const.tileWidth2//2 * mag > gWindowHeight:	
 				continue
-			y -= stage.scroll*2
+			y -= stage.scroll*const.ENTITY_SCALE
 
 			x = o.x
-			if x < stage.hscroll*2:
+			if x < stage.hscroll*const.ENTITY_SCALE:
 				continue
-			if (x - stage.hscroll*2) * const.tileWidth//2 * mag > gWindowWidth:
+			if (x - stage.hscroll*const.ENTITY_SCALE) * const.tileWidth2//2 * mag > gWindowWidth:
 				continue
-			x -= stage.hscroll*2
+			x -= stage.hscroll*const.ENTITY_SCALE
 
-			dstx = x * (const.tileWidth // 2)
-			dsty = y * (const.tileWidth // 2)
+			dstx = x * (const.tileWidth2 // 2)
+			dsty = y * (const.tileWidth2 // 2)
 
 			x = o.type1 % 16 #row size in units.bmp
 			y = o.type1 // 16
-			srcx = x * const.tileWidth
-			srcy = y * const.tileWidth
+			srcx = x * const.tileWidth2
+			srcy = y * const.tileWidth2
 
-			srcrect = (srcx, srcy, const.tileWidth, const.tileWidth)
-			dstrect = (int(dstx*mag), int(dsty*mag), int(const.tileWidth//2*mag), int(const.tileWidth//2*mag))
+			srcrect = (srcx, srcy, const.tileWidth2, const.tileWidth2)
+			dstrect = (int(dstx*mag), int(dsty*mag), int(const.tileWidth2//2*mag), int(const.tileWidth2//2*mag))
 
 			self.renderer.copy(units, srcrect=srcrect, dstrect=dstrect)
 
 			if o in stage.selectedEntities:
-				self.drawBox(self.renderer, SURF_SDLCOLOR_CYAN, int(dstx*mag)-3, int(dsty*mag)-3, int(const.tileWidth//2*mag)+4, int(const.tileWidth//2*mag)+4, 2)
+				self.drawBox(self.renderer, SURF_SDLCOLOR_CYAN, int(dstx*mag)-3, int(dsty*mag)-3, int(const.tileWidth2//2*mag)+4, int(const.tileWidth2//2*mag)+4, 2)
 			else:
 				if o.type1 in const.entityCrashIds:
 					self.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=dstrect)
@@ -1245,10 +1285,13 @@ class Interface:
 				else:
 					titleColor = SURF_SDLCOLOR_RED
 				#entity borders
-				self.drawBox(self.renderer, titleColor, int(dstx*mag), int(dsty*mag), int(const.tileWidth//2*mag), int(const.tileWidth//2*mag))
+				self.drawBox(self.renderer, titleColor, int(dstx*mag), int(dsty*mag), int(const.tileWidth2//2*mag), int(const.tileWidth2//2*mag))
 
 			if (dstx, dsty) in xys: #distinguish layered entities
 				 self.renderer.copy(gSurfaces[SURF_COLOR_ORANGE_TRANSPARENT], dstrect=dstrect)
+
+			if o.string:
+				renderText(o.string, sdlColorWhite, TTF_STYLE_NORMAL, dstrect[0] + (const.tileWidth*mag), dstrect[1] + 2*mag)
 			xys.append((dstx, dsty))
 			
 	def drawBox(self, renderer, surf, dstx, dsty, w, h, size=1):
@@ -1293,6 +1336,21 @@ class Interface:
 		for x in range(gWindowWidth // editorBg.size[0] + 1):
 			for y in range(gWindowHeight // editorBg.size[1] + 1):
 				self.renderer.copy(editorBg, dstrect=(x*editorBg.size[0], y*editorBg.size[1], editorBg.size[0], editorBg.size[1]))
+
+	def renderBgColor(self, gxEdit, curStage):
+		stage = curStage
+		srcx = int(stage.hscroll * const.tileWidth)
+		srcy = int(stage.scroll * const.tileWidth)
+
+		sizex = min(gWindowWidth*max(1, int(1/gxEdit.magnification)), stage.surfaces[0].size[0], stage.surfaces[0].size[0] - srcx)
+		sizey = min(gWindowHeight*max(1, int(1/gxEdit.magnification)), stage.surfaces[0].size[1], stage.surfaces[0].size[1] - srcy)
+
+		#srcrect = (srcx, srcy, sizex, sizey)
+		dstrect = (0, 0, int(sizex*gxEdit.magnification), int(sizey*gxEdit.magnification))
+
+		color = sdl2.ext.Color(stage.pack.bg_r, stage.pack.bg_g, stage.pack.bg_b)
+		self.renderer.fill(dstrect, color)
+	
 
 	def renderFade(self):
 		pass

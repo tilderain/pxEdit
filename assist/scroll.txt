@@ -1,0 +1,10 @@
+Normal
+3/4
+Half
+Quarter
+Eighth
+Zero
+H 3/4
+H Half
+H Quater
+V0 Half

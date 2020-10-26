@@ -22,8 +22,9 @@ def runMouseWheel(stage, wheel):
 def runMouse1(gxEdit, stage, mouse):
 	if mouse.button != sdl2.SDL_BUTTON_LEFT: return False
 
-	map = stage.map
-	eve = stage.eve
+	map = stage.pack.layers[gxEdit.currentLayer]
+	eve = stage.pack.eve.units
+
 	mag = gxEdit.magnification
 
 	for i, elem in reversed(list(gxEdit.elements.items())):
@@ -49,10 +50,10 @@ def runMouse1(gxEdit, stage, mouse):
 		#tile select
 		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // const.tileWidth // gxEdit.tilePaletteMag
 		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // const.tileWidth // gxEdit.tilePaletteMag
-
-		if x >= stage.attr.width:
+		
+		if x >= stage.attrs[gxEdit.currentLayer].width:
 			return
-		if y >= stage.attr.height:
+		if y >= stage.attrs[gxEdit.currentLayer].height:
 			return
 
 		if x < 0 or y < 0:
@@ -67,8 +68,8 @@ def runMouse1(gxEdit, stage, mouse):
 	if tilePalette.visible and util.inWindowBoundingBox(mouse, tilePalette):
 		#entity select
 		#TODO: add mag
-		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // const.tileWidth
-		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // const.tileWidth
+		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // const.tileWidth2
+		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // const.tileWidth2
 
 		index = x + (y * 16)
 		if index > const.entityFuncCount:
@@ -83,8 +84,8 @@ def runMouse1(gxEdit, stage, mouse):
 		y = int(mouse.y + (stage.scroll * const.tileWidth * mag))
 
 		if stage.selectedEntities != []:
-			xe = int(mouse.x // (const.tileWidth//2 * mag)) + stage.hscroll*2
-			ye = int(mouse.y // (const.tileWidth//2 * mag)) + stage.scroll*2
+			xe = int(mouse.x // (const.tileWidth2//2 * mag)) + stage.hscroll*const.ENTITY_SCALE
+			ye = int(mouse.y // (const.tileWidth2//2 * mag)) + stage.scroll*const.ENTITY_SCALE
 			for o in stage.selectedEntities:
 				if o.x == xe and o.y == ye:
 					gxEdit.draggingEntities = True
@@ -130,7 +131,7 @@ def runMouseDrag(gxEdit, stage):
 
 	if (mouse.button != sdl2.SDL_BUTTON_LEFT): return False
 
-	map = stage.map
+	map = stage.pack.layers[gxEdit.currentLayer]
 	mag = gxEdit.magnification
 
 	tileEndX = int(const.tileWidth * mag * map.width)
@@ -156,15 +157,15 @@ def runMouseDrag(gxEdit, stage):
 
 		if x < 0 or y < 0:
 			return
-		if x >= stage.attr.width:
+		if x >= stage.attrs[gxEdit.currentLayer].width:
 			return
-		if y >= stage.attr.height:
+		if y >= stage.attrs[gxEdit.currentLayer].height:
 			return
 		stage.selectedTilesEnd = [x, y]
 
 	#tiles Paint
 	elif gxEdit.currentEditMode == const.EDIT_TILE:
-
+		if not len(map.tiles): return
 		x = int(mouse.x // (const.tileWidth * mag) + stage.hscroll)
 		y = int(mouse.y // (const.tileWidth * mag) + stage.scroll)
 
@@ -200,7 +201,7 @@ def runMouseDrag(gxEdit, stage):
 			multi.serverSendTileEdit(gxEdit, gxEdit.curStage, tiles)
 		for pos, tile in tiles:
 			stage.renderTileToSurface(pos[0], pos[1], tile[0],
-											tile[1])
+											tile[1], gxEdit.currentLayer)
 		map.modify(tiles)
 		#TODO: disable undo while dragging
 		#TODO: commit undo action only when mouseup
@@ -210,11 +211,11 @@ def runMouseDrag(gxEdit, stage):
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 		x = int(mouse.x + (stage.hscroll * const.tileWidth * mag))
 		y = int(mouse.y + (stage.scroll * const.tileWidth * mag))
-		scale = (const.tileWidth//2 * mag)
+		scale = (const.tileWidth2//2 * mag)
 
 		if gxEdit.draggingEntities:
-			x = int((mouse.x // scale) + stage.hscroll*2)
-			y = int((mouse.y // scale) + stage.scroll*2)
+			x = int((mouse.x // scale) + stage.hscroll*const.ENTITY_SCALE)
+			y = int((mouse.y // scale) + stage.scroll*const.ENTITY_SCALE)
 
 			xe = gxEdit.entDragPos[0]
 			ye = gxEdit.entDragPos[1]
@@ -222,12 +223,12 @@ def runMouseDrag(gxEdit, stage):
 			for o in stage.selectedEntities:
 				if o.x + x-xe < 0: return
 				if o.y + y-ye < 0: return
-				if o.x + x-xe > (stage.map.width * 2)-1: return
-				if o.y + y-ye > (stage.map.height * 2)-1: return
+				if o.x + x-xe > (stage.pack.layers[0].width * const.ENTITY_SCALE)-1: return
+				if o.y + y-ye > (stage.pack.layers[0].height * const.ENTITY_SCALE)-1: return
 			gxEdit.entDragPos = [x, y]
 
 			ids = [o.id for o in stage.selectedEntities]
-			stage.eve.move(ids, x-xe, y-ye)
+			stage.pack.eve.move(ids, x-xe, y-ye)
 			return
 
 		x1 = int(gxEdit.selectionBoxStart[0] // scale)
@@ -246,7 +247,7 @@ def runMouseDrag(gxEdit, stage):
 		gxEdit.selectionBoxEnd = [x, y]
 		
 		selectedEntities = []
-		for o in stage.eve.get():
+		for o in stage.pack.eve.units:
 			#if o.x > x2 or o.y > y2: continue
 
 			if o.x >= x1 and o.y >= y1 \
@@ -258,21 +259,27 @@ def runMouseDrag(gxEdit, stage):
 		else:
 			elem = gxEdit.elements["entEdit"]
 			if len(selectedEntities) == 1:
-				elem.elements["paramEdit"].text = str(selectedEntities[0].type2)
+				elem.elements["appearEdit"].text = str(selectedEntities[0].appearflag)
+				elem.elements["dirEdit"].text = str(selectedEntities[0].direction)
+				elem.elements["flagEdit"].text = str(selectedEntities[0].flag)
+				elem.elements["stringEdit"].text = str(selectedEntities[0].string)
+				elem.elements["stringEdit"].placeholderText = ""
+				pass
+				#elem.elements["paramEdit"].text = str(selectedEntities[0].type2)
 			else:
-				elem.elements["paramEdit"].text = ""
-				elem.elements["paramEdit"].placeholderText = "\n\n\n\n"
+				for _,e in elem.elements.items():
+					if isinstance(e, interface.UITextInput):
+						e.text = ""
+						e.placeholderText = "\n\n\n\n"
+
 			elem.visible = True
-			elem.x = int((selectedEntities[0].x - (stage.hscroll*2))* (const.tileWidth // 2) * mag + const.tileWidth*2)
-			elem.y = int((selectedEntities[0].y - (stage.scroll*2))* (const.tileWidth // 2) * mag)
+			elem.x = int((selectedEntities[0].x - (stage.hscroll*const.ENTITY_SCALE))* (const.tileWidth2 // 2) * mag + const.tileWidth2*2)
+			elem.y = int((selectedEntities[0].y - (stage.scroll*const.ENTITY_SCALE))* (const.tileWidth2 // 2) * mag)
 			#gxEdit.focussedElem = elem.elements["paramEdit"]
 
 			#TODO: scroll into view for expanded entity list
 			gxEdit.currentEntity = selectedEntities[0].type1
 			
-			
-				
-
 
 					
 def runMouse2(gxEdit, stage, mouse):
@@ -281,14 +288,14 @@ def runMouse2(gxEdit, stage, mouse):
 	mag = gxEdit.magnification
 
 	if gxEdit.currentEditMode == const.EDIT_ENTITY:
-		x = int(mouse.x / (const.tileWidth/2 * mag)) + stage.hscroll*2
-		y = int(mouse.y / (const.tileWidth/2 * mag)) + stage.scroll*2
+		x = int(mouse.x / (const.tileWidth2/2 * mag)) + stage.hscroll*const.ENTITY_SCALE
+		y = int(mouse.y / (const.tileWidth2/2 * mag)) + stage.scroll*const.ENTITY_SCALE
 		x = math.floor(x) 
 		y = math.floor(y)
 
-		for o in stage.eve.get():
+		for o in stage.pack.eve.units:
 			if o.x == x and o.y == y:
-				stage.eve.remove([o.id])
+				stage.pack.eve.remove([o.id])
 
 				undo = UndoAction(const.UNDO_ENTITY_REMOVE, 0, [o])
 				stage.addUndo(undo)
@@ -303,6 +310,19 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		gxEdit.curStage -= 1
 	elif sym == sdl2.SDLK_k:
 		gxEdit.curStage += 1
+
+	elif sym == sdl2.SDLK_w:
+		gxEdit.loadStage(stage.pack.up_field)
+		gxEdit.curStage+=1
+	elif sym == sdl2.SDLK_a:
+		gxEdit.loadStage(stage.pack.left_field)
+		gxEdit.curStage+=1
+	elif sym == sdl2.SDLK_s:
+		gxEdit.loadStage(stage.pack.down_field)
+		gxEdit.curStage+=1
+	elif sym == sdl2.SDLK_d:
+		gxEdit.loadStage(stage.pack.right_field)
+		gxEdit.curStage+=1
 
 	elif sym == sdl2.SDLK_LEFT:
 		stage.hscroll -= 1
@@ -343,6 +363,14 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	elif sym == sdl2.SDLK_BACKSLASH:
 		gxEdit.entityPaletteMag += 1
 
+	elif sym == sdl2.SDLK_COMMA:
+		gxEdit.currentLayer -= 1
+		if gxEdit.currentLayer < 0: gxEdit.currentLayer = 0
+
+	elif sym == sdl2.SDLK_PERIOD:
+		gxEdit.currentLayer += 1
+		if gxEdit.currentLayer > 2: gxEdit.currentLayer = 2
+
 	elif sym == sdl2.SDLK_BACKSPACE:
 		if gxEdit.focussedElem:
 			gxEdit.focussedElem.text = gxEdit.focussedElem.text[:-1]
@@ -354,12 +382,12 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			mouse = util.getMouseState()
 			mag = gxEdit.magnification
 
-			x = int(mouse.x // (const.tileWidth//2 * mag)) + stage.hscroll*2
-			y = int(mouse.y // (const.tileWidth//2 * mag)) + stage.scroll*2
-			if x >= stage.map.width*2 or y >= stage.map.height*2:
+			x = int(mouse.x // (const.tileWidth//const.ENTITY_SCALE * mag)) + stage.hscroll* const.ENTITY_SCALE
+			y = int(mouse.y // (const.tileWidth//const.ENTITY_SCALE * mag)) + stage.scroll* const.ENTITY_SCALE
+			if x >= stage.pack.layers[0].width*const.ENTITY_SCALE or y >= stage.pack.layers[0].height*const.ENTITY_SCALE:
 				return
 
-			o = stage.eve.add(x, y, gxEdit.currentEntity, 0)
+			o = stage.pack.eve.add(x, y, gxEdit.currentEntity)
 
 			undo = UndoAction(const.UNDO_ENTITY_ADD, 0, [o])
 			stage.addUndo(undo)
@@ -368,7 +396,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	elif sym == sdl2.SDLK_DELETE:
 		if stage.selectedEntities:
 			ids = [o.id for o in stage.selectedEntities]
-			stage.eve.remove(ids)
+			stage.pack.eve.remove(ids)
 			gxEdit.elements["entEdit"].visible = False
 
 			undo = UndoAction(const.UNDO_ENTITY_REMOVE, 0, stage.selectedEntities)
@@ -412,25 +440,25 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			else:
 				mouse = util.getMouseState()
 
-				scale = (const.tileWidth//2 * gxEdit.magnification)
-				x = int((mouse.x // scale) + stage.hscroll*2)
-				y = int((mouse.y // scale) + stage.scroll*2)
+				scale = (const.tileWidth//const.ENTITY_SCALE * gxEdit.magnification)
+				x = int((mouse.x // scale) + stage.hscroll*const.ENTITY_SCALE)
+				y = int((mouse.y // scale) + stage.scroll*const.ENTITY_SCALE)
 
 				#todo print Paste failed!
 				for o in gxEdit.copiedEntities:
 					if o.x + x < 0: return
 					if o.y + y < 0: return
-					if o.x + x > (stage.map.width * 2)-1: return
-					if o.y + y > (stage.map.height * 2)-1: return
+					if o.x + x > (stage.pack.layers[0].width * const.ENTITY_SCALE)-1: return
+					if o.y + y > (stage.pack.layers[0].height * const.ENTITY_SCALE)-1: return
 
 				ents = []
 				for o in gxEdit.copiedEntities:
 					o2 = copy.deepcopy(o)
-					o2.id = stage.eve._count
+					o2.id = stage.pack.eve._count
 					o2.x += x
 					o2.y += y
-					stage.eve._count += 1
-					stage.eve._entities.append(o2)
+					stage.pack.eve._count += 1
+					stage.pack.eve.units.append(o2)
 					ents.append(o2)
 
 				undo = UndoAction(const.UNDO_ENTITY_ADD, 0, ents)

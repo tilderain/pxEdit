@@ -35,8 +35,10 @@ import multi
 
 
 
-dataPath = "./guxt/data/"
-gamePath = "./guxt/"
+dataPath = "./Kero Blaster/rsc_k/"
+gamePath = "./Kero Blaster/"
+fieldPath = "./Kero Blaster/rsc_k/field/"
+imgPath = "./Kero Blaster/rsc_k/img/"
 
 #for debugging
 dataPath = "./" + dataPath
@@ -49,6 +51,9 @@ partsPath = "parts{}.bmp"
 attrPath = "parts{}.pxatrb"
 eventPath = "event{}.pxeve"
 pximgPath = "parts{}.pximg"
+
+pxPackExt = ".pxpack"
+pxAttrExt = ".pxattr"
 
 backupFolderName = "backup"
 backupFormat = "backup/_{}_{}"
@@ -73,18 +78,17 @@ windowName = "Doctor's Garage"
 
 
 class StagePrj:
-	def __init__(self, stageNo):
-		self.stageNo = stageNo
-		self.eve = pxEve.PxEve()
-		self.map = pxMap.PxMapAttr()
-		self.attr = pxMap.PxMapAttr()
+	def __init__(self, stageName):
+		self.stageName = stageName
+		self.pack = pxMap.PxPack()
+		self.attrs = [pxMap.PxPackLayer(), pxMap.PxPackLayer(), pxMap.PxPackLayer()]
 
 		#TODO: for multiplayer
 		self.oldEve = None
 		self.oldMap = None
 
 		# tileset texture
-		self.parts = None
+		self.parts = [None, None, None]
 
 		self.scroll = 0
 		self.hscroll = 0
@@ -108,36 +112,46 @@ class StagePrj:
 		# to not spam edit commands
 		self.lastTileEdit = [None, None]
 
-		self.surface = None
+		self.surfaces = [None, None, None]
 
-	def createMapSurface(self):
-		if self.surface: del self.surface
-		self.surface = interface.gSprfactory.create_texture_sprite(interface.gRenderer, (self.map.width*const.tileWidth, self.map.height*const.tileWidth), access=sdl2.SDL_TEXTUREACCESS_TARGET)
+	def createMapSurface(self, layerNo):
+		if self.surfaces[layerNo]: del self.surfaces[layerNo]
+		if self.pack.layers[layerNo].width * self.pack.layers[layerNo].height == 0: return
+		
+		self.surfaces[layerNo] = interface.gSprfactory.create_texture_sprite(interface.gRenderer, 
+			(self.pack.layers[layerNo].width*const.tileWidth, self.pack.layers[layerNo].height*const.tileWidth), access=sdl2.SDL_TEXTUREACCESS_TARGET)
 	
 	def load(self):
 		#TODO: open dialogue box to see if there is a newer backup
 			#read last modified date
 			#Choose the backup you want to open.
+		
+		self.pack.load(fieldPath + self.stageName + pxPackExt)
 
-		self.eve.load(dataPath + eventPath.format(self.stageNo))
-		self.map.load(dataPath + mapPath.format(self.stageNo))
-		self.attr.load(dataPath + attrPath.format(self.stageNo))
-
-		self.createMapSurface()
+		for i in range(3):
+			self.attrs[i].load(imgPath + self.pack.layers[i].partsName + pxAttrExt)
+			self.loadParts(i)
+			self.createMapSurface(i)
+			self.renderMapToSurface(i)
 
 		return True
 
-	def loadParts(self, sprfactory):
-		self.parts = sprfactory.from_image(dataPath + partsPath.format(self.stageNo))
+	def loadParts(self, layerNo):
+		try:
+			self.parts[layerNo] = interface.gSprfactory.from_image(imgPath + self.pack.layers[layerNo].partsName + ".png")
+			if not self.attrs[layerNo].width:
+					self.attrs[layerNo].width = self.parts[layerNo].size[0] // const.tileWidth
+					self.attrs[layerNo].height = self.parts[layerNo].size[1] // const.tileWidth
+		except (OSError, IOError) as e:
+			print("Error while loading parts {} {}".format(layerNo, e))
+			return
 
 	def save(self):
 		#if self.lastSavePos == self.undoPos: #TODO: and pxattr not modified
 		#	return False
 
-		print("--Saving stage {}...--".format(self.stageNo))
-		self.eve.save(dataPath + eventPath.format(self.stageNo))
-		self.map.save(dataPath + mapPath.format(self.stageNo))
-		self.attr.save(dataPath + attrPath.format(self.stageNo))
+		print("--Saving stage {}...--".format(self.stageName))
+		#self.pack.save()
 
 		self.lastSavePos = self.undoPos
 		self.lastBackupPos = self.undoPos
@@ -155,16 +169,16 @@ class StagePrj:
 		if self.lastBackupPos == self.undoPos:
 			return False
 
-		print("--Backing up stage {}...--".format(self.stageNo))
+		print("--Backing up stage {}...--".format(self.stageName))
 
 		date = datetime.now()
 		dateMin = date.strftime(backupTimeFormat)
 
-		eventOut = eventPath.format(self.stageNo)
-		mapOut = mapPath.format(self.stageNo)
+		#eventOut = eventPath.format(self.stageName)
+		#mapOut = mapPath.format(self.stageName)
 		
-		self.eve.save(dataPath + backupFolderName + "/" + dateMin + "_" + eventOut)
-		self.map.save(dataPath + backupFolderName + "/" + dateMin + "_" + mapOut)
+		#self.eve.save(dataPath + backupFolderName + "/" + dateMin + "_" + eventOut)
+		#self.map.save(dataPath + backupFolderName + "/" + dateMin + "_" + mapOut)
 
 		self.lastBackupPos = self.undoPos
 
@@ -172,12 +186,19 @@ class StagePrj:
 
 		return True
 
-	def renderMapToSurface(self):
-		map = self.map
+	def renderMapToSurface(self, layerNo):
+		map = self.pack.layers[layerNo]
+		if len(map.tiles) == 0: return
+
 		sdlrenderer = interface.gRenderer.sdlrenderer
-		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surface.texture)
+		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surfaces[layerNo].texture)
+		#sdl2.SDL_SetRenderDrawBlendMode(sdlrenderer, sdl2.SDL_BLENDMODE_NONE)
+		sdl2.SDL_SetTextureBlendMode(self.surfaces[layerNo].texture, sdl2.SDL_BLENDMODE_BLEND)
+
 		srcrect = sdl2.SDL_Rect(0,0,const.tileWidth,const.tileWidth)
 		dstrect = sdl2.SDL_Rect(0,0,const.tileWidth,const.tileWidth)
+
+
 		for x in range(map.width):
 			for y in range(map.height):
 				#TODO: detect if blank tile
@@ -195,13 +216,15 @@ class StagePrj:
 				srcrect.y = srcy
 				dstrect.x = dstx
 				dstrect.y = dsty
-
-				sdl2.SDL_RenderCopy(sdlrenderer, self.parts.texture, srcrect, dstrect)
+				try:
+					sdl2.SDL_RenderCopy(sdlrenderer, self.parts[layerNo].texture, srcrect, dstrect)
+				except:
+					break
 				#interface.gRenderer.copy(self.parts, srcrect, dstrect)
 		sdl2.SDL_SetRenderTarget(sdlrenderer, None)
 			
 	
-	def renderTileToSurface(self, x, y, tx, ty):
+	def renderTileToSurface(self, x, y, tx, ty, layerNo):
 		dstx = x * const.tileWidth
 		dsty = y * const.tileWidth
 
@@ -212,8 +235,14 @@ class StagePrj:
 		srcrect = (srcx, srcy, const.tileWidth, const.tileWidth)
 		dstrect = (dstx, dsty, const.tileWidth, const.tileWidth)
 
-		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surface.texture)
-		interface.gRenderer.copy(self.parts, srcrect, dstrect)
+		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surfaces[layerNo].texture)
+
+		sdl2.SDL_SetTextureBlendMode(self.parts[layerNo].texture, sdl2.SDL_BLENDMODE_NONE)
+
+		interface.gRenderer.copy(self.parts[layerNo], srcrect, dstrect)
+
+		sdl2.SDL_SetTextureBlendMode(self.parts[layerNo].texture, sdl2.SDL_BLENDMODE_BLEND)
+
 		sdl2.SDL_SetRenderTarget(sdlrenderer, None)
 
 	def addUndo(self, undo):
@@ -228,7 +257,7 @@ class Editor:
 		self.entityInfo = []
 		self.stages = []
 		#TODO: remove this
-		self.curStage = 2
+		self.curStage = 0
 
 		# zoom level
 		self.magnification = 3
@@ -237,6 +266,9 @@ class Editor:
 
 		self.currentEntity = 0
 		self.currentEditMode = const.EDIT_TILE
+		self.currentLayer = 0
+
+		self.currentTilePaintMode = None
 
 		self.selectionBoxStart = [-1, -1]
 		self.selectionBoxEnd = [-1, -1]
@@ -309,12 +341,14 @@ class Editor:
 		result &= self.readEntityInfo()
 		return result
 
-	def loadStage(self, stageNo):
-		for stage in self.stages:
-			if stage.stageNo == stageNo:
-				print("Error: tried loading an already loaded stage")
-				return False
-		stage = StagePrj(stageNo)
+	def loadStage(self, stageName):
+		#for stage in self.stages:
+		#	if stage.stageNo == stageNo:
+		#		print("Error: tried loading an already loaded stage")
+		#		return False
+		if not len(stageName): return False
+		print("Loading stage " + stageName)
+		stage = StagePrj(stageName)
 		result = stage.load()
 		self.stages.append(stage)
 		return result
@@ -339,18 +373,18 @@ class Editor:
 			stage.map.modify(undo.reverse)
 			for pos, tile in undo.reverse:
 				stage.renderTileToSurface(pos[0], pos[1], tile[0],
-												tile[1])
+												tile[1], gxEdit.currentLayer)
 		elif undo.action == const.UNDO_ENTITY_MOVE:
-			stage.eve.replace(undo.reverse)
+			stage.pack.eve.replace(undo.reverse)
 			stage.selectedEntities = undo.reverse
 
 		elif undo.action == const.UNDO_ENTITY_ADD:
 			ids = [o.id for o in undo.forward]
-			stage.eve.remove(ids)
+			stage.pack.eve.remove(ids)
 
 		elif undo.action == const.UNDO_ENTITY_REMOVE:
 			for o in undo.forward:
-				stage.eve._entities.append(o)
+				stage.pack.eve.units.append(o)
 
 		stage.undoPos -= 1
 		
@@ -370,16 +404,16 @@ class Editor:
 			stage.map.modify(redo.forward)
 			for pos, tile in redo.forward:
 				stage.renderTileToSurface(pos[0], pos[1], tile[0],
-												tile[1])
+												tile[1], gxEdit.currentLayer)
 		elif redo.action == const.UNDO_ENTITY_MOVE:
-			stage.eve.replace(redo.forward)	
+			stage.pack.eve.replace(redo.forward)	
 			stage.selectedEntities = redo.forward
 		elif redo.action == const.UNDO_ENTITY_ADD:
 			for o in redo.forward:
-				stage.eve._entities.append(o)
+				stage.pack.eve.units.append(o)
 		elif redo.action == const.UNDO_ENTITY_REMOVE:
 			ids = [o.id for o in redo.forward]
-			stage.eve.remove(ids)
+			stage.pack.eve.remove(ids)
 
 											
 		stage.undoPos += 1
@@ -465,11 +499,8 @@ def main():
 	#easy
 
 	gxEdit.loadMeta(sprfactory)
-	for i in range(1,7):
-		if i == 5: print("stage... FIVE")
-		gxEdit.loadStage(i)
-		gxEdit.stages[i-1].loadParts(sprfactory)
-		gxEdit.stages[i-1].renderMapToSurface()
+
+	gxEdit.loadStage("04building2")
 
 	introAnimTimer = 0
 
@@ -490,7 +521,7 @@ def main():
 
 	gxEdit.elements["uiTooltip"] = interface.UITooltip(0,0,1,1)
 
-	gxEdit.elements["entEdit"] = interface.EntityEditWindow(20,20,150,25)
+	gxEdit.elements["entEdit"] = interface.EntityEditWindow(20,20,150,90)
 
 	gxEdit.elements["mapSizeDialog"] = interface.MapResizeDialog(20,20,104,88)
 
@@ -499,9 +530,11 @@ def main():
 	def renderEditor():
 		#TODO: placeholder
 
-		gui.renderMainBg(introAnimTimer, mouseover)
+		#gui.renderMainBg(introAnimTimer, mouseover)
 		gui.renderEditorBg()
-		gui.renderTiles(gxEdit, curStage)
+		gui.renderBgColor(gxEdit, curStage)
+		for i in reversed(range(3)):
+			gui.renderTiles(gxEdit, curStage, i)
 		gui.renderEntities(gxEdit, curStage)
 	
 		gui.renderEntityPalette(gxEdit, curStage)
@@ -585,14 +618,14 @@ def main():
 			if gxEdit.curStage < 0:
 				gxEdit.curStage = 0
 		def clampScroll(stage):
-			if stage.scroll >= stage.map.height - scaleFactor:
-				stage.scroll = stage.map.height - scaleFactor
+			if stage.scroll >= stage.pack.layers[0].height - scaleFactor:
+				stage.scroll = stage.pack.layers[0].height - scaleFactor
 			
 			if stage.scroll < 0:
 				stage.scroll = 0
 
-			if stage.hscroll >= stage.map.width - scaleFactor:
-				stage.hscroll = stage.map.width - scaleFactor
+			if stage.hscroll >= stage.pack.layers[0].width - scaleFactor:
+				stage.hscroll = stage.pack.layers[0].width - scaleFactor
 			
 			if stage.hscroll < 0:
 				stage.hscroll = 0
