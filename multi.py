@@ -10,7 +10,8 @@ DEFAULT_PORT = 7777
 PACKET_CONNECT = 1
 PACKET_MOUSEPOS = 2
 PACKET_TILEEDIT = 3
-#with undostack
+
+#send stage with undostack
 PACKET_SENDSTAGE = 4
 PACKET_SENDPARTS = 5
 PACKET_MOUSEPOSFORCLIENT = 6
@@ -70,7 +71,7 @@ def packetHandler(gxEdit, sock, playerId, datas):
 		#########################################
 
 		if data["type"] == PACKET_CONNECT:
-			gxEdit.players[playerId]["name"] = data["name"]
+			gxEdit.players[playerId]["name"] = ""
 			ip = gxEdit.players[playerId]["ip"]
 
 			print(data["name"] + " connected. (" + ip[0] + ":" + str(ip[1]) + ")")
@@ -84,11 +85,12 @@ def packetHandler(gxEdit, sock, playerId, datas):
 				print("the name was illegal.")
 				return False
 
-			for player in gxEdit.players:
+			for _, player in gxEdit.players.items():
 				if player["name"] == data["name"]:
 					print("the name already exists.")
 					return False
-
+					
+			gxEdit.players[playerId]["name"] = data["name"]
 			#TODO: broadcast new players to all others
 
 		#########################################
@@ -157,7 +159,7 @@ class PxEditServer(socketserver.ThreadingTCPServer):
 
 def hostButtonAction(window, elem, gxEdit):
 	if gxEdit.socket:
-		#TODO: message
+		#TODO: message that you suck
 		return
 	paramName = window.elements["paramName"].text
 	#TODO:
@@ -249,7 +251,7 @@ def connectButtonAction(window, elem, gxEdit):
 		port = DEFAULT_PORT
 
 	if paramIP == "":
-		ip = "localhost"
+		ip = "127.0.0.1"
 	else:
 		ip = paramIP
 

@@ -96,6 +96,31 @@ def runMouse1(gxEdit, stage, mouse):
 		gxEdit.selectionBoxStart = [x, y]
 		gxEdit.selectionBoxEnd = [x, y]
 
+def runMouse3(gxEdit, stage, mouse):
+	if mouse.button != sdl2.SDL_BUTTON_MIDDLE: return False
+
+	map = stage.pack.layers[gxEdit.currentLayer]
+	eve = stage.pack.eve.units
+
+	mag = gxEdit.magnification
+
+	if gxEdit.currentEditMode == const.EDIT_TILE:
+		if not len(map.tiles): return
+		x = int(mouse.x // (const.tileWidth * mag) + stage.hscroll)
+		y = int(mouse.y // (const.tileWidth * mag) + stage.scroll)
+
+		if x >= map.width or y >= map.height:
+			return
+	# pick block
+	#TODO: this should eventually be quick copy paste
+
+	xx = map.tiles[y][x] % 16
+	yy = map.tiles[y][x] // 16
+	stage.selectedTilesStart = [xx, yy]	
+	stage.selectedTilesEnd = [xx, yy]
+
+
+
 def runMouseUp(gxEdit, curStage, mouse):
 	if mouse.button != sdl2.SDL_BUTTON_LEFT: return False
 
@@ -128,8 +153,8 @@ def runMouseDrag(gxEdit, stage):
 	else:
 		gxEdit.tooltipText = []
 	
-
-	if (mouse.button != sdl2.SDL_BUTTON_LEFT): return False
+	keystate = util.getKeyState()
+	if (mouse.button != sdl2.SDL_BUTTON_LEFT and not keystate[sdl2.SDL_SCANCODE_SPACE]): return False
 
 	map = stage.pack.layers[gxEdit.currentLayer]
 	mag = gxEdit.magnification
@@ -259,9 +284,9 @@ def runMouseDrag(gxEdit, stage):
 		else:
 			elem = gxEdit.elements["entEdit"]
 			if len(selectedEntities) == 1:
-				elem.elements["appearEdit"].text = str(selectedEntities[0].appearflag)
-				elem.elements["dirEdit"].text = str(selectedEntities[0].direction)
 				elem.elements["flagEdit"].text = str(selectedEntities[0].flag)
+				elem.elements["dirEdit"].text = str(selectedEntities[0].param2)
+				elem.elements["bitsEdit"].text = str(selectedEntities[0].bits)
 				elem.elements["stringEdit"].text = str(selectedEntities[0].string)
 				elem.elements["stringEdit"].placeholderText = ""
 				pass
@@ -299,6 +324,7 @@ def runMouse2(gxEdit, stage, mouse):
 
 				undo = UndoAction(const.UNDO_ENTITY_REMOVE, 0, [o])
 				stage.addUndo(undo)
+				gxEdit.elements["entEdit"].visible = False
 				return
 
 def runKeyboard(gxEdit, stage, scaleFactor, key):
@@ -311,35 +337,85 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	elif sym == sdl2.SDLK_k:
 		gxEdit.curStage += 1
 
-	elif sym == sdl2.SDLK_w:
+	#window shortcuts
+	elif sym == sdl2.SDLK_e:
+		interface.toggleEntityPalette(0,0,gxEdit)
+	elif sym == sdl2.SDLK_r:
+		interface.toggleTilePalette(0,0,gxEdit)
+
+	#field shortcut transportation
+	elif sym == sdl2.SDLK_t:
 		gxEdit.loadStage(stage.pack.up_field)
 		gxEdit.curStage+=1
-	elif sym == sdl2.SDLK_a:
+	elif sym == sdl2.SDLK_f:
 		gxEdit.loadStage(stage.pack.left_field)
 		gxEdit.curStage+=1
-	elif sym == sdl2.SDLK_s:
+	elif sym == sdl2.SDLK_g:
 		gxEdit.loadStage(stage.pack.down_field)
 		gxEdit.curStage+=1
-	elif sym == sdl2.SDLK_d:
+	elif sym == sdl2.SDLK_h:
 		gxEdit.loadStage(stage.pack.right_field)
 		gxEdit.curStage+=1
+	
+	#keyboard navigation tile selection
+	elif sym == sdl2.SDLK_a:
+		if not key.keysym.mod & sdl2.KMOD_SHIFT:
+			stage.selectedTilesStart[0] -= 1
+		if not key.keysym.mod & sdl2.KMOD_ALT:
+			stage.selectedTilesEnd[0] -= 1
+		stage.lastTileEdit = [None, None]
+	elif sym == sdl2.SDLK_d:
+		if not key.keysym.mod & sdl2.KMOD_SHIFT:
+			stage.selectedTilesStart[0] += 1
+		if not key.keysym.mod & sdl2.KMOD_ALT:
+			stage.selectedTilesEnd[0] += 1
+		stage.lastTileEdit = [None, None]
+	elif sym == sdl2.SDLK_w:
+		if not key.keysym.mod & sdl2.KMOD_SHIFT:
+			stage.selectedTilesStart[1] -= 1
+		if not key.keysym.mod & sdl2.KMOD_ALT:
+			stage.selectedTilesEnd[1] -= 1
+		stage.lastTileEdit = [None, None]
+	elif sym == sdl2.SDLK_s:
+		if not key.keysym.mod & sdl2.KMOD_SHIFT:
+			stage.selectedTilesStart[1] += 1
+		if not key.keysym.mod & sdl2.KMOD_ALT:
+			stage.selectedTilesEnd[1] += 1
+		stage.lastTileEdit = [None, None]
 
+	#keyboard navigation mouse movement
+	elif sym == sdl2.SDLK_KP_8:
+		mouse = util.getMouseState()
+		sdl2.SDL_WarpMouseInWindow(None, mouse.x, int(mouse.y-const.tileWidth*gxEdit.magnification))
+	elif sym == sdl2.SDLK_KP_4:
+		mouse = util.getMouseState()
+		sdl2.SDL_WarpMouseInWindow(None,  int(mouse.x-const.tileWidth*gxEdit.magnification), mouse.y)
+	elif sym == sdl2.SDLK_KP_5:
+		mouse = util.getMouseState()
+		sdl2.SDL_WarpMouseInWindow(None, mouse.x,  int(mouse.y+const.tileWidth*gxEdit.magnification))
+	elif sym == sdl2.SDLK_KP_6:
+		mouse = util.getMouseState()
+		sdl2.SDL_WarpMouseInWindow(None,  int(mouse.x+const.tileWidth*gxEdit.magnification), mouse.y)
+
+	#keyboard navigation scroll
 	elif sym == sdl2.SDLK_LEFT:
-		stage.hscroll -= 1
+		stage.hscroll -= 2
 	elif sym == sdl2.SDLK_RIGHT:
-		stage.hscroll += 1
+		stage.hscroll += 2
 	elif sym == sdl2.SDLK_DOWN:
-		stage.scroll += 1
+		stage.scroll += 2
 	elif sym == sdl2.SDLK_UP:
-		stage.scroll -= 1
+		stage.scroll -= 2
 	elif sym == sdl2.SDLK_HOME:
 		stage.scroll = 0
 	elif sym == sdl2.SDLK_END:
-		stage.scroll = stage.map.height - scaleFactor
+		stage.scroll = stage.pack.layers[0].height - scaleFactor
 	elif sym == sdl2.SDLK_PAGEDOWN:
 		stage.scroll += int(scaleFactor // 1.5)
 	elif sym == sdl2.SDLK_PAGEUP:
 		stage.scroll -= int(scaleFactor // 1.5)
+
+	#keyboard navigation zoom
 	elif sym == sdl2.SDLK_MINUS:
 		if gxEdit.magnification == 1:
 			gxEdit.magnification = 0.5
@@ -363,6 +439,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	elif sym == sdl2.SDLK_BACKSLASH:
 		gxEdit.entityPaletteMag += 1
 
+	#layer switch
 	elif sym == sdl2.SDLK_COMMA:
 		gxEdit.currentLayer -= 1
 		if gxEdit.currentLayer < 0: gxEdit.currentLayer = 0
@@ -376,9 +453,10 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			gxEdit.focussedElem.text = gxEdit.focussedElem.text[:-1]
 			if gxEdit.focussedElem.onAction:
 				gxEdit.focussedElem.onAction(gxEdit.focussedElem, gxEdit)
+
+	#entity manipulation
 	elif sym == sdl2.SDLK_i:
 		if gxEdit.currentEditMode == const.EDIT_ENTITY:
-			#entity place
 			mouse = util.getMouseState()
 			mag = gxEdit.magnification
 
@@ -392,7 +470,6 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			undo = UndoAction(const.UNDO_ENTITY_ADD, 0, [o])
 			stage.addUndo(undo)
 
-
 	elif sym == sdl2.SDLK_DELETE:
 		if stage.selectedEntities:
 			ids = [o.id for o in stage.selectedEntities]
@@ -404,21 +481,10 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 
 			stage.selectedEntities = []
 
+
 	elif key.keysym.mod & sdl2.KMOD_CTRL:
-		if sym == sdl2.SDLK_d:
-			#scrambleEntities(stage)
-			pass
 
-		elif sym == sdl2.SDLK_c:
-			if stage.selectedEntities:
-				gxEdit.copiedEntities = copy.deepcopy(stage.selectedEntities)
-				basex = min([o.x for o in gxEdit.copiedEntities])
-				basey = min([o.y for o in gxEdit.copiedEntities])
-
-				for o in gxEdit.copiedEntities:
-					o.x -= basex
-					o.y -= basey
-		elif sym == sdl2.SDLK_s:
+		if sym == sdl2.SDLK_s:
 			#TODO: show flash on save (goodly)
 			if stage.save():
 				gxEdit.saveTimer = 5
@@ -429,10 +495,19 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			else:
 				gxEdit.executeUndo()
 
-
 		elif sym == sdl2.SDLK_y:
 			gxEdit.executeRedo()
 
+		elif sym == sdl2.SDLK_c:
+			if stage.selectedEntities:
+				gxEdit.copiedEntities = copy.deepcopy(stage.selectedEntities)
+				basex = min([o.x for o in gxEdit.copiedEntities])
+				basey = min([o.y for o in gxEdit.copiedEntities])
+
+				for o in gxEdit.copiedEntities:
+					o.x -= basex
+					o.y -= basey
+		
 		elif sym == sdl2.SDLK_v:
 			if gxEdit.focussedElem:
 				text = sdl2.SDL_GetClipboardText()
@@ -464,7 +539,6 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 				undo = UndoAction(const.UNDO_ENTITY_ADD, 0, ents)
 				stage.addUndo(undo)
 
-				
 
 	elif sym == sdl2.SDLK_F11:
 		gxEdit.fullscreen ^= 1
@@ -473,10 +547,3 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			sdl2.SDL_SetWindowFullscreen(interface.gWindow.window, sdl2.SDL_WINDOW_FULLSCREEN_DESKTOP)
 		else:
 			sdl2.SDL_SetWindowFullscreen(interface.gWindow.window, 0)
-
-	#e = toggle entity palette
-	#t = toggle tile palette
-
-	#elif sym == sdl2.SDLK_r:
-	#	stage.renderMapToSurface()
-			

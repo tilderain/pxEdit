@@ -341,13 +341,14 @@ BUTTON_TYPE_RADIO = 2
 class UIButton:
 	def __init__(self, x, y, w, h, parent, group=0, rects=rectsButtonNormal, style=0, tooltip=None, type=BUTTON_TYPE_NORMAL,
 				 enum=BUTTON_NORMAL,
+				 var=None, state=BUTTON_STATE_NORMAL,
 				 text=None, fontStyle=None, fontColor=None):
 		
 		UIElement.__init__(self, x, y, w, h, parent, None, style, tooltip)
 
 		self.rects = copy.deepcopy(rects)
 
-		self.state = BUTTON_STATE_NORMAL
+		self.state = state
 
 		self.type = type
 		
@@ -358,6 +359,8 @@ class UIButton:
 		self.fontColor=fontColor
 
 		self.enum = enum
+
+		self.var = var
 
 		if self.enum:
 			for i in range(len(self.rects)):
@@ -373,13 +376,13 @@ class UIButton:
 							elem.state = BUTTON_STATE_NORMAL
 					except:
 						pass
-			else:
+			else: #checkbox
 				if self.state == BUTTON_STATE_ACTIVE: #toggle check
 					self.state = BUTTON_STATE_NORMAL
 				else:
 					self.state = BUTTON_STATE_ACTIVE
 			self.onAction(self.parent, self, gxEdit)		
-		else:
+		else: #normal button
 			self.state = BUTTON_STATE_CLICKED
 		return True
 
@@ -588,17 +591,19 @@ class TilePaletteWindow(UIWindow):
 
 		mag = gxEdit.tilePaletteMag
 
-
+		if not stage.attrs[gxEdit.currentLayer].width: return
+		if not stage.parts[gxEdit.currentLayer]: return
 		#reset width
-		self.w = (gxEdit.stages[gxEdit.curStage].attrs[gxEdit.currentLayer].width * const.tileWidth2) * mag
-		self.h = (gxEdit.stages[gxEdit.curStage].attrs[gxEdit.currentLayer].height * const.tileWidth2) * mag + 24 + 2
+		self.w = (stage.attrs[gxEdit.currentLayer].width * const.tileWidth) * mag
+		self.h = (stage.attrs[gxEdit.currentLayer].height * const.tileWidth) * mag + 24 + 2
 
 		self.draghitbox = [0, 0, self.w, 24]
 
 		self.elements["buttonMinimize"].x = self.w - 24
 		##
 
-		srcrect = stage.parts[gxEdit.currentLayer].area
+		srcrect = (0,0, stage.attrs[gxEdit.currentLayer].width * const.tileWidth, 
+			stage.attrs[gxEdit.currentLayer].height * const.tileWidth)
 		
 		dstx = self.x + self.elements["picker"].x
 		dsty = self.y + self.elements["picker"].y
@@ -606,7 +611,8 @@ class TilePaletteWindow(UIWindow):
 
 
 		#TODO: add dstrect mag
-		dstrect = (dstx, dsty, stage.parts[gxEdit.currentLayer].size[0] * mag, stage.parts[gxEdit.currentLayer].size[1] * mag)
+		dstrect = (dstx, dsty, stage.attrs[gxEdit.currentLayer].width * const.tileWidth * mag, 
+							   stage.attrs[gxEdit.currentLayer].height * const.tileWidth * mag)
 		gInterface.renderer.copy(stage.parts[gxEdit.currentLayer], srcrect=srcrect, dstrect=dstrect)
 
 		#TODO: add selected tile border (properly)
@@ -624,7 +630,7 @@ class TilePaletteWindow(UIWindow):
 			w = (end[0]+1 - start[0]) * const.tileWidth * mag
 			h =  (end[1]+1 - start[1]) * const.tileWidth * mag
 
-			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, w, h)
+			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, w, h, 2)
 
 		#show current tile box
 		pass
@@ -688,8 +694,8 @@ class EntityPaletteWindow(UIWindow):
 	def handleMouseOver(self, mouse, gxEdit):
 		UIWindow.handleMouseOver(self, mouse, gxEdit)
 
-		x = (mouse.x - self.x - self.elements["picker"].x) // const.tileWidth
-		y = (mouse.y - self.y - self.elements["picker"].y) // const.tileWidth
+		x = (mouse.x - self.x - self.elements["picker"].x) // const.tileWidth2
+		y = (mouse.y - self.y - self.elements["picker"].y) // const.tileWidth2
 
 		index = x + (y * 16)
 		if index >= const.entityFuncCount:
@@ -725,9 +731,11 @@ class EntityPaletteWindow(UIWindow):
 		return True
 
 
-
+#todo: put this globally in uiwindow
 def toggleTilePalette(window, elem, gxEdit):
 	gxEdit.elements["tilePalette"].visible ^= 1	
+def toggleEntityPalette(window, elem, gxEdit):
+	gxEdit.elements["entityPalette"].visible ^= 1	
 
 def toggleResizeDialog(window, elem, gxEdit):
 	elem = gxEdit.elements["mapSizeDialog"]
@@ -746,6 +754,9 @@ def toggleMultiplayerMenu(window, elem, gxEdit):
 	elem.y = gWindowHeight // 2 - elem.h // 2
 	gxEdit.elements["dialogMultiplayer"] = gxEdit.elements.pop("dialogMultiplayer")
 	elem.visible ^= 1
+
+def toggleLayerVisibility(window, elem, gxEdit):
+	gxEdit.visibleLayers[elem.var] = True if elem.state == BUTTON_STATE_ACTIVE else False
 
 class MultiplayerWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLS, style=0,):
@@ -804,18 +815,26 @@ class ToolsWindow(UIWindow):
 		self.elements["textLayer"] = UIElement(88, 2, 0, 0, self, rectWindowTextLayer)
 
 		self.elements["butMap0"] = UIButton(88, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_MAP0, type=BUTTON_TYPE_CHECKBOX,
+										var=0, 	state=BUTTON_STATE_ACTIVE,
 										tooltip=[["Display foreground", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butMap0"].onAction = toggleLayerVisibility
 
 		self.elements["butMap1"] = UIButton(104, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_MAP1, type=BUTTON_TYPE_CHECKBOX, 
+										var=1, state=BUTTON_STATE_ACTIVE,
 										tooltip=[["Display midground", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butMap1"].onAction = toggleLayerVisibility
 
 		self.elements["butMap2"] = UIButton(120, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_MAP2, type=BUTTON_TYPE_CHECKBOX,
+										var=2,	state=BUTTON_STATE_ACTIVE,
 										tooltip=[["Display background", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butMap2"].onAction = toggleLayerVisibility
 
 		self.elements["textLVMP"] = UIElement(136, 20, 0, 0, self, rectWindowTextLVMP)
 
 		self.elements["butUnits"] = UIButton(152, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_UNITS, type=BUTTON_TYPE_CHECKBOX,
+										var=3,	state=BUTTON_STATE_ACTIVE,
 										tooltip=[["Display entities (units)", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butUnits"].onAction = toggleLayerVisibility
 
 		self.elements["butGrid"] = UIButton(168, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_TILETYPE, type=BUTTON_TYPE_CHECKBOX,
 										tooltip=[["Display tile attributes", sdlColorBlack, TTF_STYLE_NORMAL]])
@@ -860,12 +879,12 @@ def editEntityAttributes(control, gxEdit):
 
 	ids = [o.id for o in select]
 
-	if control.paramtype == const.PARAM_APPEARFLAG:
-		stage.pack.eve.modify(ids, appearflag=int(param))
-	elif control.paramtype == const.PARAM_DIRECTION:
-		stage.pack.eve.modify(ids, direction=int(param))
-	elif control.paramtype == const.PARAM_FLAG:
+	if control.paramtype == const.PARAM_FLAG:
 		stage.pack.eve.modify(ids, flag=int(param))
+	elif control.paramtype == const.PARAM_PARAM2:
+		stage.pack.eve.modify(ids, param2=int(param))
+	elif control.paramtype == const.PARAM_BITS:
+		stage.pack.eve.modify(ids, bits=int(param))
 
 	#stage.pack.eve.modify(ids, type2=int(param))
 
@@ -883,29 +902,29 @@ class EntityEditWindow(UIWindow):
 
 		self.selectedEntities = []
 
-		self.elements["textAppearShadow"] = UIText(6, 6, "AppearFlag:", sdlColorBlack, TTF_STYLE_NORMAL, self)
-		self.elements["textAppear"] = UIText(5, 5, "AppearFlag:", sdlColorYellow, TTF_STYLE_NORMAL, self)
-		self.elements["appearEdit"] = UITextInput(60, 5, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
-			paramtype=const.PARAM_APPEARFLAG)
-		self.elements["appearEdit"].onAction = editEntityAttributes
-
-		self.elements["textFlagShadow"] = UIText(6, 25, "Flag:", sdlColorBlack, TTF_STYLE_NORMAL, self)
-		self.elements["textFlag"] = UIText(5, 25, "Flag:", sdlColorYellow, TTF_STYLE_NORMAL, self)
-		self.elements["flagEdit"] = UITextInput(60, 25, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+		self.elements["textAppearShadow"] = UIText(6, 6, "Flag:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textAppear"] = UIText(5, 5, "Flag:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["flagEdit"] = UITextInput(60, 5, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
 			paramtype=const.PARAM_FLAG)
 		self.elements["flagEdit"].onAction = editEntityAttributes
 
-		self.elements["textDirShadow"] = UIText(6, 45, "Direction:", sdlColorBlack, TTF_STYLE_NORMAL, self)
-		self.elements["textDir"] = UIText(5, 45, "Direction:", sdlColorYellow, TTF_STYLE_NORMAL, self)
-		self.elements["dirEdit"] = UITextInput(60, 45, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
-			paramtype=const.PARAM_DIRECTION)
+		self.elements["textDirShadow"] = UIText(6, 25, "Param2:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textDir"] = UIText(5, 25, "Param2:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["dirEdit"] = UITextInput(60, 25, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			paramtype=const.PARAM_PARAM2)
 		self.elements["dirEdit"].onAction = editEntityAttributes
 
-		self.elements["textStrShadow"] = UIText(6, 65, "String:", sdlColorBlack, TTF_STYLE_NORMAL, self)
-		self.elements["textStr"] = UIText(5, 65, "String:", sdlColorYellow, TTF_STYLE_NORMAL, self)
-		self.elements["stringEdit"] = UITextInput(60, 65, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
-			paramtype=const.PARAM_STRING)
+		self.elements["textStrShadow"] = UIText(6, 45, "String:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textStr"] = UIText(5, 45, "String:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["stringEdit"] = UITextInput(60, 45, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
+			paramtype=const.PARAM_STRING, maxlen=15)
 		self.elements["stringEdit"].onAction = editEntityString
+
+		self.elements["textBitsShadow"] = UIText(6, 65, "Bits:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textBits"] = UIText(5, 65, "Bits:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["bitsEdit"] = UITextInput(60, 65, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			paramtype=const.PARAM_BITS)
+		self.elements["bitsEdit"].onAction = editEntityAttributes
 		#self.elements["buttonMinimize"] = UIButton(180, 4, 16, 16, self)
 		#self.elements["buttonMinimize"].onAction = minimizeButtonAction
 
@@ -1215,10 +1234,10 @@ class Interface:
 					else:
 						titleColor = sdlColorMagenta
 
-					#gxEdit.tooltipText.append([gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD])
+					gxEdit.tooltipText.append([gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD])
 					gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
 
-					#gxEdit.tooltipText.append(["Param: " + str(o.type2), sdlColorWhite, TTF_STYLE_NORMAL])
+					gxEdit.tooltipText.append(["Param2: " + str(o.param2), sdlColorWhite, TTF_STYLE_NORMAL])
 
 			x *= int(const.tileWidth2//2 * mag)
 			y *= int(const.tileWidth2//2 * mag)
@@ -1321,6 +1340,11 @@ class Interface:
 		renderer.copy(gSurfaces[SURF_COLOR_GREEN], dstrect=dstrect2)
 		renderer.copy(gSurfaces[SURF_COLOR_GREEN], dstrect=dstrect3)
 		renderer.copy(gSurfaces[SURF_COLOR_GREEN], dstrect=dstrect4)
+	
+	def drawBox2(self, renderer, rect, color):
+		sdl2.SDL_SetRenderDrawColor(renderer.sdlrenderer, *color, 255)
+		gDrawBoxRect.x,gDrawBoxRect.y,gDrawBoxRect.w,gDrawBoxRect.h = (*rect,)
+		sdl2.SDL_RenderDrawRect(renderer.sdlrenderer, gDrawBoxRect)
 
 	def renderMainBg(self, introAnimTimer, mouseover):
 		windowBg = gSurfaces[SURF_WINDOWBG]

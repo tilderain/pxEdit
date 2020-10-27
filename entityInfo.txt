@@ -1,122 +1,250 @@
-(000)@@
-(001) Explode@Regular explosion effect.@
-(002) CloudL@A large cloud.@
-(003) CloudS@A small cloud.@
-(004) Puff@Puff cloud (from your ship)@
-(005) Hanger@A spinning three-pronged enemy with an eye, launches upwards. The first enemy in the game.@
-(006) CloudGen@Generates big and small clouds from the top of the screen.@
-(007) Powerup@A plain powerup that launches from the bottom of the screen. Does not come with a spinner.@(Parameter: which powerup it is)
-(008) Climber@An enemy that swims up from the bottom of the screen.@
-(009) Kagome@Pivots in a circle. A kagome lattice.@
-(010) Unused?@@
-(011) Wing@Falls from the top of the screen and shoots periodically.@(Parameter: falls twice as fast if set)
-(012) WingCorpse@The body of a Wing.@
-(013) Bullet@A bullet.@(Parameter: Angle, in 1/256th of a circle. 0 = Right, 64 = Down, 128 = Left, 192 = Up, etc.)
-(014) BulletSlow@A slower bullet.@(Parameter: same as 013Bullet)
-(015) Boss1@Boss Wing@
-(016) Boss1Eye@@
-(017) Boss1BigEye@@
-(018) BulletLong@A long bullet.@(Parameter: direction to spawn in)
-(019) BGM@Switches song.@(Parameter: id of the song)
-(020) Asteroid_L@Large asteroid.@
-(021) Asteroid_S@Small asteroid.@
-(022) ScrollSpdSet@Sets the scroll speed.@(Parameter: speed)
-(023) Asteroid_SGravity@A small asteroid that falls down.@(Parameter: which direction it comes from.)
-(024) Hanger_Wave@A Hanger that moves in a sine wave.@
-(025) Hanger_Shoot@A hanger that comes up and shoots once.@(Parameter: lowers health and score if set.)
-(026) RockHugger@Flies up to the top. Comes with an asteroid.@(Parameter: which asteroid it is)
-(027) RHAsteroidL@The asteroid of a Rock Hugger.@
-(028) RHAsteroidS@The asteroid of a Rock Hugger.@
-(029) Bullet2?@@(Parameter: spawns lower if set)
-(030) Elka@A big square enemy that moves along the screen and shoots.@
-(031) Sodi@Comes down and shoots, then leaves.@
-(032) Boss2@Missile Tailor@
-(033) Boss2RocketSpawner@@
-(034) B2ExplosionSpawner?@@
-(035) B2Rocket@@(Parameter: what direction it will go in)
-(036) Boss2Eye@@
-(037) Star@Twinkle@(Parameter: the kind of star it is)
-(038) StarGen@Makes stars randomly.@
-(039) Elka2@An Elka that stays in place and explodes on death.@
-(040) GuxtFort@A ground unit that fires in three-round burst.@
-(041) CatEye@A ground unit that opens and shoots after a while.@(Parameter: how many seconds to wait after appearing)
-(042) Slider@Slides around. Starts shooting after a delay.@
-(043) Cycloid@Flies around the screen in a U shape.@(Parameter:todo)
-(044) Chester@Moves around in bursts, opening and closing.@
-(045) Bonus@A bonus that drops down slowly.@(Parameter: which bonus it is.)
-(046) BonusGen@Spawns an Ikachan bonus when two powerups are collected in quick succession.@(Parameter: makes it useless if set.)
-(047) CloudXL@A REALLY big cloud.@
-(048) Gimmick@Sleeps on the wall. Moves to the other side if shot.@(Parameter: direction)
-(049) Boss3@Three Holes@
-(050/62) PowerupHelper@@
-(051) B3Eye1?@@
-(052) B3Eye2?@@
-(053) B3Eye3?@@
-(054) B3BulletBlocker?@@
-(055) B3Target??@@
-(056) Checkpoint@@
-(057) Boss3TurretSpawner@@
-(058) B3Turret@@
-(059) Hanger_Soft@A hanger with one health.@(Parameter: turns it into a powerup spinner that doesn't work)
-(060) PowerupBox@A shootable ground powerup.@(Parameter: the powerup)
-(061) PowerupStatic@A plain ground powerup.@(Parameter:)
-(050/62) PowerupHelper@@
-(063) BulletWhite@A white bullet.@(Parameter: same as 013Bullet)
-(064) PowerupSpinner@A spinning powerup that launches up.@(Parameter:)
-(065) ClimberShoot@Digs up from under the ground, falls out and shoots.@
-(066) Tri@A strong unit that flies up diagonally, opens, then shoots.@
-(067) GuxtTank@A submarine that swims before shooting.@(Parameter: vertical offset)
-(068) MedusaEye@A strong ground unit that fires rapidly.@(Parameter: delay in half seconds before opening.)
-(069) GuxtMine@Ground unit that explodes on death.@
-(070) BlendyGen@Slow falling ball and chain.@(Parameter: position of the ball)
-(071) Blendy@@
-(072) Cycloid2@Spins around in a circle then flies towards the player.@
-(073) Cycloid2Gen@Creates 4 Cycloid2s in succession.@
-(074) PowerupHidden@A hidden powerup.@(Parameter: the powerup)
-(075) PowerupAsteroid@A powerup hidden in a spooky asteroid.@(Parameter: the powerup)
-(076) Boss4@Octopus@
-(077) @@
-(078) @@
-(079) @@
-(080) @@
-(081) SpaceAmeba@Like a chester, but fades into the background.@
-(082) @@
-(083) B4Bullet@@
-(084) Square@A rotating square that winds up and flies in a cardinal direction..@(Parameter: the direction to fly in.)
-(085) CloudDarkL@A large dark cloud.@
-(086) CloudDarkS@A small dark cloud.@
-(087) CloudDarkGen@Generates large and small dark clouds.@
-(088) MissilePot@Comes up slowly and fires a string of missiles.@
-(089) @@
-(090) Missile@The missile of a Missile Pot.@(Parameter: which direction to go in.)
-(091) BGRock@@(Parameter: rect?)
-(092) BGRockGen@Generates rocks in the background.@
-(093) DeleteRockDarkCloudGen@Removes rock and dark cloud generators.@
-(094) SandStamper@Hops along the ground.@(Parameter: how fast to stamp)
-(095) @@
-(096) Stamp@A stamp in the sand.@
-(097) Brick@A destroyable ground unit.@
-(098) BulletSquare@A menacing square bullet.@(Parameter: the angle)
-(099) BulletSquareGen@A ground unit that fires square bullets in the direction of the player.@
-(100) Boss5@Gas Turbine@(Parameter: affects spawn position of the laser by minsiscule amounts (% 256))
-(101) @@
-(102) B5Bullet@@(Parameter: angle)
-(103) @@
-(104) B5Laser@@(Parameter: angle)
-(105) B5LaserTrail@@
-(106) AzaBonusSpawner@Spawns an Azarashi dart bonus after 20 asteroids are killed.@
-(107) ToggleShadow@Puts a shadow under the ship. Used in stage 5.@(Parameter: enables shadow)
-(108) Boss6@Ogdobas@The zombie of Octopus.
-(109) @@
-(110) @@
-(111) B6Laser@@
-(112) @@
-(113) @@
-(114) B6Ball@@
-(115) B6Caret@@
-(116) CreditText@Text that pops in during the credits, in sequential order. Pauses the game for 50 frames.@
-(117) CreditReplace@Removes all entities of a certain type.@(Parameter: the entity id to remove)
-(118) CreditLoadImg@Changes the currently loaded enemy spritesheet.@(Parameter: the stage to switch to)
-(119) CPhoto@A photo of a boss that flies in from the side. Switches direction every other boss.@(Parameter: which boss)
-(120) CreditGimmick@The Gimmick in the credits that opens its eye. Comes with a perch.@
-(121) BonusHidden@A hidden bonus that peeps when shot.@(Parameter: the bonus.)
+(000) -@@
+(001) Empty@@
+(002) Trush Box@@
+(003) Event@@(p2: 0=stop 1=mv-h 2=mv-v 3=mv-H 4=mv-V 10=mem block)
+(004) Anchor@@( <swtN:2=up p2:speed )
+(005) Shutter@@(p2: parts / Flag: On=Close / Name: L=left or U,R,D )
+(006) Long Weed@@
+(007) Kankisen 1@@
+(008) Trunk@@
+(009) Test@@
+(010) Block Generator@@
+(011) Kurobo-@@
+(012) Snow Trunk@@
+(013) Cat & Frog Step@@
+(014) Gearshift@@
+(015) Timer Kun@@
+(016) Kajiya@@
+(017) Endless Ice@@
+(018) MiniSpiral@@
+(019) Elevator Door@@(p2: 10=stop)
+(020) BigPress@@
+(021) Train@@
+(022) Drop@@
+(023) Green Fish@@
+(024) Shield Plant@@
+(025) Kani mini@@
+(026) Relay@@
+(027) toL2@@
+(028) toU2@@
+(029) toR2@@
+(030) toD2@@
+(031) FirePlant@@
+(032) LadderBox@@
+(033) Debug Link@@
+(034) ComboCue@@
+(035) Kinko@@
+(036) The Tire@@
+(037) Doro Hole@@
+(038) Heart@@
+(039) Doro Jump@@
+(040) Lift V3@@
+(041) Ice Spike@@
+(042) Camp Gate@@
+(043) Chibi Uzo@@
+(044) Uzo Void layer 0@@
+(045) Tar@@
+(046) Block Eater@@
+(047) Uzo Void layer 1@@
+(048) HiddenChest@@
+(049) Call Missile Bird 7@@
+(050) Trunk Mini@@
+(051) Kani 7@@
+(052) Kani Chibi 7@@
+(053) Phone@@
+(054) Nurse@@
+(055) Fire bubble Set@@
+(056) Mole@@
+(057) Uzo Void layer 2@@
+(058) comic balloon@@
+(059) Rolling Fiber@@
+(060) Barbwire@@
+(061) Domino@@
+(062) Explain@@
+(063) Door A@@
+(064) Walking Black@@
+(065) Focus Control@@(0=Nrml V 1=UnderMPC)
+(066) Uzo Flame@@(prm2: 0 = left 1 = top 2 = right 3 = bottom)
+(067) Creeper@@
+(068) Shacho Act stage 7 office@@
+(069) Room Locker@@
+(070) Bent Plate@@
+(071) Boss Desk@@
+(072) Barricade@@
+(073) Uzo Tank@@
+(074) Elevator 00@@
+(075) Kani@@
+(076) Tokobushi@@
+(077) Anemone@@
+(078) to Back@@
+(079) Position Half Up@@
+(080) Door Vertical@@
+(081) Line Censor@@
+(082) Route Arrow@@
+(083) Fly Wave@@
+(084) Spin@@
+(085) Altar@@
+(086) Call Small@@
+(087) Snow Setter@@
+(088) Icicle@@
+(089) Uzo Slime@@
+(090) Goldrush@@
+(091) Ebi Flower 7@@
+(092) Nikubae@@
+(093) Uzo Gray (layer0)@@
+(094) 4 Boss Barricade.@@
+(095) Quaker@@
+(096) Flag Mine@@
+(097) Uzo Red@@
+(098) Saucer@@
+(099) Uzo Over Fence@@
+(100) Fluo Lamp@@
+(101) Gravity Block 3@@
+(102) Uzo Chibi Red@@
+(103) Uzo Gray (layer2)@@
+(104) Sparker@@
+(105) Bacteria@@
+(106) Digesty@@
+(107) Roof Worm@@
+(108) Big Worm@@
+(109) Silhoette@@
+(110) Zombie@@
+(111) Leather@@
+(112) White Setter@@
+(113) Egg Worm@@(prm2: 0 = upper left 1 = upper right 2 = lower left 3 = lower right)
+(114) Stone Gate@@(swt 1:key coming, 2:keep close, 3:to open 4:key short)
+(115) Frog Plant@@
+(116) Weak Weed@@
+(117) Ebi Floser@@
+(118) Bubble 1UP@@
+(119) Shacho A@@
+(120) Frozen Fish@@
+(121) Uzo Elec@@
+(122) Flower Vase@@
+(123) Gray Spiral@@
+(124) Time Attack Display@@
+(125) Metalmushi@@
+(126) The Bar@@
+(127) Gravity Ice@@
+(128) EarthFly@@
+(129) Walking Moss@@
+(130) Mob Stand@@
+(131) Spike Plant@@
+(132) Sidewinder@@
+(133) Katanakaji@@
+(134) Chest2@@
+(135) Walk Plant@@
+(136) Blue Fish@@
+(137) Dragon Flower@@
+(138) Set Birds@@( 0:room 1:tree 2:two birds )
+(139) Fly Evade@@
+(140) Gravity Block 2@@
+(141) Doronko@@
+(142) Tumbleweed@@
+(143) New Arms@@
+(144) Bat ceiling@@
+(145) Strong Box@@
+(146) Chandelier@@
+(147) Bubble Lift@@
+(148) Call Bats@@
+(149) Booster@@
+(150) Bat Passing@@
+(151) Orange Fish@@
+(152) Echinus@@
+(153) KillerSensor@@
+(154) Moving Box Horizontal@@
+(155) BomBox@@
+(156) Edge Coin (s)@@
+(157) Edge Medal@@
+(158) Fall Light@@
+(159) Intro@@
+(160) Uzouzo@@
+(161) Office Fly@@
+(162) Sister@@
+(163) Sasuke@@
+(164) Hanger@@
+(165) Rolling Snow@@
+(166) Ball Flyer@@(prm2: I'm going to make you move around.)
+(167) Rolling Big@@
+(168) Refrigerator@@
+(169) Ice Hillock@@
+(170) Bear Core@@
+(171) Animal Bone@@
+(172) Kankisen 2@@
+(173) Carton Box L@@
+(174) Carton Box s@@
+(175) Broken Plant@@
+(176) Phone Dark@@
+(177) Core Debug@@
+(178) Spike Plant Fly@@
+(179) Call Glider Bird (Fire)@@
+(180) Spike Plant Side.@@
+(181) Doroman@@
+(182) Doronko Turn@@
+(183) Vertical Beam@@
+(184) Moving Box Vertical@@
+(185) Propeller Fish@@
+(186) Hopper@@
+(187) Zundou Lift@@
+(188) Slip Lift@@
+(189) Maruta Lift@@
+(190) Sliding Block@@
+(191) Frost Generic@@
+(192) zan Bito bag@@1=walk, 2~8=walk(cnt), 9=run, 10=run(swt)
+(193) Wind Hopper@@
+(194) zan Bito type@@
+(195) Hazy Worm@@
+(196) Pink Hopper@@
+(197) Rolling Spark@@(prm2: 1=slow 3=fast)
+(198) Spike Plant2@@
+(199) Puddie Lift@@
+(200) Walking Box@@
+(201) Steel Spiral@@
+(202) Junk Hopper@@
+(203) Togetoge@@
+(204) Masamune@@
+(205) Datsu@@
+(206) Carry(color)@@
+(207) Sheaf(color)@@
+(208) Seagull@@
+(209) Beach Mole@@
+(210) Sea Dragon@@
+(211) Garbage Bag@@
+(212) Tarai@@
+(213) za Crew@@1=run, 2=walk(slow), 3=talk, 4=walk, 6=nod, 10=run(swt)
+(214) Togemushi@@
+(215) Seagull Fly@@
+(216) za Nakai@@
+(217) Position@@(prm2: 3 = ypos-3)
+(218) Oshima@@
+(219) Ashidaka@@
+(220) Puti Step@@
+(221) Dark Ameba@@
+(222) Side Snail@@
+(223) Tower Cloud@@
+(224) Orange Fish 9@@
+(225) Umineko@@
+(226) Entrance@@
+(227) Spider@@
+(228) Weak Web@@
+(229) Hinotama@@
+(230) Cabinet Monster@@
+(231) Step Books@@
+(232) Step Desk@@
+(233) Step Cabinet1@@
+(234) Step Cabinet2@@
+(235) Circle Kurono@@
+(236) Sky Kurono@@
+(237) Sky Kurono cloud 0@@
+(238) Sky Kurono cloud 1@@
+(239) Random Flash.@@
+(240) Work Books(color)@@
+(241) effect Smokes@@
+(242) effect Dust@@
+(243) Hidden Sheaf(color)@@
+(244) Work Books(gray)@@
+(245) Carry(gray)@@
+(246) Sheaf(gray)@@
+(247) Hidden Sheaf(gray)@@
+(248) Uzo(car3)@@
+(249) Sky Kurono cloud 2@@

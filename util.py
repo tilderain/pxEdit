@@ -11,6 +11,10 @@ def getMouseState():
 
 	return mouse
 
+def getKeyState():
+	keystate = sdl2.SDL_GetKeyboardState(None)
+	return keystate
+
 def inBoundingBox(x1, y1, x2, y2, w, h):
 	if x1 >= x2 and y1 >= y2 \
 		and x1 <= x2 + w and y1 <= y2 + h:

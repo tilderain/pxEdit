@@ -19,6 +19,7 @@ import sdl2.ext
 from sdl2.sdlttf import *
 
 import multi
+import util
 
 #You must agree to the terms of use to continue.
 #Terms of Use
@@ -267,6 +268,7 @@ class Editor:
 		self.currentEntity = 0
 		self.currentEditMode = const.EDIT_TILE
 		self.currentLayer = 0
+		self.visibleLayers = [True, True, True, True]
 
 		self.currentTilePaintMode = None
 
@@ -318,6 +320,7 @@ class Editor:
 		self.server_thread = None
 
 		#ip, name, color? curstage:, mousexy pos, ping, last response time
+		# this is a dict however numbers are names
 		self.players = {}
 		#unique id count of connected clients
 		#just like in source the host is playerId 1
@@ -515,7 +518,7 @@ def main():
 	#gxEdit.elements.append(interface.UIWindow(300, 300, 260, 272, const.WINDOW_TILEPALETTE))
 
 	gxEdit.elements["tilePalette"] = interface.TilePaletteWindow(400, 300, 256, 280, const.WINDOW_TILEPALETTE)
-	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(400, 0, 256, 156, const.WINDOW_ENTITYPALETTE)
+	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(400, 0, 256, 280, const.WINDOW_ENTITYPALETTE)
 
 	gxEdit.elements["toolsWindow"] = interface.ToolsWindow(400, 200, 190, 86, const.WINDOW_TOOLS)
 
@@ -534,8 +537,10 @@ def main():
 		gui.renderEditorBg()
 		gui.renderBgColor(gxEdit, curStage)
 		for i in reversed(range(3)):
-			gui.renderTiles(gxEdit, curStage, i)
-		gui.renderEntities(gxEdit, curStage)
+			if gxEdit.visibleLayers[i]:
+				gui.renderTiles(gxEdit, curStage, i)
+		if gxEdit.visibleLayers[3] or gxEdit.currentEditMode == const.EDIT_ENTITY:
+			gui.renderEntities(gxEdit, curStage)
 	
 		gui.renderEntityPalette(gxEdit, curStage)
 		gui.renderTilePalette(gxEdit, curStage)
@@ -581,9 +586,14 @@ def main():
 			multiwindowstring = "**Connected**"
 
 		#set windowname
-		interface.gWindow.title = windowName + " [" + "map" + str(gxEdit.curStage+1) + "]" + " " + multiwindowstring
+		interface.gWindow.title = windowName + " [" + "" + str(curStage.stageName) + "]" + " " + multiwindowstring
 		
 		for event in events:
+			#TODO: really really fix this
+			if gxEdit.focussedElem:
+				if not gxEdit.focussedElem.parent.visible:
+					gxEdit.focussedElem = None
+
 			if event.type == sdl2.SDL_QUIT:
 				running = False
 				break
@@ -603,6 +613,7 @@ def main():
 				mouseHeld = True
 				input.runMouse1(gxEdit, curStage, event.button)
 				input.runMouse2(gxEdit, curStage, event.button)
+				input.runMouse3(gxEdit, curStage, event.button)
 			elif event.type == sdl2.SDL_MOUSEBUTTONUP:
 				input.runMouseUp(gxEdit, curStage, event.button)
 				mouseHeld = False
@@ -683,7 +694,7 @@ def main():
 
 		curStage = gxEdit.stages[gxEdit.curStage]
 		input.runMouseDrag(gxEdit, curStage)
-		if mouseHeld: runTileSelection(curStage)
+		runTileSelection(curStage)
 
 		gui.fill()
 		if (gxEdit.saveTimer <= 0):

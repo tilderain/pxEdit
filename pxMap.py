@@ -12,13 +12,13 @@ def readInt(stream, length):
 	return int.from_bytes(stream.read(length), byteorder="little")
 
 class PxPackUnit:
-	def __init__(self, flag, code_char, direction, x, y, appearflag, string, id):
-		self.flag = flag
+	def __init__(self, bits, code_char, param2, x, y, flag, string, id):
+		self.bits = bits
 		self.type1 = code_char
-		self.direction = direction
+		self.param2 = param2
 		self.x = x
 		self.y = y
-		self.appearflag = appearflag
+		self.flag = flag
 		self.string = string
 		self.id = id
 
@@ -40,16 +40,16 @@ class PxEve:
 					o.x += xoffset
 					o.y += yoffset
 
-	def modify(self, ids, x=None, y=None, code_char=None, flag=None, direction=None, appearflag=None, string=None):
+	def modify(self, ids, x=None, y=None, code_char=None, bits=None, param2=None, flag=None, string=None):
 		for num in ids:
 			for o in self.units:
 				if num == o.id:
 					if x != None: o.x = x
 					if y != None: o.y = y
 					if code_char != None: o.type1 = code_char
-					if flag != None: o.flag = flag
-					if direction != None: o.direction = direction
-					if appearflag != None: o.appearflag = appearflag
+					if bits != None: o.bits = bits
+					if param2 != None: o.param2 = param2
+					if flag != None: o.code_flag = flag
 					if string != None: o.string = string
 					break
 	def remove(self, ids):
@@ -59,8 +59,8 @@ class PxEve:
 					self.units.remove(o)
 					break
 			
-	def add(self, x, y, code_char, flag=0, direction=0, appearflag=0, string=""):
-		o = PxPackUnit(flag, code_char, direction, x, y, appearflag, string, self._count)
+	def add(self, x, y, code_char, bits=0, param2=0, flag=0, string=""):
+		o = PxPackUnit(bits, code_char, param2, x, y, flag, string, self._count)
 		self._count += 1
 		self.units.append(o)
 		return o
@@ -70,17 +70,20 @@ class PxPackLayer:
 	def __init__(self):
 
 		self.partsName = None
-		self.scrolltype = None
-		self.visibility = None
+		self.scrolltype = 0
+		self.visibility = 0
 
-		self.width = None
-		self.height = None
-		self.type = None
+		#max for an attr is 16*16
+		self.width = 16
+		self.height = 16
+		self.type = 0
 
 
-		self.tiles = []
+		self.tiles = [0 * self.width * self.height]
 	
 	def loadFromPack(self, stream):
+		self.tiles = []
+
 		stream.read(8) #PXMAP01
 		self.width = readInt(stream, 2)
 		self.height = readInt(stream, 2)
@@ -180,16 +183,16 @@ class PxPack:
 		
 		entityCount = readInt(stream, 2)
 		for i in range(entityCount):
-			flag = readInt(stream, 1)
+			bits = readInt(stream, 1)
 			code_char = readInt(stream, 1)
-			direction = readInt(stream, 1)
+			param2 = readInt(stream, 1)
 
 			x = readInt(stream, 2)
 			y = readInt(stream, 2)
-			appearflag = readInt(stream, 2)
+			flag = readInt(stream, 2)
 
 			string = readPixelString(stream)
-			self.eve.units.append(PxPackUnit(flag,code_char,direction,x,y,appearflag,string, self.eve._count))
+			self.eve.units.append(PxPackUnit(bits,code_char,param2,x,y,flag,string, self.eve._count))
 			self.eve._count += 1
 
 		stream.close()

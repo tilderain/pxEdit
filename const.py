@@ -19,7 +19,7 @@ PAINT_COPY = 4
 #used to determine if they crash the game or not
 entityCrashIds = [12, 16, 17, 33, 34, 36, 50, 51, 52, 53, 55, 57, 62, 71, 77, 78, 79, 80, 82, 89, 95, 101, 103, 109, 110, 112, 113]
 #total entity ids
-entityFuncCount = 122
+entityFuncCount = 250
 
 #for a green title color
 entityGoodIds = [1, 2, 3, 4, 7, 37, 45, 47, 60, 61, 64, 74, 75, 91, 92, 96, 116, 119, 121]
@@ -35,10 +35,10 @@ WINDOW_TOOLTIP = 4
 WINDOW_ENTITYEDIT = 5
 
 PARAM_TYPE1 = 0
-PARAM_FLAG = 1
-PARAM_DIRECTION = 2
+PARAM_BITS = 1
+PARAM_PARAM2 = 2
 PARAM_STRING = 3
-PARAM_APPEARFLAG = 4
+PARAM_FLAG = 4
 
 STYLE_TOOLTIP_BLACK = 0
 STYLE_TOOLTIP_YELLOW = 1
