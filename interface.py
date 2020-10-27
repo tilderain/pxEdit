@@ -1039,7 +1039,7 @@ class Interface:
                           0x0000FF00,           
                           0x000000FF))   
 
-		gSurfaces[SURF_COLOR_WHITE_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(255,255,255, 100), size=(32, 32),
+		gSurfaces[SURF_COLOR_WHITE_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(255,255,255, 48), size=(32, 32),
            masks=(0xFF000000,           
                   0x00FF0000,           
                   0x0000FF00,           
@@ -1212,6 +1212,17 @@ class Interface:
 			w *= int(const.tileWidth * mag)
 			h *= int(const.tileWidth * mag)
 
+			#tile preview
+			#TODO: how will this work with copy?
+			if gxEdit.showTilePreview:
+				sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 64)
+
+				prtrect = (start[0]*const.tileWidth, start[1]*const.tileWidth,
+					(end[0] - start[0] + 1) * const.tileWidth, (end[1] - start[1] + 1) * const.tileWidth)
+				self.renderer.copy(stage.parts[gxEdit.currentLayer], srcrect=prtrect, dstrect=(x,y,w,h))
+
+				sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 255)
+
 		elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 			if gxEdit.draggingEntities: return
 			x = int(mouse.x // (const.tileWidth2//2 * mag)) 
@@ -1245,8 +1256,9 @@ class Interface:
 			w = int(const.tileWidth2//2 * mag)
 			h = int(const.tileWidth2//2 * mag)
 
+		sdl2.SDL_SetTextureColorMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, *gxEdit.tileHighlightColor)
 		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
-
+		
 
 	def renderTilePalette(self, gxEdit, stage):
 		#TODO: placeholder

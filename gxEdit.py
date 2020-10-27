@@ -301,6 +301,9 @@ class Editor:
 		#TODO: toggle setting to display bg parallax as ingame
 		self.parallax = True
 
+		self.showTilePreview = True
+		self.tileHighlightColor = [0, 0, 255]
+
 		self.backupLimit = 5
 		self.backupMinutes = 5
 		self.lastBackupTick = 0
