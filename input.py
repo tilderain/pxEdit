@@ -200,7 +200,10 @@ def runMouseDrag(gxEdit, stage):
 
 		if stage.lastTileEdit == [x, y]:
 			return
+		
 		stage.lastTileEdit = [x, y]
+		if gxEdit.tileHighlightAnimate:
+			gxEdit.tileHighlightTimer = 120
 
 		startX = stage.selectedTilesStart[0]
 		startY = stage.selectedTilesStart[1]
@@ -305,14 +308,33 @@ def runMouseDrag(gxEdit, stage):
 					if isinstance(e, interface.UITextInput):
 						e.text = ""
 						e.placeholderText = "\n\n\n\n"
-
-						#TODO: half checked state
-						for i in range(1, 9):
-							elem.elements["butCheckBits" + str(i)].state = interface.BUTTON_STATE_NORMAL
+				elem.elements["textHexBitsS"].text = ""
+				elem.elements["textHexBits"].text = ""
+				bit = 1
+				for i in range(1, 9):
+					foundCount = 0
+					for o in selectedEntities:
+						if o.bits & bit:
+							foundCount += 1
+					if foundCount == len(selectedEntities):
+						elem.elements["butCheckBits" + str(i)].state = interface.BUTTON_STATE_ACTIVE
+						elem.elements["textHexBitsS"].text += "1"
+						elem.elements["textHexBits"].text += "1"
+					elif foundCount >= 1:
+						elem.elements["butCheckBits" + str(i)].state = interface.BUTTON_STATE_CLICKED
+						elem.elements["textHexBitsS"].text += "?"
+						elem.elements["textHexBits"].text += "?"
+					else:
+						elem.elements["butCheckBits" + str(i)].state = interface.BUTTON_STATE_NORMAL
+						elem.elements["textHexBitsS"].text += "0"
+						elem.elements["textHexBits"].text += "0"
+					bit *= 2
+				elem.elements["textHexBitsS"].text = elem.elements["textHexBitsS"].text[::-1]
+				elem.elements["textHexBits"].text = elem.elements["textHexBits"].text[::-1]
 
 			elem.visible = True
-			elem.x = int((selectedEntities[0].x - (stage.hscroll*const.ENTITY_SCALE))* (const.tileWidth2 // 2) * mag + const.tileWidth2*2)
-			elem.y = int((selectedEntities[0].y - (stage.scroll*const.ENTITY_SCALE))* (const.tileWidth2 // 2) * mag)
+			elem.x = mouse.x - elem.w - 8
+			elem.y = mouse.y - elem.h//2
 
 			#TODO: scroll into view for expanded entity list
 			gxEdit.currentEntity = selectedEntities[0].type1

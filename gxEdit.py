@@ -304,7 +304,7 @@ class Editor:
 		self.showTilePreview = True
 		self.tileHighlightColor = [80, 180, 255]
 
-		self.tileHighLightAnimate = True
+		self.tileHighlightAnimate = True
 		self.tileHighlightTimer = 0
 		self.tileHighlightDir = 0
 

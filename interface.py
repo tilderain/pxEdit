@@ -129,8 +129,9 @@ rectsButtonMinimize = [rectButtonMinimizeNormal, None, rectButtonMinimizeClicked
 
 rectButtonCheckbox = (80, 0, 16, 12)
 rectButtonCheckboxChecked = (96, 0, 16, 12)
+rectButtonCheckboxHalfChecked = (112, 0, 16, 12)
 
-rectsButtonCheckbox = rectButtonCheckbox, None, rectButtonCheckboxChecked, rectButtonCheckboxChecked, None
+rectsButtonCheckbox = rectButtonCheckbox, None, rectButtonCheckboxHalfChecked, rectButtonCheckboxChecked, None
 
 
 #y+=16
@@ -1305,7 +1306,7 @@ class Interface:
 		sdl2.SDL_SetTextureColorMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, *gxEdit.tileHighlightColor)
 		sdl2.SDL_SetTextureAlphaMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, gxEdit.tileHighlightTimer)
 
-		if gxEdit.tileHighLightAnimate:
+		if gxEdit.tileHighlightAnimate:
 			gxEdit.tileHighlightTimer+= 1 if gxEdit.tileHighlightDir else -1
 			if gxEdit.tileHighlightTimer*2 > 90*2:
 				gxEdit.tileHighlightDir = 0
