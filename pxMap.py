@@ -3,7 +3,7 @@ import mmap
 from ctypes import c_short
 
 def writePixelString(fp, string):
-	length = len(string)
+	length = len(string.encode.("shift-jis"))
 	fp.write(struct.pack("<B", length))
 	fp.write(bytes(string.encode("shift-jis")))
 
@@ -16,7 +16,7 @@ def readPixelString(stream):
 def readInt(stream, length):
 	return int.from_bytes(stream.read(length), byteorder="little")
 
-pxmapMagic = "PXMAP01\0"
+pxmapMagic = "pxMAP01\0"
 
 class PxPackUnit:
 	def __init__(self, bits, code_char, param2, x, y, flag, string, id):
