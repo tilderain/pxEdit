@@ -550,6 +550,10 @@ def main():
 		if gxEdit.visibleLayers[4]:
 			gui.renderTileAttr(gxEdit, curStage)
 
+		gui.renderEntitySelectionBox(gxEdit, curStage)
+		gui.renderPlayers(gxEdit, curStage)
+		gui.renderTilePreview(gxEdit, curStage)
+
 		if gxEdit.visibleLayers[3] or gxEdit.currentEditMode == const.EDIT_ENTITY:
 			gui.renderEntities(gxEdit, curStage)
 	

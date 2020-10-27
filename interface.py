@@ -1143,50 +1143,102 @@ class Interface:
 
 	def renderEntityPalette(self, gxEdit, stage):
 		return
+	
+	def setMapEntityTooltip(self, gxEdit, stage, x, y):
+		gxEdit.tooltipText = []
+		for o in stage.pack.eve.units:
+			#TODO: multiple entities
+			#TODO: highlight hovered in picker
+			if o.x == x + stage.hscroll*const.ENTITY_SCALE and o.y == y + stage.scroll*const.ENTITY_SCALE:
+				index = o.type1
 
+				titleColor, descColor, paramColor = getEntityColors(index)
 
-	def renderTiles(self, gxEdit, stage, layerNo):
-		#TODO: this needs to be split up
-		for bit in gxEdit.tileRenderQueue:
-			stg = gxEdit.stages[bit[0]]
-			for pos, tile in bit[1]:
-				stg.renderTileToSurface(pos[0], pos[1], tile[0],
-											tile[1], gxEdit.currentLayer)
+				gxEdit.tooltipText.append([gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD])
+				gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
 
-		if not stage.surfaces[layerNo]: return
-		
-		gxEdit.tileRenderQueue = []
+				if gxEdit.elements["entEdit"].visible:
+					if gxEdit.entityInfo[index][2] != "":
+						gxEdit.tooltipText.append([gxEdit.entityInfo[index][2], paramColor, TTF_STYLE_NORMAL])
 
-		map = stage.pack.layers[layerNo]
-		mag = gxEdit.magnification
+				gxEdit.tooltipText.append(["Param2: " + str(o.param2), sdlColorWhite, TTF_STYLE_NORMAL])
 
-		srcx = int(stage.hscroll * const.tileWidth)
-		srcy = int(stage.scroll * const.tileWidth)
+	def renderTilePreview(self, gxEdit, stage):
 
-		sizex = min(gWindowWidth*max(1, int(1/gxEdit.magnification)), stage.surfaces[layerNo].size[0], stage.surfaces[layerNo].size[0] - srcx)
-		sizey = min(gWindowHeight*max(1, int(1/gxEdit.magnification)), stage.surfaces[layerNo].size[1], stage.surfaces[layerNo].size[1] - srcy)
-
-		srcrect = (srcx, srcy, sizex, sizey)
-		dstrect = (0, 0, int(sizex*mag), int(sizey*mag))
-
-		self.renderer.copy(stage.surfaces[layerNo].texture, srcrect=srcrect, dstrect=dstrect)
-
-		#TODO: fix this
 		mouse = util.getMouseState()
+		mag = gxEdit.magnification
+		map = stage.pack.layers[gxEdit.currentLayer]
 
-		if gxEdit.selectionBoxStart != [-1, -1]:
-			x1 = gxEdit.selectionBoxStart[0] -  int(stage.hscroll * const.tileWidth * mag)
-			y1 = gxEdit.selectionBoxStart[1] -  int(stage.scroll * const.tileWidth * mag)
-			x2 = gxEdit.selectionBoxEnd[0] -  int(stage.hscroll * const.tileWidth * mag)
-			y2 = gxEdit.selectionBoxEnd[1] -  int(stage.scroll * const.tileWidth * mag)
-			
-			if x1 > x2: x1, x2 = x2, x1
-			if y1 > y2: y1, y2 = y2, y1
-			
-			self.drawBox(self.renderer, SURF_SDLCOLOR_CYAN, x1, y1, 
-														x2 - x1, 
-														y2 - y1)
-															
+		if gxEdit.currentEditMode == const.EDIT_TILE:
+			x = int(mouse.x // (const.tileWidth * mag))
+			y = int(mouse.y // (const.tileWidth * mag))
+
+			if x >= map.width or y >= map.height: return
+
+			start = stage.selectedTilesStart[:]
+			end = stage.selectedTilesEnd[:]
+
+			negX = negY = False
+			if start[0] > end[0]:
+				start[0], end[0] = end[0], start[0]
+				negX = True
+			if end[1] < start[1]:
+				start[1], end[1] = end[1], start[1]
+				negY = True
+
+			w = end[0] - start[0] + 1
+			h = end[1] - start[1] + 1
+
+			if negX: x -= w - 1
+			if negY: y -= h - 1
+
+			x *= int(const.tileWidth * mag)
+			y *= int(const.tileWidth * mag)
+
+			w *= int(const.tileWidth * mag)
+			h *= int(const.tileWidth * mag)
+
+			#tile preview
+			#TODO: how will this work with copy?
+			if gxEdit.showTilePreview:
+				sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 128)
+
+				prtrect = (start[0]*const.tileWidth, start[1]*const.tileWidth,
+					(end[0] - start[0] + 1) * const.tileWidth, (end[1] - start[1] + 1) * const.tileWidth)
+				self.renderer.copy(stage.parts[gxEdit.currentLayer], srcrect=prtrect, dstrect=(x,y,w,h))
+
+				sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 255)
+		elif gxEdit.currentEditMode == const.EDIT_ENTITY:
+			if gxEdit.draggingEntities: return
+			x = int(mouse.x // (const.tileWidth2//2 * mag)) 
+			y = int(mouse.y // (const.tileWidth2//2 * mag))
+
+			if x >= map.width*const.ENTITY_SCALE or y >= map.height*const.ENTITY_SCALE: return
+
+			self.setMapEntityTooltip(gxEdit, stage, x, y)
+
+			x *= int(const.tileWidth2//2 * mag)
+			y *= int(const.tileWidth2//2 * mag)
+
+			w = int(const.tileWidth2//2 * mag)
+			h = int(const.tileWidth2//2 * mag)
+
+		sdl2.SDL_SetTextureColorMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, *gxEdit.tileHighlightColor)
+		sdl2.SDL_SetTextureAlphaMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, gxEdit.tileHighlightTimer)
+
+		if gxEdit.tileHighlightAnimate:
+			gxEdit.tileHighlightTimer+= 2 if gxEdit.tileHighlightDir else -2
+			if gxEdit.tileHighlightTimer*2 > 90*2:
+				gxEdit.tileHighlightDir = 0
+			if gxEdit.tileHighlightTimer <= 0:
+				gxEdit.tileHighlightDir = 1
+		else:
+			gxEdit.tileHighlightTimer = 48*2
+		
+		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
+
+		
+	def renderPlayers(self, gxEdit, stage):
 		for _, player in gxEdit.players.items():
 			if "mousepos" not in player: continue
 			if "curStage" not in player: continue
@@ -1257,90 +1309,47 @@ class Interface:
 			renderText(player["name"], sdlColorBlack, TTF_STYLE_NORMAL, x + 9, y + 1)
 			renderText(player["name"], sdlColorWhite, TTF_STYLE_NORMAL, x + 8, y)
 
-		if gxEdit.currentEditMode == const.EDIT_TILE:
-			x = int(mouse.x // (const.tileWidth * mag))
-			y = int(mouse.y // (const.tileWidth * mag))
+	def renderEntitySelectionBox(self, gxEdit, stage):
+		mag = gxEdit.magnification
+		if gxEdit.selectionBoxStart != [-1, -1]:
+			x1 = gxEdit.selectionBoxStart[0] -  int(stage.hscroll * const.tileWidth * mag)
+			y1 = gxEdit.selectionBoxStart[1] -  int(stage.scroll * const.tileWidth * mag)
+			x2 = gxEdit.selectionBoxEnd[0] -  int(stage.hscroll * const.tileWidth * mag)
+			y2 = gxEdit.selectionBoxEnd[1] -  int(stage.scroll * const.tileWidth * mag)
+			
+			if x1 > x2: x1, x2 = x2, x1
+			if y1 > y2: y1, y2 = y2, y1
+			
+			self.drawBox(self.renderer, SURF_SDLCOLOR_CYAN, x1, y1, 
+														x2 - x1, 
+														y2 - y1)
 
-			if x >= map.width or y >= map.height: return
+	def renderTiles(self, gxEdit, stage, layerNo):
+		#TODO: this needs to be split up
+		for bit in gxEdit.tileRenderQueue:
+			stg = gxEdit.stages[bit[0]]
+			for pos, tile in bit[1]:
+				stg.renderTileToSurface(pos[0], pos[1], tile[0],
+											tile[1], gxEdit.currentLayer)
 
-			start = stage.selectedTilesStart[:]
-			end = stage.selectedTilesEnd[:]
-
-			negX = negY = False
-			if start[0] > end[0]:
-				start[0], end[0] = end[0], start[0]
-				negX = True
-			if end[1] < start[1]:
-				start[1], end[1] = end[1], start[1]
-				negY = True
-
-			w = end[0] - start[0] + 1
-			h = end[1] - start[1] + 1
-
-			if negX: x -= w - 1
-			if negY: y -= h - 1
-
-			x *= int(const.tileWidth * mag)
-			y *= int(const.tileWidth * mag)
-
-			w *= int(const.tileWidth * mag)
-			h *= int(const.tileWidth * mag)
-
-			#tile preview
-			#TODO: how will this work with copy?
-			if gxEdit.showTilePreview:
-				sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 64)
-
-				prtrect = (start[0]*const.tileWidth, start[1]*const.tileWidth,
-					(end[0] - start[0] + 1) * const.tileWidth, (end[1] - start[1] + 1) * const.tileWidth)
-				self.renderer.copy(stage.parts[gxEdit.currentLayer], srcrect=prtrect, dstrect=(x,y,w,h))
-
-				sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 255)
-
-		elif gxEdit.currentEditMode == const.EDIT_ENTITY:
-			if gxEdit.draggingEntities: return
-			x = int(mouse.x // (const.tileWidth2//2 * mag)) 
-			y = int(mouse.y // (const.tileWidth2//2 * mag))
-
-			if x >= map.width*const.ENTITY_SCALE or y >= map.height*const.ENTITY_SCALE: return
-
-			gxEdit.tooltipText = []
-			for o in stage.pack.eve.units:
-				#TODO: multiple entities
-				#TODO: highlight hovered in picker
-				if o.x == x + stage.hscroll*const.ENTITY_SCALE and o.y == y + stage.scroll*const.ENTITY_SCALE:
-					index = o.type1
-
-					titleColor, descColor, paramColor = getEntityColors(index)
-
-					gxEdit.tooltipText.append([gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD])
-					gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
-
-					if gxEdit.elements["entEdit"].visible:
-						if gxEdit.entityInfo[index][2] != "":
-							gxEdit.tooltipText.append([gxEdit.entityInfo[index][2], paramColor, TTF_STYLE_NORMAL])
-
-					gxEdit.tooltipText.append(["Param2: " + str(o.param2), sdlColorWhite, TTF_STYLE_NORMAL])
-
-			x *= int(const.tileWidth2//2 * mag)
-			y *= int(const.tileWidth2//2 * mag)
-
-			w = int(const.tileWidth2//2 * mag)
-			h = int(const.tileWidth2//2 * mag)
-
-		sdl2.SDL_SetTextureColorMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, *gxEdit.tileHighlightColor)
-		sdl2.SDL_SetTextureAlphaMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, gxEdit.tileHighlightTimer)
-
-		if gxEdit.tileHighlightAnimate:
-			gxEdit.tileHighlightTimer+= 1 if gxEdit.tileHighlightDir else -1
-			if gxEdit.tileHighlightTimer*2 > 90*2:
-				gxEdit.tileHighlightDir = 0
-			if gxEdit.tileHighlightTimer <= 0:
-				gxEdit.tileHighlightDir = 1
-		else:
-			gxEdit.tileHighlightTimer = 48
+		if not stage.surfaces[layerNo]: return
 		
-		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
+		gxEdit.tileRenderQueue = []
+
+		map = stage.pack.layers[layerNo]
+		mag = gxEdit.magnification
+
+		srcx = int(stage.hscroll * const.tileWidth)
+		srcy = int(stage.scroll * const.tileWidth)
+
+		sizex = min(gWindowWidth*max(1, int(1/gxEdit.magnification)), stage.surfaces[layerNo].size[0], stage.surfaces[layerNo].size[0] - srcx)
+		sizey = min(gWindowHeight*max(1, int(1/gxEdit.magnification)), stage.surfaces[layerNo].size[1], stage.surfaces[layerNo].size[1] - srcy)
+
+		srcrect = (srcx, srcy, sizex, sizey)
+		dstrect = (0, 0, int(sizex*mag), int(sizey*mag))
+
+		self.renderer.copy(stage.surfaces[layerNo].texture, srcrect=srcrect, dstrect=dstrect)
+
 		
 	def renderTileAttr(self, gxEdit, stage):
 		map = stage.pack.layers[gxEdit.currentLayer]
