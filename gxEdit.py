@@ -302,7 +302,11 @@ class Editor:
 		self.parallax = True
 
 		self.showTilePreview = True
-		self.tileHighlightColor = [0, 0, 255]
+		self.tileHighlightColor = [80, 180, 255]
+
+		self.tileHighLightAnimate = True
+		self.tileHighlightTimer = 0
+		self.tileHighlightDir = 0
 
 		self.backupLimit = 5
 		self.backupMinutes = 5

@@ -1039,7 +1039,7 @@ class Interface:
                           0x0000FF00,           
                           0x000000FF))   
 
-		gSurfaces[SURF_COLOR_WHITE_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(255,255,255, 48), size=(32, 32),
+		gSurfaces[SURF_COLOR_WHITE_TRANSPARENT] = self.sprfactory.from_color(sdl2.ext.Color(255,255,255, 255), size=(32, 32),
            masks=(0xFF000000,           
                   0x00FF0000,           
                   0x0000FF00,           
@@ -1257,6 +1257,17 @@ class Interface:
 			h = int(const.tileWidth2//2 * mag)
 
 		sdl2.SDL_SetTextureColorMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, *gxEdit.tileHighlightColor)
+		sdl2.SDL_SetTextureAlphaMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, gxEdit.tileHighlightTimer)
+
+		if gxEdit.tileHighLightAnimate:
+			gxEdit.tileHighlightTimer+= 1 if gxEdit.tileHighlightDir else -1
+			if gxEdit.tileHighlightTimer*2 > 90*2:
+				gxEdit.tileHighlightDir = 0
+			if gxEdit.tileHighlightTimer <= 0:
+				gxEdit.tileHighlightDir = 1
+		else:
+			gxEdit.tileHighlightTimer = 48
+		
 		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
 		
 
