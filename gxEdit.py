@@ -269,7 +269,7 @@ class Editor:
 		self.currentEntity = 0
 		self.currentEditMode = const.EDIT_TILE
 		self.currentLayer = 0
-		self.visibleLayers = [True, True, True, True]
+		self.visibleLayers = [True, True, True, True, False]
 
 		self.currentTilePaintMode = None
 
@@ -547,6 +547,9 @@ def main():
 		for i in reversed(range(3)):
 			if gxEdit.visibleLayers[i]:
 				gui.renderTiles(gxEdit, curStage, i)
+		if gxEdit.visibleLayers[4]:
+			gui.renderTileAttr(gxEdit, curStage)
+
 		if gxEdit.visibleLayers[3] or gxEdit.currentEditMode == const.EDIT_ENTITY:
 			gui.renderEntities(gxEdit, curStage)
 	

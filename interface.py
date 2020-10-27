@@ -44,6 +44,7 @@ SURF_NUMBER = 17
 SURF_EDITORBG = 18
 
 SURF_SDLCOLOR_CYAN = 19
+SURF_ATTRIBUTE = 20
 
 gSurfaces = [None] * surfaceCount
 
@@ -623,6 +624,27 @@ class TilePaletteWindow(UIWindow):
 							   stage.attrs[gxEdit.currentLayer].height * const.tileWidth * mag)
 		gInterface.renderer.copy(stage.parts[gxEdit.currentLayer], srcrect=srcrect, dstrect=dstrect)
 
+		if gxEdit.visibleLayers[4]:
+			attr = stage.attrs[gxEdit.currentLayer]
+			mag = gxEdit.tilePaletteMag
+			for y in range(attr.height):
+				for x in range(attr.width):
+					dstxx = dstx + (x * const.tileWidth * mag)
+					dstyy = dsty + (y * const.tileWidth * mag)
+
+					tile = attr.tiles[y][x]
+
+					xxx = tile % 16 
+					yyy = tile // 16
+					srcx = xxx * 16
+					srcy = yyy * 16
+
+					srcrect = (srcx, srcy, 16, 16)
+					dstrect = (dstxx, dstyy, const.tileWidth*mag, const.tileWidth*mag)
+
+					gRenderer.copy(gSurfaces[SURF_ATTRIBUTE], srcrect=srcrect, dstrect=dstrect)
+				
+
 		#TODO: add selected tile border (properly)
 		if gxEdit.currentEditMode == const.EDIT_TILE:
 			start = stage.selectedTilesStart[:]
@@ -847,9 +869,10 @@ class ToolsWindow(UIWindow):
 										tooltip=[["Display entities (units)", sdlColorBlack, TTF_STYLE_NORMAL]])
 		self.elements["butUnits"].onAction = toggleLayerVisibility
 
-		self.elements["butGrid"] = UIButton(168, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_TILETYPE, type=BUTTON_TYPE_CHECKBOX,
+		self.elements["butAttr"] = UIButton(168, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_TILETYPE, type=BUTTON_TYPE_CHECKBOX,
+										var=4,
 										tooltip=[["Display tile attributes", sdlColorBlack, TTF_STYLE_NORMAL]])
-
+		self.elements["butAttr"].onAction = toggleLayerVisibility
 
 		self.elements["butToggleMultiplayer"] = UIButton(40, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
 												tooltip=[["multiplayer", sdlColorBlack, TTF_STYLE_NORMAL]])
@@ -1095,6 +1118,7 @@ class Interface:
                   0x000000FF))   
 
 		gSurfaces[SURF_UNITS] = self.sprfactory.from_image(unitsName)
+		gSurfaces[SURF_ATTRIBUTE] = self.sprfactory.from_image("assist/attribute.png")
 
 
 		gSurfaces[SURF_UIWINDOW] = self.sprfactory.from_image(RESOURCES + "Window.bmp")
@@ -1122,6 +1146,7 @@ class Interface:
 
 
 	def renderTiles(self, gxEdit, stage, layerNo):
+		#TODO: this needs to be split up
 		for bit in gxEdit.tileRenderQueue:
 			stg = gxEdit.stages[bit[0]]
 			for pos, tile in bit[1]:
@@ -1317,6 +1342,32 @@ class Interface:
 		
 		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
 		
+	def renderTileAttr(self, gxEdit, stage):
+		map = stage.pack.layers[gxEdit.currentLayer]
+		attr = stage.attrs[gxEdit.currentLayer]
+		mag = gxEdit.magnification
+		for y in range(stage.scroll, stage.scroll + int(gWindowHeight // const.tileWidth // mag)):
+			if y >= map.height: break
+			for x in range(stage.hscroll, stage.hscroll + int(gWindowWidth // const.tileWidth // mag)):
+				if x >= map.width: break
+
+				dstx = (x - stage.hscroll) * const.tileWidth
+				dsty = (y - stage.scroll) * const.tileWidth
+
+				tile = map.tiles[y][x]
+				xx = tile % 16 
+				yy = tile // 16
+				tile = attr.tiles[yy][xx]
+
+				xxx = tile % 16 
+				yyy = tile // 16
+				srcx = xxx * 16
+				srcy = yyy * 16
+
+				srcrect = (srcx, srcy, 16, 16)
+				dstrect = (dstx*int(mag), dsty*int(mag), const.tileWidth*int(mag), const.tileWidth*int(mag))
+
+				self.renderer.copy(gSurfaces[SURF_ATTRIBUTE], srcrect=srcrect, dstrect=dstrect)
 
 	def renderTilePalette(self, gxEdit, stage):
 		#TODO: placeholder

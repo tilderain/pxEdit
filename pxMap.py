@@ -89,7 +89,7 @@ class PxPackLayer:
 		self.type = 0
 
 
-		self.tiles = [0 * self.width * self.height]
+		self.tiles = [[0] * self.width] * self.height
 	
 	def loadFromPack(self, stream):
 		self.tiles = []
