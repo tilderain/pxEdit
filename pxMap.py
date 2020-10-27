@@ -3,7 +3,7 @@ import mmap
 from ctypes import c_short
 
 def writePixelString(fp, string):
-	length = len(string.encode.("shift-jis"))
+	length = len(string.encode("shift-jis"))
 	fp.write(struct.pack("<B", length))
 	fp.write(bytes(string.encode("shift-jis")))
 

@@ -152,7 +152,9 @@ class StagePrj:
 		#	return False
 
 		print("--Saving stage {}...--".format(self.stageName))
+		
 		self.pack.save(fieldPath + self.stageName + pxPackExt)
+		#TODO: save to _temp, rename existing to _temp2, rename _temp to orig and delete temp2
 
 		self.lastSavePos = self.undoPos
 		self.lastBackupPos = self.undoPos
@@ -509,7 +511,7 @@ def main():
 
 	gxEdit.loadMeta(sprfactory)
 
-	gxEdit.loadStage("04building2")
+	gxEdit.loadStage("01field1")
 
 	introAnimTimer = 0
 

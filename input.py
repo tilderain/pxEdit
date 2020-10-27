@@ -411,12 +411,12 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		if not key.keysym.mod & sdl2.KMOD_ALT:
 			stage.selectedTilesEnd[1] -= 1
 		stage.lastTileEdit = [None, None]
-	#elif sym == sdl2.SDLK_s:
-	#	if not key.keysym.mod & sdl2.KMOD_SHIFT:
-	#		stage.selectedTilesStart[1] += 1
-	#	if not key.keysym.mod & sdl2.KMOD_ALT:
-	#		stage.selectedTilesEnd[1] += 1
-	#	stage.lastTileEdit = [None, None]
+	elif sym == sdl2.SDLK_s and not key.keysym.mod & sdl2.KMOD_CTRL:
+		if not key.keysym.mod & sdl2.KMOD_SHIFT:
+			stage.selectedTilesStart[1] += 1
+		if not key.keysym.mod & sdl2.KMOD_ALT:
+			stage.selectedTilesEnd[1] += 1
+		stage.lastTileEdit = [None, None]
 
 	#keyboard navigation mouse movement
 	elif sym == sdl2.SDLK_KP_8:
