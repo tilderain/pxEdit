@@ -292,8 +292,15 @@ class UITextInput(UIElement):
 		if self.style == const.TEXTINPUTTYPE_NUMBER:
 			if not text.isdigit() and not (self.text == "" and text == "-"):
 				return False
-		if self.maxlen and len(self.text) + len(text) > self.maxlen:
+			try:
+				if self.maxlen and int(self.text + text) > self.maxlen or \
+					self.maxlen and -int(self.text + text) > self.maxlen:
+					return False
+			except:
+				pass
+		elif self.maxlen and len(self.text + text) > self.maxlen:
 			return False
+		
 		self.text += text
 		if self.onAction: 
 			self.onAction(self, gxEdit)
@@ -654,7 +661,24 @@ class TilePaletteWindow(UIWindow):
 	def handleMouseDrag(self, gxEdit):
 		return False
 		
+def getEntityColors(index):
+	if index in const.entityCrashIds:
+		titleColor = sdlColorRed
+	elif index in const.entityGoodIds:
+		titleColor = sdlColorGreen
+	elif index in const.entityUtilIds:
+		titleColor = sdlColorGold
+	else:
+		titleColor = sdlColorMagenta
+	
+	descColor = sdlColorWhite
 
+	if index in const.entityGoodIds:
+		paramColor = sdlColorYellow
+	else:
+		paramColor = sdlColorCyan
+	
+	return titleColor, descColor, paramColor
 
 class EntityPaletteWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TILEPALETTE, style=0, visible=True):
@@ -703,22 +727,8 @@ class EntityPaletteWindow(UIWindow):
 		if index < 0:
 			return False
 
-		if index in const.entityCrashIds:
-			titleColor = sdlColorRed
-		elif index in const.entityGoodIds:
-			titleColor = sdlColorGreen
-		elif index in const.entityUtilIds:
-			titleColor = sdlColorGold
-		else:
-			titleColor = sdlColorMagenta
+		titleColor, descColor, paramColor = getEntityColors(index)
 		
-		descColor = sdlColorWhite
-
-		if index in const.entityGoodIds:
-			paramColor = sdlColorYellow
-		else:
-			paramColor = sdlColorCyan
-
 		if gxEdit.entityInfo[index][0] != "":
 			gxEdit.tooltipText = ([[gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD]])
 		if gxEdit.entityInfo[index][1] != "":
@@ -885,8 +895,26 @@ def editEntityAttributes(control, gxEdit):
 		stage.pack.eve.modify(ids, param2=int(param))
 	elif control.paramtype == const.PARAM_BITS:
 		stage.pack.eve.modify(ids, bits=int(param))
+		control.parent.elements["textHexBitsS"].text = util.lazybin(select[0].bits, 8)
+		control.parent.elements["textHexBits"].text = util.lazybin(select[0].bits, 8)
 
 	#stage.pack.eve.modify(ids, type2=int(param))
+
+def editEntityBits(window, elem, gxEdit):
+	stage = gxEdit.stages[gxEdit.curStage]
+	select = stage.selectedEntities
+
+	ids = [o.id for o in select]
+	if elem.state == BUTTON_STATE_ACTIVE:
+		stage.pack.eve.modify(ids, bits=select[0].bits | elem.var)
+	else:
+		stage.pack.eve.modify(ids, bits=select[0].bits & ~(elem.var))
+
+	window.elements["textHexBitsS"].text = util.lazybin(select[0].bits, 8)
+	window.elements["textHexBits"].text = util.lazybin(select[0].bits, 8)
+
+
+
 
 def editEntityString(control, gxEdit):
 	param = control.text
@@ -895,6 +923,7 @@ def editEntityString(control, gxEdit):
 
 	ids = [o.id for o in select]
 	stage.pack.eve.modify(ids, string=param)
+
 
 class EntityEditWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_ENTITYEDIT, style=0):
@@ -905,13 +934,13 @@ class EntityEditWindow(UIWindow):
 		self.elements["textAppearShadow"] = UIText(6, 6, "Flag:", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textAppear"] = UIText(5, 5, "Flag:", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["flagEdit"] = UITextInput(60, 5, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
-			paramtype=const.PARAM_FLAG)
+			paramtype=const.PARAM_FLAG, maxlen=65535)
 		self.elements["flagEdit"].onAction = editEntityAttributes
 
 		self.elements["textDirShadow"] = UIText(6, 25, "Param2:", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textDir"] = UIText(5, 25, "Param2:", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["dirEdit"] = UITextInput(60, 25, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
-			paramtype=const.PARAM_PARAM2)
+			paramtype=const.PARAM_PARAM2, maxlen=255)
 		self.elements["dirEdit"].onAction = editEntityAttributes
 
 		self.elements["textStrShadow"] = UIText(6, 45, "String:", sdlColorBlack, TTF_STYLE_NORMAL, self)
@@ -920,11 +949,30 @@ class EntityEditWindow(UIWindow):
 			paramtype=const.PARAM_STRING, maxlen=15)
 		self.elements["stringEdit"].onAction = editEntityString
 
-		self.elements["textBitsShadow"] = UIText(6, 65, "Bits:", sdlColorBlack, TTF_STYLE_NORMAL, self)
-		self.elements["textBits"] = UIText(5, 65, "Bits:", sdlColorYellow, TTF_STYLE_NORMAL, self)
-		self.elements["bitsEdit"] = UITextInput(60, 65, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
-			paramtype=const.PARAM_BITS)
-		self.elements["bitsEdit"].onAction = editEntityAttributes
+		self.elements["textBitsShadow"] = UIText(6, 69, "Bits:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textBits"] = UIText(5, 68, "Bits:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+
+		self.elements["textHexBitsS"] = UIText(74, 70, "a", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textHexBits"] = UIText(73, 70, "a", sdlColorYellow, TTF_STYLE_NORMAL, self)
+
+		self.elements["butCheckBits1"] = UIButton(120, 90, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=1)
+		self.elements["butCheckBits2"] = UIButton(120, 110, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=2)
+		self.elements["butCheckBits3"] = UIButton(120, 130, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=4)
+		self.elements["butCheckBits4"] = UIButton(120, 150, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=8)
+		self.elements["butCheckBits5"] = UIButton(120, 170, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=16)
+		self.elements["textBitsDesc5"] = UIText(15, 168, "Spawn with alt dir:", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["butCheckBits6"] = UIButton(120, 190, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=32)
+		self.elements["butCheckBits7"] = UIButton(120, 210, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=64)
+		self.elements["butCheckBits8"] = UIButton(120, 230, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=128)
+		self.elements["butCheckBits1"].onAction = editEntityBits
+		self.elements["butCheckBits2"].onAction = editEntityBits
+		self.elements["butCheckBits3"].onAction = editEntityBits
+		self.elements["butCheckBits4"].onAction = editEntityBits
+		self.elements["butCheckBits5"].onAction = editEntityBits
+		self.elements["butCheckBits6"].onAction = editEntityBits
+		self.elements["butCheckBits7"].onAction = editEntityBits
+		self.elements["butCheckBits8"].onAction = editEntityBits
+
 		#self.elements["buttonMinimize"] = UIButton(180, 4, 16, 16, self)
 		#self.elements["buttonMinimize"].onAction = minimizeButtonAction
 
@@ -1236,17 +1284,15 @@ class Interface:
 				#TODO: highlight hovered in picker
 				if o.x == x + stage.hscroll*const.ENTITY_SCALE and o.y == y + stage.scroll*const.ENTITY_SCALE:
 					index = o.type1
-					if index in const.entityCrashIds:
-						titleColor = sdlColorRed
-					elif index in const.entityGoodIds:
-						titleColor = sdlColorGreen
-					elif index in const.entityUtilIds:
-						titleColor = sdlColorGold
-					else:
-						titleColor = sdlColorMagenta
+
+					titleColor, descColor, paramColor = getEntityColors(index)
 
 					gxEdit.tooltipText.append([gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD])
 					gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
+
+					if gxEdit.elements["entEdit"].visible:
+						if gxEdit.entityInfo[index][2] != "":
+							gxEdit.tooltipText.append([gxEdit.entityInfo[index][2], paramColor, TTF_STYLE_NORMAL])
 
 					gxEdit.tooltipText.append(["Param2: " + str(o.param2), sdlColorWhite, TTF_STYLE_NORMAL])
 

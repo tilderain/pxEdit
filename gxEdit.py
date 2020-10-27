@@ -531,7 +531,7 @@ def main():
 
 	gxEdit.elements["uiTooltip"] = interface.UITooltip(0,0,1,1)
 
-	gxEdit.elements["entEdit"] = interface.EntityEditWindow(20,20,150,90)
+	gxEdit.elements["entEdit"] = interface.EntityEditWindow(20,20,150,250)
 
 	gxEdit.elements["mapSizeDialog"] = interface.MapResizeDialog(20,20,104,88)
 

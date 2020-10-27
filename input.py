@@ -287,21 +287,32 @@ def runMouseDrag(gxEdit, stage):
 			if len(selectedEntities) == 1:
 				elem.elements["flagEdit"].text = str(selectedEntities[0].flag)
 				elem.elements["dirEdit"].text = str(selectedEntities[0].param2)
-				elem.elements["bitsEdit"].text = str(selectedEntities[0].bits)
 				elem.elements["stringEdit"].text = str(selectedEntities[0].string)
 				elem.elements["stringEdit"].placeholderText = ""
-				pass
-				#elem.elements["paramEdit"].text = str(selectedEntities[0].type2)
+
+				elem.elements["textHexBitsS"].text = util.lazybin(selectedEntities[0].bits, 8)
+				elem.elements["textHexBits"].text = util.lazybin(selectedEntities[0].bits, 8)
+
+				bit = 1
+				for i in range(1, 9):
+					elem.elements["butCheckBits" + str(i)].state = \
+						interface.BUTTON_STATE_ACTIVE if selectedEntities[0].bits & bit else \
+						interface.BUTTON_STATE_NORMAL
+					bit *= 2
+
 			else:
 				for _,e in elem.elements.items():
 					if isinstance(e, interface.UITextInput):
 						e.text = ""
 						e.placeholderText = "\n\n\n\n"
 
+						#TODO: half checked state
+						for i in range(1, 9):
+							elem.elements["butCheckBits" + str(i)].state = interface.BUTTON_STATE_NORMAL
+
 			elem.visible = True
 			elem.x = int((selectedEntities[0].x - (stage.hscroll*const.ENTITY_SCALE))* (const.tileWidth2 // 2) * mag + const.tileWidth2*2)
 			elem.y = int((selectedEntities[0].y - (stage.scroll*const.ENTITY_SCALE))* (const.tileWidth2 // 2) * mag)
-			#gxEdit.focussedElem = elem.elements["paramEdit"]
 
 			#TODO: scroll into view for expanded entity list
 			gxEdit.currentEntity = selectedEntities[0].type1
@@ -342,6 +353,8 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		interface.toggleEntityPalette(0,0,gxEdit)
 	elif sym == sdl2.SDLK_r:
 		interface.toggleTilePalette(0,0,gxEdit)
+
+	#zx change tool
 
 	#field shortcut transportation
 	elif sym == sdl2.SDLK_t:
