@@ -2,6 +2,11 @@ import io, os, struct
 import mmap
 from ctypes import c_short
 
+def writePixelString(fp, string):
+	length = len(string)
+	fp.write(struct.pack("<B", length))
+	fp.write(bytes(string.encode("shift-jis")))
+
 def readPixelString(stream):
 	length = stream.read_byte()
 	if length >= 32: return ""
@@ -10,6 +15,8 @@ def readPixelString(stream):
 
 def readInt(stream, length):
 	return int.from_bytes(stream.read(length), byteorder="little")
+
+pxmapMagic = "PXMAP01\0"
 
 class PxPackUnit:
 	def __init__(self, bits, code_char, param2, x, y, flag, string, id):
@@ -64,6 +71,9 @@ class PxEve:
 		self._count += 1
 		self.units.append(o)
 		return o
+
+	def saveToPack(self, stream):
+		pass
 		
 	
 class PxPackLayer:
@@ -84,6 +94,7 @@ class PxPackLayer:
 	def loadFromPack(self, stream):
 		self.tiles = []
 
+		#TODO: verify header minus numbers
 		stream.read(8) #PXMAP01
 		self.width = readInt(stream, 2)
 		self.height = readInt(stream, 2)
@@ -106,6 +117,22 @@ class PxPackLayer:
 
 		self.loadFromPack(stream)
 
+	def saveToPack(self, f):
+		f.write(bytes(pxmapMagic.encode("ascii")))
+		f.write(struct.pack("<H", self.width))
+		f.write(struct.pack("<H", self.height))
+
+		if self.width * self.height == 0: return
+
+		f.write(struct.pack("<B", self.type))
+
+		if self.type == 0:
+			for y in self.tiles:
+				f.write(bytes(y))
+
+	def save(self, path):
+		pass
+
 	def modify(self, tiles):
 		#[[x,y], [x, y]]
 
@@ -118,6 +145,7 @@ class PxPackLayer:
 			
 			self.tiles[tile[0][1]][tile[0][0]] = x+y
 	
+pxpackMagic = "PXPACK121127a**\0"
 
 class PxPack:
 	def __init__(self):
@@ -152,6 +180,7 @@ class PxPack:
 
 		LAYER_COUNT = 3
 
+		#TODO: verify header
 		stream.seek(16)
 
 		self.description = readPixelString(stream)
@@ -206,43 +235,48 @@ class PxPack:
 			print("Error while opening {}: {}".format(path, e))
 			return False
 		else:
-			f.write(struct.pack("<h", self.width))
-			f.write(struct.pack("<h", self.height))
-			for y in self.tiles:
-				f.write(bytes(y))
+			f.write(bytes(pxpackMagic.encode("ascii")))
+			writePixelString(f, self.description)
+			writePixelString(f, self.left_field)
+			writePixelString(f, self.right_field)
+			writePixelString(f, self.up_field)
+			writePixelString(f, self.down_field)
+			writePixelString(f, self.spritesheet)
+
+			f.write(struct.pack("<H", self.area_x))
+			f.write(struct.pack("<H", self.area_y))
+			f.write(struct.pack("<B", self.area_no))
+
+			f.write(struct.pack("<B", self.bg_r))
+			f.write(struct.pack("<B", self.bg_g))
+			f.write(struct.pack("<B", self.bg_b))
+
+			LAYER_COUNT = 3
+
+			for i in range(LAYER_COUNT):
+				layer = self.layers[i]
+
+				writePixelString(f, layer.partsName)
+				f.write(struct.pack("<B", layer.visibility))
+				f.write(struct.pack("<B", layer.scrolltype))
+			for i in range(LAYER_COUNT):
+				self.layers[i].saveToPack(f)
+
+			f.write(struct.pack("<H", len(self.eve.units)))
+			for o in self.eve.units:
+				f.write(struct.pack("<B", o.bits))
+				f.write(struct.pack("<B", o.type1))
+				f.write(struct.pack("<B", o.param2))
+
+				f.write(struct.pack("<h", o.x))
+				f.write(struct.pack("<h", o.y))
+				f.write(struct.pack("<H", o.flag))
+				writePixelString(f, o.string)
+
+			f.close()
 
 			return True
 		
-	def modify(self, tiles):
-		#[[x,y], [x, y]]
-
-		for tile in tiles:
-			#convert a spritesheet tile index to its representation in the tile array
-			if tile[0][0] >= self.width: continue
-			if tile[0][1] >= self.height: continue
-			x = tile[1][0]
-			y = tile[1][1] * 16
-			
-			self.tiles[tile[0][1]][tile[0][0]] = x+y
-	def resize(self, width, height):
-		if width <= 0: return
-		if height <= 0: return
-
-		tiles = []
-		for y in range(height):
-			if y > self.height-1:
-				tiles.append([0] * width)
-			else:
-				tiles.append( self.tiles[y][:width] + [0]*(width - self.width))
-			
-		self.tiles = tiles
-
-		self.width = width
-		self.height = height
-		
-	def get(self):
-		return self.tiles[:]
-
 
 class PxMapAttr: #use the same class for both
 	def __init__(self):
@@ -275,6 +309,8 @@ class PxMapAttr: #use the same class for both
 			f.write(struct.pack("<h", self.height))
 			for y in self.tiles:
 				f.write(bytes(y))
+
+			f.close()
 
 			return True
 		

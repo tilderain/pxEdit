@@ -152,7 +152,7 @@ class StagePrj:
 		#	return False
 
 		print("--Saving stage {}...--".format(self.stageName))
-		#self.pack.save()
+		self.pack.save(fieldPath + self.stageName + pxPackExt)
 
 		self.lastSavePos = self.undoPos
 		self.lastBackupPos = self.undoPos
@@ -175,8 +175,7 @@ class StagePrj:
 		date = datetime.now()
 		dateMin = date.strftime(backupTimeFormat)
 
-		#eventOut = eventPath.format(self.stageName)
-		#mapOut = mapPath.format(self.stageName)
+		self.pack.save(fieldPath + backupFolderName + "/" + dateMin + "_" + self.stageName + pxPackExt)
 		
 		#self.eve.save(dataPath + backupFolderName + "/" + dateMin + "_" + eventOut)
 		#self.map.save(dataPath + backupFolderName + "/" + dateMin + "_" + mapOut)
