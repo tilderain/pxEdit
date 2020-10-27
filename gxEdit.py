@@ -373,10 +373,10 @@ class Editor:
 
 		if undo.action == const.UNDO_TILE:
 			stage.lastTileEdit = [None, None]
-			stage.map.modify(undo.reverse)
+			stage.pack.layers[undo.param].modify(undo.reverse)
 			for pos, tile in undo.reverse:
 				stage.renderTileToSurface(pos[0], pos[1], tile[0],
-												tile[1], gxEdit.currentLayer)
+												tile[1], undo.param)
 		elif undo.action == const.UNDO_ENTITY_MOVE:
 			stage.pack.eve.replace(undo.reverse)
 			stage.selectedEntities = undo.reverse
@@ -404,10 +404,10 @@ class Editor:
 
 		if redo.action == const.UNDO_TILE:
 			stage.lastTileEdit = [None, None]
-			stage.map.modify(redo.forward)
+			stage.pack.layers[redo.param].modify(redo.forward)
 			for pos, tile in redo.forward:
 				stage.renderTileToSurface(pos[0], pos[1], tile[0],
-												tile[1], gxEdit.currentLayer)
+												tile[1], redo.param)
 		elif redo.action == const.UNDO_ENTITY_MOVE:
 			stage.pack.eve.replace(redo.forward)	
 			stage.selectedEntities = redo.forward

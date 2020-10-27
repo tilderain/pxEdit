@@ -10,10 +10,11 @@ import copy
 
 #TODO: find a better place for this
 class UndoAction:
-	def __init__(self, action, reverse, forward):
+	def __init__(self, action, reverse, forward, param=None):
 		self.action = action
 		self.reverse = copy.deepcopy(reverse)
 		self.forward = copy.deepcopy(forward)
+		self.param = param
 
 def runMouseWheel(stage, wheel):
 	stage.scroll -= wheel.y
@@ -230,7 +231,7 @@ def runMouseDrag(gxEdit, stage):
 		map.modify(tiles)
 		#TODO: disable undo while dragging
 		#TODO: commit undo action only when mouseup
-		undo = UndoAction(const.UNDO_TILE, oldTiles, tiles)
+		undo = UndoAction(const.UNDO_TILE, oldTiles, tiles, gxEdit.currentLayer)
 		stage.addUndo(undo)
 		
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
@@ -329,7 +330,6 @@ def runMouse2(gxEdit, stage, mouse):
 
 def runKeyboard(gxEdit, stage, scaleFactor, key):
 	sym = key.keysym.sym
-
 	#todo: when focussed elem do not do things you can type
 	
 	if sym == sdl2.SDLK_j:
