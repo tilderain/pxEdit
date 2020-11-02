@@ -332,7 +332,8 @@ class Editor:
 		self.players = {}
 		#unique id count of connected clients
 		#just like in source the host is playerId 1
-		self.playerId = 0
+		self.playerId = 1
+		self.serverPlayerNameTemp = ""
 		self.lastMousePosTick = 0
 		self.lastMousePos = (0, 0)
 		self.tileRenderQueue = []
@@ -430,8 +431,8 @@ class Editor:
 		stage.undoPos += 1
 
 	def backupStages(self):
-		if not os.path.exists(dataPath + backupFolderName):
-			os.makedirs(dataPath + backupFolderName)
+		if not os.path.exists(fieldPath + backupFolderName):
+			os.makedirs(fieldPath + backupFolderName)
 
 		for stage in self.stages:
 			if not stage.backup():
@@ -481,8 +482,8 @@ def main():
 		return
 
 	#TODO window.rect
-	defaultWindowWidth = 640
-	defaultWindowHeight = 480
+	defaultWindowWidth = 1680
+	defaultWindowHeight = 960
 
 	interface.gWindow = sdl2.ext.Window(windowName, size=(defaultWindowWidth, defaultWindowHeight), flags=sdl2.SDL_WINDOW_RESIZABLE)
 	interface.gWindowWidth = defaultWindowWidth
@@ -525,10 +526,10 @@ def main():
 	#gxEdit.elements.append(interface.UIWindow(22, 22, 256, 256))
 	#gxEdit.elements.append(interface.UIWindow(300, 300, 260, 272, const.WINDOW_TILEPALETTE))
 
-	gxEdit.elements["tilePalette"] = interface.TilePaletteWindow(400, 300, 256, 280, const.WINDOW_TILEPALETTE)
-	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(400, 0, 256, 280, const.WINDOW_ENTITYPALETTE)
+	gxEdit.elements["tilePalette"] = interface.TilePaletteWindow(1200, 400, 256, 280, const.WINDOW_TILEPALETTE)
+	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(1450, 400, 256, 280, const.WINDOW_ENTITYPALETTE)
 
-	gxEdit.elements["toolsWindow"] = interface.ToolsWindow(400, 200, 190, 86, const.WINDOW_TOOLS)
+	gxEdit.elements["toolsWindow"] = interface.ToolsWindow(800, 400, 190, 86, const.WINDOW_TOOLS)
 
 	gxEdit.elements["uiTooltip"] = interface.UITooltip(0,0,1,1)
 
@@ -570,6 +571,7 @@ def main():
 
 	#for continuous resizing
 	def resizeEventWatch(data, event):
+		#TODO: recreate map textures for our poor software rendered boys
 		if event.contents.type == sdl2.SDL_WINDOWEVENT:
 			if event.contents.window.event == sdl2.SDL_WINDOWEVENT_SIZE_CHANGED:
 				interface.gWindowWidth = event.contents.window.data1
@@ -726,14 +728,20 @@ def main():
 			gxEdit.lastBackupTick = tickCount
 			
 		if gxEdit.socket and tickCount >= gxEdit.lastMousePosTick + 100:
-			if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
+			if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT or True:
 				mouse = util.getMouseState()
 
 				#maybe it'd be fun to send their zoom level
 				x = int(mouse.x // gxEdit.magnification) + int(curStage.hscroll * const.tileWidth)
 				y = int(mouse.y // gxEdit.magnification) + int(curStage.scroll * const.tileWidth)
 				if(x, y) is not gxEdit.lastMousePos:
-					multi.sendMousePosPacket(gxEdit, x, y, gxEdit.curStage)
+					if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
+						multi.sendMousePosPacket(gxEdit, x, y, gxEdit.curStage)
+					elif gxEdit.multiplayerState == const.MULTIPLAYER_HOST:
+						try:
+							multi.serverSendMousePosPacket(gxEdit, x, y, gxEdit.curStage, "1", gxEdit.serverPlayerNameTemp)
+						except:
+							pass
 					gxEdit.lastMousePosTick = tickCount
 					gxEdit.lastMousePos = (x, y)
 				

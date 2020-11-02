@@ -100,12 +100,29 @@ def packetHandler(gxEdit, sock, playerId, datas):
 		elif data["type"] == PACKET_MOUSEPOS:
 			gxEdit.players[playerId]["mousepos"] = data["x"], data["y"]
 			gxEdit.players[playerId]["curStage"] = data["curStage"]
+
+			if playerId: #i am a server
+				for _, player in gxEdit.players.items():
+					if player["name"] == gxEdit.players[playerId]["name"]: continue
+					serverSendMousePosPacket(gxEdit, data["x"], data["y"], data["curStage"], playerId, gxEdit.players[playerId]["name"])
+		elif data["type"] == PACKET_MOUSEPOSFORCLIENT:
+			pid = data["playerId"]
+
+			try:
+				gxEdit.players[pid]
+			except:
+				gxEdit.players[pid] = {"name": data["name"]}
+
+			gxEdit.players[pid]["mousepos"] = data["x"], data["y"]
+			gxEdit.players[pid]["curStage"] = data["curStage"]
+
+
 		elif data["type"] == PACKET_TILEEDIT:
 			stage = gxEdit.stages[data["stage"]]
-			stage.map.modify(data["tiles"])
+			stage.pack.layers[data["layer"]].modify(data["tiles"])
 			
 			#TODO: UNDO
-			gxEdit.tileRenderQueue.append((data["stage"], data["tiles"]))
+			gxEdit.tileRenderQueue.append((data["stage"], data["tiles"], data["layer"]))
 
 			if playerId: #i am a server
 				for _, player in gxEdit.players.items():
@@ -190,6 +207,8 @@ def hostButtonAction(window, elem, gxEdit):
 
 	window.visible = False
 
+	gxEdit.serverPlayerNameTemp = paramName
+
 	print("Now hosting!")
 	print("Multiplayer version: " + str(VERSION_MAGIC))
 
@@ -197,8 +216,12 @@ def serverBroadcastAll(gxEdit, packet): #playerid?
 	for _, player in gxEdit.players.items():
 		serverSendPacket(packet, player["sock"].request)
 
-def serverSendTileEdit(gxEdit, curStage, tiles):
-	packet = {"type":PACKET_TILEEDIT, "stage": curStage, "tiles": tiles}
+def serverSendTileEdit(gxEdit, curStage, tiles, layer):
+	packet = {"type":PACKET_TILEEDIT, "stage": curStage, "tiles": tiles, "layer": layer}
+	serverBroadcastAll(gxEdit, packet)
+	
+def serverSendMousePosPacket(gxEdit, x, y, curStage, playerId, name):
+	packet = {"type":PACKET_MOUSEPOSFORCLIENT, "x": x, "y": y, "curStage": curStage, "playerId": playerId, "name": name}
 	serverBroadcastAll(gxEdit, packet)
 	
 
@@ -231,8 +254,8 @@ def sendMousePosPacket(gxEdit, x, y, curStage):
 	packet = {"type":PACKET_MOUSEPOS, "x": x, "y": y, "curStage": curStage}
 	sendPacket(gxEdit, packet)
 	
-def sendTileEditPacket(gxEdit, curStage, tiles):
-	packet = {"type":PACKET_TILEEDIT, "stage": curStage, "tiles": tiles}
+def sendTileEditPacket(gxEdit, curStage, tiles, layer):
+	packet = {"type":PACKET_TILEEDIT, "stage": curStage, "tiles": tiles, "layer": layer}
 	sendPacket(gxEdit, packet)
 
 def connectButtonAction(window, elem, gxEdit):

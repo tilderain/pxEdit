@@ -874,7 +874,8 @@ class ToolsWindow(UIWindow):
 										tooltip=[["Display tile attributes", sdlColorBlack, TTF_STYLE_NORMAL]])
 		self.elements["butAttr"].onAction = toggleLayerVisibility
 
-		self.elements["butToggleMultiplayer"] = UIButton(40, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
+		self.elements["butToggleMultiplayer"] = UIButton(40, 60, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
+												enum=BUTTON_MULTIPLAYER,
 												tooltip=[["multiplayer", sdlColorBlack, TTF_STYLE_NORMAL]])
 		self.elements["butToggleMultiplayer"].onAction = toggleMultiplayerMenu
 
@@ -980,14 +981,25 @@ class EntityEditWindow(UIWindow):
 		self.elements["textHexBits"] = UIText(73, 70, "a", sdlColorYellow, TTF_STYLE_NORMAL, self)
 
 		self.elements["butCheckBits1"] = UIButton(120, 90, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=1)
+		#seems to only have an effect when spawning, (is set during creation)
+		self.elements["textBitsDesc1"] = UIText(15, 88, "I don't know", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["butCheckBits2"] = UIButton(120, 110, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=2)
+		#365 may use this
+		self.elements["textBitsDesc2"] = UIText(15, 109, "unused?", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["butCheckBits3"] = UIButton(120, 130, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=4)
+		self.elements["textBitsDesc3"] = UIText(15, 128, "Run script on touch:", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["butCheckBits4"] = UIButton(120, 150, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=8)
+		self.elements["textBitsDesc4"] = UIText(15, 148, "Run script on death:", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["butCheckBits5"] = UIButton(120, 170, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=16)
 		self.elements["textBitsDesc5"] = UIText(15, 168, "Spawn with alt dir:", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["butCheckBits6"] = UIButton(120, 190, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=32)
+		#631, 446, 448, 447, 197, 179, 177 npc acts may use this
+		self.elements["textBitsDesc6"] = UIText(15, 188, "unused?", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		
 		self.elements["butCheckBits7"] = UIButton(120, 210, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=64)
+		self.elements["textBitsDesc7"] = UIText(15, 208, "No appear if flag set", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["butCheckBits8"] = UIButton(120, 230, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=128)
+		self.elements["textBitsDesc8"] = UIText(15, 228, "Appear if flag set", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["butCheckBits1"].onAction = editEntityBits
 		self.elements["butCheckBits2"].onAction = editEntityBits
 		self.elements["butCheckBits3"].onAction = editEntityBits
@@ -1239,6 +1251,7 @@ class Interface:
 
 		
 	def renderPlayers(self, gxEdit, stage):
+		mag = gxEdit.magnification
 		for _, player in gxEdit.players.items():
 			if "mousepos" not in player: continue
 			if "curStage" not in player: continue
@@ -1325,12 +1338,11 @@ class Interface:
 														y2 - y1)
 
 	def renderTiles(self, gxEdit, stage, layerNo):
-		#TODO: this needs to be split up
 		for bit in gxEdit.tileRenderQueue:
 			stg = gxEdit.stages[bit[0]]
 			for pos, tile in bit[1]:
 				stg.renderTileToSurface(pos[0], pos[1], tile[0],
-											tile[1], gxEdit.currentLayer)
+											tile[1], bit[2])
 
 		if not stage.surfaces[layerNo]: return
 		

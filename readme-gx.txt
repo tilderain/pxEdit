@@ -1,8 +1,6 @@
 how to use:
-place guxt folder in "dist" folder
-folder must be called guxt
-
-game should be modded to disable pximg scrambling and use bmps instead
+place "Kero Blaster" folder in this folder
+folder must be called "Kero Blaster"
 
 hotkeys:
 
@@ -17,7 +15,26 @@ minus & Equals: Zoom stage
 CTRL-S: Save
 
 i: place entities
+ctrlcctrlv : copy paste entities
+	+ paste into textbox
+
+e : toggle entity palette
+r : toggle tile palette
+
+comma,period: change current layer
+
+mouse3 - pick block
 
 CTRL-Z CTRL-Y
+CTRL-SHIFT-Z
 
 F11: fullscreen
+
+tfgh: switch to field assigned to leftuprightdown
+wasd: change tile
+shift/alt + wasd: change tile selection box
+
+numpad 8456: move mouse cursor
+spacebar: place tile
+
+

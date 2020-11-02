@@ -48,6 +48,7 @@ class PxEve:
 					o.y += yoffset
 
 	def modify(self, ids, x=None, y=None, code_char=None, bits=None, param2=None, flag=None, string=None):
+		#TODO: is this really neccesary?
 		for num in ids:
 			for o in self.units:
 				if num == o.id:
@@ -56,7 +57,7 @@ class PxEve:
 					if code_char != None: o.type1 = code_char
 					if bits != None: o.bits = bits
 					if param2 != None: o.param2 = param2
-					if flag != None: o.code_flag = flag
+					if flag != None: o.flag = flag
 					if string != None: o.string = string
 					break
 	def remove(self, ids):
@@ -67,7 +68,7 @@ class PxEve:
 					break
 			
 	def add(self, x, y, code_char, bits=0, param2=0, flag=0, string=""):
-		o = PxPackUnit(bits, code_char, param2, x, y, flag, string, self._count)
+		o = PxPackUnit(bits|1, code_char, param2, x, y, flag, string, self._count)
 		self._count += 1
 		self.units.append(o)
 		return o
