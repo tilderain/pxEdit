@@ -589,8 +589,18 @@ class TilePaletteWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TILEPALETTE, style=0, visible=True):
 		UIWindow.__init__(self, x, y, w, h, type, style, visible)
 
-		self.elements["picker"] = UIElement(0, 24, 0, 0, self, (0,0,0,0))
+		self.elements["picker"] = UIElement(0, 40, 0, 0, self, (0,0,0,0))
 		self.elements["textPalette"] = UIElement(6, 6, 1, 1, self, rectWindowTextPalette)
+
+		#textMouseX
+		#textMouseY
+		#textMapWidth
+		#textMapHeight
+
+		self.elements["editLayer"] = UIButton(128, 24, 16, 16, self, enum=BUTTON_SCRIPT, style=const.STYLE_TOOLTIP_YELLOW,
+				tooltip=[["Edit layer", sdlColorBlack, TTF_STYLE_NORMAL]])
+
+		self.elements["editLayer"].onAction = toggleResizeDialog
 
 		self.elements["buttonMinimize"] = UIButton(0, 4, 16, 16, self, rects=rectsButtonMinimize)
 		self.elements["buttonMinimize"].onAction = minimizeButtonAction
@@ -604,7 +614,7 @@ class TilePaletteWindow(UIWindow):
 		if not stage.parts[gxEdit.currentLayer]: return
 		#reset width
 		self.w = (stage.attrs[gxEdit.currentLayer].width * const.tileWidth) * mag
-		self.h = (stage.attrs[gxEdit.currentLayer].height * const.tileWidth) * mag + 24 + 2
+		self.h = (stage.attrs[gxEdit.currentLayer].height * const.tileWidth) * mag + 24 + 2 + 16
 
 		self.draghitbox = [0, 0, self.w, 24]
 
@@ -772,9 +782,15 @@ def toggleEntityPalette(window, elem, gxEdit):
 
 def toggleResizeDialog(window, elem, gxEdit):
 	elem = gxEdit.elements["mapSizeDialog"]
+
+	elem.currentLayer = gxEdit.currentLayer
+	elem.curStage = gxEdit.stages[gxEdit.curStage]
 	curStage = gxEdit.stages[gxEdit.curStage]
-	elem.elements["paramX"].text = str(curStage.map.width)
-	elem.elements["paramY"].text = str(curStage.map.height)
+
+	elem.elements["paramX"].text = str(curStage.pack.layers[elem.currentLayer].width)
+	elem.elements["paramY"].text = str(curStage.pack.layers[elem.currentLayer].height)
+
+
 
 	elem.x = gWindowWidth // 2 - elem.w // 2
 	elem.y = gWindowHeight // 2 - elem.h // 2
@@ -1030,17 +1046,18 @@ class ResizeControl(UIElement):
 def mapResizeAction(window, elem, gxEdit):
 	paramX = window.elements["paramX"].text
 	paramY = window.elements["paramY"].text
-	curStage = gxEdit.stages[gxEdit.curStage]
+	curStage = window.curStage
+	curLayer = curStage.pack.layers[window.currentLayer]
 	try:
 		x = int(paramX)
 	except:
-		x = curStage.map.width
+		x = curLayer.width
 	try:
 		y = int(paramY)
 	except:
-		y = curStage.map.height
+		x = curLayer.height
 
-	if x == curStage.map.width and y == curStage.map.height:
+	if x == curLayer.width and y == curLayer.height:
 		window.visible = False
 		return
 
@@ -1048,9 +1065,9 @@ def mapResizeAction(window, elem, gxEdit):
 	if x * const.tileWidth > 16384: x = 16384 // const.tileWidth
 	if y * const.tileWidth > 16384: y = 16384 // const.tileWidth
 
-	curStage.map.resize(x, y)
-	curStage.createMapSurface()
-	curStage.renderMapToSurface()
+	curLayer.resize(x, y)
+	curStage.createMapSurface(window.currentLayer)
+	curStage.renderMapToSurface(window.currentLayer)
 	window.visible = False
 
 class MapResizeDialog(UIWindow):
@@ -1343,7 +1360,8 @@ class Interface:
 			for pos, tile in bit[1]:
 				stg.renderTileToSurface(pos[0], pos[1], tile[0],
 											tile[1], bit[2])
-
+											
+		if len(stage.surfaces) < layerNo: return
 		if not stage.surfaces[layerNo]: return
 		
 		gxEdit.tileRenderQueue = []

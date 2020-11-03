@@ -116,7 +116,8 @@ class StagePrj:
 		self.surfaces = [None, None, None]
 
 	def createMapSurface(self, layerNo):
-		if self.surfaces[layerNo]: del self.surfaces[layerNo]
+		del self.surfaces[layerNo]
+		self.surfaces.insert(layerNo, None)
 		if self.pack.layers[layerNo].width * self.pack.layers[layerNo].height == 0: return
 		
 		self.surfaces[layerNo] = interface.gSprfactory.create_texture_sprite(interface.gRenderer, 
