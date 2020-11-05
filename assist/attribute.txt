@@ -1,0 +1,127 @@
+Tile 0
+Solid
+Npc Block?
+Player Block?
+Destructable1?
+Spike
+Destructable2?
+Platform
+Upleft Slope Big
+Upleft Slope Small
+Upright Slope Small
+Upright Slope Big
+Downleft Slope Big
+Downleft Slope Small
+Downright Slope Small
+Downright Slope Big
+A
+B
+C
+D
+E
+A
+B
+1
+2
+3
+4
+5
+A
+B
+C
+D
+A
+B
+C
+D
+E
+None
+None
+None
+Topleft Corner
+TopRight Corner
+Bottomleft Corner
+Bottomright Corner
+Upslope helper
+Downslope helper
+None
+None
+Ice?
+Ladder
+Ladder Top
+PlayerBullet Block?
+PlayerNpc Block??
+None
+None
+None
+Mud
+Ice
+Snow?
+None
+None
+None
+None
+None
+Water
+Water Solid
+Water Npc Block?
+Water Player Block?
+Water Destructable1?
+Water Spike
+Water Destructable2?
+Water Platform
+Water Upleft Slope Big
+Water Upleft Slope Small
+Water Upright Slope Small
+Water Upright Slope Big
+Water Downleft Slope Big
+Water Downleft Slope Small
+Water Downright Slope Small
+Water Downright Slope Big
+A
+B
+C
+D
+E
+A
+B
+1
+2
+3
+4
+5
+A
+B
+C
+D
+A
+B
+C
+D
+E
+None
+None
+None
+WaterTopleft Corner
+WaterTopRight Corner
+WaterBottomleft Corner
+WaterBottomright Corner
+WaterUpslope helper
+WaterDownslope helper
+None
+Water Ladder
+Water Ladder Top
+Water PlayerBullet Block?
+Water PlayerNpc Block??
+None
+None
+None
+Water Mud?
+Water Ice?
+Water Snow?
+None
+None
+None
+None
+None
+

@@ -1,0 +1,65 @@
+Empty
+UzoEye
+Elevator06
+Kani
+JetCharge
+KllslfBlock
+TouchPanel
+testCircle
+eveElvtr00
+Dark2Block
+ShachoBdum
+tsiS
+usaS
+bbl1UP
+DoorA
+WoodBarri19
+skLift0
+skLift1
+skDesk
+skPillow
+chptDesk
+BabyBird
+DesKuro_frg
+TrolleyHello
+FireworksPod
+zaNanao
+zaDoor
+zaNanaoType
+zaTV
+zaNotePC
+zaFireworks
+zaOshima_drk
+zaAudi
+zaCarry
+zaPhone
+zaYubune
+zaSuimen
+zaTansan
+zaZabu
+zaSofa
+zaBantou
+zaOshima_dsk
+zaOutsideK
+zaPhoneZero
+zaHendenLamp
+zaHendenWave
+zaWorkFalls
+zaBitoSleep
+RollingSpk9
+phPinkFall
+phTsubasa
+phAdam_weed
+phZubo
+phRubi
+DesKurono
+BossScr2
+
+	txtStart
+	PinkHourLogo
+	Books
+	HeavyProc
+	phRom
+	phUmbreFall
+	phSmallUFO
+	phAdam

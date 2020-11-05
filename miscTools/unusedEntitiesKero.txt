@@ -1,0 +1,35 @@
+(020) BigPress
+(032) LadderBox
+(034) ComboCue
+(038) Heart
+(048) HiddenChest
+(058) comic balloon
+(060) Barbwire
+(061) Domino
+(062) Explain
+(065) Focus Control
+(076) Tokobushi
+(082) Route Arrow
+(090) Goldrush
+(095) Quaker
+(096) Flag Mine
+(098) Saucer
+(102) Uzo Chibi Red
+(105) Bacteria
+(110) Zombie
+(111) Leather
+(114) Stone Gate
+(126) The Bar
+(128) EarthFly
+(129) Walking Moss
+(130) Mob Stand
+(133) Katanakaji
+(143) New Arms
+(149) Booster
+(158) Fall Light
+(172) Kankisen 2
+(179) Call Glider Bird (Fire)
+(200) Walking Box
+(217) Position
+(218) Oshima
+

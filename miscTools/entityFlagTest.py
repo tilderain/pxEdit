@@ -3,7 +3,7 @@ import os
 
 def readEntityInfo():
 	try:
-		with open("entityInfo.txt") as f:
+		with open("../entityInfo.txt") as f:
 			entityInfo = [line.split("@") for line in f.read().splitlines()]
 			
 	except(IOError, FileNotFoundError) as e:
@@ -13,10 +13,10 @@ def readEntityInfo():
 
 entityInfo = readEntityInfo()
 
-for file in sorted(os.listdir("./Kero Blaster/rsc_k/field/")):
+for file in sorted(os.listdir("../Kero Blaster/rsc_k/field/")):
 	pack = pxMap.PxPack()
 	print(file)
-	pack.load("./Kero Blaster/rsc_k/field/" + file)
+	pack.load("../Kero Blaster/rsc_k/field/" + file)
 	
 
 	for o in pack.eve.units:
