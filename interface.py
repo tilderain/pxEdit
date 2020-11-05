@@ -846,8 +846,8 @@ def editPxPackAttributes(window, elem, gxEdit):
 			int(paramV)
 		except:
 			paramV = 0
-		curStage.pack.layers[0].scrolltype = int(paramST)
-		curStage.pack.layers[0].visibility = int(paramV)
+		curStage.pack.layers[i].scrolltype = int(paramST)
+		curStage.pack.layers[i].visibility = int(paramV)
 
 		paramParts = window.elements[f"map{i}PartsEdit"].text
 		oldParts = curStage.pack.layers[i].partsName
