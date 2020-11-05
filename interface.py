@@ -162,6 +162,12 @@ rectButtonNormalClicked = [32, 16, 16, 16]
 rectButtonNormalActive = [48, 16, 16, 16]
 rectButtonNormalHovered = [64, 16, 16, 16]
 
+
+rectButtonRectangle = [80, 224, 16, 16]
+rectButtonRectangleActive = [128, 224, 16, 16]
+rectsButtonRectangle = [rectButtonRectangle, None, None, rectButtonRectangleActive, None]
+
+
 rectsButtonNormal = [rectButtonNormal, rectButtonNormalDisabled, rectButtonNormalClicked, rectButtonNormalActive, rectButtonNormalHovered]
 
 rectMultiplayerCursor = (128, 0, 16, 16)
@@ -780,6 +786,128 @@ def toggleTilePalette(window, elem, gxEdit):
 def toggleEntityPalette(window, elem, gxEdit):
 	gxEdit.elements["entityPalette"].visible ^= 1	
 
+def editPxPackAttributes(window, elem, gxEdit):
+	
+	curStage = window.curStage
+	curStage.pack.description = window.elements["descEdit"].text
+	curStage.pack.spritesheet = window.elements["sprEdit"].text
+
+	curStage.pack.left_field = window.elements["leftEdit"].text
+	curStage.pack.right_field = window.elements["rightEdit"].text 
+	curStage.pack.up_field = window.elements["upEdit"].text 
+	curStage.pack.down_field = window.elements["downEdit"].text
+
+	paramX = window.elements["areaXEdit"].text
+	paramY = window.elements["areaYEdit"].text
+
+	paramAreaNo = window.elements["areaNoEdit"].text
+	paramR = window.elements["rEdit"].text
+	paramG = window.elements["gEdit"].text
+	paramB = window.elements["bEdit"].text
+	try:
+		int(paramX)
+	except:
+		paramX = 0
+	try:
+		int(paramY)
+	except:
+		paramY = 0
+	try:
+		int(paramAreaNo)
+	except:
+		paramAreaNo = 0
+	try:
+		int(paramR)
+	except:
+		paramR = 0
+	try:
+		int(paramG)
+	except:
+		paramG = 0
+	try:
+		int(paramB)
+	except:
+		paramB = 0
+	curStage.pack.area_x = int(paramX)
+	curStage.pack.area_y = int(paramY)
+	curStage.pack.area_no = int(paramAreaNo)
+	curStage.pack.bg_r = int(paramR)
+	curStage.pack.bg_g = int(paramG)
+	curStage.pack.bg_b = int(paramB)
+
+	for i in range(3):
+		paramST = window.elements[f"map{i}STEdit"].text
+		paramV = window.elements[f"map{i}VEdit"].text
+		try:
+			int(paramST)
+		except:
+			paramST = 0
+		try:
+			int(paramV)
+		except:
+			paramV = 0
+		curStage.pack.layers[0].scrolltype = int(paramST)
+		curStage.pack.layers[0].visibility = int(paramV)
+
+		paramParts = window.elements[f"map{i}PartsEdit"].text
+		oldParts = curStage.pack.layers[i].partsName
+
+		if paramParts == oldParts: continue
+
+		#TODO fix path var
+		curStage.pack.layers[i].partsName = paramParts
+		if curStage.loadParts(i):
+			curStage.attrs[i].load("./Kero Blaster/rsc_k/img/" + paramParts + ".pximg")
+			curStage.createMapSurface(i)
+			curStage.renderMapToSurface(i)
+		else:
+			curStage.pack.layers[i].partsName = oldParts
+
+	window.visible = False
+
+
+def togglePxPackAttributes(window, elem, gxEdit):
+	elem = gxEdit.elements["pxPackAttrDialog"]
+
+	elem.curStage = gxEdit.stages[gxEdit.curStage]
+	curStage = gxEdit.stages[gxEdit.curStage]
+
+	elem.elements["descEdit"].text = curStage.pack.description
+	elem.elements["sprEdit"].text = curStage.pack.spritesheet
+
+	elem.elements["areaXEdit"].text = str(curStage.pack.area_x)
+	elem.elements["areaYEdit"].text = str(curStage.pack.area_y)
+
+	elem.elements["areaNoEdit"].text = str(curStage.pack.area_no)
+
+	elem.elements["rEdit"].text = str(curStage.pack.bg_r)
+	elem.elements["gEdit"].text = str(curStage.pack.bg_g)
+	elem.elements["bEdit"].text = str(curStage.pack.bg_b)
+
+	elem.elements["leftEdit"].text = curStage.pack.left_field
+	elem.elements["rightEdit"].text = curStage.pack.right_field
+	elem.elements["upEdit"].text = curStage.pack.up_field
+	elem.elements["downEdit"].text = curStage.pack.down_field
+
+
+	elem.elements["map0PartsEdit"].text = curStage.pack.layers[0].partsName
+	elem.elements["map0STEdit"].text = str(curStage.pack.layers[0].scrolltype)
+	elem.elements["map0VEdit"].text = str(curStage.pack.layers[0].visibility)
+
+	elem.elements["map1PartsEdit"].text = curStage.pack.layers[1].partsName
+	elem.elements["map1STEdit"].text = str(curStage.pack.layers[1].scrolltype)
+	elem.elements["map1VEdit"].text = str(curStage.pack.layers[1].visibility)
+
+	elem.elements["map2PartsEdit"].text = curStage.pack.layers[2].partsName
+	elem.elements["map2STEdit"].text = str(curStage.pack.layers[2].scrolltype)
+	elem.elements["map2VEdit"].text = str(curStage.pack.layers[2].visibility)
+
+	elem.x = gWindowWidth // 2 - elem.w // 2
+	elem.y = gWindowHeight // 2 - elem.h // 2
+	gxEdit.elements["pxPackAttrDialog"] = gxEdit.elements.pop("pxPackAttrDialog")
+	elem.visible ^= 1
+
+
 def toggleResizeDialog(window, elem, gxEdit):
 	elem = gxEdit.elements["mapSizeDialog"]
 
@@ -856,6 +984,8 @@ class ToolsWindow(UIWindow):
 
 		self.elements["butReplace"] = UIButton(40, 36, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_REPLACE, type=BUTTON_TYPE_RADIO, group=2,
 										tooltip=[["Replace", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butRectangle"] = UIButton(60, 36, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, rects=rectsButtonRectangle, type=BUTTON_TYPE_RADIO, group=2,
+										tooltip=[["Rectangle", sdlColorBlack, TTF_STYLE_NORMAL]])
 
 
 		#---LAYER
@@ -898,29 +1028,8 @@ class ToolsWindow(UIWindow):
 		self.elements["butTogglePackAttr"] = UIButton(160, 60, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
 												enum=BUTTON_SCRIPT,
 												tooltip=[["Edit pxpack attributes", sdlColorBlack, TTF_STYLE_NORMAL]])
-		self.elements["butTogglePackAttr"].onAction = toggleMultiplayerMenu
+		self.elements["butTogglePackAttr"].onAction = togglePxPackAttributes
 
-
-		'''
-		self.elements["butToggleTilePalette"] = UIButton(4, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
-												tooltip=[["i hate pxedit", sdlColorBlack, TTF_STYLE_NORMAL]])
-		self.elements["butToggleTilePalette"].onAction = toggleTilePalette								
-
-		
-
-		self.elements["butToggleResize"] = UIButton(24, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
-												tooltip=[["resize map", sdlColorBlack, TTF_STYLE_NORMAL]])
-		self.elements["butToggleResize"].onAction = toggleResizeDialog			
-
-		self.elements["butCheckbox"] = UIButton(4, 48, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX)
-
-		self.elements["butRadio"] = UIButton(20, 48, 16, 12, self, group=1, rects=rectsButtonCheckbox, type=BUTTON_TYPE_RADIO)
-		self.elements["butRadio2"] = UIButton(36, 48, 16, 12, self, group=1, rects=rectsButtonCheckbox, type=BUTTON_TYPE_RADIO)
-
-
-																						
-		#self.elements["butToggleTilePalette"].onAction = 
-		'''
 
 def editEntityAttributes(control, gxEdit):
 	param = control.text
@@ -1029,14 +1138,6 @@ class EntityEditWindow(UIWindow):
 		self.elements["butCheckBits7"].onAction = editEntityBits
 		self.elements["butCheckBits8"].onAction = editEntityBits
 
-		#self.elements["buttonMinimize"] = UIButton(180, 4, 16, 16, self)
-		#self.elements["buttonMinimize"].onAction = minimizeButtonAction
-
-		#self.elements["textTools"] = UIElement(2, 2, 0, 0, self, rectWindowTextTools)
-
-		#self.elements["butToggleTilePalette"] = UIButton(4, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
-		#										tooltip=[["i hate pxedit", sdlColorBlack, TTF_STYLE_NORMAL]])
-		#self.elements["butToggleTilePalette"].onAction = 
 
 class YesNoCancelDialog(UIWindow):
 	pass
@@ -1086,12 +1187,99 @@ class MapResizeDialog(UIWindow):
 		self.elements["paramX"] = UITextInput(20, 5, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER)
 		self.elements["paramY"] = UITextInput(20, 28, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER)
 
-		self.elements["textOk"] = UIText(16, 68, "Ok", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textOk"] = UIText(16, 68, "Ok", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["textCancel"] = UIText(54, 68, "Cancel", sdlColorYellow, TTF_STYLE_NORMAL, self)
 
 		self.elements["buttonOk"] = UIButton(15, 50, 16, 16, self)
 		self.elements["buttonOk"].onAction = mapResizeAction
 		self.elements["buttonCancel"] = UIButton(60, 50, 16, 16, self)
+		self.elements["buttonCancel"].onAction = minimizeButtonAction
+
+		#TODO: stage parameter
+
+class PxPackAttrDialog(UIWindow):
+	def __init__(self, x, y, w, h, type=const.WINDOW_ENTITYEDIT, style=0):
+		UIWindow.__init__(self, x, y, w, h, type, style)
+
+		self.elements["textDesc"] = UIText(6, 6, "Map Name", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["descEdit"] = UITextInput(68, 6, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
+			maxlen=16)
+
+
+		self.elements["textSpr"] = UIText(6, 34, "Spritesheet", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["sprEdit"] = UITextInput(68, 34, 80, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
+			maxlen=16)
+
+		self.elements["textAreaxy"] = UIText(6, 72, "Area x, y", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["areaXEdit"] = UITextInput(68, 72, 40, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=255)
+		self.elements["areaYEdit"] = UITextInput(112, 72, 40, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=255)
+
+		self.elements["textAreano"] = UIText(6, 96, "Area no.", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["areaNoEdit"] = UITextInput(68, 96, 40, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=255)
+
+
+		self.elements["textRGB"] = UIText(6, 120, "R,G,B", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["rEdit"] = UITextInput(68, 120, 40, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=255)
+		self.elements["gEdit"] = UITextInput(112, 120, 40, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=255)
+		self.elements["bEdit"] = UITextInput(154, 120, 40, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=255)
+
+		self.elements["textLeft"] = UIText(6, 160, "Left", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["leftEdit"] = UITextInput(68, 160, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
+			maxlen=16)
+
+		self.elements["textRight"] = UIText(6, 180, "Right", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["rightEdit"] = UITextInput(68, 180, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
+			maxlen=16)
+
+		self.elements["textUp"] = UIText(6, 200, "Up", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["upEdit"] = UITextInput(68, 200, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
+			maxlen=16)
+		self.elements["textDown"] = UIText(6, 220, "Down", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["downEdit"] = UITextInput(68, 220, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
+			maxlen=16)
+
+
+		self.elements["textMap0Parts"] = UIText(200, 6, "Map0 Parts", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["map0PartsEdit"] = UITextInput(280, 6, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
+			maxlen=16)
+		self.elements["textMap0ST"] = UIText(200, 26, "Map0 ScrollType", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["map0STEdit"] = UITextInput(280, 26, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=16)
+		self.elements["textMap0V"] = UIText(200, 46, "Map0 Visibility", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["map0VEdit"] = UITextInput(280, 46, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=16)
+		self.elements["textMap1Parts"] = UIText(200, 86, "Map1 Parts", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["map1PartsEdit"] = UITextInput(280, 86, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
+			maxlen=16)
+		self.elements["textMap1ST"] = UIText(200, 106, "Map1 ScrollType", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["map1STEdit"] = UITextInput(280, 106, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=16)
+		self.elements["textMap1V"] = UIText(200, 126, "Map1 Visibility", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["map1VEdit"] = UITextInput(280, 126, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=16)
+		self.elements["textMap2Parts"] = UIText(200, 166, "Map2 Parts", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["map2PartsEdit"] = UITextInput(280, 166, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self,
+			maxlen=16)
+		self.elements["textMap2ST"] = UIText(200, 186, "Map2 ScrollType", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["map2STEdit"] = UITextInput(280, 186, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=16)
+		self.elements["textMap2V"] = UIText(200, 206, "Map2 Visibility", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["map2VEdit"] = UITextInput(280, 206, 120, 18, "", sdlColorGreen, TTF_STYLE_BOLD, self, style=const.TEXTINPUTTYPE_NUMBER,
+			maxlen=16)
+
+
+		self.elements["textOk"] = UIText(290, 255, "Ok", sdlColorYellow, TTF_STYLE_NORMAL, self)
+		self.elements["textCancel"] = UIText(360, 255, "Cancel", sdlColorYellow, TTF_STYLE_NORMAL, self)
+
+		self.elements["buttonOk"] = UIButton(290, 235, 16, 16, self)
+		self.elements["buttonOk"].onAction = editPxPackAttributes
+		self.elements["buttonCancel"] = UIButton(365, 235, 16, 16, self)
 		self.elements["buttonCancel"].onAction = minimizeButtonAction
 
 		#TODO: stage parameter

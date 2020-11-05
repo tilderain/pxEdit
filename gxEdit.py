@@ -128,15 +128,15 @@ class StagePrj:
 			#read last modified date
 			#Choose the backup you want to open.
 		
-		self.pack.load(fieldPath + self.stageName + pxPackExt)
+		if self.pack.load(fieldPath + self.stageName + pxPackExt):
+			for i in range(3):
+				self.attrs[i].load(imgPath + self.pack.layers[i].partsName + pxAttrExt)
+				self.loadParts(i)
+				self.createMapSurface(i)
+				self.renderMapToSurface(i)
+			return True
 
-		for i in range(3):
-			self.attrs[i].load(imgPath + self.pack.layers[i].partsName + pxAttrExt)
-			self.loadParts(i)
-			self.createMapSurface(i)
-			self.renderMapToSurface(i)
-
-		return True
+		return False
 
 	def loadParts(self, layerNo):
 		try:
@@ -144,9 +144,10 @@ class StagePrj:
 			if not self.attrs[layerNo].width:
 					self.attrs[layerNo].width = self.parts[layerNo].size[0] // const.tileWidth
 					self.attrs[layerNo].height = self.parts[layerNo].size[1] // const.tileWidth
+			return True
 		except (OSError, IOError) as e:
 			print("Error while loading parts {} {}".format(layerNo, e))
-			return
+			return False
 
 	def save(self):
 		#if self.lastSavePos == self.undoPos: #TODO: and pxattr not modified
@@ -364,7 +365,10 @@ class Editor:
 		print("Loading stage " + stageName)
 		stage = StagePrj(stageName)
 		result = stage.load()
-		self.stages.append(stage)
+		if result:
+			self.stages.append(stage)
+		else:
+			del stage
 		return result
 
 	def getStageById(self, stageNo):
@@ -538,6 +542,8 @@ def main():
 	gxEdit.elements["entEdit"] = interface.EntityEditWindow(20,20,150,250)
 
 	gxEdit.elements["mapSizeDialog"] = interface.MapResizeDialog(20,20,104,88)
+
+	gxEdit.elements["pxPackAttrDialog"] = interface.PxPackAttrDialog(20,20,405,270)
 
 	gxEdit.elements["dialogMultiplayer"] = interface.MultiplayerWindow(0,0,220,80)
 

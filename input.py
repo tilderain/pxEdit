@@ -481,17 +481,33 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 
 	#field shortcut transportation
 	elif sym == sdl2.SDLK_t:
-		gxEdit.loadStage(stage.pack.up_field)
-		gxEdit.curStage+=1
+		for i in range(len(gxEdit.stages)):
+			if gxEdit.stages[i].stageName == stage.pack.up_field:
+				gxEdit.curStage = i
+				return
+		if gxEdit.loadStage(stage.pack.up_field):
+			gxEdit.curStage = len(gxEdit.stages)
 	elif sym == sdl2.SDLK_f:
-		gxEdit.loadStage(stage.pack.left_field)
-		gxEdit.curStage+=1
+		for i in range(len(gxEdit.stages)):
+			if gxEdit.stages[i].stageName == stage.pack.left_field:
+				gxEdit.curStage = i
+				return
+		if gxEdit.loadStage(stage.pack.left_field):
+			gxEdit.curStage = len(gxEdit.stages)
 	elif sym == sdl2.SDLK_g:
-		gxEdit.loadStage(stage.pack.down_field)
-		gxEdit.curStage+=1
+		for i in range(len(gxEdit.stages)):
+			if gxEdit.stages[i].stageName == stage.pack.down_field:
+				gxEdit.curStage = i
+				return
+		if gxEdit.loadStage(stage.pack.down_field):
+			gxEdit.curStage = len(gxEdit.stages)
 	elif sym == sdl2.SDLK_h:
-		gxEdit.loadStage(stage.pack.right_field)
-		gxEdit.curStage+=1
+		for i in range(len(gxEdit.stages)):
+			if gxEdit.stages[i].stageName == stage.pack.right_field:
+				gxEdit.curStage = i
+				return
+		if gxEdit.loadStage(stage.pack.right_field):
+			gxEdit.curStage = len(gxEdit.stages)
 	
 	#keyboard navigation tile selection
 	elif sym == sdl2.SDLK_a:

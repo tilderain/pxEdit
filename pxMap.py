@@ -100,13 +100,14 @@ class PxPackLayer:
 		self.width = readInt(stream, 2)
 		self.height = readInt(stream, 2)
 
-		if self.width * self.height == 0: return
+		if self.width * self.height == 0: return True
 
 		self.type = readInt(stream, 1)
 		if self.type == 0:
 			for i in range(self.height):
 				byt = stream.read(self.width)
 				self.tiles.append([tile for tile in byt])
+			return True
 	
 	def load(self, path): #readEntities
 		try:
@@ -116,7 +117,7 @@ class PxPackLayer:
 			print("Error while opening {}: {}".format(path, e))
 			return False
 
-		self.loadFromPack(stream)
+		return self.loadFromPack(stream)
 
 	def saveToPack(self, f):
 		f.write(bytes(pxmapMagic.encode("ascii")))
@@ -341,6 +342,7 @@ class PxMapAttr: #use the same class for both
 			y = tile[1][1] * 16
 			
 			self.tiles[tile[0][1]][tile[0][0]] = x+y
+
 	def resize(self, width, height):
 		if width <= 0: return
 		if height <= 0: return
@@ -356,6 +358,9 @@ class PxMapAttr: #use the same class for both
 
 		self.width = width
 		self.height = height
+
+	def shift(self, x, y, wrap):
+		pass
 		
 	def get(self):
 		return self.tiles[:]
