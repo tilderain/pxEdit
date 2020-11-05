@@ -857,7 +857,7 @@ def editPxPackAttributes(window, elem, gxEdit):
 		#TODO fix path var
 		curStage.pack.layers[i].partsName = paramParts
 		if curStage.loadParts(i):
-			curStage.attrs[i].load("./Kero Blaster/rsc_k/img/" + paramParts + ".pximg")
+			curStage.attrs[i].load("./Kero Blaster/rsc_k/img/" + paramParts + ".pxattr")
 			curStage.createMapSurface(i)
 			curStage.renderMapToSurface(i)
 		else:
