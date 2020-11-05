@@ -259,7 +259,7 @@ class Editor:
 	def __init__(self):
 		self.entityInfo = []
 		self.stages = []
-		#TODO: remove this
+
 		self.curStage = 0
 
 		# zoom level
@@ -269,10 +269,10 @@ class Editor:
 
 		self.currentEntity = 0
 		self.currentEditMode = const.EDIT_TILE
+		self.currentTilePaintMode = const.PAINT_NORMAL
 		self.currentLayer = 0
 		self.visibleLayers = [True, True, True, True, False]
 
-		self.currentTilePaintMode = None
 
 		self.selectionBoxStart = [-1, -1]
 		self.selectionBoxEnd = [-1, -1]
@@ -355,6 +355,7 @@ class Editor:
 		return result
 
 	def loadStage(self, stageName):
+		#TODO: 
 		#for stage in self.stages:
 		#	if stage.stageNo == stageNo:
 		#		print("Error: tried loading an already loaded stage")
@@ -610,6 +611,7 @@ def main():
 			#TODO: really really fix this
 			if gxEdit.focussedElem:
 				if not gxEdit.focussedElem.parent.visible:
+					gxEdit.focussedElem.focussed = False
 					gxEdit.focussedElem = None
 
 			if event.type == sdl2.SDL_QUIT:

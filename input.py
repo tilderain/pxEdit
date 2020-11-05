@@ -363,6 +363,8 @@ def runMouse2(gxEdit, stage, mouse):
 				gxEdit.elements["entEdit"].visible = False
 				return
 
+toolsOrdered = ("butDraw", "butErase", "butCopy", "butFill", "butReplace")
+
 def runKeyboard(gxEdit, stage, scaleFactor, key):
 	sym = key.keysym.sym
 	if key.keysym.mod & sdl2.KMOD_CTRL:
@@ -421,15 +423,48 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 
 				undo = UndoAction(const.UNDO_ENTITY_ADD, 0, ents)
 				stage.addUndo(undo)
+		elif sym == sdl2.SDLK_1:
+			gxEdit.elements["toolsWindow"].elements["butMap0"].handleMouse1(None, gxEdit)
+		elif sym == sdl2.SDLK_2:
+			gxEdit.elements["toolsWindow"].elements["butMap1"].handleMouse1(None, gxEdit)
+		elif sym == sdl2.SDLK_3:
+			gxEdit.elements["toolsWindow"].elements["butMap2"].handleMouse1(None, gxEdit)
+		elif sym == sdl2.SDLK_4:
+			gxEdit.elements["toolsWindow"].elements["butUnits"].handleMouse1(None, gxEdit)
+		elif sym == sdl2.SDLK_5:
+			gxEdit.elements["toolsWindow"].elements["butAttr"].handleMouse1(None, gxEdit)
+
 
 	#TODO: make this better
-	if gxEdit.focussedElem:
+	elif gxEdit.focussedElem:
 		if sym == sdl2.SDLK_BACKSPACE:
 			if gxEdit.focussedElem:
 				gxEdit.focussedElem.text = gxEdit.focussedElem.text[:-1]
 				if gxEdit.focussedElem.onAction:
 					gxEdit.focussedElem.onAction(gxEdit.focussedElem, gxEdit)
 		return
+
+	elif sym == sdl2.SDLK_1:
+		gxEdit.elements["toolsWindow"].elements["butDraw"].handleMouse1(None, gxEdit)
+	elif sym == sdl2.SDLK_2:
+		gxEdit.elements["toolsWindow"].elements["butErase"].handleMouse1(None, gxEdit)
+	elif sym == sdl2.SDLK_3:
+		gxEdit.elements["toolsWindow"].elements["butCopy"].handleMouse1(None, gxEdit)
+	elif sym == sdl2.SDLK_4:
+		gxEdit.elements["toolsWindow"].elements["butFill"].handleMouse1(None, gxEdit)
+	elif sym == sdl2.SDLK_5:
+		gxEdit.elements["toolsWindow"].elements["butReplace"].handleMouse1(None, gxEdit)
+	elif sym == sdl2.SDLK_6:
+		pass
+		#gxEdit.elements["toolsWindow"].elements["butRectangle"].handleMouse1(None, gxEdit)
+	elif sym == sdl2.SDLK_z:
+		gxEdit.currentTilePaintMode -= 1
+		if gxEdit.currentTilePaintMode < 0: gxEdit.currentTilePaintMode = 4
+		gxEdit.elements["toolsWindow"].elements[toolsOrdered[gxEdit.currentTilePaintMode]].handleMouse1(None, gxEdit)
+	elif sym == sdl2.SDLK_x:
+		gxEdit.currentTilePaintMode += 1
+		if gxEdit.currentTilePaintMode > 4: gxEdit.currentTilePaintMode = 0
+		gxEdit.elements["toolsWindow"].elements[toolsOrdered[gxEdit.currentTilePaintMode]].handleMouse1(None, gxEdit)
 
 	elif sym == sdl2.SDLK_j:
 		gxEdit.curStage -= 1

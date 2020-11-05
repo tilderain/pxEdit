@@ -97,6 +97,8 @@ def packetHandler(gxEdit, sock, playerId, datas):
 		### --- SERVER RECIEVING PACKETS --- ####
 		#########################################
 
+		#TODO: sanitize stage name
+		
 		elif data["type"] == PACKET_MOUSEPOS:
 			gxEdit.players[playerId]["mousepos"] = data["x"], data["y"]
 			gxEdit.players[playerId]["curStage"] = data["curStage"]

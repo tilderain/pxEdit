@@ -10,10 +10,11 @@ EDIT_ENTITY = 1
 
 #paint modes
 PAINT_NORMAL = 0
-PAINT_RECTANGLE = 1
-PAINT_FILL = 2
-PAINT_REPLACE = 3
-PAINT_COPY = 4
+PAINT_ERASE = 1
+PAINT_COPY = 3
+PAINT_FILL = 4
+PAINT_REPLACE = 5
+PAINT_RECTANGLE = 6
 
 #Entities which can only be spawned from parents
 #used to determine if they crash the game or not

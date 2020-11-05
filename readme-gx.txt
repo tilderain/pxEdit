@@ -23,6 +23,10 @@ r : toggle tile palette
 
 comma,period: change current layer
 
+z,x: change tile paint mode
+12345: change tile paint mode
+ctrl+12345: toggle layer visibility
+
 mouse3 - pick block
 
 CTRL-Z CTRL-Y

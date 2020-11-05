@@ -890,12 +890,16 @@ class ToolsWindow(UIWindow):
 										tooltip=[["Display tile attributes", sdlColorBlack, TTF_STYLE_NORMAL]])
 		self.elements["butAttr"].onAction = toggleLayerVisibility
 
-		self.elements["butToggleMultiplayer"] = UIButton(40, 60, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
+		self.elements["butToggleMultiplayer"] = UIButton(132, 60, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
 												enum=BUTTON_MULTIPLAYER,
 												tooltip=[["multiplayer", sdlColorBlack, TTF_STYLE_NORMAL]])
 		self.elements["butToggleMultiplayer"].onAction = toggleMultiplayerMenu
 
-		
+		self.elements["butTogglePackAttr"] = UIButton(160, 60, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
+												enum=BUTTON_SCRIPT,
+												tooltip=[["Edit pxpack attributes", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butTogglePackAttr"].onAction = toggleMultiplayerMenu
+
 
 		'''
 		self.elements["butToggleTilePalette"] = UIButton(4, 24, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, 
