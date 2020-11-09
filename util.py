@@ -1,4 +1,5 @@
-
+import os
+os.environ["PYSDL2_DLL_PATH"] = "./"
 import sdl2.ext
 import ctypes
 

@@ -1,5 +1,6 @@
 # pylint: disable=no-member
-
+import os
+os.environ["PYSDL2_DLL_PATH"] = "./"
 import sdl2.ext
 import const
 import math
@@ -8,10 +9,10 @@ import ctypes
 import util
 
 import multi
-import os
+
 import copy
 
-os.environ["PYSDL2_DLL_PATH"] = "./"
+
 from sdl2.sdlttf import *
 
 #from gxEdit import gxEdit as gxEdit

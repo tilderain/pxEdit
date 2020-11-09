@@ -1,3 +1,5 @@
+import os
+os.environ["PYSDL2_DLL_PATH"] = "./"
 import sdl2.ext
 import const
 import ctypes
@@ -363,10 +365,11 @@ def runMouse2(gxEdit, stage, mouse):
 				gxEdit.elements["entEdit"].visible = False
 				return
 
-toolsOrdered = ("butDraw", "butErase", "butCopy", "butFill", "butReplace")
+toolsOrdered = ("butDraw", "butErase", "butCopy", "butFill", "butReplace", "butRectangle")
 
 def runKeyboard(gxEdit, stage, scaleFactor, key):
 	sym = key.keysym.sym
+	#TODO: scancode
 	if key.keysym.mod & sdl2.KMOD_CTRL:
 
 		if sym == sdl2.SDLK_s:
@@ -455,15 +458,14 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	elif sym == sdl2.SDLK_5:
 		gxEdit.elements["toolsWindow"].elements["butReplace"].handleMouse1(None, gxEdit)
 	elif sym == sdl2.SDLK_6:
-		pass
-		#gxEdit.elements["toolsWindow"].elements["butRectangle"].handleMouse1(None, gxEdit)
+		gxEdit.elements["toolsWindow"].elements["butRectangle"].handleMouse1(None, gxEdit)
 	elif sym == sdl2.SDLK_z:
 		gxEdit.currentTilePaintMode -= 1
-		if gxEdit.currentTilePaintMode < 0: gxEdit.currentTilePaintMode = 4
+		if gxEdit.currentTilePaintMode < 0: gxEdit.currentTilePaintMode = 5
 		gxEdit.elements["toolsWindow"].elements[toolsOrdered[gxEdit.currentTilePaintMode]].handleMouse1(None, gxEdit)
 	elif sym == sdl2.SDLK_x:
 		gxEdit.currentTilePaintMode += 1
-		if gxEdit.currentTilePaintMode > 4: gxEdit.currentTilePaintMode = 0
+		if gxEdit.currentTilePaintMode > 5: gxEdit.currentTilePaintMode = 0
 		gxEdit.elements["toolsWindow"].elements[toolsOrdered[gxEdit.currentTilePaintMode]].handleMouse1(None, gxEdit)
 
 	elif sym == sdl2.SDLK_j:
