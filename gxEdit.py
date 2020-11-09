@@ -130,8 +130,8 @@ class StagePrj:
 		
 		if self.pack.load(fieldPath + self.stageName + pxPackExt):
 			for i in range(3):
-				self.attrs[i].load(imgPath + self.pack.layers[i].partsName + pxAttrExt)
 				self.loadParts(i)
+				self.attrs[i].load(imgPath + self.pack.layers[i].partsName + pxAttrExt)
 				self.createMapSurface(i)
 				self.renderMapToSurface(i)
 			return True
@@ -145,7 +145,7 @@ class StagePrj:
 					self.attrs[layerNo].width = self.parts[layerNo].size[0] // const.tileWidth
 					self.attrs[layerNo].height = self.parts[layerNo].size[1] // const.tileWidth
 			return True
-		except (OSError, IOError) as e:
+		except (OSError, IOError, sdl2.ext.SDLError) as e:
 			print("Error while loading parts {} {}".format(layerNo, e))
 			return False
 
@@ -157,6 +157,8 @@ class StagePrj:
 		
 		self.pack.save(fieldPath + self.stageName + pxPackExt)
 		#TODO: save to _temp, rename existing to _temp2, rename _temp to orig and delete temp2
+
+		#TODO: for save as, open all pxpacks in folder and change all references to new name
 
 		self.lastSavePos = self.undoPos
 		self.lastBackupPos = self.undoPos
