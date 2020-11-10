@@ -627,7 +627,10 @@ def main():
 				break
 			elif event.type == sdl2.SDL_DROPFILE:
 				#TODO: drop an exe or event/map to load singular
-				pass
+				print("help")
+				fName = str(event.drop.file).split("/")[-1].split(".")[0]
+				if gxEdit.loadStage(fName):
+					gxEdit.curStage = len(gxEdit.stages)
 			elif event.type == sdl2.SDL_WINDOWEVENT:
 				if event.window.event == sdl2.SDL_WINDOWEVENT_ENTER:
 					mouseover = True
