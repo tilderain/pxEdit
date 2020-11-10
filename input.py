@@ -368,25 +368,25 @@ def runMouse2(gxEdit, stage, mouse):
 toolsOrdered = ("butDraw", "butErase", "butCopy", "butFill", "butReplace", "butRectangle")
 
 def runKeyboard(gxEdit, stage, scaleFactor, key):
-	sym = key.keysym.sym
+	sym = key.keysym.scancode
 	#TODO: scancode
 	if key.keysym.mod & sdl2.KMOD_CTRL:
 
-		if sym == sdl2.SDLK_s:
+		if sym == sdl2.SDL_SCANCODE_S:
 			#TODO: show flash on save (goodly)
 			if stage.save():
 				gxEdit.saveTimer = 5
 
-		elif sym == sdl2.SDLK_z and not gxEdit.multiplayerState: #todo
+		elif sym == sdl2.SDL_SCANCODE_Z and not gxEdit.multiplayerState: #todo
 			if key.keysym.mod & sdl2.KMOD_SHIFT:
 				gxEdit.executeRedo()
 			else:
 				gxEdit.executeUndo()
 
-		elif sym == sdl2.SDLK_y and not gxEdit.multiplayerState: #todo
+		elif sym == sdl2.SDL_SCANCODE_Y and not gxEdit.multiplayerState: #todo
 			gxEdit.executeRedo()
 
-		elif sym == sdl2.SDLK_c:
+		elif sym == sdl2.SDL_SCANCODE_C:
 			if stage.selectedEntities:
 				gxEdit.copiedEntities = copy.deepcopy(stage.selectedEntities)
 				basex = min([o.x for o in gxEdit.copiedEntities])
@@ -396,7 +396,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 					o.x -= basex
 					o.y -= basey
 		
-		elif sym == sdl2.SDLK_v:
+		elif sym == sdl2.SDL_SCANCODE_V:
 			if gxEdit.focussedElem:
 				text = sdl2.SDL_GetClipboardText()
 				gxEdit.focussedElem.handleTextInput(text.decode("utf-8"), gxEdit)
@@ -426,84 +426,84 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 
 				undo = UndoAction(const.UNDO_ENTITY_ADD, 0, ents)
 				stage.addUndo(undo)
-		elif sym == sdl2.SDLK_1:
+		elif sym == sdl2.SDL_SCANCODE_1:
 			gxEdit.elements["toolsWindow"].elements["butMap0"].handleMouse1(None, gxEdit)
-		elif sym == sdl2.SDLK_2:
+		elif sym == sdl2.SDL_SCANCODE_2:
 			gxEdit.elements["toolsWindow"].elements["butMap1"].handleMouse1(None, gxEdit)
-		elif sym == sdl2.SDLK_3:
+		elif sym == sdl2.SDL_SCANCODE_3:
 			gxEdit.elements["toolsWindow"].elements["butMap2"].handleMouse1(None, gxEdit)
-		elif sym == sdl2.SDLK_4:
+		elif sym == sdl2.SDL_SCANCODE_4:
 			gxEdit.elements["toolsWindow"].elements["butUnits"].handleMouse1(None, gxEdit)
-		elif sym == sdl2.SDLK_5:
+		elif sym == sdl2.SDL_SCANCODE_5:
 			gxEdit.elements["toolsWindow"].elements["butAttr"].handleMouse1(None, gxEdit)
 
 
 	#TODO: make this better
 	elif gxEdit.focussedElem:
-		if sym == sdl2.SDLK_BACKSPACE:
+		if sym == sdl2.SDL_SCANCODE_BACKSPACE:
 			if gxEdit.focussedElem:
 				gxEdit.focussedElem.text = gxEdit.focussedElem.text[:-1]
 				if gxEdit.focussedElem.onAction:
 					gxEdit.focussedElem.onAction(gxEdit.focussedElem, gxEdit)
 		return
 
-	elif sym == sdl2.SDLK_1:
+	elif sym == sdl2.SDL_SCANCODE_1:
 		gxEdit.elements["toolsWindow"].elements["butDraw"].handleMouse1(None, gxEdit)
-	elif sym == sdl2.SDLK_2:
+	elif sym == sdl2.SDL_SCANCODE_2:
 		gxEdit.elements["toolsWindow"].elements["butErase"].handleMouse1(None, gxEdit)
-	elif sym == sdl2.SDLK_3:
+	elif sym == sdl2.SDL_SCANCODE_3:
 		gxEdit.elements["toolsWindow"].elements["butCopy"].handleMouse1(None, gxEdit)
-	elif sym == sdl2.SDLK_4:
+	elif sym == sdl2.SDL_SCANCODE_4:
 		gxEdit.elements["toolsWindow"].elements["butFill"].handleMouse1(None, gxEdit)
-	elif sym == sdl2.SDLK_5:
+	elif sym == sdl2.SDL_SCANCODE_5:
 		gxEdit.elements["toolsWindow"].elements["butReplace"].handleMouse1(None, gxEdit)
-	elif sym == sdl2.SDLK_6:
+	elif sym == sdl2.SDL_SCANCODE_6:
 		gxEdit.elements["toolsWindow"].elements["butRectangle"].handleMouse1(None, gxEdit)
-	elif sym == sdl2.SDLK_z:
+	elif sym == sdl2.SDL_SCANCODE_Z:
 		gxEdit.currentTilePaintMode -= 1
 		if gxEdit.currentTilePaintMode < 0: gxEdit.currentTilePaintMode = 5
 		gxEdit.elements["toolsWindow"].elements[toolsOrdered[gxEdit.currentTilePaintMode]].handleMouse1(None, gxEdit)
-	elif sym == sdl2.SDLK_x:
+	elif sym == sdl2.SDL_SCANCODE_X:
 		gxEdit.currentTilePaintMode += 1
 		if gxEdit.currentTilePaintMode > 5: gxEdit.currentTilePaintMode = 0
 		gxEdit.elements["toolsWindow"].elements[toolsOrdered[gxEdit.currentTilePaintMode]].handleMouse1(None, gxEdit)
 
-	elif sym == sdl2.SDLK_j:
+	elif sym == sdl2.SDL_SCANCODE_J:
 		gxEdit.curStage -= 1
-	elif sym == sdl2.SDLK_k:
+	elif sym == sdl2.SDL_SCANCODE_K:
 		gxEdit.curStage += 1
 
 	#window shortcuts
-	elif sym == sdl2.SDLK_e:
+	elif sym == sdl2.SDL_SCANCODE_E:
 		interface.toggleEntityPalette(0,0,gxEdit)
-	elif sym == sdl2.SDLK_r:
+	elif sym == sdl2.SDL_SCANCODE_R:
 		interface.toggleTilePalette(0,0,gxEdit)
 
 	#zx change tool
 
 	#field shortcut transportation
-	elif sym == sdl2.SDLK_t:
+	elif sym == sdl2.SDL_SCANCODE_T:
 		for i in range(len(gxEdit.stages)):
 			if gxEdit.stages[i].stageName == stage.pack.up_field:
 				gxEdit.curStage = i
 				return
 		if gxEdit.loadStage(stage.pack.up_field):
 			gxEdit.curStage = len(gxEdit.stages)
-	elif sym == sdl2.SDLK_f:
+	elif sym == sdl2.SDL_SCANCODE_F:
 		for i in range(len(gxEdit.stages)):
 			if gxEdit.stages[i].stageName == stage.pack.left_field:
 				gxEdit.curStage = i
 				return
 		if gxEdit.loadStage(stage.pack.left_field):
 			gxEdit.curStage = len(gxEdit.stages)
-	elif sym == sdl2.SDLK_g:
+	elif sym == sdl2.SDL_SCANCODE_G:
 		for i in range(len(gxEdit.stages)):
 			if gxEdit.stages[i].stageName == stage.pack.down_field:
 				gxEdit.curStage = i
 				return
 		if gxEdit.loadStage(stage.pack.down_field):
 			gxEdit.curStage = len(gxEdit.stages)
-	elif sym == sdl2.SDLK_h:
+	elif sym == sdl2.SDL_SCANCODE_H:
 		for i in range(len(gxEdit.stages)):
 			if gxEdit.stages[i].stageName == stage.pack.right_field:
 				gxEdit.curStage = i
@@ -512,25 +512,25 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			gxEdit.curStage = len(gxEdit.stages)
 	
 	#keyboard navigation tile selection
-	elif sym == sdl2.SDLK_a:
+	elif sym == sdl2.SDL_SCANCODE_A:
 		if not key.keysym.mod & sdl2.KMOD_SHIFT:
 			stage.selectedTilesStart[0] -= 1
 		if not key.keysym.mod & sdl2.KMOD_ALT:
 			stage.selectedTilesEnd[0] -= 1
 		stage.lastTileEdit = [None, None]
-	elif sym == sdl2.SDLK_d:
+	elif sym == sdl2.SDL_SCANCODE_D:
 		if not key.keysym.mod & sdl2.KMOD_SHIFT:
 			stage.selectedTilesStart[0] += 1
 		if not key.keysym.mod & sdl2.KMOD_ALT:
 			stage.selectedTilesEnd[0] += 1
 		stage.lastTileEdit = [None, None]
-	elif sym == sdl2.SDLK_w:
+	elif sym == sdl2.SDL_SCANCODE_W:
 		if not key.keysym.mod & sdl2.KMOD_SHIFT:
 			stage.selectedTilesStart[1] -= 1
 		if not key.keysym.mod & sdl2.KMOD_ALT:
 			stage.selectedTilesEnd[1] -= 1
 		stage.lastTileEdit = [None, None]
-	elif sym == sdl2.SDLK_s and not key.keysym.mod & sdl2.KMOD_CTRL:
+	elif sym == sdl2.SDL_SCANCODE_S and not key.keysym.mod & sdl2.KMOD_CTRL:
 		if not key.keysym.mod & sdl2.KMOD_SHIFT:
 			stage.selectedTilesStart[1] += 1
 		if not key.keysym.mod & sdl2.KMOD_ALT:
@@ -538,72 +538,72 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		stage.lastTileEdit = [None, None]
 
 	#keyboard navigation mouse movement
-	elif sym == sdl2.SDLK_KP_8:
+	elif sym == sdl2.SDL_SCANCODE_KP_8:
 		mouse = util.getMouseState()
 		sdl2.SDL_WarpMouseInWindow(None, mouse.x, int(mouse.y-const.tileWidth*gxEdit.magnification))
-	elif sym == sdl2.SDLK_KP_4:
+	elif sym == sdl2.SDL_SCANCODE_KP_4:
 		mouse = util.getMouseState()
 		sdl2.SDL_WarpMouseInWindow(None,  int(mouse.x-const.tileWidth*gxEdit.magnification), mouse.y)
-	elif sym == sdl2.SDLK_KP_5:
+	elif sym == sdl2.SDL_SCANCODE_KP_5:
 		mouse = util.getMouseState()
 		sdl2.SDL_WarpMouseInWindow(None, mouse.x,  int(mouse.y+const.tileWidth*gxEdit.magnification))
-	elif sym == sdl2.SDLK_KP_6:
+	elif sym == sdl2.SDL_SCANCODE_KP_6:
 		mouse = util.getMouseState()
 		sdl2.SDL_WarpMouseInWindow(None,  int(mouse.x+const.tileWidth*gxEdit.magnification), mouse.y)
 
 	#keyboard navigation scroll
-	elif sym == sdl2.SDLK_LEFT:
+	elif sym == sdl2.SDL_SCANCODE_LEFT:
 		stage.hscroll -= 2
-	elif sym == sdl2.SDLK_RIGHT:
+	elif sym == sdl2.SDL_SCANCODE_RIGHT:
 		stage.hscroll += 2
-	elif sym == sdl2.SDLK_DOWN:
+	elif sym == sdl2.SDL_SCANCODE_DOWN:
 		stage.scroll += 2
-	elif sym == sdl2.SDLK_UP:
+	elif sym == sdl2.SDL_SCANCODE_UP:
 		stage.scroll -= 2
-	elif sym == sdl2.SDLK_HOME:
+	elif sym == sdl2.SDL_SCANCODE_HOME:
 		stage.scroll = 0
-	elif sym == sdl2.SDLK_END:
+	elif sym == sdl2.SDL_SCANCODE_END:
 		stage.scroll = stage.pack.layers[0].height - scaleFactor
-	elif sym == sdl2.SDLK_PAGEDOWN:
+	elif sym == sdl2.SDL_SCANCODE_PAGEDOWN:
 		stage.scroll += int(scaleFactor // 1.5)
-	elif sym == sdl2.SDLK_PAGEUP:
+	elif sym == sdl2.SDL_SCANCODE_PAGEUP:
 		stage.scroll -= int(scaleFactor // 1.5)
 
 	#keyboard navigation zoom
-	elif sym == sdl2.SDLK_MINUS:
+	elif sym == sdl2.SDL_SCANCODE_MINUS:
 		if gxEdit.magnification == 1:
 			gxEdit.magnification = 0.5
 		else:
 			gxEdit.magnification -= 1
-	elif sym == sdl2.SDLK_EQUALS:
+	elif sym == sdl2.SDL_SCANCODE_EQUALS:
 		if gxEdit.magnification == 0.5:
 			gxEdit.magnification = 1
 		else:
 			gxEdit.magnification += 1
 
-	elif sym == sdl2.SDLK_LEFTBRACKET:
+	elif sym == sdl2.SDL_SCANCODE_LEFTBRACKET:
 		gxEdit.tilePaletteMag -= 1
 
-	elif sym == sdl2.SDLK_RIGHTBRACKET:
+	elif sym == sdl2.SDL_SCANCODE_RIGHTBRACKET:
 		gxEdit.tilePaletteMag += 1
 
-	elif sym == sdl2.SDLK_QUOTE:
+	elif sym == sdl2.SDL_SCANCODE_APOSTROPHE:
 		gxEdit.entityPaletteMag -= 1
 
-	elif sym == sdl2.SDLK_BACKSLASH:
+	elif sym == sdl2.SDL_SCANCODE_BACKSLASH:
 		gxEdit.entityPaletteMag += 1
 
 	#layer switch
-	elif sym == sdl2.SDLK_COMMA:
+	elif sym == sdl2.SDL_SCANCODE_COMMA:
 		gxEdit.currentLayer -= 1
 		if gxEdit.currentLayer < 0: gxEdit.currentLayer = 0
 
-	elif sym == sdl2.SDLK_PERIOD:
+	elif sym == sdl2.SDL_SCANCODE_PERIOD:
 		gxEdit.currentLayer += 1
 		if gxEdit.currentLayer > 2: gxEdit.currentLayer = 2
 
 	#entity manipulation
-	elif sym == sdl2.SDLK_i:
+	elif sym == sdl2.SDL_SCANCODE_I:
 		if gxEdit.currentEditMode == const.EDIT_ENTITY:
 			mouse = util.getMouseState()
 			mag = gxEdit.magnification
@@ -618,7 +618,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			undo = UndoAction(const.UNDO_ENTITY_ADD, 0, [o])
 			stage.addUndo(undo)
 
-	elif sym == sdl2.SDLK_DELETE:
+	elif sym == sdl2.SDL_SCANCODE_DELETE:
 		if stage.selectedEntities:
 			ids = [o.id for o in stage.selectedEntities]
 			stage.pack.eve.remove(ids)
@@ -630,7 +630,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			stage.selectedEntities = []
 
 
-	elif sym == sdl2.SDLK_F11:
+	elif sym == sdl2.SDL_SCANCODE_F11:
 		gxEdit.fullscreen ^= 1
 
 		if not gxEdit.fullscreen:
