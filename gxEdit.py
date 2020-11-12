@@ -628,7 +628,10 @@ def main():
 			elif event.type == sdl2.SDL_DROPFILE:
 				#TODO: drop an exe or event/map to load singular
 				print("help")
-				fName = str(event.drop.file).split("/")[-1].split(".")[0]
+				if sys.platform == "win32":
+					fName = str(event.drop.file).split("\\")[-1].split(".")[0]
+				else:
+					fName = str(event.drop.file).split("/")[-1].split(".")[0]
 				if gxEdit.loadStage(fName):
 					gxEdit.curStage = len(gxEdit.stages)
 			elif event.type == sdl2.SDL_WINDOWEVENT:
