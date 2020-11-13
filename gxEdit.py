@@ -36,10 +36,10 @@ import util
 
 
 
-dataPath = "./Kero Blaster/rsc_k/"
+dataPath = "./Kero Blaster/data/"
 gamePath = "./Kero Blaster/"
-fieldPath = "./Kero Blaster/rsc_k/field/"
-imgPath = "./Kero Blaster/rsc_k/img/"
+fieldPath = "./Kero Blaster/data/field/"
+imgPath = "./Kero Blaster/data/img/"
 
 #for debugging
 dataPath = "./" + dataPath
@@ -212,8 +212,11 @@ class StagePrj:
 				dstx = x * const.tileWidth
 				dsty = y * const.tileWidth
 
-				xx = map.tiles[y][x] % 16 #the magic number so that each 4 bits in a byte corresponds to the x, y position in the tileset
-				yy = map.tiles[y][x] // 16
+				xx = map.tiles[y][x][0] #the magic number so that each 4 bits in a byte corresponds to the x, y position in the tileset
+				yy = map.tiles[y][x][1]
+
+				if xx == 0 and yy == 0: continue
+				
 				srcx = xx * const.tileWidth
 				srcy = yy * const.tileWidth
 
@@ -245,9 +248,13 @@ class StagePrj:
 
 		sdl2.SDL_SetTextureBlendMode(self.parts[layerNo].texture, sdl2.SDL_BLENDMODE_NONE)
 
+		if tx == 0 and ty == 0: sdl2.SDL_SetTextureAlphaMod(self.parts[layerNo].texture, 0)
+
 		interface.gRenderer.copy(self.parts[layerNo], srcrect, dstrect)
 
 		sdl2.SDL_SetTextureBlendMode(self.parts[layerNo].texture, sdl2.SDL_BLENDMODE_BLEND)
+
+		if tx == 0 and ty == 0: sdl2.SDL_SetTextureAlphaMod(self.parts[layerNo].texture, 255)
 
 		sdl2.SDL_SetRenderTarget(sdlrenderer, None)
 
@@ -363,6 +370,7 @@ class Editor:
 		#	if stage.stageNo == stageNo:
 		#		print("Error: tried loading an already loaded stage")
 		#		return False
+		if not stageName: return False
 		if not len(stageName): return False
 		print("Loading stage " + stageName)
 		stage = StagePrj(stageName)
@@ -628,7 +636,10 @@ def main():
 			elif event.type == sdl2.SDL_DROPFILE:
 				#TODO: drop an exe or event/map to load singular
 				print("help")
-				fName = str(event.drop.file).split("/")[-1].split(".")[0]
+				if sys.platform == "win32":
+					fName = str(event.drop.file).split("\\")[-1].split(".")[0]
+				else:
+					fName = str(event.drop.file).split("/")[-1].split(".")[0]
 				if gxEdit.loadStage(fName):
 					gxEdit.curStage = len(gxEdit.stages)
 			elif event.type == sdl2.SDL_WINDOWEVENT:

@@ -651,8 +651,8 @@ class TilePaletteWindow(UIWindow):
 
 					tile = attr.tiles[y][x]
 
-					xxx = tile % 16 
-					yyy = tile // 16
+					xxx = tile[0]
+					yyy = tile[1]
 					srcx = xxx * 16
 					srcy = yyy * 16
 
@@ -858,7 +858,7 @@ def editPxPackAttributes(window, elem, gxEdit):
 		#TODO fix path var
 		curStage.pack.layers[i].partsName = paramParts
 		if curStage.loadParts(i):
-			curStage.attrs[i].load("./Kero Blaster/rsc_k/img/" + paramParts + ".pxattr")
+			curStage.attrs[i].load("./Kero Blaster/data/img/" + paramParts + ".pxattr")
 			curStage.createMapSurface(i)
 			curStage.renderMapToSurface(i)
 		else:
@@ -1423,6 +1423,7 @@ class Interface:
 			#tile preview
 			#TODO: how will this work with copy?
 			if gxEdit.showTilePreview:
+				if not stage.parts[gxEdit.currentLayer]: return
 				sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 128)
 
 				prtrect = (start[0]*const.tileWidth, start[1]*const.tileWidth,
@@ -1587,12 +1588,12 @@ class Interface:
 				dsty = (y - stage.scroll) * const.tileWidth
 
 				tile = map.tiles[y][x]
-				xx = tile % 16 
-				yy = tile // 16
+				xx = tile[0]
+				yy = tile[1]
 				tile = attr.tiles[yy][xx]
 
-				xxx = tile % 16 
-				yyy = tile // 16
+				xxx = tile[0]
+				yyy = tile[1]
 				srcx = xxx * 16
 				srcy = yyy * 16
 

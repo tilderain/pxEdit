@@ -1,6 +1,7 @@
 import io, os, struct
 import mmap
 from ctypes import c_short
+import itertools
 
 def writePixelString(fp, string):
 	length = len(string.encode("shift-jis"))
@@ -16,16 +17,17 @@ def readPixelString(stream):
 def readInt(stream, length):
 	return int.from_bytes(stream.read(length), byteorder="little")
 
-pxmapMagic = "pxMAP01\0"
+pxmapMagic = "kmMAP02\00"
 
 class PxPackUnit:
-	def __init__(self, bits, code_char, param2, x, y, flag, string, id):
+	def __init__(self, bits, code_char, param2, x, y, flag, unk, string, id):
 		self.bits = bits
 		self.type1 = code_char
 		self.param2 = param2
 		self.x = x
 		self.y = y
 		self.flag = flag
+		self.unk = unk
 		self.string = string
 		self.id = id
 
@@ -67,8 +69,8 @@ class PxEve:
 					self.units.remove(o)
 					break
 			
-	def add(self, x, y, code_char, bits=0, param2=0, flag=0, string=""):
-		o = PxPackUnit(bits|1, code_char, param2, x, y, flag, string, self._count)
+	def add(self, x, y, code_char, bits=0, param2=0, flag=0, unk=0, string=""):
+		o = PxPackUnit(bits|1, code_char, param2, x, y, flag, unk, string, self._count)
 		self._count += 1
 		self.units.append(o)
 		return o
@@ -87,6 +89,8 @@ class PxPackLayer:
 		#max for an attr is 16*16
 		self.width = 16
 		self.height = 16
+		self.unk = 0
+
 		self.type = 0
 
 
@@ -96,17 +100,22 @@ class PxPackLayer:
 		self.tiles = []
 
 		#TODO: verify header minus numbers
-		stream.read(8) #PXMAP01
+		test = stream.read(8) #PXMAP01
 		self.width = readInt(stream, 2)
 		self.height = readInt(stream, 2)
+		#self.unk = readInt(stream, 2)
 
 		if self.width * self.height == 0: return True
 
 		self.type = readInt(stream, 1)
 		if self.type == 0:
 			for i in range(self.height):
-				byt = stream.read(self.width)
-				self.tiles.append([tile for tile in byt])
+				row = []
+				for i in range(self.width):
+					x = int.from_bytes(stream.read(1), byteorder="little")
+					y = int.from_bytes(stream.read(1), byteorder="little")
+					row.append([x, y])
+				self.tiles.append(row)
 			return True
 	
 	def load(self, path): #readEntities
@@ -129,8 +138,9 @@ class PxPackLayer:
 		f.write(struct.pack("<B", self.type))
 
 		if self.type == 0:
-			for y in self.tiles:
-				f.write(bytes(y))
+			#this is disgusting
+			output = list(itertools.chain(*list(itertools.chain(*self.tiles))))
+			f.write(bytes(output))
 
 	def save(self, path):
 		pass
@@ -143,9 +153,9 @@ class PxPackLayer:
 			if tile[0][0] >= self.width: continue
 			if tile[0][1] >= self.height: continue
 			x = tile[1][0]
-			y = tile[1][1] * 16
+			y = tile[1][1]
 			
-			self.tiles[tile[0][1]][tile[0][0]] = x+y
+			self.tiles[tile[0][1]][tile[0][0]] = [x,y]
 	def resize(self, width, height):
 		if width <= 0: return
 		if height <= 0: return
@@ -162,7 +172,7 @@ class PxPackLayer:
 		self.width = width
 		self.height = height
 		
-pxpackMagic = "PXPACK121127a**\0"
+pxpackMagic = "km200717"
 
 class PxPack:
 	def __init__(self):
@@ -198,18 +208,10 @@ class PxPack:
 		LAYER_COUNT = 3
 
 		#TODO: verify header
-		stream.seek(16)
+		stream.seek(8)
 
 		self.description = readPixelString(stream)
-		self.left_field = readPixelString(stream)
-		self.right_field = readPixelString(stream)
-		self.up_field = readPixelString(stream)
-		self.down_field = readPixelString(stream)
 		self.spritesheet = readPixelString(stream)
-
-		self.area_x = readInt(stream, 2)
-		self.area_y = readInt(stream, 2)
-		self.area_no = readInt(stream, 1)
 
 		self.bg_r = readInt(stream, 1)
 		self.bg_g = readInt(stream, 1)
@@ -233,14 +235,16 @@ class PxPack:
 			code_char = readInt(stream, 1)
 			param2 = readInt(stream, 1)
 
+			unk = readInt(stream, 1)
+
 			x = readInt(stream, 2)
 			y = readInt(stream, 2)
 			flag = readInt(stream, 2)
 
 			string = readPixelString(stream)
-			self.eve.units.append(PxPackUnit(bits,code_char,param2,x,y,flag,string, self.eve._count))
+			self.eve.units.append(PxPackUnit(bits,code_char,param2,x,y,flag,unk,string, self.eve._count))
 			self.eve._count += 1
-
+		
 		stream.close()
 		f.close()
 		return True
@@ -254,15 +258,7 @@ class PxPack:
 		else:
 			f.write(bytes(pxpackMagic.encode("ascii")))
 			writePixelString(f, self.description)
-			writePixelString(f, self.left_field)
-			writePixelString(f, self.right_field)
-			writePixelString(f, self.up_field)
-			writePixelString(f, self.down_field)
 			writePixelString(f, self.spritesheet)
-
-			f.write(struct.pack("<H", self.area_x))
-			f.write(struct.pack("<H", self.area_y))
-			f.write(struct.pack("<B", self.area_no))
 
 			f.write(struct.pack("<B", self.bg_r))
 			f.write(struct.pack("<B", self.bg_g))
@@ -284,6 +280,8 @@ class PxPack:
 				f.write(struct.pack("<B", o.bits))
 				f.write(struct.pack("<B", o.type1))
 				f.write(struct.pack("<B", o.param2))
+
+				f.write(struct.pack("<B", o.unk))
 
 				f.write(struct.pack("<h", o.x))
 				f.write(struct.pack("<h", o.y))

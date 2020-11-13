@@ -119,8 +119,8 @@ def runMouse3(gxEdit, stage, mouse):
 	# pick block
 	#TODO: this should eventually be quick copy paste
 
-	xx = map.tiles[y][x] % 16
-	yy = map.tiles[y][x] // 16
+	xx = map.tiles[y][x][0]
+	yy = map.tiles[y][x][1]
 	stage.selectedTilesStart = [xx, yy]	
 	stage.selectedTilesEnd = [xx, yy]
 
@@ -222,8 +222,8 @@ def runMouseDrag(gxEdit, stage):
 
 			tiles.append([[xx,yy], [tile[0], tile[1]]])
 
-			oldTileX = map.tiles[yy][xx] % 16
-			oldTileY = map.tiles[yy][xx] // 16
+			oldTileX = map.tiles[yy][xx][0]
+			oldTileY = map.tiles[yy][xx][1]
 
 			oldTiles.append([[xx,yy], [oldTileX, oldTileY]])
 
@@ -371,7 +371,10 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	sym = key.keysym.scancode
 	#TODO: scancode
 	if key.keysym.mod & sdl2.KMOD_CTRL:
-
+		if sym == sdl2.SDL_SCANCODE_A:
+			for o in stage.selectedEntities:
+				o.type1 += 1
+	
 		if sym == sdl2.SDL_SCANCODE_S:
 			#TODO: show flash on save (goodly)
 			if stage.save():

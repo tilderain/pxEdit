@@ -52,6 +52,8 @@ tileScale = 1
 tileWidth = 8 * tileScale
 tileWidth2 = 16 * tileScale
 
+tileMax = 255
+
 ENTITY_SCALE = 1
 
 
