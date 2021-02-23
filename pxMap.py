@@ -133,7 +133,13 @@ class PxPackLayer:
 				f.write(bytes(y))
 
 	def save(self, path):
-		pass
+		try:
+			f = open(path, 'wb')
+		except (OSError, IOError) as e:
+			print("Error while saving {}: {}".format(path, e))
+			return False
+		else:
+			self.saveToPack(f)
 
 	def modify(self, tiles):
 		#[[x,y], [x, y]]

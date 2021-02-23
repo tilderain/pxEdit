@@ -276,6 +276,8 @@ class Editor:
 		self.currentLayer = 0
 		self.visibleLayers = [True, True, True, True, False]
 
+		self.rectanglePaintBoxStart = [-1, -1]
+		self.rectanglePaintBoxEnd = [-1, -1]
 
 		self.selectionBoxStart = [-1, -1]
 		self.selectionBoxEnd = [-1, -1]
@@ -696,8 +698,8 @@ def main():
 				start[0], end[0] = end[0], start[0]
 			if end[1] < start[1]:
 				start[1], end[1] = end[1], start[1]
-			for x in range(start[0], end[0]+1):
-				for y in range(start[1], end[1]+1):
+			for y in range(start[1], end[1]+1):
+				for x in range(start[0], end[0]+1):
 					tiles.append([x, y])
 
 			if tiles != []: stage.selectedTiles = tiles

@@ -138,6 +138,68 @@ def runMouseUp(gxEdit, curStage, mouse):
 			stage = gxEdit.stages[gxEdit.curStage]
 			undo = UndoAction(const.UNDO_ENTITY_MOVE, stage.selectedEntitiesDragStart, stage.selectedEntities)
 			stage.addUndo(undo)
+	elif gxEdit.currentEditMode == const.EDIT_TILE and gxEdit.rectanglePaintBoxStart != [-1, -1]:
+		map = curStage.pack.layers[gxEdit.currentLayer]
+		if not len(map.tiles): return
+
+		curStage.lastTileEdit == [-1, -1]
+		
+		if gxEdit.tileHighlightAnimate:
+			gxEdit.tileHighlightTimer = 120
+
+		start = gxEdit.rectanglePaintBoxStart[:]
+		end = gxEdit.rectanglePaintBoxEnd[:]
+		start2 = curStage.selectedTilesStart[:]
+		end2 = curStage.selectedTilesEnd[:]
+
+		if start[0] > end[0]:
+			start[0], end[0] = end[0], start[0]
+		if end[1] < start[1]:
+			start[1], end[1] = end[1], start[1]
+		if start2[0] > end2[0]:
+			start2[0], end2[0] = end2[0], start2[0]
+		if end2[1] < start2[1]:
+			start2[1], end2[1] = end2[1], start2[1]
+		startX = curStage.selectedTilesStart[0]
+		startY = curStage.selectedTilesStart[1]
+		tiles = []
+		oldTiles = []
+
+		width = end[0] - start[0] + 1
+		height = end[1] - start[1] + 1
+
+		w2 = end2[0] - start2[0] + 1
+		for y in range(height):
+			for x in range(width):
+				tile = curStage.selectedTiles[((x % w2) + (y*w2)) % len(curStage.selectedTiles)]
+				xx = x + start[0]
+				yy = y + start[1]
+				if xx >= map.width or yy >= map.height: 
+					continue
+
+				tiles.append([[xx,yy], [tile[0], tile[1]]])
+
+				oldTileX = map.tiles[yy][xx] % 16
+				oldTileY = map.tiles[yy][xx] // 16
+
+				oldTiles.append([[xx,yy], [oldTileX, oldTileY]])
+
+		if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
+			multi.sendTileEditPacket(gxEdit, gxEdit.curStage, tiles, gxEdit.currentLayer)
+			return
+		if gxEdit.multiplayerState == const.MULTIPLAYER_HOST:
+			multi.serverSendTileEdit(gxEdit, gxEdit.curStage, tiles, gxEdit.currentLayer)
+		for pos, tile in tiles:
+			curStage.renderTileToSurface(pos[0], pos[1], tile[0],
+											tile[1], gxEdit.currentLayer)
+		map.modify(tiles)
+		#TODO: disable undo while dragging
+		#TODO: commit undo action only when mouseup
+		undo = UndoAction(const.UNDO_TILE, oldTiles, tiles, gxEdit.currentLayer)
+		curStage.addUndo(undo)
+
+		gxEdit.rectanglePaintBoxStart = [-1, -1]
+		gxEdit.rectanglePaintBoxEnd = [-1, -1]
 
 	for i, elem in reversed(list(gxEdit.elements.items())):
 		if gxEdit.activeElem:
@@ -204,29 +266,36 @@ def runMouseDrag(gxEdit, stage):
 
 		if stage.lastTileEdit == [x, y]:
 			return
-		
-		stage.lastTileEdit = [x, y]
-		if gxEdit.tileHighlightAnimate:
-			gxEdit.tileHighlightTimer = 120
 
 		startX = stage.selectedTilesStart[0]
 		startY = stage.selectedTilesStart[1]
 		tiles = []
 		oldTiles = []
-		for tile in stage.selectedTiles:
-			xx = tile[0] - startX + x
-			yy = tile[1] - startY + y
 
-			if xx >= map.width or yy >= map.height: 
-				continue
+		if gxEdit.currentTilePaintMode == const.PAINT_NORMAL:
+			for tile in stage.selectedTiles:
+				xx = tile[0] - startX + x
+				yy = tile[1] - startY + y
 
-			tiles.append([[xx,yy], [tile[0], tile[1]]])
+				if xx >= map.width or yy >= map.height: 
+					continue
 
-			oldTileX = map.tiles[yy][xx] % 16
-			oldTileY = map.tiles[yy][xx] // 16
+				tiles.append([[xx,yy], [tile[0], tile[1]]])
 
-			oldTiles.append([[xx,yy], [oldTileX, oldTileY]])
+				oldTileX = map.tiles[yy][xx] % 16
+				oldTileY = map.tiles[yy][xx] // 16
 
+				oldTiles.append([[xx,yy], [oldTileX, oldTileY]])
+		elif gxEdit.currentTilePaintMode == const.PAINT_RECTANGLE:
+
+			if gxEdit.rectanglePaintBoxStart == [-1, -1]:
+				gxEdit.rectanglePaintBoxStart = [x, y]
+			gxEdit.rectanglePaintBoxEnd = [x, y]
+
+			if gxEdit.tileHighlightAnimate and gxEdit.tileHighlightTimer < 40:
+				gxEdit.tileHighlightDir = True
+			return
+			
 		if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
 			multi.sendTileEditPacket(gxEdit, gxEdit.curStage, tiles, gxEdit.currentLayer)
 			return
@@ -240,6 +309,10 @@ def runMouseDrag(gxEdit, stage):
 		#TODO: commit undo action only when mouseup
 		undo = UndoAction(const.UNDO_TILE, oldTiles, tiles, gxEdit.currentLayer)
 		stage.addUndo(undo)
+
+		stage.lastTileEdit = [x, y]
+		if gxEdit.tileHighlightAnimate:
+			gxEdit.tileHighlightTimer = 120
 		
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 		x = int(mouse.x + (stage.hscroll * const.tileWidth * mag))

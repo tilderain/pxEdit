@@ -936,6 +936,20 @@ def toggleMultiplayerMenu(window, elem, gxEdit):
 def toggleLayerVisibility(window, elem, gxEdit):
 	gxEdit.visibleLayers[elem.var] = True if elem.state == BUTTON_STATE_ACTIVE else False
 
+def changeTilePaintMode(window, elem, gxEdit):
+	if elem.enum == BUTTON_DRAW:
+		gxEdit.currentTilePaintMode = const.PAINT_NORMAL
+	elif elem.enum == BUTTON_ERASE:
+		gxEdit.currentTilePaintMode = const.PAINT_ERASE
+	elif elem.enum == BUTTON_COPY:
+		gxEdit.currentTilePaintMode = const.PAINT_COPY
+	elif elem.enum == BUTTON_FILL:
+		gxEdit.currentTilePaintMode = const.PAINT_FILL
+	elif elem.enum == BUTTON_REPLACE:
+		gxEdit.currentTilePaintMode = const.PAINT_REPLACE
+	elif elem.rects == rectsButtonRectangle:
+		gxEdit.currentTilePaintMode = const.PAINT_RECTANGLE
+
 class MultiplayerWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLS, style=0,):
 		UIWindow.__init__(self, x, y, w, h, type, style)
@@ -972,22 +986,29 @@ class ToolsWindow(UIWindow):
 		self.elements["textTools"] = UIElement(4, 2, 0, 0, self, rectWindowTextTools)
 
 		self.elements["butDraw"] = UIButton(8, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_DRAW, type=BUTTON_TYPE_RADIO, group=2,
-										tooltip=[["Paint", sdlColorBlack, TTF_STYLE_NORMAL]])
+										tooltip=[["Paint", sdlColorBlack, TTF_STYLE_NORMAL]],
+										state=BUTTON_STATE_ACTIVE)
+		self.elements["butDraw"].onAction = changeTilePaintMode
 
 		self.elements["butErase"] = UIButton(28, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_ERASE, type=BUTTON_TYPE_RADIO, group=2,
 										tooltip=[["Erase", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butErase"].onAction = changeTilePaintMode
 
 		self.elements["butCopy"] = UIButton(48, 20, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_COPY, type=BUTTON_TYPE_RADIO, group=2,
 										tooltip=[["Copy", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butCopy"].onAction = changeTilePaintMode
 
 		self.elements["butFill"] = UIButton(20, 36, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_FILL, type=BUTTON_TYPE_RADIO, group=2,
 										tooltip=[["Fill", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butFill"].onAction = changeTilePaintMode
 
 		self.elements["butReplace"] = UIButton(40, 36, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_REPLACE, type=BUTTON_TYPE_RADIO, group=2,
 										tooltip=[["Replace", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butReplace"].onAction = changeTilePaintMode
+
 		self.elements["butRectangle"] = UIButton(60, 36, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, rects=rectsButtonRectangle, type=BUTTON_TYPE_RADIO, group=2,
 										tooltip=[["Rectangle", sdlColorBlack, TTF_STYLE_NORMAL]])
-
+		self.elements["butRectangle"].onAction = changeTilePaintMode
 
 		#---LAYER
 
@@ -1392,44 +1413,69 @@ class Interface:
 		map = stage.pack.layers[gxEdit.currentLayer]
 
 		if gxEdit.currentEditMode == const.EDIT_TILE:
-			x = int(mouse.x // (const.tileWidth * mag))
-			y = int(mouse.y // (const.tileWidth * mag))
+			if gxEdit.rectanglePaintBoxStart == [-1, -1]:
+				x = int(mouse.x // (const.tileWidth * mag))
+				y = int(mouse.y // (const.tileWidth * mag))
 
-			if x >= map.width or y >= map.height: return
+				if x >= map.width or y >= map.height: return
 
-			start = stage.selectedTilesStart[:]
-			end = stage.selectedTilesEnd[:]
+				start = stage.selectedTilesStart[:]
+				end = stage.selectedTilesEnd[:]
 
-			negX = negY = False
-			if start[0] > end[0]:
-				start[0], end[0] = end[0], start[0]
-				negX = True
-			if end[1] < start[1]:
-				start[1], end[1] = end[1], start[1]
-				negY = True
+				negX = negY = False
+				if start[0] > end[0]:
+					start[0], end[0] = end[0], start[0]
+					negX = True
+				if end[1] < start[1]:
+					start[1], end[1] = end[1], start[1]
+					negY = True
 
-			w = end[0] - start[0] + 1
-			h = end[1] - start[1] + 1
+				w = end[0] - start[0] + 1
+				h = end[1] - start[1] + 1
 
-			if negX: x -= w - 1
-			if negY: y -= h - 1
+				if negX: x -= w - 1
+				if negY: y -= h - 1
 
-			x *= int(const.tileWidth * mag)
-			y *= int(const.tileWidth * mag)
+				x *= int(const.tileWidth * mag)
+				y *= int(const.tileWidth * mag)
 
-			w *= int(const.tileWidth * mag)
-			h *= int(const.tileWidth * mag)
+				w *= int(const.tileWidth * mag)
+				h *= int(const.tileWidth * mag)
 
-			#tile preview
-			#TODO: how will this work with copy?
-			if gxEdit.showTilePreview:
-				sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 128)
+				#tile preview
+				#TODO: how will this work with copy?
+				if gxEdit.showTilePreview:
+					sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 128)
 
-				prtrect = (start[0]*const.tileWidth, start[1]*const.tileWidth,
-					(end[0] - start[0] + 1) * const.tileWidth, (end[1] - start[1] + 1) * const.tileWidth)
-				self.renderer.copy(stage.parts[gxEdit.currentLayer], srcrect=prtrect, dstrect=(x,y,w,h))
+					prtrect = (start[0]*const.tileWidth, start[1]*const.tileWidth,
+						(end[0] - start[0] + 1) * const.tileWidth, (end[1] - start[1] + 1) * const.tileWidth)
+					self.renderer.copy(stage.parts[gxEdit.currentLayer], srcrect=prtrect, dstrect=(x,y,w,h))
 
-				sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 255)
+					sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 255)
+			else:
+				start = gxEdit.rectanglePaintBoxStart[:]
+				end = gxEdit.rectanglePaintBoxEnd[:]
+
+				negX = negY = False
+				if start[0] > end[0]:
+					start[0], end[0] = end[0], start[0]
+					negX = True
+				if end[1] < start[1]:
+					start[1], end[1] = end[1], start[1]
+					negY = True
+
+				x = start[0] - stage.hscroll
+				y = start[1] - stage.scroll
+				w = end[0] - start[0] + 1
+				h = end[1] - start[1] + 1
+
+				x *= int(const.tileWidth * mag)
+				y *= int(const.tileWidth * mag)
+
+				w *= int(const.tileWidth * mag)
+				h *= int(const.tileWidth * mag)
+
+			
 		elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 			if gxEdit.draggingEntities: return
 			x = int(mouse.x // (const.tileWidth2//2 * mag)) 
