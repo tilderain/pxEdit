@@ -67,6 +67,7 @@ def runMouse1(gxEdit, stage, mouse):
 		stage.selectedTiles = [[x, y]]
 
 		stage.lastTileEdit = [None, None]
+		gxEdit.tileSelectionUpdate = True
 	tilePalette = gxEdit.elements["entityPalette"]
 	if tilePalette.visible and util.inWindowBoundingBox(mouse, tilePalette):
 		#entity select
@@ -123,12 +124,18 @@ def runMouse3(gxEdit, stage, mouse):
 	yy = map.tiles[y][x] // 16
 	stage.selectedTilesStart = [xx, yy]	
 	stage.selectedTilesEnd = [xx, yy]
+	gxEdit.tileSelectionUpdate = True
 
 
 
 def runMouseUp(gxEdit, curStage, mouse):
 	if mouse.button != sdl2.SDL_BUTTON_LEFT: return False
 
+	for i, elem in reversed(list(gxEdit.elements.items())):
+		if gxEdit.activeElem:
+			if(gxEdit.activeElem.handleMouse1Up(mouse, gxEdit)):
+				gxEdit.activeElem = None
+			return
 	if gxEdit.currentEditMode == const.EDIT_ENTITY:
 		gxEdit.selectionBoxStart = [-1, -1]
 		gxEdit.selectionBoxEnd = [-1, -1]
@@ -143,7 +150,7 @@ def runMouseUp(gxEdit, curStage, mouse):
 		if not len(map.tiles): return
 
 		curStage.lastTileEdit == [-1, -1]
-		
+
 		if gxEdit.tileHighlightAnimate:
 			gxEdit.tileHighlightTimer = 120
 
@@ -200,12 +207,35 @@ def runMouseUp(gxEdit, curStage, mouse):
 
 		gxEdit.rectanglePaintBoxStart = [-1, -1]
 		gxEdit.rectanglePaintBoxEnd = [-1, -1]
+	elif gxEdit.currentEditMode == const.EDIT_TILE and gxEdit.currentTilePaintMode == const.PAINT_COPY:
+		stage = curStage
+		mag = gxEdit.magnification
+		x = int(mouse.x // (const.tileWidth * mag) + stage.hscroll)
+		y = int(mouse.y // (const.tileWidth * mag) + stage.scroll)
+		stage.selectedTilesEnd[0] = x
+		stage.selectedTilesEnd[1] = y
+	
+		tiles = []
+		start = stage.selectedTilesStart[:]
+		end = stage.selectedTilesEnd[:]
 
-	for i, elem in reversed(list(gxEdit.elements.items())):
-		if gxEdit.activeElem:
-			if(gxEdit.activeElem.handleMouse1Up(mouse, gxEdit)):
-				gxEdit.activeElem = None
-			return
+		if end[0] < start[0]:
+			start[0], end[0] = end[0], start[0]
+		if end[1] < start[1]:
+			start[1], end[1] = end[1], start[1]
+		for y in range(start[1], end[1]+1):
+			if y >= stage.pack.layers[gxEdit.currentLayer].height: continue
+			for x in range(start[0], end[0]+1):
+				if x >= stage.pack.layers[gxEdit.currentLayer].width: continue
+				xx = stage.pack.layers[gxEdit.currentLayer].tiles[y][x] % 16
+				yy = stage.pack.layers[gxEdit.currentLayer].tiles[y][x] // 16
+				tiles.append([xx, yy])
+
+		if tiles != []: stage.selectedTiles = tiles
+
+		gxEdit.copyingTiles = False
+
+		gxEdit.elements["toolsWindow"].elements["butDraw"].handleMouse1(None, gxEdit)
 
 
 def runMouseDrag(gxEdit, stage):			
@@ -254,6 +284,7 @@ def runMouseDrag(gxEdit, stage):
 		if y >= stage.attrs[gxEdit.currentLayer].height:
 			return
 		stage.selectedTilesEnd = [x, y]
+		gxEdit.tileSelectionUpdate = True
 
 	#tiles Paint
 	elif gxEdit.currentEditMode == const.EDIT_TILE:
@@ -272,10 +303,35 @@ def runMouseDrag(gxEdit, stage):
 		tiles = []
 		oldTiles = []
 
-		if gxEdit.currentTilePaintMode == const.PAINT_NORMAL:
-			for tile in stage.selectedTiles:
-				xx = tile[0] - startX + x
-				yy = tile[1] - startY + y
+		if gxEdit.currentTilePaintMode == const.PAINT_COPY:
+			if not gxEdit.copyingTiles:
+				stage.selectedTilesStart[0] = x
+				stage.selectedTilesStart[1] = y
+				gxEdit.copyingTiles = True
+			stage.selectedTilesEnd = [x, y]
+			return
+			
+		elif gxEdit.currentTilePaintMode == const.PAINT_NORMAL:
+			start = stage.selectedTilesStart[:]
+			end = stage.selectedTilesEnd[:]
+
+			negX = negY = False
+			if start[0] > end[0]:
+				start[0], end[0] = end[0], start[0]
+				negX = True
+			if end[1] < start[1]:
+				start[1], end[1] = end[1], start[1]
+				negY = True
+
+			w = end[0] - start[0] + 1
+			h = end[1] - start[1] + 1
+
+			if negX: x -= w - 1
+			if negY: y -= h - 1
+			
+			for i, tile in enumerate(stage.selectedTiles):
+				xx = (i % w) + x
+				yy = (i // w) + y
 
 				if xx >= map.width or yy >= map.height: 
 					continue
@@ -295,7 +351,7 @@ def runMouseDrag(gxEdit, stage):
 			if gxEdit.tileHighlightAnimate and gxEdit.tileHighlightTimer < 40:
 				gxEdit.tileHighlightDir = True
 			return
-			
+		
 		if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
 			multi.sendTileEditPacket(gxEdit, gxEdit.curStage, tiles, gxEdit.currentLayer)
 			return
@@ -520,6 +576,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 					gxEdit.focussedElem.onAction(gxEdit.focussedElem, gxEdit)
 		return
 
+	#zx change tool
 	elif sym == sdl2.SDL_SCANCODE_1:
 		gxEdit.elements["toolsWindow"].elements["butDraw"].handleMouse1(None, gxEdit)
 	elif sym == sdl2.SDL_SCANCODE_2:
@@ -532,15 +589,16 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		gxEdit.elements["toolsWindow"].elements["butReplace"].handleMouse1(None, gxEdit)
 	elif sym == sdl2.SDL_SCANCODE_6:
 		gxEdit.elements["toolsWindow"].elements["butRectangle"].handleMouse1(None, gxEdit)
-	elif sym == sdl2.SDL_SCANCODE_Z:
-		gxEdit.currentTilePaintMode -= 1
-		if gxEdit.currentTilePaintMode < 0: gxEdit.currentTilePaintMode = 5
-		gxEdit.elements["toolsWindow"].elements[toolsOrdered[gxEdit.currentTilePaintMode]].handleMouse1(None, gxEdit)
-	elif sym == sdl2.SDL_SCANCODE_X:
-		gxEdit.currentTilePaintMode += 1
-		if gxEdit.currentTilePaintMode > 5: gxEdit.currentTilePaintMode = 0
-		gxEdit.elements["toolsWindow"].elements[toolsOrdered[gxEdit.currentTilePaintMode]].handleMouse1(None, gxEdit)
-
+	
+	#elif sym == sdl2.SDL_SCANCODE_Z:
+	#	gxEdit.currentTilePaintMode -= 1
+	#	if gxEdit.currentTilePaintMode < 0: gxEdit.currentTilePaintMode = 5
+	#	gxEdit.elements["toolsWindow"].elements[toolsOrdered[gxEdit.currentTilePaintMode]].handleMouse1(None, gxEdit)
+	#elif sym == sdl2.SDL_SCANCODE_X:
+	#	gxEdit.currentTilePaintMode += 1
+	#	if gxEdit.currentTilePaintMode > 5: gxEdit.currentTilePaintMode = 0
+	#	gxEdit.elements["toolsWindow"].elements[toolsOrdered[gxEdit.currentTilePaintMode]].handleMouse1(None, gxEdit)
+	
 	elif sym == sdl2.SDL_SCANCODE_J:
 		gxEdit.curStage -= 1
 	elif sym == sdl2.SDL_SCANCODE_K:
@@ -551,8 +609,6 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		interface.toggleEntityPalette(0,0,gxEdit)
 	elif sym == sdl2.SDL_SCANCODE_R:
 		interface.toggleTilePalette(0,0,gxEdit)
-
-	#zx change tool
 
 	#field shortcut transportation
 	elif sym == sdl2.SDL_SCANCODE_T:
@@ -591,25 +647,29 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		if not key.keysym.mod & sdl2.KMOD_ALT:
 			stage.selectedTilesEnd[0] -= 1
 		stage.lastTileEdit = [None, None]
+		gxEdit.tileSelectionUpdate = True
 	elif sym == sdl2.SDL_SCANCODE_D:
 		if not key.keysym.mod & sdl2.KMOD_SHIFT:
 			stage.selectedTilesStart[0] += 1
 		if not key.keysym.mod & sdl2.KMOD_ALT:
 			stage.selectedTilesEnd[0] += 1
 		stage.lastTileEdit = [None, None]
+		gxEdit.tileSelectionUpdate = True
 	elif sym == sdl2.SDL_SCANCODE_W:
 		if not key.keysym.mod & sdl2.KMOD_SHIFT:
 			stage.selectedTilesStart[1] -= 1
 		if not key.keysym.mod & sdl2.KMOD_ALT:
 			stage.selectedTilesEnd[1] -= 1
 		stage.lastTileEdit = [None, None]
+		gxEdit.tileSelectionUpdate = True
 	elif sym == sdl2.SDL_SCANCODE_S and not key.keysym.mod & sdl2.KMOD_CTRL:
 		if not key.keysym.mod & sdl2.KMOD_SHIFT:
 			stage.selectedTilesStart[1] += 1
 		if not key.keysym.mod & sdl2.KMOD_ALT:
 			stage.selectedTilesEnd[1] += 1
 		stage.lastTileEdit = [None, None]
-
+		gxEdit.tileSelectionUpdate = True
+		
 	#keyboard navigation mouse movement
 	elif sym == sdl2.SDL_SCANCODE_KP_8:
 		mouse = util.getMouseState()

@@ -697,6 +697,7 @@ class TilePaletteWindow(UIWindow):
 		gxEdit.currentEditMode = const.EDIT_TILE
 		stage.selectedTilesStart = [x, y]
 		stage.selectedTiles = [[x, y]]
+		gxEdit.tileSelectionUpdate = True
 
 	def handleMouseDrag(self, gxEdit):
 		return False
@@ -949,6 +950,7 @@ def changeTilePaintMode(window, elem, gxEdit):
 		gxEdit.currentTilePaintMode = const.PAINT_REPLACE
 	elif elem.rects == rectsButtonRectangle:
 		gxEdit.currentTilePaintMode = const.PAINT_RECTANGLE
+	gxEdit.copyingTiles = False
 
 class MultiplayerWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLS, style=0,):
@@ -1413,7 +1415,7 @@ class Interface:
 		map = stage.pack.layers[gxEdit.currentLayer]
 
 		if gxEdit.currentEditMode == const.EDIT_TILE:
-			if gxEdit.rectanglePaintBoxStart == [-1, -1]:
+			if gxEdit.rectanglePaintBoxStart == [-1, -1]: #normal
 				x = int(mouse.x // (const.tileWidth * mag))
 				y = int(mouse.y // (const.tileWidth * mag))
 
@@ -1433,8 +1435,12 @@ class Interface:
 				w = end[0] - start[0] + 1
 				h = end[1] - start[1] + 1
 
-				if negX: x -= w - 1
-				if negY: y -= h - 1
+				if gxEdit.currentTilePaintMode != const.PAINT_COPY:
+					if negX: x -= w - 1
+					if negY: y -= h - 1
+				else:
+					if not negX: x -= w - 1
+					if not negY: y -= h - 1
 
 				x *= int(const.tileWidth * mag)
 				y *= int(const.tileWidth * mag)
@@ -1442,7 +1448,7 @@ class Interface:
 				w *= int(const.tileWidth * mag)
 				h *= int(const.tileWidth * mag)
 
-				#tile preview
+				#selected tile preview
 				#TODO: how will this work with copy?
 				if gxEdit.showTilePreview:
 					sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 128)
@@ -1452,7 +1458,7 @@ class Interface:
 					self.renderer.copy(stage.parts[gxEdit.currentLayer], srcrect=prtrect, dstrect=(x,y,w,h))
 
 					sdl2.SDL_SetTextureAlphaMod(stage.parts[gxEdit.currentLayer].texture, 255)
-			else:
+			else: #rectangle box (should probably still show tile preview)
 				start = gxEdit.rectanglePaintBoxStart[:]
 				end = gxEdit.rectanglePaintBoxEnd[:]
 
@@ -1475,7 +1481,6 @@ class Interface:
 				w *= int(const.tileWidth * mag)
 				h *= int(const.tileWidth * mag)
 
-			
 		elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 			if gxEdit.draggingEntities: return
 			x = int(mouse.x // (const.tileWidth2//2 * mag)) 
@@ -1490,7 +1495,7 @@ class Interface:
 
 			w = int(const.tileWidth2//2 * mag)
 			h = int(const.tileWidth2//2 * mag)
-
+		#TODO: different color with rectangle and copy?
 		sdl2.SDL_SetTextureColorMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, *gxEdit.tileHighlightColor)
 		sdl2.SDL_SetTextureAlphaMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, gxEdit.tileHighlightTimer)
 

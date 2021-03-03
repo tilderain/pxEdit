@@ -275,6 +275,9 @@ class Editor:
 		self.currentTilePaintMode = const.PAINT_NORMAL
 		self.currentLayer = 0
 		self.visibleLayers = [True, True, True, True, False]
+		self.tileSelectionUpdate = False
+		#TODO: replace this with mouse1 behavior
+		self.copyingTiles = False
 
 		self.rectanglePaintBoxStart = [-1, -1]
 		self.rectanglePaintBoxEnd = [-1, -1]
@@ -690,6 +693,7 @@ def main():
 
 			
 		def runTileSelection(stage):
+			if not gxEdit.tileSelectionUpdate: return
 			tiles = []
 			start = stage.selectedTilesStart[:]
 			end = stage.selectedTilesEnd[:]
@@ -703,6 +707,7 @@ def main():
 					tiles.append([x, y])
 
 			if tiles != []: stage.selectedTiles = tiles
+			gxEdit.tileSelectionUpdate = False
 
 		def clampUiWindows():
 			#TODO: restore original position if user did not move it
