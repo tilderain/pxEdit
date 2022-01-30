@@ -6,4 +6,4 @@
 
 Experimental collaborative editor with high hopes. It attempts to emulate the style of Pixel's private editor, pxStage. The main draw is the ability to edit levels with other people.
 
-Desperately in need of a rewrite, probably in Cython, C, or Rust.
+It's basically a prototype that got out of control, so it's desperately in need of a rewrite, probably in Cython, C, or Rust.
