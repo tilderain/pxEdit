@@ -36,10 +36,10 @@ import util
 
 
 
-dataPath = "./Kero Blaster/rsc_k/"
+dataPath = "./Kero Blaster/Resource/"
 gamePath = "./Kero Blaster/"
-fieldPath = "./Kero Blaster/rsc_k/field/"
-imgPath = "./Kero Blaster/rsc_k/img/"
+fieldPath = "./Kero Blaster/Resource/field/"
+imgPath = "./Kero Blaster/Resource/img/"
 
 #for debugging
 dataPath = "./" + dataPath
@@ -129,9 +129,9 @@ class StagePrj:
 			#Choose the backup you want to open.
 		
 		if self.pack.load(fieldPath + self.stageName + pxPackExt):
-			for i in range(3):
+			for i in range(1):
 				self.loadParts(i)
-				self.attrs[i].load(imgPath + self.pack.layers[i].partsName + pxAttrExt)
+				self.attrs[i].load(imgPath + self.pack.layers[i].partsName + pxAttrExt, printError=False)
 				self.createMapSurface(i)
 				self.renderMapToSurface(i)
 			return True
@@ -140,7 +140,7 @@ class StagePrj:
 
 	def loadParts(self, layerNo):
 		try:
-			self.parts[layerNo] = interface.gSprfactory.from_image(imgPath + self.pack.layers[layerNo].partsName + ".png")
+			self.parts[layerNo] = interface.gSprfactory.from_image(fieldPath + self.pack.layers[layerNo].partsName + ".png")
 			if not self.attrs[layerNo].width:
 					self.attrs[layerNo].width = self.parts[layerNo].size[0] // const.tileWidth
 					self.attrs[layerNo].height = self.parts[layerNo].size[1] // const.tileWidth
@@ -176,7 +176,7 @@ class StagePrj:
 		if self.lastBackupPos == self.undoPos:
 			return False
 
-		print("--Backing up stage {}...--".format(self.stageName))
+		print("-- Backing up stage {}... --".format(self.stageName))
 
 		date = datetime.now()
 		dateMin = date.strftime(backupTimeFormat)
@@ -483,12 +483,15 @@ def main():
 	sdl2.ext.init()
 	#To disable texture destruction on window resize
 	sdl2.SDL_SetHint(sdl2.SDL_HINT_RENDER_DRIVER, b"opengl")
+#	sdl2.SDL_SetHint(sdl2.SDL_HINT_DPI_SCALING "0"
+#	sdl2.SDL_SetHint(sdl2.SDL_HINT_DPI_AWARENESS "system"
+#	sdl2.SDL_SetHint(sdl2.SDL_HINT_VIDEO_HIGHDPI_DISABLED "1"
 
 	if TTF_Init() == -1:
 		print("Error initting ttf: ", TTF_GetError())
 		return
 
-	interface.gFont = TTF_OpenFont(b"sserife.fon", ctypes.c_int(12))
+	interface.gFont = TTF_OpenFont(b"sserife.fon", ctypes.c_int(21))
 
 	if not interface.gFont:
 		print("error opening font:", TTF_GetError())
@@ -525,7 +528,7 @@ def main():
 
 	gxEdit.loadMeta(sprfactory)
 
-	gxEdit.loadStage("01field1")
+	gxEdit.loadStage("rmStart")
 
 	introAnimTimer = 0
 
@@ -591,9 +594,11 @@ def main():
 			if event.contents.window.event == sdl2.SDL_WINDOWEVENT_SIZE_CHANGED:
 				interface.gWindowWidth = event.contents.window.data1
 				interface.gWindowHeight = event.contents.window.data2
+
+				renderer.logical_size = (interface.gWindowWidth, interface.gWindowHeight)
 				
-				renderEditor()
-				renderer.present()
+				#renderEditor()
+				#renderer.present()
 		return 0
 	reFunc = sdl2.SDL_EventFilter(resizeEventWatch)
 	sdl2.SDL_AddEventWatch(reFunc, window.window)
@@ -772,7 +777,7 @@ def main():
 
 		#TODO: do a getticks system
 		renderer.present()
-		sdl2.SDL_Delay(8)
+		sdl2.SDL_Delay(20)
 
 		#window.refresh()
 	sdl2.ext.quit()

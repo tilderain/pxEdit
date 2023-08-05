@@ -1,0 +1,750 @@
+<entity id="0" name="-" description="">
+	<tile tileset="fuFixChar" x="0" y="0" numXTiles="0" numYTiles="0"/>
+</entity>
+<entity id="1" name="Empty" description="">
+	<tile tileset="fuFixChar" x="103" y="126" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="2" name="Trush Box" description="">
+	<tile tileset="" x="24" y="20" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="3" name="Event" description="(p2: 0=stop 1=mv-h 2=mv-v 3=mv-H 4=mv-V 10=mem block)">
+	<tile tileset="fuFixChar" x="96" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="4" name="Anchor" description="( <swtN:2=up p2:speed )">
+	<tile tileset="fuFixChar" x="102" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="5" name="Shutter" description="(p2: parts / Flag: On=Close / Name: L=left or U,R,D )">
+	<tile tileset="fuFixChar" x="105" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="6" name="Long Weed" description="">
+	<tile tileset="/0" x="16" y="32" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="7" name="Kankisen 1" description="">
+	<tile tileset="/0" x="48" y="16" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="8" name="Trunk" description="">
+	<tile tileset="" x="16" y="48" numXTiles="8" numYTiles="2"/>
+</entity>
+<entity id="9" name="Test" description="">
+	<tile tileset="fuFixChar" x="0" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="10" name="Block Generator" description="">
+	<tile tileset="" x="28" y="63" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="11" name="Kurobo-" description="">
+	<tile tileset="/0" x="8" y="40" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="12" name="Snow Trunk" description="">
+	<tile tileset="" x="56" y="60" numXTiles="8" numYTiles="4"/>
+</entity>
+<entity id="13" name="Cat & Frog Step" description="">
+	<tile tileset="fuFixNPC" x="90" y="92" numXTiles="6" numYTiles="2"/>
+</entity>
+<entity id="14" name="Gearshift" description="">
+	<tile tileset="fuFixNPC" x="64" y="72" numXTiles="2" numYTiles="4"/>
+</entity>
+<entity id="15" name="Timer Kun" description="">
+	<tile tileset="fuFixNPC" x="88" y="120" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="16" name="Kajiya" description="">
+	<tile tileset="fuFixNPC" x="64" y="56" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="17" name="Endless Ice" description="">
+	<tile tileset="" x="24" y="48" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="18" name="MiniSpiral" description="">
+	<tile tileset="" x="12" y="54" numXTiles="3" numYTiles="3"/>
+</entity>
+<entity id="19" name="Elevator Door" description="(p2: 10=stop)">
+	<tile tileset="fuFixNPC" x="96" y="56" numXTiles="6" numYTiles="8"/>
+</entity>
+<entity id="20" name="BigPress" description="">
+	<tile tileset="" x="60" y="46" numXTiles="4" numYTiles="8"/>
+</entity>
+<entity id="21" name="Train" description="">
+	<tile tileset="" x="0" y="28" numXTiles="14" numYTiles="18"/>
+</entity>
+<entity id="22" name="Drop" description="">
+	<tile tileset="fuFixPtcl" x="26" y="18" numXTiles="2" numYTiles="2"/>
+</entity>
+<entity id="23" name="Green Fish" description="">
+	<tile tileset="" x="0" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="24" name="Shield Plant" description="">
+	<tile tileset="" x="0" y="0" numXTiles="16" numYTiles="10"/>
+</entity>
+<entity id="25" name="Kani mini" description="">
+	<tile tileset="" x="18" y="54" numXTiles="3" numYTiles="3"/>
+</entity>
+<entity id="26" name="Relay" description="">
+	<tile tileset="fuFixChar" x="107" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="27" name="toL2" description="">
+	<tile tileset="fuFixPtcl" x="54" y="58" numXTiles="6" numYTiles="2"/>
+</entity>
+<entity id="28" name="toU2" description="">
+	<tile tileset="fuFixPtcl" x="60" y="58" numXTiles="2" numYTiles="6"/>
+</entity>
+<entity id="29" name="toR2" description="">
+	<tile tileset="fuFixPtcl" x="54" y="60" numXTiles="6" numYTiles="2"/>
+</entity>
+<entity id="30" name="toD2" description="">
+	<tile tileset="fuFixPtcl" x="62" y="58" numXTiles="2" numYTiles="6"/>
+</entity>
+<entity id="31" name="FirePlant" description="">
+	<tile tileset="" x="16" y="16" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="32" name="LadderBox" description="">
+	<tile tileset="fuFixNPC" x="26" y="38" numXTiles="3" numYTiles="3"/>
+</entity>
+<entity id="33" name="Debug Link" description="">
+	<tile tileset="fuFixChar" x="100" y="122" numXTiles="2" numYTiles="2"/>
+</entity>
+<entity id="34" name="ComboCue" description="">
+	<tile tileset="fuFixChar" x="22" y="122" numXTiles="3" numYTiles="3"/>
+</entity>
+<entity id="35" name="Kinko" description="">
+	<tile tileset="fuFixNPC" x="0" y="120" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="36" name="The Tire" description="">
+	<tile tileset="fuFixNPC" x="64" y="96" numXTiles="10" numYTiles="10"/>
+</entity>
+<entity id="37" name="Doro Hole" description="">
+	<tile tileset="" x="24" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="38" name="Heart" description="">
+	<tile tileset="" x="0" y="0" numXTiles="0" numYTiles="0"/>
+</entity>
+<entity id="39" name="Doro Jump" description="">
+	<tile tileset="" x="24" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="40" name="Lift V3" description="">
+	<tile tileset="fuFixNPC" x="122" y="84" numXTiles="6" numYTiles="2"/>
+</entity>
+<entity id="41" name="Ice Spike" description="">
+	<tile tileset="/0" x="0" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="42" name="Camp Gate" description="">
+	<tile tileset="fuFixChar" x="116" y="84" numXTiles="6" numYTiles="6"/>
+</entity>
+<entity id="43" name="Chibi Uzo" description="">
+	<tile tileset="fuFixNPC" x="8" y="94" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="44" name="Uzo Void layer 0" description="">
+	<tile tileset="/0" x="32" y="16" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="45" name="Tar" description="">
+	<tile tileset="" x="20" y="24" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="46" name="Block Eater" description="">
+	<tile tileset="" x="0" y="0" numXTiles="0" numYTiles="0"/>
+</entity>
+<entity id="47" name="Uzo Void layer 1" description="">
+	<tile tileset="fuFixNPC" x="64" y="76" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="48" name="HiddenChest" description="">
+	<tile tileset="fuFixNPC" x="28" y="35" numXTiles="4" numYTiles="3"/>
+</entity>
+<entity id="49" name="Call Missile Bird 7" description="">
+	<tile tileset="fuFixChar" x="103" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="50" name="Trunk Mini" description="">
+	<tile tileset="" x="48" y="48" numXTiles="6" numYTiles="2"/>
+</entity>
+<entity id="51" name="Kani 7" description="">
+	<tile tileset="" x="0" y="28" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="52" name="Kani Chibi 7" description="">
+	<tile tileset="" x="16" y="54" numXTiles="3" numYTiles="3"/>
+</entity>
+<entity id="53" name="Phone" description="">
+	<tile tileset="fuFixNPC" x="72" y="72" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="54" name="Nurse" description="">
+	<tile tileset="fuFixNPC" x="64" y="64" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="55" name="Fire bubble Set" description="">
+	<tile tileset="" x="24" y="55" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="56" name="Mole" description="">
+	<tile tileset="" x="24" y="16" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="57" name="Uzo Void layer 2" description="">
+	<tile tileset="/2" x="24" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="58" name="comic balloon" description="">
+	<tile tileset="fuFixChar" x="64" y="64" numXTiles="16" numYTiles="8"/>
+</entity>
+<entity id="59" name="Rolling Fiber" description="">
+	<tile tileset="" x="22" y="0" numXTiles="6" numYTiles="6"/>
+</entity>
+<entity id="60" name="Barbwire" description="">
+	<tile tileset="" x="28" y="58" numXTiles="2" numYTiles="2"/>
+</entity>
+<entity id="61" name="Domino" description="">
+	<tile tileset="" x="20" y="62" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="62" name="Explain" description="">
+	<tile tileset="fuFixChar" x="103" y="126" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="63" name="Door A" description="">
+	<tile tileset="fuFixNPC" x="96" y="56" numXTiles="6" numYTiles="8"/>
+</entity>
+<entity id="64" name="Walking Black" description="">
+	<tile tileset="fuFixNPC" x="0" y="32" numXTiles="8" numYTiles="8"/>
+</entity>
+<entity id="65" name="Focus Control" description="(0=Nrml V 1=UnderMPC)">
+	<tile tileset="fuFixChar" x="104" y="126" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="66" name="Uzo Flame" description="(prm2: 0 = left 1 = top 2 = right 3 = bottom)">
+	<tile tileset="/0" x="0" y="40" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="67" name="Creeper" description="">
+	<tile tileset="" x="0" y="0" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="68" name="Shacho Act stage 7 office" description="">
+	<tile tileset="" x="24" y="0" numXTiles="6" numYTiles="8"/>
+</entity>
+<entity id="69" name="Room Locker" description="">
+	<tile tileset="fuFixNPC" x="24" y="66" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="70" name="Bent Plate" description="">
+	<tile tileset="" x="0" y="40" numXTiles="14" numYTiles="12"/>
+</entity>
+<entity id="71" name="Boss Desk" description="">
+	<tile tileset="" x="56" y="52" numXTiles="8" numYTiles="4"/>
+</entity>
+<entity id="72" name="Barricade" description="">
+	<tile tileset="fuFixNPC" x="12" y="108" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="73" name="Uzo Tank" description="">
+	<tile tileset="fuFixNPC" x="64" y="116" numXTiles="6" numYTiles="6"/>
+</entity>
+<entity id="74" name="Elevator 00" description="">
+	<tile tileset="/0" x="32" y="0" numXTiles="16" numYTiles="12"/>
+</entity>
+<entity id="75" name="Kani" description="">
+	<tile tileset="" x="8" y="36" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="76" name="Tokobushi" description="">
+	<tile tileset="" x="0" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="77" name="Anemone" description="">
+	<tile tileset="" x="10" y="16" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="78" name="to Back" description="">
+	<tile tileset="fuFixChar" x="96" y="122" numXTiles="2" numYTiles="2"/>
+</entity>
+<entity id="79" name="Position Half Up" description="">
+	<tile tileset="fuFixChar" x="111" y="126" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="80" name="Door Vertical" description="">
+	<tile tileset="/0" x="32" y="16" numXTiles="6" numYTiles="8"/>
+</entity>
+<entity id="81" name="Line Censor" description="">
+	<tile tileset="fuFixPtcl" x="10" y="46" numXTiles="1" numYTiles="16"/>
+</entity>
+<entity id="82" name="Route Arrow" description="">
+	<tile tileset="fuFixNPC" x="116" y="90" numXTiles="3" numYTiles="3"/>
+</entity>
+<entity id="83" name="Fly Wave" description="">
+	<tile tileset="" x="12" y="20" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="84" name="Spin" description="">
+	<tile tileset="" x="8" y="20" numXTiles="3" numYTiles="3"/>
+</entity>
+<entity id="85" name="Altar" description="">
+	<tile tileset="/1" x="8" y="0" numXTiles="16" numYTiles="4"/>
+</entity>
+<entity id="86" name="Call Small" description="">
+	<tile tileset="fuFixChar" x="0" y="0" numXTiles="0" numYTiles="0"/>
+</entity>
+<entity id="87" name="Snow Setter" description="">
+	<tile tileset="fuFixChar" x="111" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="88" name="Icicle" description="">
+	<tile tileset="" x="24" y="48" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="89" name="Uzo Slime" description="">
+	<tile tileset="fuFixChar" x="0" y="96" numXTiles="6" numYTiles="6"/>
+</entity>
+<entity id="90" name="Goldrush" description="">
+	<tile tileset="" x="8" y="36" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="91" name="Ebi Flower 7" description="">
+	<tile tileset="" x="24" y="48" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="92" name="Nikubae" description="">
+	<tile tileset="fuFixNPC" x="12" y="102" numXTiles="2" numYTiles="2"/>
+</entity>
+<entity id="93" name="Uzo Gray (layer0)" description="">
+	<tile tileset="/0" x="56" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="94" name="4 Boss Barricade." description="">
+	<tile tileset="/0" x="16" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="95" name="Quaker" description="">
+	<tile tileset="fuFixChar" x="104" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="96" name="Flag Mine" description="">
+	<tile tileset="fuFixChar" x="110" y="126" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="97" name="Uzo Red" description="">
+	<tile tileset="fuFixNPC" x="16" y="82" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="98" name="Saucer" description="">
+	<tile tileset="" x="0" y="0" numXTiles="22" numYTiles="4"/>
+</entity>
+<entity id="99" name="Uzo Over Fence" description="">
+	<tile tileset="/2" x="24" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="100" name="Fluo Lamp" description="">
+	<tile tileset="fuFixNPC" x="76" y="90" numXTiles="8" numYTiles="2"/>
+</entity>
+<entity id="101" name="Gravity Block 3" description="">
+	<tile tileset="fuFixChar" x="22" y="96" numXTiles="6" numYTiles="6"/>
+</entity>
+<entity id="102" name="Uzo Chibi Red" description="">
+	<tile tileset="fuFixNPC" x="0" y="94" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="103" name="Uzo Gray (layer2)" description="">
+	<tile tileset="/2" x="16" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="104" name="Sparker" description="">
+	<tile tileset="fuFixChar" x="111" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="105" name="Bacteria" description="">
+	<tile tileset="" x="12" y="52" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="106" name="Digesty" description="">
+	<tile tileset="/1" x="28" y="8" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="107" name="Roof Worm" description="">
+	<tile tileset="" x="8" y="0" numXTiles="4" numYTiles="3"/>
+</entity>
+<entity id="108" name="Big Worm" description="">
+	<tile tileset="" x="12" y="0" numXTiles="8" numYTiles="6"/>
+</entity>
+<entity id="109" name="Silhoette" description="">
+	<tile tileset="" x="56" y="46" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="110" name="Zombie" description="">
+	<tile tileset="" x="0" y="0" numXTiles="6" numYTiles="6"/>
+</entity>
+<entity id="111" name="Leather" description="">
+	<tile tileset="" x="0" y="18" numXTiles="6" numYTiles="6"/>
+</entity>
+<entity id="112" name="White Setter" description="">
+	<tile tileset="fuFixChar" x="111" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="113" name="Egg Worm" description="(prm2: 0 = upper left 1 = upper right 2 = lower left 3 = lower right)">
+	<tile tileset="" x="24" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="114" name="Stone Gate" description="(swt 1:key coming, 2:keep close, 3:to open 4:key short)">
+	<tile tileset="" x="60" y="46" numXTiles="4" numYTiles="8"/>
+</entity>
+<entity id="115" name="Frog Plant" description="">
+	<tile tileset="" x="0" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="116" name="Weak Weed" description="">
+	<tile tileset="/0" x="0" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="117" name="Ebi Floser" description="">
+	<tile tileset="" x="8" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="118" name="Bubble 1UP" description="">
+	<tile tileset="" x="0" y="0" numXTiles="0" numYTiles="0"/>
+</entity>
+<entity id="119" name="Shacho A" description="">
+	<tile tileset="fuFixNPC" x="32" y="0" numXTiles="6" numYTiles="8"/>
+</entity>
+<entity id="120" name="Frozen Fish" description="">
+	<tile tileset="" x="0" y="28" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="121" name="Uzo Elec" description="">
+	<tile tileset="fuFixNPC" x="24" y="70" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="122" name="Flower Vase" description="">
+	<tile tileset="fuFixNPC" x="96" y="116" numXTiles="6" numYTiles="6"/>
+</entity>
+<entity id="123" name="Gray Spiral" description="">
+	<tile tileset="fuFixNPC" x="0" y="24" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="124" name="Time Attack Display" description="">
+	<tile tileset="fuFixNPC" x="96" y="84" numXTiles="18" numYTiles="4"/>
+</entity>
+<entity id="125" name="Metalmushi" description="">
+	<tile tileset="fuFixNPC" x="76" y="84" numXTiles="4" numYTiles="2"/>
+</entity>
+<entity id="126" name="The Bar" description="">
+	<tile tileset="/0" x="28" y="4" numXTiles="4" numYTiles="24"/>
+</entity>
+<entity id="127" name="Gravity Ice" description="">
+	<tile tileset="fuFixChar" x="18" y="96" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="128" name="EarthFly" description="">
+	<tile tileset="" x="0" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="129" name="Walking Moss" description="">
+	<tile tileset="" x="8" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="130" name="Mob Stand" description="">
+	<tile tileset="" x="0" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="131" name="Spike Plant" description="">
+	<tile tileset="/0" x="8" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="132" name="Sidewinder" description="">
+	<tile tileset="" x="16" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="133" name="Katanakaji" description="">
+	<tile tileset="fuFixNPC" x="32" y="56" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="134" name="Chest2" description="">
+	<tile tileset="fuFixNPC" x="26" y="56" numXTiles="6" numYTiles="3"/>
+</entity>
+<entity id="135" name="Walk Plant" description="">
+	<tile tileset="" x="0" y="20" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="136" name="Blue Fish" description="">
+	<tile tileset="" x="0" y="20" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="137" name="Dragon Flower" description="">
+	<tile tileset="" x="0" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="138" name="Set Birds" description="( 0:room 1:tree 2:two birds )">
+	<tile tileset="fuFixChar" x="103" y="126" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="139" name="Fly Evade" description="">
+	<tile tileset="" x="12" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="140" name="Gravity Block 2" description="">
+	<tile tileset="fuFixChar" x="28" y="96" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="141" name="Doronko" description="">
+	<tile tileset="" x="16" y="28" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="142" name="Tumbleweed" description="">
+	<tile tileset="" x="24" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="143" name="New Arms" description="">
+	<tile tileset="" x="0" y="24" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="144" name="Bat ceiling" description="">
+	<tile tileset="" x="0" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="145" name="Strong Box" description="">
+	<tile tileset="fuFixNPC" x="0" y="104" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="146" name="Chandelier" description="">
+	<tile tileset="fuFixNPC" x="16" y="70" numXTiles="8" numYTiles="4"/>
+</entity>
+<entity id="147" name="Bubble Lift" description="">
+	<tile tileset="fuFixChar" x="112" y="96" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="148" name="Call Bats" description="">
+	<tile tileset="" x="16" y="16" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="149" name="Booster" description="">
+	<tile tileset="fuFixChar" x="16" y="64" numXTiles="6" numYTiles="2"/>
+</entity>
+<entity id="150" name="Bat Passing" description="">
+	<tile tileset="" x="8" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="151" name="Orange Fish" description="">
+	<tile tileset="" x="8" y="20" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="152" name="Echinus" description="">
+	<tile tileset="" x="0" y="48" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="153" name="KillerSensor" description="">
+	<tile tileset="" x="0" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="154" name="Moving Box Horizontal" description="">
+	<tile tileset="" x="42" y="44" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="155" name="BomBox" description="">
+	<tile tileset="" x="0" y="52" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="156" name="Edge Coin (s)" description="">
+	<tile tileset="" x="4" y="20" numXTiles="3" numYTiles="3"/>
+</entity>
+<entity id="157" name="Edge Medal" description="">
+	<tile tileset="" x="0" y="20" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="158" name="Fall Light" description="">
+	<tile tileset="fuFixChar" x="116" y="122" numXTiles="6" numYTiles="6"/>
+</entity>
+<entity id="159" name="Intro" description="">
+	<tile tileset="fuFixChar" x="112" y="126" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="160" name="Uzouzo" description="">
+	<tile tileset="fuFixNPC" x="0" y="82" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="161" name="Office Fly" description="">
+	<tile tileset="" x="60" y="48" numXTiles="2" numYTiles="2"/>
+</entity>
+<entity id="162" name="Sister" description="">
+	<tile tileset="fuFixNPC" x="80" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="163" name="Sasuke" description="">
+	<tile tileset="fuFixNPC" x="96" y="0" numXTiles="6" numYTiles="8"/>
+</entity>
+<entity id="164" name="Hanger" description="">
+	<tile tileset="fuFixNPC" x="80" y="72" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="165" name="Rolling Snow" description="">
+	<tile tileset="" x="24" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="166" name="Ball Flyer" description="(prm2: I'm going to make you move around.)">
+	<tile tileset="" x="28" y="16" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="167" name="Rolling Big" description="">
+	<tile tileset="" x="18" y="0" numXTiles="6" numYTiles="6"/>
+</entity>
+<entity id="168" name="Refrigerator" description="">
+	<tile tileset="" x="8" y="0" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="169" name="Ice Hillock" description="">
+	<tile tileset="" x="8" y="36" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="170" name="Bear Core" description="">
+	<tile tileset="" x="8" y="24" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="171" name="Animal Bone" description="">
+	<tile tileset="fuFixNPC" x="16" y="102" numXTiles="4" numYTiles="2"/>
+</entity>
+<entity id="172" name="Kankisen 2" description="">
+	<tile tileset="/2" x="24" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="173" name="Carton Box L" description="">
+	<tile tileset="/0" x="32" y="48" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="174" name="Carton Box s" description="">
+	<tile tileset="/0" x="38" y="48" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="175" name="Broken Plant" description="">
+	<tile tileset="/0" x="56" y="54" numXTiles="8" numYTiles="2"/>
+</entity>
+<entity id="176" name="Phone Dark" description="">
+	<tile tileset="fuFixNPC" x="76" y="72" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="177" name="Core Debug" description="">
+	<tile tileset="fuFixChar" x="114" y="122" numXTiles="2" numYTiles="2"/>
+</entity>
+<entity id="178" name="Spike Plant Fly" description="">
+	<tile tileset="/0" x="16" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="179" name="Call Glider Bird (Fire)" description="">
+	<tile tileset="fuFixChar" x="103" y="126" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="180" name="Spike Plant Side." description="">
+	<tile tileset="/0" x="16" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="181" name="Doroman" description="">
+	<tile tileset="" x="24" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="182" name="Doronko Turn" description="">
+	<tile tileset="" x="24" y="20" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="183" name="Vertical Beam" description="">
+	<tile tileset="" x="0" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="184" name="Moving Box Vertical" description="">
+	<tile tileset="" x="42" y="36" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="185" name="Propeller Fish" description="">
+	<tile tileset="" x="24" y="36" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="186" name="Hopper" description="">
+	<tile tileset="fuFixNPC" x="0" y="64" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="187" name="Zundou Lift" description="">
+	<tile tileset="fuFixNPC" x="72" y="84" numXTiles="4" numYTiles="8"/>
+</entity>
+<entity id="188" name="Slip Lift" description="">
+	<tile tileset="fuFixNPC" x="72" y="92" numXTiles="8" numYTiles="4"/>
+</entity>
+<entity id="189" name="Maruta Lift" description="">
+	<tile tileset="fuFixNPC" x="80" y="92" numXTiles="8" numYTiles="4"/>
+</entity>
+<entity id="190" name="Sliding Block" description="">
+	<tile tileset="/0" x="8" y="8" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="191" name="Frost Generic" description="">
+	<tile tileset="" x="0" y="52" numXTiles="8" numYTiles="6"/>
+</entity>
+<entity id="192" name="zan Bito bag" description="1=walk, 2~8=walk(cnt), 9=run, 10=run(swt)">
+	<tile tileset="" x="32" y="0" numXTiles="4" numYTiles="8"/>
+</entity>
+<entity id="193" name="Wind Hopper" description="">
+	<tile tileset="fuFixNPC" x="0" y="64" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="194" name="zan Bito type" description="">
+	<tile tileset="" x="56" y="52" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="195" name="Hazy Worm" description="">
+	<tile tileset="" x="0" y="0" numXTiles="8" numYTiles="4"/>
+</entity>
+<entity id="196" name="Pink Hopper" description="">
+	<tile tileset="" x="16" y="16" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="197" name="Rolling Spark" description="(prm2: 1=slow 3=fast)">
+	<tile tileset="fuFixNPC" x="68" y="84" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="198" name="Spike Plant2" description="">
+	<tile tileset="/0" x="8" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="199" name="Puddie Lift" description="">
+	<tile tileset="/1" x="8" y="8" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="200" name="Walking Box" description="">
+	<tile tileset="fuFixNPC" x="16" y="32" numXTiles="8" numYTiles="8"/>
+</entity>
+<entity id="201" name="Steel Spiral" description="">
+	<tile tileset="" x="0" y="0" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="202" name="Junk Hopper" description="">
+	<tile tileset="" x="12" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="203" name="Togetoge" description="">
+	<tile tileset="" x="60" y="56" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="204" name="Masamune" description="">
+	<tile tileset="fuFixNPC" x="116" y="86" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="205" name="Datsu" description="">
+	<tile tileset="/0" x="0" y="58" numXTiles="8" numYTiles="2"/>
+</entity>
+<entity id="206" name="Carry(color)" description="">
+	<tile tileset="fuFixNPC" x="74" y="96" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="207" name="Sheaf(color)" description="">
+	<tile tileset="fuFixNPC" x="76" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="208" name="Seagull" description="">
+	<tile tileset="" x="0" y="0" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="209" name="Beach Mole" description="">
+	<tile tileset="" x="12" y="0" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="210" name="Sea Dragon" description="">
+	<tile tileset="" x="0" y="46" numXTiles="8" numYTiles="6"/>
+</entity>
+<entity id="211" name="Garbage Bag" description="">
+	<tile tileset="fuFixNPC" x="12" y="64" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="212" name="Tarai" description="">
+	<tile tileset="fuFixNPC" x="8" y="74" numXTiles="8" numYTiles="4"/>
+</entity>
+<entity id="213" name="za Crew" description="1=run, 2=walk(slow), 3=talk, 4=walk, 6=nod, 10=run(swt)">
+	<tile tileset="" x="0" y="0" numXTiles="5" numYTiles="8"/>
+</entity>
+<entity id="214" name="Togemushi" description="">
+	<tile tileset="" x="20" y="0" numXTiles="2" numYTiles="2"/>
+</entity>
+<entity id="215" name="Seagull Fly" description="">
+	<tile tileset="" x="0" y="0" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="216" name="za Nakai" description="">
+	<tile tileset="" x="20" y="0" numXTiles="5" numYTiles="8"/>
+</entity>
+<entity id="217" name="Position" description="(prm2: 3 = ypos-3)">
+	<tile tileset="" x="0" y="0" numXTiles="0" numYTiles="0"/>
+</entity>
+<entity id="218" name="Oshima" description="">
+	<tile tileset="" x="12" y="0" numXTiles="8" numYTiles="6"/>
+</entity>
+<entity id="219" name="Ashidaka" description="">
+	<tile tileset="" x="0" y="28" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="220" name="Puti Step" description="">
+	<tile tileset="" x="20" y="48" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="221" name="Dark Ameba" description="">
+	<tile tileset="" x="0" y="52" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="222" name="Side Snail" description="">
+	<tile tileset="" x="12" y="12" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="223" name="Tower Cloud" description="">
+	<tile tileset="/2" x="0" y="0" numXTiles="28" numYTiles="4"/>
+</entity>
+<entity id="224" name="Orange Fish 9" description="">
+	<tile tileset="" x="24" y="26" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="225" name="Umineko" description="">
+	<tile tileset="" x="0" y="16" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="226" name="Entrance" description="">
+	<tile tileset="fuFixChar" x="103" y="126" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="227" name="Spider" description="">
+	<tile tileset="" x="16" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="228" name="Weak Web" description="">
+	<tile tileset="fuFixNPC" x="8" y="56" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="229" name="Hinotama" description="">
+	<tile tileset="fuFixNPC" x="118" y="48" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="230" name="Cabinet Monster" description="">
+	<tile tileset="fuFixNPC" x="64" y="50" numXTiles="4" numYTiles="2"/>
+</entity>
+<entity id="231" name="Step Books" description="">
+	<tile tileset="/1" x="16" y="24" numXTiles="2" numYTiles="2"/>
+</entity>
+<entity id="232" name="Step Desk" description="">
+	<tile tileset="/1" x="26" y="28" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="233" name="Step Cabinet1" description="">
+	<tile tileset="/1" x="16" y="26" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="234" name="Step Cabinet2" description="">
+	<tile tileset="/1" x="20" y="28" numXTiles="6" numYTiles="4"/>
+</entity>
+<entity id="235" name="Circle Kurono" description="">
+	<tile tileset="" x="12" y="60" numXTiles="2" numYTiles="2"/>
+</entity>
+<entity id="236" name="Sky Kurono" description="">
+	<tile tileset="" x="18" y="62" numXTiles="2" numYTiles="2"/>
+</entity>
+<entity id="237" name="Sky Kurono cloud 0" description="">
+	<tile tileset="/0" x="0" y="55" numXTiles="25" numYTiles="9"/>
+</entity>
+<entity id="238" name="Sky Kurono cloud 1" description="">
+	<tile tileset="/1" x="0" y="16" numXTiles="20" numYTiles="8"/>
+</entity>
+<entity id="239" name="Random Flash." description="">
+	<tile tileset="fuFixChar" x="107" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="240" name="Work Books(color)" description="">
+	<tile tileset="fuFixChar" x="14" y="104" numXTiles="4" numYTiles="10"/>
+</entity>
+<entity id="241" name="effect Smokes" description="">
+	<tile tileset="fuFixChar" x="111" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="242" name="effect Dust" description="">
+	<tile tileset="fuFixChar" x="111" y="127" numXTiles="1" numYTiles="1"/>
+</entity>
+<entity id="243" name="Hidden Sheaf(color)" description="">
+	<tile tileset="fuFixNPC" x="76" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="244" name="Work Books(gray)" description="">
+	<tile tileset="fuFixChar" x="14" y="114" numXTiles="4" numYTiles="10"/>
+</entity>
+<entity id="245" name="Carry(gray)" description="">
+	<tile tileset="fuFixNPC" x="82" y="96" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="246" name="Sheaf(gray)" description="">
+	<tile tileset="fuFixNPC" x="84" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="247" name="Hidden Sheaf(gray)" description="">
+	<tile tileset="fuFixNPC" x="84" y="32" numXTiles="4" numYTiles="4"/>
+</entity>
+<entity id="248" name="Uzo(car3)" description="">
+	<tile tileset="fuFixChar" x="108" y="84" numXTiles="4" numYTiles="6"/>
+</entity>
+<entity id="249" name="Sky Kurono cloud 2" description="">
+	<tile tileset="/2" x="0" y="16" numXTiles="20" numYTiles="8"/>
+</entity>

@@ -13,10 +13,10 @@ def readEntityInfo():
 
 entityInfo = readEntityInfo()
 
-for file in sorted(os.listdir("../Kero Blaster/rsc_k/field/")):
+for file in sorted(os.listdir("../Kero Blaster/Resource/field/")):
 	pack = pxMap.PxPack()
 	print(file)
-	pack.load("../Kero Blaster/rsc_k/field/" + file)
+	pack.load("../Kero Blaster/Resource/field/" + file)
 	
 
 	for o in pack.eve.units:

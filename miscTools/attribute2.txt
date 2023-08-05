@@ -1,0 +1,1534 @@
+npc no: 0
+func 0x0, surf ?5, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 1
+func 0x462580, surf ?5, rect1 824, rect2 1008, rect3 8, rect4 8, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 2
+func 0x458940, surf ?4, rect1 192, rect2 160, rect3 32, rect4 48, 2, 0, 12, 12, 12, #14, 22, coin 65486, bonus 3, nameptr0x0, namestring 0
+npc no: 3
+func 0x4685c0, surf ?5, rect1 768, rect2 1016, rect3 8, rect4 8, 0, 0, 3, 3, 3, #3, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 4
+func 0x4625e0, surf ?5, rect1 816, rect2 1016, rect3 8, rect4 8, 0, 0, 3, 3, 3, #3, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 5
+func 0x4629a0, surf ?5, rect1 840, rect2 1016, rect3 8, rect4 8, 0, 1, 3, 3, 3, #3, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 6
+func 0x44afc0, surf ?7, rect1 128, rect2 256, rect3 32, rect4 48, 8, 0, 8, 20, 4, #4, 1, coin 64514, bonus 1, nameptr0x0, namestring 0
+npc no: 7
+func 0x475970, surf ?7, rect1 384, rect2 128, rect3 32, rect4 32, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 8
+func 0x466500, surf ?4, rect1 128, rect2 384, rect3 64, rect4 16, 0, 0, 22, 8, 24, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 9
+func 0x453c80, surf ?5, rect1 0, rect2 0, rect3 32, rect4 32, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 10
+func 0x466730, surf ?4, rect1 224, rect2 504, rect3 8, rect4 8, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 11
+func 0x44e560, surf ?7, rect1 64, rect2 320, rect3 32, rect4 32, 1, 0, 12, 12, 12, #12, 6, coin 65535, bonus 3, nameptr0x0, namestring 0
+npc no: 12
+func 0x466500, surf ?4, rect1 448, rect2 480, rect3 64, rect4 32, 0, 0, 22, 8, 24, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 13
+func 0x475a20, surf ?3, rect1 720, rect2 736, rect3 48, rect4 16, 5, 0, 16, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 14
+func 0x479e30, surf ?3, rect1 512, rect2 576, rect3 16, rect4 32, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 15
+func 0x468d60, surf ?3, rect1 704, rect2 960, rect3 32, rect4 32, 0, 0, 8, 8, 8, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 16
+func 0x479c50, surf ?3, rect1 512, rect2 448, rect3 32, rect4 32, 2, 0, 10, 10, 10, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 17
+func 0x456770, surf ?4, rect1 192, rect2 384, rect3 32, rect4 32, 1, 0, 8, 10, 4, #8, 12, coin 1, bonus 1, nameptr0x0, namestring 0
+npc no: 18
+func 0x469e80, surf ?4, rect1 96, rect2 432, rect3 24, rect4 24, 1, 0, 9, 9, 9, #12, 2, coin 65535, bonus 0, nameptr0x0, namestring 0
+npc no: 19
+func 0x468e80, surf ?3, rect1 768, rect2 448, rect3 48, rect4 64, 0, 0, 2, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 20
+func 0x469bd0, surf ?4, rect1 480, rect2 368, rect3 32, rect4 64, 0, 1, 16, 32, 16, #32, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 21
+func 0x475c40, surf ?4, rect1 0, rect2 224, rect3 112, rect4 144, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 22
+func 0x46ee10, surf ?6, rect1 208, rect2 144, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 23
+func 0x44ca00, surf ?4, rect1 0, rect2 0, rect3 32, rect4 32, 2, 0, 12, 6, 8, #8, 12, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 24
+func 0x438880, surf ?4, rect1 0, rect2 0, rect3 128, rect4 80, 3, 0, 1, 1, 30, #32, 110, coin 99, bonus 0, nameptr0x0, namestring 0
+npc no: 25
+func 0x46b1c0, surf ?4, rect1 144, rect2 432, rect3 24, rect4 24, 1, 0, 8, 8, 8, #12, 6, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 26
+func 0x468800, surf ?5, rect1 856, rect2 1016, rect3 8, rect4 8, 0, 0, 16, 16, 3, #3, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 27
+func 0x4689e0, surf ?6, rect1 432, rect2 464, rect3 48, rect4 16, 0, 0, 3, 3, 6, #6, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 28
+func 0x468aa0, surf ?6, rect1 480, rect2 464, rect3 16, rect4 48, 0, 0, 3, 3, 6, #6, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 29
+func 0x468a40, surf ?6, rect1 432, rect2 480, rect3 48, rect4 16, 0, 0, 3, 3, 6, #6, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 30
+func 0x468b00, surf ?6, rect1 496, rect2 464, rect3 16, rect4 48, 0, 0, 3, 3, 6, #6, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 31
+func 0x46a280, surf ?4, rect1 128, rect2 128, rect3 32, rect4 32, 2, 0, 10, 10, 16, #16, 16, coin 6, bonus 0, nameptr0x0, namestring 0
+npc no: 32
+func 0x462bd0, surf ?3, rect1 208, rect2 304, rect3 24, rect4 24, 2, 0, 11, 11, 12, #12, 6, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 33
+func 0x466b50, surf ?5, rect1 800, rect2 976, rect3 16, rect4 16, 2, 0, 8, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 34
+func 0x463b30, surf ?5, rect1 176, rect2 976, rect3 24, rect4 24, 1, 1, 12, 8, 0, #0, 12, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 35
+func 0x451040, surf ?3, rect1 0, rect2 960, rect3 48, rect4 32, 2, 0, 20, 14, 22, #16, 40, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 36
+func 0x4782d0, surf ?3, rect1 512, rect2 768, rect3 80, rect4 80, 0, 0, 24, 24, 24, #24, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 37
+func 0x458e30, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 1, 0, 10, 10, 10, #12, 9, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 38
+func 0x463c40, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 39
+func 0x459440, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 1, 0, 10, 10, 10, #12, 9, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 40
+func 0x462fc0, surf ?3, rect1 976, rect2 672, rect3 48, rect4 16, 0, 0, 20, 8, 20, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 41
+func 0x44b6c0, surf ?7, rect1 0, rect2 256, rect3 32, rect4 32, 2, 0, 8, 8, 8, #8, 24, coin 10, bonus 1, nameptr0x0, namestring 0
+npc no: 42
+func 0x462da0, surf ?5, rect1 928, rect2 672, rect3 48, rect4 48, 0, 0, 16, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 43
+func 0x453d90, surf ?3, rect1 64, rect2 752, rect3 32, rect4 32, 4, 0, 8, 8, 8, #8, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 44
+func 0x47c270, surf ?7, rect1 256, rect2 128, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 45
+func 0x456c00, surf ?4, rect1 160, rect2 192, rect3 48, rect4 32, 5, 0, 12, 12, 12, #10, 4, coin 10, bonus 3, nameptr0x0, namestring 0
+npc no: 46
+func 0x4636d0, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 47
+func 0x47c270, surf ?3, rect1 512, rect2 608, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 48
+func 0x4637c0, surf ?3, rect1 224, rect2 280, rect3 32, rect4 24, 2, 0, 8, 8, 0, #0, 18, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 49
+func 0x44d920, surf ?5, rect1 824, rect2 1016, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 50
+func 0x466500, surf ?4, rect1 384, rect2 384, rect3 48, rect4 16, 0, 0, 8, 8, 10, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 51
+func 0x46b1c0, surf ?4, rect1 0, rect2 224, rect3 32, rect4 32, 2, 0, 10, 14, 10, #16, 12, coin 65516, bonus 3, nameptr0x0, namestring 0
+npc no: 52
+func 0x46b1c0, surf ?4, rect1 128, rect2 432, rect3 24, rect4 24, 1, 0, 8, 8, 8, #12, 6, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 53
+func 0x47ba30, surf ?3, rect1 576, rect2 576, rect3 32, rect4 32, 2, 1, 12, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 54
+func 0x4794d0, surf ?3, rect1 512, rect2 512, rect3 32, rect4 32, 1, 0, 10, 4, 10, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 55
+func 0x46a870, surf ?4, rect1 192, rect2 440, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 56
+func 0x46a970, surf ?4, rect1 192, rect2 128, rect3 32, rect4 32, 1, 0, 12, 14, 12, #16, 12, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 57
+func 0x47c270, surf ?1, rect1 192, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 58
+func 0x47c480, surf ?5, rect1 512, rect2 512, rect3 128, rect4 64, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 59
+func 0x457040, surf ?4, rect1 176, rect2 0, rect3 48, rect4 48, 2, 0, 18, 18, 16, #20, 24, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 60
+func 0x46aed0, surf ?4, rect1 224, rect2 464, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 61
+func 0x463ce0, surf ?4, rect1 160, rect2 496, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 62
+func 0x468cb0, surf ?5, rect1 824, rect2 1008, rect3 8, rect4 8, 0, 0, 8, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 63
+func 0x4696d0, surf ?3, rect1 768, rect2 448, rect3 48, rect4 64, 0, 0, 0, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 64
+func 0x459a10, surf ?3, rect1 0, rect2 256, rect3 64, rect4 64, 6, 0, 16, 24, 8, #24, 100, coin 65486, bonus 3, nameptr0x0, namestring 0
+npc no: 65
+func 0x468300, surf ?5, rect1 832, rect2 1008, rect3 8, rect4 8, 0, 0, 8, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 66
+func 0x4577b0, surf ?7, rect1 0, rect2 320, rect3 32, rect4 32, 4, 0, 14, 14, 8, #8, 8, coin 65516, bonus 0, nameptr0x0, namestring 0
+npc no: 67
+func 0x457c40, surf ?4, rect1 0, rect2 0, rect3 48, rect4 32, 2, 0, 18, 10, 18, #10, 28, coin 65486, bonus 2, nameptr0x0, namestring 0
+npc no: 68
+func 0x480790, surf ?4, rect1 192, rect2 0, rect3 48, rect4 64, 2, 0, 10, 14, 12, #16, 32, coin 19, bonus 0, nameptr0x0, namestring 0
+npc no: 69
+func 0x451330, surf ?3, rect1 192, rect2 528, rect3 32, rect4 32, 1, 0, 10, 8, 0, #0, 8, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 70
+func 0x47cf00, surf ?4, rect1 0, rect2 320, rect3 112, rect4 96, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 71
+func 0x478280, surf ?4, rect1 448, rect2 416, rect3 64, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 72
+func 0x46b0d0, surf ?3, rect1 96, rect2 864, rect3 32, rect4 32, 1, 0, 10, 12, 10, #12, 16, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 73
+func 0x47bd80, surf ?3, rect1 512, rect2 928, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 74
+func 0x47d1f0, surf ?7, rect1 256, rect2 0, rect3 128, rect4 96, 0, 0, 0, 0, 8, #24, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 75
+func 0x46b1c0, surf ?4, rect1 64, rect2 288, rect3 32, rect4 32, 2, 0, 10, 14, 10, #16, 16, coin 65516, bonus 3, nameptr0x0, namestring 0
+npc no: 76
+func 0x46b850, surf ?4, rect1 0, rect2 256, rect3 32, rect4 32, 1, 0, 12, 8, 12, #8, 12, coin 65527, bonus 0, nameptr0x0, namestring 0
+npc no: 77
+func 0x46bb20, surf ?4, rect1 80, rect2 128, rect3 48, rect4 32, 2, 0, 12, 14, 12, #10, 32, coin 65486, bonus 2, nameptr0x0, namestring 0
+npc no: 78
+func 0x468b60, surf ?5, rect1 768, rect2 976, rect3 16, rect4 16, 0, 0, 4, 4, 4, #4, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 79
+func 0x466c70, surf ?5, rect1 888, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 80
+func 0x466ce0, surf ?7, rect1 256, rect2 128, rect3 48, rect4 64, 0, 0, 6, 32, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 81
+func 0x466fa0, surf ?6, rect1 80, rect2 368, rect3 8, rect4 128, 0, 0, 2, 64, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 82
+func 0x467120, surf ?3, rect1 928, rect2 720, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 83
+func 0x44e220, surf ?4, rect1 96, rect2 160, rect3 32, rect4 32, 1, 0, 6, 6, 6, #6, 4, coin 1, bonus 3, nameptr0x0, namestring 0
+npc no: 84
+func 0x46bf20, surf ?4, rect1 64, rect2 160, rect3 24, rect4 24, 1, 0, 10, 10, 6, #6, 8, coin 65535, bonus 1, nameptr0x0, namestring 0
+npc no: 85
+func 0x47b2f0, surf ?2, rect1 64, rect2 0, rect3 128, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 86
+func 0x47bcf0, surf ?5, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 87
+func 0x46f440, surf ?5, rect1 888, rect2 1016, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 88
+func 0x46c140, surf ?4, rect1 192, rect2 384, rect3 32, rect4 32, 1, 0, 6, 12, 4, #8, 8, coin 64513, bonus 0, nameptr0x0, namestring 0
+npc no: 89
+func 0x458460, surf ?5, rect1 0, rect2 768, rect3 48, rect4 48, 4, 0, 12, 12, 12, #8, 20, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 90
+func 0x46c640, surf ?4, rect1 64, rect2 288, rect3 32, rect4 32, 1, 0, 12, 12, 14, #16, 48, coin 29, bonus 0, nameptr0x0, namestring 0
+npc no: 91
+func 0x44ba00, surf ?4, rect1 192, rect2 384, rect3 32, rect4 32, 2, 0, 12, 10, 8, #10, 10, coin 1, bonus 3, nameptr0x0, namestring 0
+npc no: 92
+func 0x45a000, surf ?3, rect1 96, rect2 816, rect3 16, rect4 16, 4, 0, 4, 4, 4, #4, 1, coin 64513, bonus 2, nameptr0x0, namestring 0
+npc no: 93
+func 0x47d8f0, surf ?7, rect1 448, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 94
+func 0x46b0d0, surf ?7, rect1 128, rect2 256, rect3 32, rect4 32, 1, 0, 10, 12, 10, #12, 16, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 95
+func 0x463f00, surf ?5, rect1 832, rect2 1016, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 96
+func 0x463f90, surf ?5, rect1 880, rect2 1008, rect3 8, rect4 8, 0, 0, 3, 3, 3, #3, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 97
+func 0x453df0, surf ?3, rect1 128, rect2 656, rect3 32, rect4 48, 4, 0, 12, 12, 12, #12, 8, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 98
+func 0x441f10, surf ?4, rect1 0, rect2 0, rect3 176, rect4 32, 0, 1, 48, 14, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 99
+func 0x47c270, surf ?1, rect1 192, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 100
+func 0x4599a0, surf ?3, rect1 608, rect2 720, rect3 64, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 101
+func 0x4652c0, surf ?5, rect1 176, rect2 768, rect3 48, rect4 48, 2, 0, 22, 24, 24, #24, 20, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 102
+func 0x453f00, surf ?3, rect1 0, rect2 752, rect3 32, rect4 32, 4, 0, 8, 8, 8, #8, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 103
+func 0x47d8f0, surf ?1, rect1 128, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 104
+func 0x47db80, surf ?5, rect1 888, rect2 1016, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 105
+func 0x46ca60, surf ?4, rect1 96, rect2 416, rect3 32, rect4 32, 2, 0, 12, 12, 12, #12, 10, coin 65531, bonus 0, nameptr0x0, namestring 0
+npc no: 106
+func 0x46d0d0, surf ?2, rect1 224, rect2 64, rect3 32, rect4 32, 0, 0, 6, 10, 8, #12, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 107
+func 0x46d360, surf ?4, rect1 64, rect2 0, rect3 32, rect4 24, 2, 0, 12, 8, 12, #8, 8, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 108
+func 0x46d6d0, surf ?4, rect1 96, rect2 0, rect3 64, rect4 48, 2, 0, 24, 16, 24, #16, 64, coin 39, bonus 0, nameptr0x0, namestring 0
+npc no: 109
+func 0x46da90, surf ?4, rect1 448, rect2 368, rect3 32, rect4 48, 1, 0, 10, 22, 10, #24, 10, coin 65535, bonus 0, nameptr0x0, namestring 0
+npc no: 110
+func 0x46dda0, surf ?4, rect1 0, rect2 0, rect3 48, rect4 48, 1, 0, 8, 18, 8, #20, 48, coin 65535, bonus 0, nameptr0x0, namestring 0
+npc no: 111
+func 0x46e2e0, surf ?4, rect1 0, rect2 144, rect3 48, rect4 48, 1, 0, 8, 18, 8, #20, 120, coin 65516, bonus 0, nameptr0x0, namestring 0
+npc no: 112
+func 0x47df00, surf ?5, rect1 888, rect2 1016, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 113
+func 0x46e750, surf ?4, rect1 192, rect2 256, rect3 32, rect4 32, 1, 0, 8, 8, 8, #8, 2, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 114
+func 0x464110, surf ?4, rect1 480, rect2 368, rect3 32, rect4 64, 0, 1, 16, 32, 16, #32, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 115
+func 0x44a5d0, surf ?4, rect1 0, rect2 0, rect3 32, rect4 32, 2, 0, 12, 12, 14, #14, 5, coin 1, bonus 2, nameptr0x0, namestring 0
+npc no: 116
+func 0x44adf0, surf ?7, rect1 0, rect2 256, rect3 32, rect4 32, 8, 0, 6, 6, 4, #4, 1, coin 64514, bonus 1, nameptr0x0, namestring 0
+npc no: 117
+func 0x44ba00, surf ?4, rect1 64, rect2 0, rect3 32, rect4 32, 2, 0, 12, 10, 8, #10, 10, coin 1, bonus 3, nameptr0x0, namestring 0
+npc no: 118
+func 0x4644f0, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 119
+func 0x480430, surf ?3, rect1 256, rect2 0, rect3 48, rect4 64, 0, 0, 0, 8, 16, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 120
+func 0x46a120, surf ?4, rect1 0, rect2 224, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 121
+func 0x45a760, surf ?3, rect1 192, rect2 560, rect3 32, rect4 32, 4, 0, 8, 8, 12, #12, 10, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 122
+func 0x47df70, surf ?3, rect1 768, rect2 928, rect3 48, rect4 48, 0, 0, 0, 0, 6, #24, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 123
+func 0x47e190, surf ?3, rect1 0, rect2 192, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 124
+func 0x467380, surf ?3, rect1 768, rect2 672, rect3 144, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 125
+func 0x464670, surf ?3, rect1 608, rect2 672, rect3 32, rect4 16, 1, 0, 12, 8, 12, #8, 12, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 126
+func 0x463d90, surf ?7, rect1 224, rect2 32, rect3 32, rect4 192, 0, 0, 16, 96, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 127
+func 0x4653d0, surf ?5, rect1 144, rect2 768, rect3 32, rect4 32, 2, 0, 16, 16, 16, #16, 64, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 128
+func 0x46ea10, surf ?4, rect1 0, rect2 0, rect3 32, rect4 32, 1, 0, 8, 8, 4, #4, 3, coin 64513, bonus 0, nameptr0x0, namestring 0
+npc no: 129
+func 0x464a00, surf ?4, rect1 64, rect2 0, rect3 32, rect4 32, 1, 0, 10, 10, 8, #8, 2, coin 64513, bonus 0, nameptr0x0, namestring 0
+npc no: 130
+func 0x46eca0, surf ?4, rect1 0, rect2 0, rect3 32, rect4 32, 2, 0, 12, 10, 12, #16, 2, coin 65534, bonus 2, nameptr0x0, namestring 0
+npc no: 131
+func 0x44b1c0, surf ?7, rect1 64, rect2 256, rect3 32, rect4 32, 1, 0, 8, 8, 10, #12, 4, coin 65535, bonus 2, nameptr0x0, namestring 0
+npc no: 132
+func 0x44be10, surf ?4, rect1 128, rect2 0, rect3 32, rect4 32, 2, 0, 12, 12, 12, #14, 4, coin 1, bonus 3, nameptr0x0, namestring 0
+npc no: 133
+func 0x464ab0, surf ?3, rect1 256, rect2 448, rect3 32, rect4 32, 2, 0, 6, 8, 12, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 134
+func 0x464b60, surf ?3, rect1 208, rect2 448, rect3 48, rect4 24, 1, 1, 12, 6, 12, #12, 10, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 135
+func 0x44c510, surf ?4, rect1 0, rect2 160, rect3 32, rect4 48, 2, 0, 10, 18, 10, #18, 10, coin 1, bonus 2, nameptr0x0, namestring 0
+npc no: 136
+func 0x44ca00, surf ?4, rect1 0, rect2 160, rect3 32, rect4 32, 1, 0, 8, 4, 4, #4, 4, coin 1, bonus 3, nameptr0x0, namestring 0
+npc no: 137
+func 0x44a9f0, surf ?4, rect1 0, rect2 0, rect3 32, rect4 32, 2, 0, 12, 12, 14, #14, 10, coin 65535, bonus 3, nameptr0x0, namestring 0
+npc no: 138
+func 0x44d920, surf ?5, rect1 824, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 139
+func 0x44dca0, surf ?4, rect1 96, rect2 0, rect3 32, rect4 32, 1, 0, 6, 6, 6, #6, 4, coin 1, bonus 3, nameptr0x0, namestring 0
+npc no: 140
+func 0x4652c0, surf ?5, rect1 224, rect2 768, rect3 32, rect4 32, 2, 0, 16, 16, 16, #16, 12, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 141
+func 0x44e560, surf ?4, rect1 128, rect2 224, rect3 32, rect4 32, 1, 0, 12, 12, 12, #12, 6, coin 65535, bonus 3, nameptr0x0, namestring 0
+npc no: 142
+func 0x44f620, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 1, 0, 8, 8, 12, #14, 2, coin 1, bonus 2, nameptr0x0, namestring 0
+npc no: 143
+func 0x465580, surf ?4, rect1 0, rect2 192, rect3 32, rect4 32, 0, 1, 12, 2, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 144
+func 0x44fe10, surf ?4, rect1 0, rect2 0, rect3 32, rect4 32, 1, 0, 10, 10, 12, #12, 8, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 145
+func 0x450810, surf ?3, rect1 0, rect2 832, rect3 48, rect4 32, 2, 0, 20, 14, 22, #16, 40, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 146
+func 0x4519b0, surf ?3, rect1 128, rect2 560, rect3 64, rect4 32, 2, 0, 26, 12, 26, #12, 10, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 147
+func 0x4656b0, surf ?5, rect1 896, rect2 768, rect3 48, rect4 32, 1, 0, 24, 10, 10, #10, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 148
+func 0x454430, surf ?4, rect1 128, rect2 128, rect3 32, rect4 32, 1, 0, 4, 4, 4, #12, 20, coin 65526, bonus 0, nameptr0x0, namestring 0
+npc no: 149
+func 0x4659a0, surf ?5, rect1 128, rect2 512, rect3 48, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 150
+func 0x450380, surf ?4, rect1 64, rect2 0, rect3 32, rect4 32, 1, 0, 10, 10, 12, #12, 5, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 151
+func 0x452150, surf ?4, rect1 64, rect2 160, rect3 32, rect4 32, 1, 0, 8, 4, 4, #4, 6, coin 65535, bonus 3, nameptr0x0, namestring 0
+npc no: 152
+func 0x452350, surf ?4, rect1 0, rect2 384, rect3 32, rect4 32, 1, 0, 10, 10, 10, #10, 20, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 153
+func 0x452620, surf ?4, rect1 0, rect2 0, rect3 32, rect4 32, 2, 0, 14, 12, 12, #12, 12, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 154
+func 0x465ac0, surf ?4, rect1 336, rect2 352, rect3 48, rect4 32, 0, 0, 24, 14, 24, #14, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 155
+func 0x452e80, surf ?4, rect1 0, rect2 416, rect3 48, rect4 32, 1, 0, 24, 16, 24, #16, 10, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 156
+func 0x453190, surf ?4, rect1 32, rect2 160, rect3 24, rect4 24, 1, 0, 10, 10, 6, #6, 8, coin 10, bonus 3, nameptr0x0, namestring 0
+npc no: 157
+func 0x4536f0, surf ?4, rect1 0, rect2 160, rect3 32, rect4 32, 2, 0, 12, 12, 14, #14, 8, coin 65526, bonus 5, nameptr0x0, namestring 0
+npc no: 158
+func 0x4772b0, surf ?5, rect1 928, rect2 976, rect3 48, rect4 48, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 159
+func 0x4669a0, surf ?5, rect1 896, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 160
+func 0x453cc0, surf ?3, rect1 0, rect2 656, rect3 32, rect4 48, 4, 0, 12, 12, 12, #12, 8, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 161
+func 0x454040, surf ?4, rect1 480, rect2 384, rect3 16, rect4 16, 1, 0, 4, 4, 4, #4, 10, coin 65535, bonus 2, nameptr0x0, namestring 0
+npc no: 162
+func 0x4795e0, surf ?3, rect1 640, rect2 0, rect3 32, rect4 32, 1, 0, 10, 4, 10, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 163
+func 0x4776d0, surf ?3, rect1 768, rect2 0, rect3 48, rect4 64, 2, 1, 0, 0, 0, #26, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 164
+func 0x466a10, surf ?3, rect1 640, rect2 576, rect3 32, rect4 48, 0, 0, 8, 4, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 165
+func 0x44f9f0, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 1, 0, 12, 12, 12, #12, 12, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 166
+func 0x454bd0, surf ?4, rect1 224, rect2 128, rect3 32, rect4 32, 1, 0, 8, 8, 6, #10, 12, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 167
+func 0x44f9f0, surf ?4, rect1 144, rect2 0, rect3 48, rect4 48, 2, 0, 18, 18, 16, #20, 24, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 168
+func 0x4553a0, surf ?4, rect1 64, rect2 0, rect3 32, rect4 48, 2, 0, 12, 20, 14, #20, 40, coin 65486, bonus 3, nameptr0x0, namestring 0
+npc no: 169
+func 0x4558f0, surf ?4, rect1 64, rect2 288, rect3 32, rect4 32, 1, 0, 10, 10, 12, #12, 12, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 170
+func 0x455ce0, surf ?4, rect1 64, rect2 192, rect3 48, rect4 32, 2, 0, 12, 12, 12, #10, 30, coin 65486, bonus 2, nameptr0x0, namestring 0
+npc no: 171
+func 0x47e1f0, surf ?3, rect1 128, rect2 816, rect3 32, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 172
+func 0x475970, surf ?1, rect1 192, rect2 0, rect3 32, rect4 32, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 173
+func 0x47e320, surf ?7, rect1 256, rect2 384, rect3 48, rect4 32, 0, 0, 24, 16, 24, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 174
+func 0x47e320, surf ?7, rect1 304, rect2 384, rect3 32, rect4 32, 0, 0, 16, 16, 16, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 175
+func 0x47e540, surf ?7, rect1 448, rect2 432, rect3 64, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 176
+func 0x47ba30, surf ?3, rect1 608, rect2 576, rect3 32, rect4 32, 2, 1, 12, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 177
+func 0x462580, surf ?5, rect1 912, rect2 976, rect3 16, rect4 16, 0, 0, 4, 4, 4, #4, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 178
+func 0x44b4e0, surf ?7, rect1 128, rect2 256, rect3 32, rect4 32, 1, 0, 8, 8, 10, #12, 4, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 179
+func 0x44d920, surf ?5, rect1 824, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 180
+func 0x44b3b0, surf ?7, rect1 128, rect2 256, rect3 32, rect4 32, 1, 0, 8, 8, 10, #12, 4, coin 65535, bonus 2, nameptr0x0, namestring 0
+npc no: 181
+func 0x44eed0, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 1, 0, 10, 10, 10, #12, 9, coin 64513, bonus 2, nameptr0x0, namestring 0
+npc no: 182
+func 0x44e910, surf ?4, rect1 192, rect2 160, rect3 32, rect4 32, 1, 0, 12, 12, 12, #12, 6, coin 65535, bonus 3, nameptr0x0, namestring 0
+npc no: 183
+func 0x452a40, surf ?4, rect1 0, rect2 256, rect3 32, rect4 32, 2, 0, 14, 12, 12, #12, 12, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 184
+func 0x465f20, surf ?4, rect1 336, rect2 288, rect3 48, rect4 32, 0, 0, 24, 14, 24, #14, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 185
+func 0x44d0c0, surf ?4, rect1 192, rect2 288, rect3 32, rect4 32, 1, 0, 8, 4, 4, #4, 8, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 186
+func 0x45a9f0, surf ?3, rect1 0, rect2 512, rect3 32, rect4 48, 2, 0, 10, 10, 6, #14, 14, coin 10, bonus 2, nameptr0x0, namestring 0
+npc no: 187
+func 0x4631d0, surf ?3, rect1 576, rect2 672, rect3 32, rect4 64, 0, 0, 14, 32, 16, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 188
+func 0x463310, surf ?3, rect1 576, rect2 736, rect3 64, rect4 32, 0, 0, 30, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 189
+func 0x463450, surf ?3, rect1 640, rect2 736, rect3 64, rect4 32, 0, 0, 30, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 190
+func 0x4676b0, surf ?7, rect1 64, rect2 64, rect3 32, rect4 32, 0, 0, 16, 16, 16, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 191
+func 0x47a190, surf ?4, rect1 0, rect2 416, rect3 64, rect4 48, 2, 0, 26, 18, 16, #12, 12, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 192
+func 0x481040, surf ?4, rect1 256, rect2 0, rect3 32, rect4 64, 2, 0, 0, 0, 16, #32, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 193
+func 0x45abe0, surf ?3, rect1 0, rect2 512, rect3 32, rect4 48, 2, 0, 10, 10, 6, #14, 14, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 194
+func 0x481970, surf ?4, rect1 448, rect2 416, rect3 32, rect4 48, 0, 0, 0, 0, 16, #32, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 195
+func 0x45ae10, surf ?4, rect1 0, rect2 0, rect3 64, rect4 32, 4, 0, 10, 8, 0, #0, 10, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 196
+func 0x45afa0, surf ?4, rect1 128, rect2 128, rect3 32, rect4 48, 2, 0, 10, 10, 6, #14, 3, coin 65535, bonus 2, nameptr0x0, namestring 0
+npc no: 197
+func 0x4647e0, surf ?3, rect1 544, rect2 672, rect3 32, rect4 32, 0, 0, 8, 8, 8, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 198
+func 0x44b1c0, surf ?7, rect1 64, rect2 256, rect3 32, rect4 32, 1, 0, 8, 8, 10, #12, 12, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 199
+func 0x438610, surf ?2, rect1 64, rect2 64, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 200
+func 0x459a10, surf ?3, rect1 128, rect2 256, rect3 64, rect4 64, 2, 0, 16, 24, 8, #24, 100, coin 65486, bonus 3, nameptr0x0, namestring 0
+npc no: 201
+func 0x45b600, surf ?4, rect1 0, rect2 0, rect3 48, rect4 32, 3, 0, 16, 10, 16, #10, 40, coin 50, bonus 2, nameptr0x0, namestring 0
+npc no: 202
+func 0x45b9f0, surf ?4, rect1 96, rect2 0, rect3 32, rect4 32, 1, 0, 10, 10, 10, #10, 12, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 203
+func 0x45f470, surf ?4, rect1 480, rect2 448, rect3 32, rect4 32, 2, 0, 10, 6, 8, #8, 8, coin 65516, bonus 3, nameptr0x0, namestring 0
+npc no: 204
+func 0x45bc30, surf ?3, rect1 928, rect2 688, rect3 48, rect4 32, 2, 0, 16, 6, 16, #8, 8, coin 1, bonus 2, nameptr0x0, namestring 0
+npc no: 205
+func 0x45be40, surf ?7, rect1 0, rect2 464, rect3 64, rect4 16, 1, 0, 18, 4, 16, #6, 6, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 206
+func 0x45c180, surf ?3, rect1 592, rect2 768, rect3 32, rect4 32, 5, 0, 12, 12, 12, #12, 22, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 207
+func 0x45cda0, surf ?3, rect1 608, rect2 256, rect3 32, rect4 32, 1, 0, 12, 8, 12, #8, 44, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 208
+func 0x45d7b0, surf ?4, rect1 0, rect2 0, rect3 48, rect4 32, 1, 0, 10, 10, 10, #16, 16, coin 65516, bonus 3, nameptr0x0, namestring 0
+npc no: 209
+func 0x45e2c0, surf ?4, rect1 96, rect2 0, rect3 32, rect4 32, 2, 0, 12, 8, 14, #10, 22, coin 65516, bonus 3, nameptr0x0, namestring 0
+npc no: 210
+func 0x45ec00, surf ?4, rect1 0, rect2 368, rect3 64, rect4 48, 2, 0, 12, 14, 0, #0, 51, coin 65486, bonus 3, nameptr0x0, namestring 0
+npc no: 211
+func 0x45d500, surf ?3, rect1 96, rect2 512, rect3 48, rect4 32, 1, 0, 10, 10, 10, #10, 33, coin 65535, bonus 2, nameptr0x0, namestring 0
+npc no: 212
+func 0x45b1d0, surf ?3, rect1 64, rect2 592, rect3 64, rect4 32, 2, 0, 24, 8, 24, #8, 24, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 213
+func 0x4812f0, surf ?4, rect1 0, rect2 0, rect3 40, rect4 64, 3, 0, 0, 0, 16, #32, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 214
+func 0x45f550, surf ?4, rect1 160, rect2 0, rect3 16, rect4 16, 1, 0, 4, 6, 4, #4, 4, coin 65526, bonus 3, nameptr0x0, namestring 0
+npc no: 215
+func 0x45dc20, surf ?4, rect1 0, rect2 0, rect3 48, rect4 32, 1, 0, 10, 10, 10, #16, 16, coin 65516, bonus 3, nameptr0x0, namestring 0
+npc no: 216
+func 0x4812f0, surf ?4, rect1 160, rect2 0, rect3 40, rect4 64, 2, 0, 0, 0, 16, #32, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 217
+func 0x4679c0, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 218
+func 0x481d30, surf ?4, rect1 96, rect2 0, rect3 64, rect4 48, 3, 0, 0, 0, 10, #24, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 219
+func 0x45fc10, surf ?4, rect1 0, rect2 224, rect3 48, rect4 32, 2, 0, 14, 12, 6, #12, 32, coin 65516, bonus 4, nameptr0x0, namestring 0
+npc no: 220
+func 0x460340, surf ?4, rect1 160, rect2 384, rect3 48, rect4 32, 2, 0, 16, 6, 16, #6, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 221
+func 0x460400, surf ?4, rect1 0, rect2 416, rect3 32, rect4 32, 2, 0, 12, 12, 12, #12, 20, coin 65531, bonus 0, nameptr0x0, namestring 0
+npc no: 222
+func 0x460af0, surf ?4, rect1 96, rect2 96, rect3 32, rect4 32, 5, 0, 10, 10, 10, #10, 10, coin 64513, bonus 2, nameptr0x0, namestring 0
+npc no: 223
+func 0x47f430, surf ?1, rect1 0, rect2 0, rect3 224, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 224
+func 0x452150, surf ?4, rect1 192, rect2 208, rect3 32, rect4 32, 1, 0, 8, 4, 4, #4, 6, coin 65535, bonus 3, nameptr0x0, namestring 0
+npc no: 225
+func 0x45dfc0, surf ?4, rect1 0, rect2 128, rect3 48, rect4 32, 1, 0, 10, 10, 10, #16, 10, coin 65516, bonus 3, nameptr0x0, namestring 0
+npc no: 226
+func 0x467a00, surf ?5, rect1 824, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 32, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 227
+func 0x461200, surf ?4, rect1 128, rect2 256, rect3 32, rect4 32, 1, 0, 8, 12, 8, #12, 10, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 228
+func 0x44adf0, surf ?3, rect1 64, rect2 448, rect3 32, rect4 32, 8, 0, 8, 8, 14, #16, 1, coin 64514, bonus 1, nameptr0x0, namestring 0
+npc no: 229
+func 0x461720, surf ?3, rect1 944, rect2 384, rect3 32, rect4 32, 9, 0, 6, 6, 6, #6, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 230
+func 0x461b80, surf ?3, rect1 512, rect2 400, rect3 32, rect4 16, 5, 0, 0, 0, 12, #12, 51, coin 65486, bonus 2, nameptr0x0, namestring 0
+npc no: 231
+func 0x467af0, surf ?2, rect1 128, rect2 192, rect3 16, rect4 16, 0, 0, 8, 6, 6, #6, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 232
+func 0x467af0, surf ?2, rect1 208, rect2 224, rect3 48, rect4 32, 0, 0, 24, 12, 22, #12, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 233
+func 0x467af0, surf ?2, rect1 128, rect2 208, rect3 32, rect4 48, 0, 0, 14, 18, 14, #18, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 234
+func 0x467af0, surf ?2, rect1 160, rect2 224, rect3 48, rect4 32, 0, 0, 18, 14, 18, #16, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 235
+func 0x4199a0, surf ?4, rect1 96, rect2 480, rect3 16, rect4 16, 3, 0, 0, 0, 0, #0, 800, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 236
+func 0x439880, surf ?4, rect1 144, rect2 496, rect3 16, rect4 16, 3, 0, 0, 0, 0, #0, 654, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 237
+func 0x43b640, surf ?7, rect1 0, rect2 440, rect3 200, rect4 72, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 238
+func 0x43b640, surf ?2, rect1 0, rect2 128, rect3 160, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 239
+func 0x469b70, surf ?5, rect1 856, rect2 1016, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 240
+func 0x47f9e0, surf ?5, rect1 112, rect2 832, rect3 32, rect4 80, 2, 0, 10, 0, 0, #0, 10, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 241
+func 0x47fff0, surf ?5, rect1 888, rect2 1016, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 242
+func 0x4801c0, surf ?5, rect1 888, rect2 1016, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 243
+func 0x45d360, surf ?3, rect1 608, rect2 256, rect3 32, rect4 32, 1, 0, 12, 8, 12, #8, 44, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 244
+func 0x47fc50, surf ?5, rect1 112, rect2 912, rect3 32, rect4 80, 5, 0, 10, 0, 0, #0, 10, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 245
+func 0x45c180, surf ?3, rect1 656, rect2 768, rect3 32, rect4 32, 5, 0, 12, 12, 12, #12, 1, coin 65526, bonus 2, nameptr0x0, namestring 0
+npc no: 246
+func 0x45cda0, surf ?3, rect1 672, rect2 256, rect3 32, rect4 32, 1, 0, 12, 8, 12, #8, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 247
+func 0x45d360, surf ?3, rect1 672, rect2 256, rect3 32, rect4 32, 1, 0, 12, 8, 12, #8, 44, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 248
+func 0x453cc0, surf ?5, rect1 864, rect2 672, rect3 32, rect4 48, 4, 0, 12, 12, 12, #12, 8, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 249
+func 0x43b640, surf ?1, rect1 0, rect2 128, rect3 160, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 250
+func 0x46f7d0, surf ?4, rect1 0, rect2 432, rect3 24, rect4 24, 0, 0, 4, 4, 4, #4, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 251
+func 0x46f8d0, surf ?4, rect1 0, rect2 464, rect3 24, rect4 24, 7, 0, 6, 6, 8, #8, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 252
+func 0x46fb00, surf ?4, rect1 48, rect2 448, rect3 24, rect4 24, 1, 0, 4, 4, 8, #8, 6, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 253
+func 0x4733b0, surf ?4, rect1 160, rect2 192, rect3 24, rect4 32, 4, 0, 4, 5, 4, #4, 1, coin 3, bonus 0, nameptr0x0, namestring 0
+npc no: 254
+func 0x46fe20, surf ?4, rect1 192, rect2 496, rect3 32, rect4 16, 0, 0, 4, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 255
+func 0x46f8d0, surf ?4, rect1 192, rect2 352, rect3 24, rect4 24, 1, 0, 6, 6, 8, #8, 3, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 256
+func 0x46fea0, surf ?4, rect1 128, rect2 0, rect3 24, rect4 24, 0, 0, 4, 6, 4, #6, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 257
+func 0x470350, surf ?4, rect1 144, rect2 304, rect3 24, rect4 24, 1, 0, 4, 4, 8, #8, 4, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 258
+func 0x472e60, surf ?4, rect1 128, rect2 352, rect3 32, rect4 32, 8, 0, 6, 6, 6, #6, 12, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 259
+func 0x470a10, surf ?4, rect1 0, rect2 288, rect3 32, rect4 32, 8, 0, 6, 6, 2, #2, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 260
+func 0x470b90, surf ?4, rect1 64, rect2 384, rect3 32, rect4 32, 0, 0, 6, 6, 6, #6, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 261
+func 0x473d80, surf ?3, rect1 0, rect2 448, rect3 32, rect4 32, 4, 0, 8, 8, 8, #8, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 262
+func 0x470cc0, surf ?4, rect1 96, rect2 112, rect3 32, rect4 32, 2, 0, 10, 10, 10, #10, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 263
+func 0x470e60, surf ?4, rect1 48, rect2 320, rect3 32, rect4 32, 7, 0, 10, 10, 12, #12, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 264
+func 0x46ca60, surf ?4, rect1 0, rect2 432, rect3 24, rect4 24, 2, 0, 12, 12, 12, #12, 4, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 265
+func 0x470ff0, surf ?4, rect1 160, rect2 464, rect3 24, rect4 24, 1, 0, 4, 4, 4, #4, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 266
+func 0x471150, surf ?4, rect1 96, rect2 416, rect3 24, rect4 24, 0, 0, 4, 4, 8, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 267
+func 0x471330, surf ?4, rect1 192, rect2 416, rect3 32, rect4 32, 1, 0, 12, 12, 12, #12, 3, coin 64513, bonus 2, nameptr0x0, namestring 0
+npc no: 268
+func 0x471700, surf ?4, rect1 0, rect2 288, rect3 24, rect4 24, 1, 0, 8, 12, 8, #12, 3, coin 64513, bonus 0, nameptr0x0, namestring 0
+npc no: 269
+func 0x4700f0, surf ?4, rect1 144, rect2 432, rect3 24, rect4 24, 8, 0, 8, 8, 8, #8, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 270
+func 0x471a00, surf ?4, rect1 168, rect2 432, rect3 24, rect4 24, 1, 0, 8, 8, 8, #8, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 271
+func 0x4700f0, surf ?4, rect1 224, rect2 416, rect3 32, rect4 32, 9, 0, 10, 10, 10, #10, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 272
+func 0x471bc0, surf ?6, rect1 512, rect2 256, rect3 32, rect4 32, 0, 0, 4, 4, 4, #4, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 273
+func 0x474070, surf ?4, rect1 64, rect2 416, rect3 32, rect4 32, 9, 0, 4, 4, 4, #4, 6, coin 64513, bonus 2, nameptr0x0, namestring 0
+npc no: 274
+func 0x471df0, surf ?6, rect1 64, rect2 48, rect3 16, rect4 16, 0, 0, 6, 2, 6, #2, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 275
+func 0x4728e0, surf ?4, rect1 192, rect2 96, rect3 32, rect4 32, 8, 0, 6, 6, 6, #6, 4, coin 1, bonus 2, nameptr0x0, namestring 0
+npc no: 276
+func 0x472210, surf ?4, rect1 128, rect2 448, rect3 32, rect4 32, 1, 0, 8, 8, 10, #10, 10, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 277
+func 0x4725f0, surf ?5, rect1 768, rect2 768, rect3 32, rect4 32, 0, 0, 6, 6, 8, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 278
+func 0x4727f0, surf ?5, rect1 768, rect2 832, rect3 32, rect4 48, 0, 0, 6, 6, 1, #1, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 279
+func 0x472af0, surf ?4, rect1 96, rect2 192, rect3 32, rect4 32, 8, 0, 6, 6, 6, #6, 5, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 280
+func 0x4731f0, surf ?4, rect1 96, rect2 480, rect3 32, rect4 32, 1, 0, 8, 8, 8, #8, 5, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 281
+func 0x473610, surf ?4, rect1 160, rect2 240, rect3 16, rect4 16, 1, 0, 4, 2, 4, #4, 3, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 282
+func 0x471bc0, surf ?6, rect1 512, rect2 320, rect3 32, rect4 32, 0, 0, 4, 4, 4, #4, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 283
+func 0x45a3a0, surf ?4, rect1 192, rect2 464, rect3 16, rect4 16, 1, 0, 6, 6, 4, #4, 1, coin 65535, bonus 2, nameptr0x0, namestring 0
+npc no: 284
+func 0x471ff0, surf ?6, rect1 80, rect2 48, rect3 16, rect4 16, 0, 0, 2, 6, 2, #6, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 285
+func 0x473ac0, surf ?4, rect1 64, rect2 464, rect3 24, rect4 24, 9, 0, 8, 8, 4, #4, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 286
+func 0x4742a0, surf ?3, rect1 992, rect2 512, rect3 32, rect4 16, 9, 0, 8, 4, 8, #4, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 287
+func 0x474630, surf ?4, rect1 448, rect2 320, rect3 32, rect4 32, 9, 0, 8, 8, 8, #8, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 288
+func 0x474830, surf ?6, rect1 288, rect2 352, rect3 16, rect4 16, 0, 0, 4, 4, 4, #4, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 289
+func 0x460400, surf ?4, rect1 112, rect2 384, rect3 24, rect4 24, 1, 0, 12, 12, 12, #12, 10, coin 65486, bonus 2, nameptr0x0, namestring 0
+npc no: 290
+func 0x471bc0, surf ?6, rect1 512, rect2 256, rect3 32, rect4 32, 0, 0, 4, 4, 4, #4, 6, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 291
+func 0x474940, surf ?4, rect1 160, rect2 464, rect3 24, rect4 24, 1, 0, 4, 4, 8, #8, 6, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 292
+func 0x474c00, surf ?6, rect1 96, rect2 768, rect3 24, rect4 24, 1, 0, 6, 6, 6, #6, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 293
+func 0x473610, surf ?4, rect1 240, rect2 240, rect3 16, rect4 16, 1, 0, 4, 2, 4, #2, 7, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 294
+func 0x46f160, surf ?6, rect1 32, rect2 176, rect3 8, rect4 8, 0, 0, 0, 0, 2, #2, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 295
+func 0x46f310, surf ?6, rect1 32, rect2 48, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 296
+func 0x41d710, surf ?3, rect1 720, rect2 832, rect3 64, rect4 48, 0, 0, 30, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 297
+func 0x47b7c0, surf ?7, rect1 352, rect2 0, rect3 160, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 298
+func 0x437c60, surf ?4, rect1 224, rect2 96, rect3 32, rect4 32, 1, 0, 2, 8, 2, #2, 20, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 299
+func 0x41c5a0, surf ?7, rect1 192, rect2 208, rect3 16, rect4 16, 1, 0, 4, 4, 4, #4, 2, coin 64513, bonus 0, nameptr0x0, namestring 0
+npc no: 300
+func 0x476790, surf ?4, rect1 336, rect2 448, rect3 32, rect4 32, 0, 1, 0, 0, 16, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 301
+func 0x41bd70, surf ?4, rect1 32, rect2 304, rect3 32, rect4 32, 0, 0, 10, 10, 4, #4, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 302
+func 0x46a590, surf ?4, rect1 192, rect2 384, rect3 32, rect4 32, 7, 0, 8, 8, 8, #8, 1, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 303
+func 0x476a50, surf ?4, rect1 336, rect2 240, rect3 32, rect4 32, 0, 1, 0, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 304
+func 0x41b950, surf ?4, rect1 0, rect2 304, rect3 32, rect4 32, 0, 0, 12, 12, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 305
+func 0x41bf90, surf ?4, rect1 64, rect2 240, rect3 32, rect4 32, 0, 0, 8, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 306
+func 0x462ee0, surf ?3, rect1 208, rect2 496, rect3 48, rect4 16, 1, 0, 16, 2, 0, #0, 24, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 307
+func 0x4766d0, surf ?4, rect1 496, rect2 272, rect3 16, rect4 96, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 308
+func 0x436bc0, surf ?4, rect1 0, rect2 192, rect3 128, rect4 80, 0, 0, 20, 22, 20, #20, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 309
+func 0x439690, surf ?4, rect1 160, rect2 320, rect3 32, rect4 32, 9, 0, 8, 8, 6, #6, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 310
+func 0x436e80, surf ?4, rect1 0, rect2 96, rect3 128, rect4 96, 0, 0, 48, 48, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 311
+func 0x4372e0, surf ?4, rect1 128, rect2 96, rect3 48, rect4 48, 2, 0, 16, 16, 0, #0, 60, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 312
+func 0x437730, surf ?4, rect1 128, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 313
+func 0x437850, surf ?4, rect1 192, rect2 0, rect3 64, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 314
+func 0x437080, surf ?4, rect1 160, rect2 0, rect3 32, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 315
+func 0x4768d0, surf ?4, rect1 464, rect2 272, rect3 32, rect4 48, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 316
+func 0x47bf30, surf ?9, rect1 256, rect2 448, rect3 32, rect4 32, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 317
+func 0x41c830, surf ?7, rect1 0, rect2 256, rect3 32, rect4 64, 2, 0, 10, 10, 0, #0, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 318
+func 0x46f5b0, surf ?6, rect1 64, rect2 208, rect3 16, rect4 16, 0, 0, 0, 0, 4, #4, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 319
+func 0x463ea0, surf ?7, rect1 224, rect2 32, rect3 16, rect4 192, 0, 0, 8, 96, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 320
+func 0x439170, surf ?4, rect1 0, rect2 320, rect3 80, rect4 48, 0, 0, 16, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 321
+func 0x4393c0, surf ?4, rect1 0, rect2 496, rect3 16, rect4 16, 0, 0, 26, 26, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 322
+func 0x439480, surf ?4, rect1 224, rect2 416, rect3 32, rect4 32, 9, 0, 8, 8, 6, #6, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 323
+func 0x44d690, surf ?7, rect1 128, rect2 352, rect3 48, rect4 48, 2, 0, 14, 10, 10, #8, 6, coin 65535, bonus 2, nameptr0x0, namestring 0
+npc no: 324
+func 0x476cd0, surf ?4, rect1 224, rect2 416, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 325
+func 0x427770, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 1, 0, 10, 10, 10, #12, 9, coin 65535, bonus 0, nameptr0x0, namestring 0
+npc no: 326
+func 0x462580, surf ?7, rect1 0, rect2 352, rect3 48, rect4 48, 2, 0, 14, 10, 10, #8, 6, coin 65535, bonus 2, nameptr0x0, namestring 0
+npc no: 327
+func 0x4236e0, surf ?4, rect1 160, rect2 224, rect3 48, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 328
+func 0x423210, surf ?4, rect1 160, rect2 96, rect3 96, rect4 64, 0, 0, 40, 32, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 329
+func 0x4234d0, surf ?4, rect1 0, rect2 96, rect3 32, rect4 48, 0, 0, 2, 2, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 330
+func 0x4235f0, surf ?4, rect1 0, rect2 192, rect3 80, rect4 48, 0, 0, 18, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 331
+func 0x4237c0, surf ?4, rect1 0, rect2 288, rect3 32, rect4 32, 1, 0, 8, 4, 4, #4, 6, coin 64513, bonus 3, nameptr0x0, namestring 0
+npc no: 332
+func 0x4693f0, surf ?3, rect1 1008, rect2 448, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 333
+func 0x4188d0, surf ?4, rect1 0, rect2 480, rect3 48, rect4 16, 0, 0, 16, 6, 20, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 334
+func 0x418920, surf ?4, rect1 0, rect2 496, rect3 48, rect4 16, 0, 0, 20, 8, 20, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 335
+func 0x453ae0, surf ?6, rect1 384, rect2 432, rect3 0, rect4 48, 0, 0, 20, 20, 24, #24, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 336
+func 0x429310, surf ?4, rect1 0, rect2 0, rect3 240, rect4 112, 0, 0, 4, 12, 8, #8, 0, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 337
+func 0x4293d0, surf ?4, rect1 176, rect2 352, rect3 80, rect4 80, 0, 0, 24, 24, 24, #24, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 338
+func 0x478a40, surf ?4, rect1 352, rect2 352, rect3 80, rect4 80, 0, 0, 36, 36, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 339
+func 0x4295b0, surf ?4, rect1 240, rect2 32, rect3 16, rect4 16, 3, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 340
+func 0x4297a0, surf ?4, rect1 96, rect2 352, rect3 32, rect4 32, 2, 0, 12, 12, 14, #14, 10, coin 64513, bonus 2, nameptr0x0, namestring 0
+npc no: 341
+func 0x429ad0, surf ?4, rect1 112, rect2 224, rect3 16, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 342
+func 0x429dc0, surf ?4, rect1 192, rect2 224, rect3 64, rect4 32, 0, 0, 22, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 343
+func 0x42a0d0, surf ?4, rect1 0, rect2 464, rect3 48, rect4 16, 1, 0, 14, 6, 14, #6, 12, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 344
+func 0x42a530, surf ?4, rect1 240, rect2 16, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 345
+func 0x42a6c0, surf ?4, rect1 128, rect2 352, rect3 48, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 346
+func 0x42a9b0, surf ?4, rect1 160, rect2 224, rect3 32, rect4 32, 1, 0, 8, 10, 8, #10, 12, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 347
+func 0x42ae60, surf ?4, rect1 240, rect2 96, rect3 16, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 348
+func 0x478110, surf ?4, rect1 448, rect2 448, rect3 32, rect4 32, 0, 0, 0, 0, 4, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 349
+func 0x454a30, surf ?7, rect1 0, rect2 448, rect3 16, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 350
+func 0x455050, surf ?4, rect1 224, rect2 0, rect3 32, rect4 32, 1, 0, 10, 10, 10, #10, 10, coin 1, bonus 5, nameptr0x0, namestring 0
+npc no: 351
+func 0x456440, surf ?4, rect1 96, rect2 432, rect3 64, rect4 32, 0, 0, 30, 12, 12, #10, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 352
+func 0x4566c0, surf ?4, rect1 96, rect2 464, rect3 64, rect4 16, 0, 0, 28, 8, 10, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 353
+func 0x47a720, surf ?1, rect1 224, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 354
+func 0x419480, surf ?4, rect1 0, rect2 352, rect3 32, rect4 32, 9, 0, 8, 8, 8, #8, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 355
+func 0x4196e0, surf ?4, rect1 0, rect2 192, rect3 48, rect4 48, 0, 0, 12, 12, 12, #12, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 356
+func 0x421170, surf ?4, rect1 0, rect2 0, rect3 160, rect4 144, 6, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 357
+func 0x4212d0, surf ?4, rect1 0, rect2 288, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 358
+func 0x421500, surf ?4, rect1 160, rect2 0, rect3 48, rect4 48, 5, 0, 20, 20, 0, #0, 40, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 359
+func 0x473820, surf ?6, rect1 0, rect2 656, rect3 32, rect4 32, 4, 0, 6, 6, 4, #4, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 360
+func 0x421c40, surf ?4, rect1 128, rect2 384, rect3 32, rect4 32, 9, 0, 10, 6, 4, #4, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 361
+func 0x420e70, surf ?4, rect1 160, rect2 96, rect3 48, rect4 48, 6, 0, 20, 20, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 362
+func 0x421430, surf ?4, rect1 0, rect2 352, rect3 112, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 363
+func 0x41b710, surf ?4, rect1 96, rect2 0, rect3 80, rect4 64, 0, 0, 28, 20, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 364
+func 0x41cbe0, surf ?4, rect1 0, rect2 384, rect3 176, rect4 64, 0, 0, 60, 24, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 365
+func 0x41d090, surf ?4, rect1 176, rect2 416, rect3 32, rect4 32, 1, 0, 12, 12, 12, #12, 12, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 366
+func 0x469480, surf ?3, rect1 0, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 367
+func 0x4695a0, surf ?3, rect1 816, rect2 448, rect3 24, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 368
+func 0x42fd40, surf ?4, rect1 0, rect2 288, rect3 16, rect4 24, 0, 0, 6, 10, 0, #0, 100, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 369
+func 0x423d80, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 370
+func 0x42ff00, surf ?4, rect1 96, rect2 0, rect3 16, rect4 144, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 371
+func 0x4300e0, surf ?4, rect1 128, rect2 0, rect3 96, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 372
+func 0x42fb80, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 373
+func 0x430190, surf ?4, rect1 160, rect2 416, rect3 16, rect4 16, 2, 0, 4, 4, 4, #4, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 374
+func 0x4305b0, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 375
+func 0x4307b0, surf ?4, rect1 128, rect2 96, rect3 96, rect4 16, 0, 0, 24, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 376
+func 0x430960, surf ?4, rect1 240, rect2 0, rect3 16, rect4 32, 0, 0, 2, 16, 2, #16, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 377
+func 0x430ae0, surf ?4, rect1 480, rect2 384, rect3 32, rect4 32, 0, 0, 8, 4, 4, #4, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 378
+func 0x430c10, surf ?4, rect1 96, rect2 288, rect3 32, rect4 24, 4, 0, 8, 6, 8, #8, 24, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 379
+func 0x430ee0, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 380
+func 0x453df0, surf ?4, rect1 96, rect2 416, rect3 32, rect4 48, 4, 0, 12, 12, 12, #12, 8, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 381
+func 0x458460, surf ?5, rect1 0, rect2 768, rect3 48, rect4 48, 4, 0, 12, 12, 12, #8, 20, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 382
+func 0x453f00, surf ?4, rect1 160, rect2 352, rect3 32, rect4 32, 4, 0, 8, 8, 8, #8, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 383
+func 0x43eb70, surf ?4, rect1 0, rect2 0, rect3 96, rect4 80, 5, 0, 20, 36, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 384
+func 0x43ee60, surf ?4, rect1 0, rect2 240, rect3 80, rect4 16, 5, 0, 18, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 385
+func 0x43eed0, surf ?4, rect1 0, rect2 304, rect3 48, rect4 48, 5, 0, 10, 10, 10, #10, 48, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 386
+func 0x43eed0, surf ?4, rect1 96, rect2 304, rect3 32, rect4 32, 4, 0, 6, 6, 6, #6, 32, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 387
+func 0x43f4c0, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 4, 0, 8, 8, 8, #8, 4, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 388
+func 0x43f660, surf ?4, rect1 0, rect2 464, rect3 16, rect4 16, 4, 0, 4, 4, 4, #4, 1, coin 64513, bonus 2, nameptr0x0, namestring 0
+npc no: 389
+func 0x43fa80, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 390
+func 0x451d90, surf ?3, rect1 96, rect2 928, rect3 64, rect4 32, 2, 0, 26, 10, 26, #10, 10, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 391
+func 0x4678b0, surf ?6, rect1 432, rect2 496, rect3 16, rect4 16, 0, 0, 8, 8, 8, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 392
+func 0x43d910, surf ?4, rect1 128, rect2 336, rect3 32, rect4 48, 5, 0, 8, 20, 8, #20, 40, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 393
+func 0x43db90, surf ?4, rect1 0, rect2 320, rect3 64, rect4 64, 5, 0, 24, 10, 24, #10, 49, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 394
+func 0x43e170, surf ?4, rect1 32, rect2 448, rect3 32, rect4 32, 5, 0, 8, 8, 8, #8, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 395
+func 0x44d690, surf ?4, rect1 64, rect2 240, rect3 48, rect4 48, 2, 0, 14, 10, 10, #8, 6, coin 65535, bonus 2, nameptr0x0, namestring 0
+npc no: 396
+func 0x469960, surf ?3, rect1 768, rect2 512, rect3 48, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 397
+func 0x47d0e0, surf ?4, rect1 400, rect2 288, rect3 96, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 398
+func 0x47c7b0, surf ?5, rect1 768, rect2 512, rect3 192, rect4 96, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 399
+func 0x47ca30, surf ?5, rect1 960, rect2 512, rect3 32, rect4 32, 0, 0, 0, 0, 8, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 400
+func 0x47d620, surf ?3, rect1 768, rect2 576, rect3 112, rect4 96, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 401
+func 0x47d680, surf ?7, rect1 256, rect2 96, rect3 128, rect4 16, 0, 0, 64, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 402
+func 0x47d700, surf ?5, rect1 880, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 403
+func 0x47d830, surf ?7, rect1 384, rect2 0, rect3 16, rect4 96, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 404
+func 0x430190, surf ?4, rect1 416, rect2 384, rect3 32, rect4 32, 2, 0, 6, 6, 8, #8, 3, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 405
+func 0x430000, surf ?4, rect1 384, rect2 96, rect3 64, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 406
+func 0x430960, surf ?4, rect1 224, rect2 96, rect3 32, rect4 32, 0, 0, 6, 16, 6, #16, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 407
+func 0x42af50, surf ?4, rect1 128, rect2 288, rect3 32, rect4 24, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 408
+func 0x467180, surf ?3, rect1 768, rect2 736, rect3 16, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 409
+func 0x467320, surf ?10, rect1 160, rect2 0, rect3 144, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 410
+func 0x474fa0, surf ?4, rect1 6, rect2 0, rect3 42, rect4 56, 0, 0, 0, 24, 0, #0, 100, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 411
+func 0x469ac0, surf ?3, rect1 912, rect2 512, rect3 32, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 412
+func 0x4405f0, surf ?4, rect1 0, rect2 0, rect3 128, rect4 64, 0, 0, 48, 32, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 413
+func 0x440af0, surf ?4, rect1 16, rect2 496, rect3 16, rect4 16, 0, 0, 0, 0, 8, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 414
+func 0x440be0, surf ?4, rect1 208, rect2 384, rect3 32, rect4 32, 2, 0, 12, 2, 12, #2, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 415
+func 0x41da00, surf ?7, rect1 224, rect2 160, rect3 32, rect4 32, 2, 0, 8, 4, 0, #0, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 416
+func 0x436c60, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 20, 22, 20, #20, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 417
+func 0x436dd0, surf ?4, rect1 224, rect2 480, rect3 32, rect4 32, 0, 0, 0, 0, 16, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 418
+func 0x438380, surf ?4, rect1 128, rect2 256, rect3 32, rect4 32, 1, 0, 8, 8, 12, #12, 12, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 419
+func 0x437ed0, surf ?4, rect1 0, rect2 352, rect3 32, rect4 32, 1, 0, 6, 14, 0, #0, 20, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 420
+func 0x45f230, surf ?4, rect1 128, rect2 448, rect3 32, rect4 32, 1, 0, 6, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 421
+func 0x45f3d0, surf ?4, rect1 128, rect2 336, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 422
+func 0x432ad0, surf ?4, rect1 0, rect2 0, rect3 144, rect4 32, 0, 0, 68, 12, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 423
+func 0x4333a0, surf ?4, rect1 80, rect2 160, rect3 176, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 424
+func 0x434f00, surf ?4, rect1 96, rect2 64, rect3 24, rect4 24, 0, 0, 6, 6, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 425
+func 0x432c00, surf ?4, rect1 0, rect2 32, rect3 144, rect4 32, 0, 0, 58, 12, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 426
+func 0x432e50, surf ?4, rect1 0, rect2 64, rect3 96, rect4 32, 0, 0, 36, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 427
+func 0x433710, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 1, 0, 6, 8, 6, #8, 10, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 428
+func 0x433910, surf ?4, rect1 224, rect2 0, rect3 32, rect4 32, 1, 0, 6, 8, 6, #8, 5, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 429
+func 0x4331c0, surf ?4, rect1 496, rect2 496, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 430
+func 0x4340b0, surf ?4, rect1 0, rect2 160, rect3 64, rect4 48, 0, 0, 20, 10, 24, #16, 120, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 431
+func 0x434dd0, surf ?4, rect1 0, rect2 400, rect3 64, rect4 32, 0, 0, 26, 16, 26, #16, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 432
+func 0x4351b0, surf ?4, rect1 64, rect2 400, rect3 32, rect4 32, 0, 0, 6, 6, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 433
+func 0x4355f0, surf ?4, rect1 0, rect2 464, rect3 24, rect4 24, 4, 0, 8, 8, 8, #8, 2, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 434
+func 0x4359b0, surf ?4, rect1 0, rect2 464, rect3 16, rect4 16, 1, 0, 4, 4, 5, #5, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 435
+func 0x433b10, surf ?4, rect1 128, rect2 384, rect3 128, rect4 64, 0, 0, 38, 20, 5, #5, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 436
+func 0x433dd0, surf ?4, rect1 144, rect2 0, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 437
+func 0x435b70, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 2, 0, 6, 8, 6, #8, 10, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 438
+func 0x433f80, surf ?4, rect1 0, rect2 352, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 439
+func 0x434bb0, surf ?4, rect1 64, rect2 240, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 440
+func 0x45b550, surf ?3, rect1 64, rect2 560, rect3 48, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 441
+func 0x45f960, surf ?4, rect1 192, rect2 0, rect3 32, rect4 24, 2, 0, 10, 6, 8, #8, 8, coin 65516, bonus 3, nameptr0x0, namestring 0
+npc no: 442
+func 0x47f2b0, surf ?5, rect1 832, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 443
+func 0x441f20, surf ?4, rect1 0, rect2 80, rect3 112, rect4 32, 0, 1, 26, 14, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 444
+func 0x441f20, surf ?4, rect1 0, rect2 64, rect3 176, rect4 16, 0, 1, 72, 6, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 445
+func 0x441fa0, surf ?4, rect1 112, rect2 80, rect3 48, rect4 16, 0, 1, 8, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 446
+func 0x442130, surf ?4, rect1 176, rect2 0, rect3 48, rect4 48, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 447
+func 0x441c00, surf ?4, rect1 0, rect2 112, rect3 64, rect4 32, 0, 0, 24, 10, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 448
+func 0x442510, surf ?4, rect1 64, rect2 112, rect3 32, rect4 32, 9, 0, 10, 10, 10, #10, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 449
+func 0x442260, surf ?4, rect1 64, rect2 176, rect3 32, rect4 32, 2, 0, 12, 10, 12, #16, 12, coin 64513, bonus 0, nameptr0x0, namestring 0
+npc no: 450
+func 0x4600d0, surf ?4, rect1 48, rect2 224, rect3 32, rect4 32, 1, 0, 10, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 451
+func 0x4588b0, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 1, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 452
+func 0x42be40, surf ?4, rect1 0, rect2 496, rect3 16, rect4 16, 9, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 453
+func 0x42bfa0, surf ?4, rect1 0, rect2 400, rect3 32, rect4 32, 9, 0, 12, 10, 12, #12, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 454
+func 0x42c410, surf ?4, rect1 0, rect2 0, rect3 2, rect4 2, 1, 0, 8, 22, 12, #24, 60, coin 64513, bonus 3, nameptr0x0, namestring 0
+npc no: 455
+func 0x42c720, surf ?6, rect1 912, rect2 384, rect3 48, rect4 48, 1, 0, 8, 20, 0, #0, 60, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 456
+func 0x42ca40, surf ?4, rect1 0, rect2 400, rect3 32, rect4 32, 1, 0, 12, 12, 12, #12, 10, coin 20, bonus 2, nameptr0x0, namestring 0
+npc no: 457
+func 0x42d0a0, surf ?2, rect1 224, rect2 0, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 458
+func 0x42d300, surf ?4, rect1 176, rect2 416, rect3 80, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 459
+func 0x461610, surf ?3, rect1 1008, rect2 0, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 460
+func 0x461f80, surf ?3, rect1 512, rect2 256, rect3 48, rect4 48, 5, 0, 14, 18, 14, #18, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 461
+func 0x4601b0, surf ?4, rect1 80, rect2 224, rect3 32, rect4 32, 5, 0, 8, 8, 8, #8, 10, coin 65486, bonus 3, nameptr0x0, namestring 0
+npc no: 462
+func 0x47f5d0, surf ?4, rect1 192, rect2 112, rect3 32, rect4 32, 5, 0, 8, 12, 8, #12, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 463
+func 0x426b00, surf ?2, rect1 128, rect2 0, rect3 64, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 464
+func 0x4249e0, surf ?2, rect1 0, rect2 0, rect3 48, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 465
+func 0x424fa0, surf ?4, rect1 0, rect2 448, rect3 32, rect4 32, 5, 0, 10, 10, 12, #12, 12, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 466
+func 0x425340, surf ?4, rect1 128, rect2 448, rect3 64, rect4 32, 2, 0, 24, 8, 24, #8, 24, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 467
+func 0x425750, surf ?4, rect1 448, rect2 464, rect3 48, rect4 48, 2, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 468
+func 0x425850, surf ?4, rect1 0, rect2 352, rect3 64, rect4 48, 5, 0, 18, 18, 16, #22, 66, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 469
+func 0x426a50, surf ?4, rect1 112, rect2 480, rect3 16, rect4 32, 0, 0, 8, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 470
+func 0x425d30, surf ?4, rect1 64, rect2 480, rect3 16, rect4 16, 0, 0, 4, 4, 6, #6, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 471
+func 0x4260a0, surf ?4, rect1 64, rect2 496, rect3 16, rect4 16, 0, 0, 4, 4, 6, #6, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 472
+func 0x426110, surf ?4, rect1 0, rect2 320, rect3 64, rect4 16, 1, 0, 18, 4, 16, #6, 6, coin 64513, bonus 2, nameptr0x0, namestring 0
+npc no: 473
+func 0x426520, surf ?2, rect1 0, rect2 192, rect3 64, rect4 32, 0, 0, 24, 8, 24, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 474
+func 0x4267f0, surf ?4, rect1 128, rect2 240, rect3 64, rect4 48, 1, 0, 14, 12, 14, #12, 20, coin 64513, bonus 2, nameptr0x0, namestring 0
+npc no: 475
+func 0x419c90, surf ?4, rect1 0, rect2 0, rect3 64, rect4 80, 3, 0, 8, 24, 0, #0, 100, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 476
+func 0x41a710, surf ?4, rect1 224, rect2 384, rect3 32, rect4 32, 1, 0, 6, 6, 0, #0, 3, coin 64513, bonus 2, nameptr0x0, namestring 0
+npc no: 477
+func 0x43a550, surf ?4, rect1 0, rect2 0, rect3 112, rect4 112, 6, 0, 24, 24, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 478
+func 0x43aac0, surf ?4, rect1 0, rect2 384, rect3 48, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 479
+func 0x43acd0, surf ?4, rect1 112, rect2 480, rect3 32, rect4 32, 0, 0, 12, 12, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 480
+func 0x43ad80, surf ?4, rect1 224, rect2 0, rect3 32, rect4 32, 1, 0, 10, 10, 0, #0, 9, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 481
+func 0x43b350, surf ?4, rect1 96, rect2 448, rect3 16, rect4 16, 0, 0, 10, 10, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 482
+func 0x43af20, surf ?4, rect1 96, rect2 480, rect3 16, rect4 16, 0, 0, 10, 10, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 483
+func 0x43b560, surf ?6, rect1 384, rect2 384, rect3 32, rect4 16, 0, 0, 12, 4, 0, #0, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 484
+func 0x43b730, surf ?4, rect1 96, rect2 496, rect3 16, rect4 16, 0, 0, 10, 10, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 485
+func 0x43b8b0, surf ?6, rect1 96, rect2 768, rect3 24, rect4 24, 9, 0, 4, 4, 0, #0, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 486
+func 0x43ba10, surf ?4, rect1 208, rect2 448, rect3 48, rect4 32, 0, 0, 14, 14, 0, #0, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 487
+func 0x43bda0, surf ?4, rect1 224, rect2 160, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 488
+func 0x43c670, surf ?4, rect1 384, rect2 448, rect3 80, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 489
+func 0x43c830, surf ?4, rect1 192, rect2 336, rect3 32, rect4 32, 4, 0, 8, 8, 0, #0, 6, coin 64513, bonus 2, nameptr0x0, namestring 0
+npc no: 490
+func 0x43b0a0, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 491
+func 0x481f40, surf ?4, rect1 0, rect2 0, rect3 48, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 492
+func 0x482580, surf ?1, rect1 224, rect2 208, rect3 4, rect4 4, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 493
+func 0x41efa0, surf ?4, rect1 0, rect2 384, rect3 80, rect4 64, 0, 0, 28, 20, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 494
+func 0x41f270, surf ?4, rect1 0, rect2 304, rect3 32, rect4 32, 0, 0, 10, 10, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 495
+func 0x41f9f0, surf ?3, rect1 720, rect2 832, rect3 64, rect4 48, 0, 0, 30, 8, 4, #8, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 496
+func 0x41fb20, surf ?4, rect1 0, rect2 240, rect3 32, rect4 32, 1, 0, 10, 10, 10, #10, 4, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 497
+func 0x41fe00, surf ?4, rect1 64, rect2 240, rect3 32, rect4 32, 0, 0, 4, 4, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 498
+func 0x42d4b0, surf ?4, rect1 208, rect2 320, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 499
+func 0x4280b0, surf ?3, rect1 64, rect2 592, rect3 64, rect4 32, 2, 0, 24, 8, 24, #8, 24, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 500
+func 0x425750, surf ?4, rect1 64, rect2 448, rect3 48, rect4 48, 2, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 501
+func 0x480380, surf ?4, rect1 128, rect2 32, rect3 48, rect4 32, 0, 1, 0, 0, 0, #0, 2, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 502
+func 0x440860, surf ?4, rect1 0, rect2 320, rect3 128, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 503
+func 0x42e280, surf ?4, rect1 64, rect2 464, rect3 24, rect4 24, 9, 0, 8, 8, 8, #12, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 504
+func 0x42e650, surf ?4, rect1 0, rect2 288, rect3 80, rect4 80, 0, 0, 22, 22, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 505
+func 0x42c880, surf ?6, rect1 960, rect2 624, rect3 64, rect4 64, 3, 0, 22, 26, 0, #0, 60, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 506
+func 0x462580, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4dd8, namestring Empty
+npc no: 507
+func 0x47b120, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4dd0, namestring UzoEye
+npc no: 508
+func 0x47ade0, surf ?4, rect1 448, rect2 448, rect3 64, rect4 32, 0, 0, 32, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4dc4, namestring Elevator06
+npc no: 509
+func 0x476720, surf ?7, rect1 448, rect2 448, rect3 32, rect4 32, 0, 1, 12, 24, 0, #32, 0, coin 0, bonus 0, nameptr0x4e4db8, namestring TrainWheel0
+npc no: 510
+func 0x47a9f0, surf ?4, rect1 96, rect2 416, rect3 80, rect4 32, 0, 0, 40, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4dac, namestring Elevator05
+npc no: 511
+func 0x47be50, surf ?2, rect1 96, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4da0, namestring CrazyClock
+npc no: 512
+func 0x476f60, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 1, 0, 10, 10, 10, #12, 9, coin 65535, bonus 0, nameptr0x4e4d98, namestring Untier
+npc no: 513
+func 0x47be50, surf ?2, rect1 176, rect2 128, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4d8c, namestring CrazyClock2
+npc no: 514
+func 0x44f620, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 1, 0, 8, 8, 12, #14, 2, coin 1, bonus 2, nameptr0x4e4d80, namestring Tumbleweed
+npc no: 515
+func 0x46b1c0, surf ?4, rect1 64, rect2 288, rect3 32, rect4 32, 2, 0, 10, 14, 10, #16, 16, coin 65516, bonus 3, nameptr0x4e4d78, namestring Kani
+npc no: 516
+func 0x464570, surf ?2, rect1 160, rect2 160, rect3 48, rect4 48, 0, 0, 8, 8, 8, #8, 0, coin 0, bonus 0, nameptr0x4e4d6c, namestring JetCharge
+npc no: 517
+func 0x476b90, surf ?7, rect1 16, rect2 128, rect3 32, rect4 16, 0, 0, 16, 8, 16, #8, 0, coin 0, bonus 0, nameptr0x4e4d60, namestring KllslfBlock
+npc no: 518
+func 0x476e20, surf ?2, rect1 0, rect2 208, rect3 192, rect4 16, 0, 0, 96, 8, 96, #0, 0, coin 0, bonus 0, nameptr0x4e4d54, namestring FallBridge
+npc no: 519
+func 0x4654c0, surf ?5, rect1 880, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4d48, namestring FocusTarget
+npc no: 520
+func 0x4770a0, surf ?4, rect1 192, rect2 0, rect3 32, rect4 32, 1, 0, 8, 10, 10, #12, 12, coin 1, bonus 5, nameptr0x4e4d3c, namestring ChestDoro
+npc no: 521
+func 0x477c30, surf ?4, rect1 0, rect2 0, rect3 64, rect4 64, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4d30, namestring OfficeBoss
+npc no: 522
+func 0x4515d0, surf ?4, rect1 192, rect2 0, rect3 64, rect4 48, 1, 0, 14, 14, 0, #0, 64, coin 0, bonus 0, nameptr0x4e4d24, namestring Reception
+npc no: 523
+func 0x466380, surf ?3, rect1 704, rect2 512, rect3 32, rect4 32, 0, 1, 14, 12, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4d18, namestring TouchPanel
+npc no: 524
+func 0x453c40, surf ?7, rect1 144, rect2 144, rect3 112, rect4 112, 0, 0, 54, 54, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4d0c, namestring testCircle
+npc no: 525
+func 0x478b30, surf ?4, rect1 0, rect2 160, rect3 32, rect4 48, 1, 0, 12, 10, 12, #16, 80, coin 50, bonus 5, nameptr0x4e4d00, namestring MoleJetpack
+npc no: 526
+func 0x479270, surf ?5, rect1 768, rect2 608, rect3 32, rect4 32, 0, 1, 10, 4, 10, #10, 0, coin 0, bonus 0, nameptr0x4e4cf8, namestring PopItem
+npc no: 527
+func 0x477e30, surf ?4, rect1 0, rect2 224, rect3 64, rect4 80, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4cec, namestring OfficeBoss2
+npc no: 528
+func 0x477f70, surf ?4, rect1 416, rect2 0, rect3 96, rect4 96, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4ce0, namestring OfficeBoss3
+npc no: 529
+func 0x47d1f0, surf ?7, rect1 256, rect2 0, rect3 128, rect4 96, 0, 0, 0, 0, 8, #24, 0, coin 0, bonus 0, nameptr0x4e4cd4, namestring eveElvtr00
+npc no: 530
+func 0x46a120, surf ?4, rect1 448, rect2 400, rect3 32, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4ccc, namestring Ribbon
+npc no: 531
+func 0x479ef0, surf ?4, rect1 0, rect2 416, rect3 64, rect4 48, 2, 0, 26, 12, 16, #12, 20, coin 0, bonus 0, nameptr0x4e4cc4, namestring Frost
+npc no: 532
+func 0x47a580, surf ?1, rect1 192, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4cbc, namestring Fan05
+npc no: 533
+func 0x47a950, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4cb0, namestring CallBall05
+npc no: 534
+func 0x4220a0, surf ?7, rect1 256, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4ca4, namestring Dark2Block
+npc no: 535
+func 0x47b610, surf ?1, rect1 80, rect2 16, rect3 16, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c98, namestring ServerLamp
+npc no: 536
+func 0x47c1c0, surf ?4, rect1 0, rect2 288, rect3 80, rect4 40, 3, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c90, namestring Drunk
+npc no: 537
+func 0x46a120, surf ?4, rect1 336, rect2 400, rect3 64, rect4 48, 0, 0, 0, 0, 8, #0, 0, coin 0, bonus 0, nameptr0x4e4c84, namestring TimeTable
+npc no: 538
+func 0x47cbe0, surf ?4, rect1 0, rect2 0, rect3 384, rect4 112, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c78, namestring TitleLogo
+npc no: 539
+func 0x46a120, surf ?10, rect1 0, rect2 0, rect3 160, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c6c, namestring PixelLogo
+npc no: 540
+func 0x43fbe0, surf ?4, rect1 128, rect2 432, rect3 64, rect4 80, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c60, namestring ShachoBdum
+npc no: 541
+func 0x47c330, surf ?3, rect1 832, rect2 768, rect3 96, rect4 80, 0, 0, 0, 8, 16, #16, 0, coin 0, bonus 0, nameptr0x4e4c54, namestring UzoBrain
+npc no: 542
+func 0x4795e0, surf ?3, rect1 640, rect2 0, rect3 32, rect4 32, 1, 0, 10, 4, 10, #16, 0, coin 0, bonus 0, nameptr0x4e43d0, namestring Sister
+npc no: 543
+func 0x4776d0, surf ?3, rect1 768, rect2 0, rect3 48, rect4 64, 2, 1, 0, 0, 12, #26, 0, coin 0, bonus 0, nameptr0x4e43dc, namestring Sasuke
+npc no: 544
+func 0x480ac0, surf ?4, rect1 384, rect2 0, rect3 32, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c48, namestring Shacho06a
+npc no: 545
+func 0x480b10, surf ?4, rect1 0, rect2 128, rect3 96, rect4 96, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c3c, namestring Shacho06c
+npc no: 546
+func 0x47d890, surf ?1, rect1 0, rect2 192, rect3 32, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c34, namestring Cake
+npc no: 547
+func 0x480b70, surf ?3, rect1 640, rect2 208, rect3 64, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c28, namestring ShachoLie
+npc no: 548
+func 0x4644f0, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 1, coin 0, bonus 0, nameptr0x4e4c20, namestring bbl1UP
+npc no: 549
+func 0x4650c0, surf ?5, rect1 856, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c14, namestring VomitCoins
+npc no: 550
+func 0x47e460, surf ?10, rect1 0, rect2 512, rect3 256, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c0c, namestring GoodJob
+npc no: 551
+func 0x47e540, surf ?4, rect1 0, rect2 336, rect3 144, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4c00, namestring txtStart
+npc no: 552
+func 0x474e30, surf ?5, rect1 768, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4bf0, namestring PinkHourLogo
+npc no: 553
+func 0x47e570, surf ?3, rect1 784, rect2 800, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4be4, namestring FishInTank
+npc no: 554
+func 0x4696d0, surf ?3, rect1 768, rect2 448, rect3 48, rect4 64, 0, 0, 0, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4bdc, namestring DoorA
+npc no: 555
+func 0x46a120, surf ?3, rect1 960, rect2 896, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4bd4, namestring Books
+npc no: 556
+func 0x475120, surf ?4, rect1 144, rect2 432, rect3 24, rect4 24, 1, 0, 4, 4, 4, #4, 1, coin 0, bonus 0, nameptr0x4e4bc8, namestring HeavyProc
+npc no: 557
+func 0x46a120, surf ?3, rect1 784, rect2 768, rect3 48, rect4 32, 0, 0, 0, 0, 0, #8, 0, coin 0, bonus 0, nameptr0x4e4bbc, namestring TeaTable
+npc no: 558
+func 0x475450, surf ?4, rect1 416, rect2 384, rect3 32, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4bb4, namestring phRom
+npc no: 559
+func 0x476e20, surf ?2, rect1 0, rect2 240, rect3 256, rect4 16, 0, 0, 96, 8, 96, #0, 0, coin 0, bonus 0, nameptr0x4e4ba8, namestring FallBridge2
+npc no: 560
+func 0x4651f0, surf ?5, rect1 856, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4b98, namestring VomitSpecial
+npc no: 561
+func 0x47e5d0, surf ?3, rect1 720, rect2 784, rect3 64, rect4 48, 0, 0, 30, 8, 14, #8, 0, coin 0, bonus 0, nameptr0x4e4b90, namestring Trolley
+npc no: 562
+func 0x461120, surf ?2, rect1 224, rect2 192, rect3 32, rect4 64, 0, 0, 6, 32, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4b84, namestring WoodBarri19
+npc no: 563
+func 0x47f8d0, surf ?2, rect1 840, rect2 1008, rect3 8, rect4 8, 0, 0, 6, 32, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4b78, namestring Kokorona
+npc no: 564
+func 0x43a6b0, surf ?7, rect1 448, rect2 192, rect3 64, rect4 32, 0, 0, 24, 8, 24, #8, 0, coin 0, bonus 0, nameptr0x4e4b70, namestring skLift0
+npc no: 565
+func 0x43a6b0, surf ?2, rect1 0, rect2 192, rect3 64, rect4 32, 0, 0, 24, 8, 24, #8, 0, coin 0, bonus 0, nameptr0x4e4b68, namestring skLift1
+npc no: 566
+func 0x43c310, surf ?4, rect1 0, rect2 336, rect3 48, rect4 48, 0, 1, 8, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4b60, namestring skDesk
+npc no: 567
+func 0x43cbe0, surf ?3, rect1 960, rect2 576, rect3 32, rect4 24, 0, 1, 8, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4b54, namestring skPillow
+npc no: 568
+func 0x4802d0, surf ?4, rect1 0, rect2 0, rect3 128, rect4 80, 0, 1, 0, 0, 0, #0, 2, coin 1, bonus 0, nameptr0x4e4b48, namestring chptDesk
+npc no: 569
+func 0x46a120, surf ?4, rect1 0, rect2 160, rect3 64, rect4 64, 0, 1, 0, 0, 0, #0, 2, coin 60, bonus 0, nameptr0x4e4b3c, namestring BabyBird
+npc no: 570
+func 0x4623c0, surf ?7, rect1 256, rect2 0, rect3 32, rect4 48, 0, 1, 6, 16, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4b34, namestring Gaishi
+npc no: 571
+func 0x426c30, surf ?2, rect1 96, rect2 160, rect3 32, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4b28, namestring DesKuro_frg
+npc no: 572
+func 0x4515d0, surf ?4, rect1 0, rect2 368, rect3 64, rect4 48, 1, 0, 14, 14, 0, #0, 64, coin 0, bonus 0, nameptr0x4e4b20, namestring Ekiin
+npc no: 573
+func 0x47eea0, surf ?3, rect1 720, rect2 784, rect3 64, rect4 48, 0, 0, 30, 8, 24, #8, 0, coin 0, bonus 0, nameptr0x4e4b10, namestring TrolleyHello
+npc no: 574
+func 0x4828b0, surf ?5, rect1 880, rect2 1008, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4b00, namestring FireworksPod
+npc no: 575
+func 0x480c70, surf ?4, rect1 256, rect2 320, rect3 32, rect4 64, 0, 0, 0, 0, 10, #24, 0, coin 0, bonus 0, nameptr0x4e4af8, namestring zaNanao
+npc no: 576
+func 0x481610, surf ?7, rect1 0, rect2 192, rect3 40, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4af0, namestring zaDoor
+npc no: 577
+func 0x4816f0, surf ?4, rect1 320, rect2 448, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4ae4, namestring zaNanaoType
+npc no: 578
+func 0x4821e0, surf ?2, rect1 96, rect2 160, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4adc, namestring zaTV
+npc no: 579
+func 0x481bd0, surf ?7, rect1 416, rect2 448, rect3 32, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4ad0, namestring zaNotePC
+npc no: 580
+func 0x482260, surf ?7, rect1 464, rect2 80, rect3 48, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4ac0, namestring zaNewscaster
+npc no: 581
+func 0x46a120, surf ?7, rect1 416, rect2 0, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 2, coin 1, bonus 0, nameptr0x4e4ab4, namestring zaTVLamp
+npc no: 582
+func 0x482310, surf ?1, rect1 224, rect2 224, rect3 4, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4aa8, namestring zaFireworks
+npc no: 583
+func 0x46a120, surf ?4, rect1 448, rect2 192, rect3 64, rect4 32, 0, 0, 0, 0, 0, #8, 2, coin 20, bonus 0, nameptr0x4e4a9c, namestring zaDatsuFire
+npc no: 584
+func 0x482af0, surf ?4, rect1 384, rect2 256, rect3 32, rect4 64, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4a90, namestring zaKurono
+npc no: 585
+func 0x482c30, surf ?4, rect1 0, rect2 0, rect3 64, rect4 80, 3, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4a80, namestring zaOshima_drk
+npc no: 586
+func 0x482cf0, surf ?4, rect1 384, rect2 400, rect3 32, rect4 32, 0, 0, 0, 0, 2, #16, 0, coin 0, bonus 0, nameptr0x4e4a78, namestring zaAudi
+npc no: 587
+func 0x482ee0, surf ?4, rect1 384, rect2 304, rect3 32, rect4 32, 0, 0, 0, 0, 2, #16, 0, coin 0, bonus 0, nameptr0x4e4a70, namestring zaCarry
+npc no: 588
+func 0x483110, surf ?4, rect1 256, rect2 320, rect3 32, rect4 80, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4a64, namestring zaKurono_up
+npc no: 589
+func 0x47ba30, surf ?4, rect1 64, rect2 416, rect3 32, rect4 32, 2, 1, 12, 8, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4a5c, namestring zaPhone
+npc no: 590
+func 0x483240, surf ?4, rect1 0, rect2 256, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4a50, namestring zaYubune
+npc no: 591
+func 0x483510, surf ?2, rect1 0, rect2 112, rect3 16, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4a44, namestring zaSuimen
+npc no: 592
+func 0x46a120, surf ?2, rect1 64, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 3, coin 30, bonus 0, nameptr0x4e4a38, namestring zaTansan
+npc no: 593
+func 0x4835c0, surf ?5, rect1 0, rect2 1008, rect3 32, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4a30, namestring zaZabu
+npc no: 594
+func 0x483620, surf ?2, rect1 0, rect2 224, rect3 48, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4a28, namestring zaSofa
+npc no: 595
+func 0x46a120, surf ?2, rect1 0, rect2 176, rect3 32, rect4 48, 0, 0, 0, 0, 6, #0, 0, coin 0, bonus 0, nameptr0x4e4a1c, namestring zaBantou
+npc no: 596
+func 0x483660, surf ?4, rect1 448, rect2 0, rect3 64, rect4 48, 3, 0, 0, 0, 6, #0, 0, coin 0, bonus 0, nameptr0x4e4a0c, namestring zaOshima_dsk
+npc no: 597
+func 0x45c180, surf ?1, rect1 192, rect2 0, rect3 32, rect4 32, 5, 0, 12, 12, 12, #12, 0, coin 0, bonus 0, nameptr0x4e4a00, namestring zaOutsideK
+npc no: 598
+func 0x4837c0, surf ?4, rect1 112, rect2 416, rect3 144, rect4 96, 5, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e49f0, namestring zaPrinterBox
+npc no: 599
+func 0x47ba30, surf ?7, rect1 256, rect2 16, rect3 32, rect4 32, 5, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e49e4, namestring zaPhoneZero
+npc no: 600
+func 0x46a120, surf ?2, rect1 64, rect2 224, rect3 32, rect4 16, 0, 0, 0, 0, 8, #0, 2, coin 1, bonus 0, nameptr0x4e49d4, namestring zaHendenLamp
+npc no: 601
+func 0x46a120, surf ?2, rect1 48, rect2 192, rect3 80, rect4 16, 0, 0, 0, 0, 0, #0, 2, coin 4, bonus 0, nameptr0x4e49c4, namestring zaHendenWave
+npc no: 602
+func 0x483800, surf ?1, rect1 128, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 2, coin 4, bonus 0, nameptr0x4e49b8, namestring zaWorkFalls
+npc no: 603
+func 0x46a120, surf ?10, rect1 272, rect2 544, rect3 96, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e49ac, namestring zaNewsHero
+npc no: 604
+func 0x4838d0, surf ?4, rect1 384, rect2 0, rect3 64, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e49a0, namestring zaBitoSleep
+npc no: 605
+func 0x464870, surf ?3, rect1 544, rect2 672, rect3 32, rect4 32, 0, 0, 8, 8, 8, #8, 0, coin 0, bonus 0, nameptr0x4e4994, namestring RollingSpk9
+npc no: 606
+func 0x475520, surf ?3, rect1 960, rect2 768, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4988, namestring phPinkFall
+npc no: 607
+func 0x4755e0, surf ?3, rect1 896, rect2 768, rect3 64, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e497c, namestring phUmbreFall
+npc no: 608
+func 0x475630, surf ?3, rect1 832, rect2 768, rect3 64, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4970, namestring phSmallUFO
+npc no: 609
+func 0x475720, surf ?3, rect1 576, rect2 0, rect3 32, rect4 32, 2, 0, 10, 4, 10, #16, 0, coin 0, bonus 0, nameptr0x4e4964, namestring phTsubasa
+npc no: 610
+func 0x42e760, surf ?7, rect1 0, rect2 320, rect3 32, rect4 48, 8, 0, 8, 20, 2, #8, 1, coin 0, bonus 0, nameptr0x4e4958, namestring phAdam_weed
+npc no: 611
+func 0x4758f0, surf ?10, rect1 0, rect2 160, rect3 80, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4950, namestring phZubo
+npc no: 612
+func 0x47e4f0, surf ?4, rect1 16, rect2 224, rect3 336, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x4e4948, namestring phRubi
+npc no: 613
+func 0x435d70, surf ?4, rect1 0, rect2 0, rect3 128, rect4 96, 3, 0, 32, 40, 0, #0, 220, coin 128, bonus 0, nameptr0x4e4940, namestring Puddie
+npc no: 614
+func 0x438880, surf ?4, rect1 0, rect2 0, rect3 128, rect4 80, 3, 0, 1, 1, 30, #32, 110, coin 0, bonus 0, nameptr0x4e4934, namestring ShieldPlant
+npc no: 615
+func 0x426d30, surf ?4, rect1 0, rect2 0, rect3 80, rect4 48, 3, 0, 20, 14, 26, #18, 360, coin 0, bonus 0, nameptr0x4e492c, namestring Gorgon
+npc no: 616
+func 0x417ab0, surf ?4, rect1 0, rect2 0, rect3 64, rect4 64, 3, 0, 14, 22, 16, #28, 120, coin 16, bonus 0, nameptr0x4e4920, namestring GiantMole
+npc no: 617
+func 0x4225e0, surf ?4, rect1 0, rect2 0, rect3 112, rect4 48, 3, 0, 30, 14, 48, #28, 360, coin 0, bonus 0, nameptr0x4e4914, namestring Dekaigyo
+npc no: 618
+func 0x4181d0, surf ?4, rect1 64, rect2 128, rect3 64, rect4 64, 3, 0, 4, 12, 16, #28, 120, coin 33, bonus 0, nameptr0x4e4908, namestring GiantMole2
+npc no: 619
+func 0x428680, surf ?4, rect1 240, rect2 0, rect3 16, rect4 16, 3, 0, 4, 4, 8, #8, 440, coin 0, bonus 0, nameptr0x4e4900, namestring N577
+npc no: 620
+func 0x418990, surf ?4, rect1 0, rect2 0, rect3 48, rect4 48, 6, 0, 16, 16, 16, #16, 180, coin 0, bonus 0, nameptr0x4e48f8, namestring Dark1
+npc no: 621
+func 0x4200a0, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 6, 0, 72, 64, 0, #0, 240, coin 0, bonus 0, nameptr0x4e48f0, namestring Dark2
+npc no: 622
+func 0x41a8e0, surf ?4, rect1 0, rect2 0, rect3 96, rect4 80, 3, 0, 46, 32, 0, #0, 420, coin 0, bonus 0, nameptr0x4e48e4, namestring ClockMan
+npc no: 623
+func 0x43e3f0, surf ?4, rect1 0, rect2 0, rect3 0, rect4 96, 6, 0, 24, 42, 0, #0, 420, coin 0, bonus 0, nameptr0x4e48dc, namestring ShachoC
+npc no: 624
+func 0x42eaf0, surf ?4, rect1 0, rect2 0, rect3 96, rect4 144, 6, 0, 0, 0, 0, #0, 1200, coin 0, bonus 0, nameptr0x4e48d0, namestring BossPlate
+npc no: 625
+func 0x43ce30, surf ?4, rect1 0, rect2 0, rect3 64, rect4 80, 6, 0, 12, 32, 14, #34, 280, coin 0, bonus 0, nameptr0x4e48c8, namestring ShachoB
+npc no: 626
+func 0x43fc20, surf ?4, rect1 400, rect2 464, rect3 32, rect4 48, 3, 0, 16, 8, 16, #24, 320, coin 0, bonus 0, nameptr0x4e48c0, namestring Titan
+npc no: 627
+func 0x436370, surf ?4, rect1 0, rect2 0, rect3 128, rect4 96, 3, 0, 32, 40, 0, #0, 360, coin 128, bonus 0, nameptr0x4e48b8, namestring Puddie2
+npc no: 628
+func 0x4310e0, surf ?4, rect1 64, rect2 464, rect3 24, rect4 24, 6, 0, 0, 0, 0, #0, 800, coin 0, bonus 0, nameptr0x4e48b0, namestring Printer
+npc no: 629
+func 0x42b000, surf ?4, rect1 0, rect2 0, rect3 64, rect4 80, 6, 0, 16, 28, 16, #28, 800, coin 0, bonus 0, nameptr0x4e48a4, namestring BossOshima
+npc no: 630
+func 0x424030, surf ?4, rect1 0, rect2 0, rect3 48, rect4 80, 6, 0, 8, 16, 8, #18, 480, coin 0, bonus 0, nameptr0x4e4898, namestring DesKurono
+npc no: 631
+func 0x41dc60, surf ?4, rect1 64, rect2 0, rect3 96, rect4 80, 3, 0, 46, 32, 0, #0, 420, coin 0, bonus 0, nameptr0x4e4890, namestring Clock2
+npc no: 632
+func 0x440d00, surf ?4, rect1 0, rect2 0, rect3 176, rect4 32, 3, 0, 48, 20, 0, #0, 5, coin 0, bonus 0, nameptr0x4e4884, namestring BossScr2
+npc no: 633
+func 0x42d5b0, surf ?4, rect1 0, rect2 0, rect3 80, rect4 64, 3, 0, 24, 14, 22, #18, 100, coin 0, bonus 0, nameptr0x4e487c, namestring phAdam
+npc no: 634
+func 0x442bc0, surf ?6, rect1 32, rect2 0, rect3 16, rect4 16, 1, 0, 4, 4, 4, #2, 1, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 635
+func 0x442be0, surf ?6, rect1 0, rect2 16, rect3 16, rect4 16, 1, 0, 4, 4, 4, #2, 1, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 636
+func 0x4455b0, surf ?6, rect1 0, rect2 80, rect3 16, rect4 16, 1, 0, 8, 2, 6, #1, 1, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 637
+func 0x445370, surf ?6, rect1 16, rect2 80, rect3 16, rect4 16, 1, 0, 1, 1, 1, #1, 1, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 638
+func 0x4455b0, surf ?6, rect1 160, rect2 320, rect3 16, rect4 16, 1, 0, 8, 2, 6, #1, 1, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 639
+func 0x445490, surf ?6, rect1 64, rect2 0, rect3 24, rect4 24, 1, 0, 1, 1, 1, #1, 1, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 640
+func 0x442bc0, surf ?6, rect1 736, rect2 160, rect3 32, rect4 32, 1, 0, 4, 4, 6, #6, 1, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 641
+func 0x444870, surf ?6, rect1 256, rect2 320, rect3 32, rect4 32, 2, 0, 3, 12, 4, #4, 1, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 642
+func 0x444870, surf ?6, rect1 800, rect2 0, rect3 48, rect4 48, 2, 0, 5, 26, 4, #4, 1, coin 3, bonus 0, nameptr0x0, namestring 0
+npc no: 643
+func 0x4437f0, surf ?6, rect1 800, rect2 288, rect3 24, rect4 24, 2, 0, 4, 4, 2, #2, 1, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 644
+func 0x443c70, surf ?6, rect1 176, rect2 320, rect3 24, rect4 24, 2, 0, 4, 4, 2, #2, 1, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 645
+func 0x443c70, surf ?6, rect1 976, rect2 0, rect3 24, rect4 24, 2, 0, 4, 4, 2, #2, 1, coin 24, bonus 0, nameptr0x0, namestring 0
+npc no: 646
+func 0x444870, surf ?6, rect1 800, rect2 0, rect3 48, rect4 48, 2, 0, 5, 26, 4, #4, 1, coin 4, bonus 0, nameptr0x0, namestring 0
+npc no: 647
+func 0x4433c0, surf ?6, rect1 0, rect2 208, rect3 32, rect4 32, 3, 0, 5, 5, 5, #5, 1, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 648
+func 0x4434d0, surf ?6, rect1 0, rect2 304, rect3 32, rect4 32, 3, 0, 8, 8, 6, #6, 1, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 649
+func 0x4435e0, surf ?6, rect1 416, rect2 160, rect3 32, rect4 32, 3, 0, 5, 5, 5, #5, 10, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 650
+func 0x443720, surf ?6, rect1 448, rect2 0, rect3 64, rect4 64, 3, 0, 24, 24, 0, #0, 10, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 651
+func 0x442c00, surf ?6, rect1 912, rect2 192, rect3 32, rect4 32, 3, 0, 8, 8, 4, #4, 1, coin 3, bonus 0, nameptr0x0, namestring 0
+npc no: 652
+func 0x442c00, surf ?6, rect1 912, rect2 288, rect3 32, rect4 32, 3, 0, 8, 8, 4, #4, 1, coin 4, bonus 0, nameptr0x0, namestring 0
+npc no: 653
+func 0x444f00, surf ?6, rect1 152, rect2 144, rect3 24, rect4 32, 4, 0, 4, 5, 4, #4, 1, coin 3, bonus 0, nameptr0x0, namestring 0
+npc no: 654
+func 0x444f20, surf ?6, rect1 320, rect2 0, rect3 32, rect4 48, 4, 0, 6, 8, 6, #6, 1, coin 4, bonus 0, nameptr0x0, namestring 0
+npc no: 655
+func 0x444f40, surf ?6, rect1 320, rect2 0, rect3 32, rect4 48, 4, 0, 6, 6, 6, #6, 1, coin 4, bonus 0, nameptr0x0, namestring 0
+npc no: 656
+func 0x444f60, surf ?5, rect1 640, rect2 448, rect3 32, rect4 32, 4, 0, 8, 8, 8, #8, 1, coin 3, bonus 0, nameptr0x0, namestring 0
+npc no: 657
+func 0x4440a0, surf ?6, rect1 800, rect2 192, rect3 32, rect4 32, 5, 0, 4, 4, 4, #2, 1, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 658
+func 0x444290, surf ?6, rect1 512, rect2 400, rect3 32, rect4 32, 5, 0, 4, 4, 6, #4, 1, coin 3, bonus 0, nameptr0x0, namestring 0
+npc no: 659
+func 0x4444b0, surf ?6, rect1 512, rect2 464, rect3 32, rect4 32, 5, 0, 8, 8, 8, #6, 1, coin 3, bonus 0, nameptr0x0, namestring 0
+npc no: 660
+func 0x444c40, surf ?6, rect1 464, rect2 432, rect3 32, rect4 32, 0, 0, 16, 16, 0, #0, 1, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 661
+func 0x444c40, surf ?6, rect1 432, rect2 384, rect3 48, rect4 48, 0, 0, 24, 24, 0, #0, 1, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 662
+func 0x445740, surf ?6, rect1 48, rect2 48, rect3 16, rect4 16, 0, 0, 6, 2, 1, #1, 1, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 663
+func 0x4457c0, surf ?6, rect1 112, rect2 256, rect3 16, rect4 16, 0, 0, 2, 2, 2, #2, 1, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 664
+func 0x4457c0, surf ?6, rect1 464, rect2 288, rect3 0, rect4 48, 0, 0, 24, 24, 2, #2, 1, coin 99, bonus 0, nameptr0x0, namestring 0
+npc no: 665
+func 0x4457c0, surf ?6, rect1 80, rect2 496, rect3 64, rect4 16, 0, 0, 32, 8, 0, #0, 4, coin 32, bonus 0, nameptr0x0, namestring 0
+npc no: 666
+func 0x4457c0, surf ?6, rect1 64, rect2 200, rect3 8, rect4 8, 0, 0, 24, 24, 0, #0, 4, coin 32, bonus 0, nameptr0x0, namestring 0
+npc no: 667
+func 0x445860, surf ?6, rect1 64, rect2 200, rect3 8, rect4 8, 0, 0, 16, 16, 0, #0, 1, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 668
+func 0x4457c0, surf ?6, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 4, 4, 1, #1, 1, coin 99, bonus 0, nameptr0x0, namestring 0
+npc no: 669
+func 0x4457c0, surf ?6, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 8, 8, 0, #0, 1, coin 4, bonus 0, nameptr0x0, namestring 0
+npc no: 670
+func 0x484230, surf ?6, rect1 944, rect2 0, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 5, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 671
+func 0x484230, surf ?6, rect1 352, rect2 384, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 3, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 672
+func 0x485980, surf ?7, rect1 0, rect2 224, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 673
+func 0x485630, surf ?10, rect1 0, rect2 0, rect3 160, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 674
+func 0x4843a0, surf ?6, rect1 48, rect2 32, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 675
+func 0x4843f0, surf ?6, rect1 0, rect2 112, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 676
+func 0x484540, surf ?6, rect1 16, rect2 104, rect3 24, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 677
+func 0x4845b0, surf ?6, rect1 80, rect2 64, rect3 8, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 678
+func 0x484660, surf ?6, rect1 184, rect2 0, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 679
+func 0x484230, surf ?6, rect1 352, rect2 128, rect3 64, rect4 64, 0, 0, 0, 0, 0, #0, 4, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 680
+func 0x4846b0, surf ?6, rect1 16, rect2 128, rect3 16, rect4 24, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 681
+func 0x484230, surf ?6, rect1 416, rect2 336, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 3, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 682
+func 0x4847a0, surf ?6, rect1 0, rect2 224, rect3 32, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 683
+func 0x484230, surf ?6, rect1 96, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 2, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 684
+func 0x4860c0, surf ?6, rect1 896, rect2 0, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 685
+func 0x484810, surf ?6, rect1 0, rect2 160, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 686
+func 0x484890, surf ?6, rect1 0, rect2 232, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 687
+func 0x4849b0, surf ?6, rect1 208, rect2 0, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 9, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 688
+func 0x484ad0, surf ?6, rect1 32, rect2 128, rect3 32, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 689
+func 0x484bf0, surf ?6, rect1 64, rect2 272, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 690
+func 0x484dd0, surf ?6, rect1 304, rect2 0, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 691
+func 0x484230, surf ?6, rect1 232, rect2 0, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 5, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 692
+func 0x484eb0, surf ?6, rect1 640, rect2 0, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 693
+func 0x484230, surf ?4, rect1 192, rect2 64, rect3 64, rect4 80, 0, 0, 0, 0, 0, #0, 3, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 694
+func 0x485850, surf ?6, rect1 0, rect2 272, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 695
+func 0x4858a0, surf ?10, rect1 512, rect2 0, rect3 160, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 696
+func 0x485140, surf ?9, rect1 160, rect2 400, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 697
+func 0x485510, surf ?6, rect1 176, rect2 144, rect3 16, rect4 16, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 698
+func 0x487310, surf ?10, rect1 208, rect2 928, rect3 48, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 699
+func 0x484230, surf ?6, rect1 0, rect2 112, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 3, coin 6, bonus 0, nameptr0x0, namestring 0
+npc no: 700
+func 0x4842f0, surf ?6, rect1 736, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 3, coin 6, bonus 0, nameptr0x0, namestring 0
+npc no: 701
+func 0x485690, surf ?6, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 702
+func 0x4857d0, surf ?6, rect1 32, rect2 64, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 703
+func 0x4842f0, surf ?6, rect1 640, rect2 0, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 3, coin 6, bonus 0, nameptr0x0, namestring 0
+npc no: 704
+func 0x4842f0, surf ?6, rect1 512, rect2 0, rect3 64, rect4 64, 0, 0, 0, 0, 0, #0, 3, coin 6, bonus 0, nameptr0x0, namestring 0
+npc no: 705
+func 0x484230, surf ?6, rect1 0, rect2 512, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 3, coin 3, bonus 0, nameptr0x0, namestring 0
+npc no: 706
+func 0x485f80, surf ?6, rect1 128, rect2 240, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 707
+func 0x485920, surf ?10, rect1 928, rect2 0, rect3 96, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 708
+func 0x484a40, surf ?6, rect1 208, rect2 0, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 9, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 709
+func 0x484230, surf ?4, rect1 128, rect2 112, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 3, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 710
+func 0x486130, surf ?6, rect1 112, rect2 272, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 711
+func 0x4861b0, surf ?5, rect1 0, rect2 432, rect3 64, rect4 16, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 712
+func 0x4842f0, surf ?6, rect1 768, rect2 128, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 3, coin 6, bonus 0, nameptr0x0, namestring 0
+npc no: 713
+func 0x486280, surf ?6, rect1 448, rect2 336, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 714
+func 0x486430, surf ?6, rect1 176, rect2 64, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 715
+func 0x484230, surf ?4, rect1 128, rect2 384, rect3 64, rect4 32, 0, 0, 0, 0, 0, #0, 4, coin 5, bonus 0, nameptr0x0, namestring 0
+npc no: 716
+func 0x4864c0, surf ?6, rect1 32, rect2 224, rect3 16, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 717
+func 0x486540, surf ?6, rect1 800, rect2 384, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 718
+func 0x46a120, surf ?5, rect1 896, rect2 864, rect3 24, rect4 24, 0, 0, 0, 0, 0, #0, 2, coin 40, bonus 0, nameptr0x0, namestring 0
+npc no: 719
+func 0x484230, surf ?6, rect1 32, rect2 368, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 3, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 720
+func 0x4865d0, surf ?9, rect1 320, rect2 416, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 721
+func 0x484fe0, surf ?6, rect1 0, rect2 0, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 722
+func 0x485320, surf ?9, rect1 384, rect2 192, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 723
+func 0x486690, surf ?6, rect1 48, rect2 176, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 724
+func 0x484230, surf ?2, rect1 208, rect2 0, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 3, coin 6, bonus 0, nameptr0x0, namestring 0
+npc no: 725
+func 0x422050, surf ?6, rect1 0, rect2 656, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 726
+func 0x4867f0, surf ?4, rect1 0, rect2 0, rect3 0, rect4 0, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 727
+func 0x486910, surf ?6, rect1 32, rect2 288, rect3 32, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 728
+func 0x486a40, surf ?10, rect1 160, rect2 64, rect3 80, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 729
+func 0x484230, surf ?6, rect1 224, rect2 256, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 2, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 730
+func 0x484230, surf ?6, rect1 224, rect2 320, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 2, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 731
+func 0x484230, surf ?6, rect1 800, rect2 96, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 2, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 732
+func 0x484230, surf ?6, rect1 896, rect2 96, rect3 48, rect4 48, 0, 0, 0, 0, 0, #0, 2, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 733
+func 0x484230, surf ?4, rect1 192, rect2 384, rect3 64, rect4 32, 0, 0, 0, 0, 0, #0, 4, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 734
+func 0x484230, surf ?4, rect1 240, rect2 0, rect3 16, rect4 32, 0, 0, 0, 0, 0, #0, 3, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 735
+func 0x484230, surf ?4, rect1 480, rect2 384, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 4, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 736
+func 0x486980, surf ?6, rect1 208, rect2 64, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 737
+func 0x484230, surf ?6, rect1 0, rect2 496, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 3, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 738
+func 0x486b00, surf ?4, rect1 80, rect2 0, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 3, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 739
+func 0x484230, surf ?4, rect1 176, rect2 416, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 6, coin 4, bonus 0, nameptr0x0, namestring 0
+npc no: 740
+func 0x484230, surf ?4, rect1 448, rect2 320, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 6, coin 4, bonus 0, nameptr0x0, namestring 0
+npc no: 741
+func 0x484230, surf ?4, rect1 224, rect2 96, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 3, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 742
+func 0x486c70, surf ?6, rect1 0, rect2 64, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 743
+func 0x486ea0, surf ?1, rect1 32, rect2 224, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 744
+func 0x487070, surf ?1, rect1 64, rect2 224, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 745
+func 0x487260, surf ?10, rect1 0, rect2 96, rect3 80, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 746
+func 0x4861b0, surf ?3, rect1 128, rect2 176, rect3 64, rect4 16, 0, 1, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 747
+func 0x487560, surf ?5, rect1 640, rect2 416, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 748
+func 0x422050, surf ?6, rect1 96, rect2 656, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 749
+func 0x484230, surf ?6, rect1 960, rect2 384, rect3 64, rect4 80, 0, 0, 0, 0, 0, #0, 3, coin 2, bonus 0, nameptr0x0, namestring 0
+npc no: 750
+func 0x484b80, surf ?6, rect1 208, rect2 656, rect3 48, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 751
+func 0x487880, surf ?6, rect1 0, rect2 0, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 752
+func 0x4878b0, surf ?4, rect1 448, rect2 176, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 753
+func 0x487920, surf ?6, rect1 144, rect2 656, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 754
+func 0x486690, surf ?6, rect1 56, rect2 176, rect3 8, rect4 8, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 755
+func 0x484230, surf ?2, rect1 96, rect2 192, rect3 32, rect4 32, 0, 0, 0, 0, 0, #0, 2, coin 1, bonus 0, nameptr0x0, namestring 0
+npc no: 756
+func 0x487460, surf ?10, rect1 320, rect2 0, rect3 64, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 757
+func 0x487460, surf ?10, rect1 208, rect2 896, rect3 48, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 758
+func 0x4875d0, surf ?4, rect1 32, rect2 384, rect3 32, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 759
+func 0x4876d0, surf ?6, rect1 992, rect2 96, rect3 16, rect4 16, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 760
+func 0x487820, surf ?4, rect1 0, rect2 288, rect3 96, rect4 96, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 761
+func 0x487820, surf ?4, rect1 0, rect2 0, rect3 128, rect4 128, 0, 0, 0, 0, 0, #0, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 762
+func 0x4174a0, surf ?5, rect1 544, rect2 448, rect3 32, rect4 32, 0, 0, 3, 3, 3, #7, 1, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 763
+func 0x4174a0, surf ?5, rect1 512, rect2 448, rect3 32, rect4 32, 0, 0, 5, 5, 8, #9, 3, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 764
+func 0x4177e0, surf ?5, rect1 384, rect2 512, rect3 32, rect4 32, 0, 0, 4, 4, 4, #14, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 765
+func 0x417990, surf ?4, rect1 0, rect2 0, rect3 32, rect4 32, 0, 0, 3, 3, 3, #11, 0, coin 0, bonus 0, nameptr0x0, namestring 0
+npc no: 766
+func 0x417990, surf ?4, rect1 0, rect2 0, rect3 32, rect4 32, 0, 0, 3, 3, 3, #12, 0, coin 0, bonus 0, nameptr0x0, namestring 0

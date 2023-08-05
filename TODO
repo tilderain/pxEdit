@@ -1,0 +1,24 @@
+beos window dragger
+
+display entity/tile as dimmed if not selected
+
+switch to entity/tile mode hotkey
+different tile highlight when in entity/tile mode
+
+tab through textboxes
+set language box hint for textboxes
+
+
+Color guide:
+
+Green:
+	"Helpful" or friendly entities. 
+Red: Enemies
+Yellow: Utility or otherwise unseen entities.
+Magenta: Crashing entities.
+
+stage preview in the stage list
+
+level editing demo playback??
+
+bottom right corner hosting/connected indicator

@@ -15,11 +15,11 @@ tileinfo = readEntityInfo()
 
 memo = []
 
-for file in sorted(os.listdir("../Kero Blaster/rsc_k/img/")):
+for file in sorted(os.listdir("../Kero Blaster/Resource/img/")):
 	attr = pxMap.PxPackLayer()
 	if not file.endswith(".pxattr"): continue
 	print(file)
-	attr.load("../Kero Blaster/rsc_k/img/" + file)
+	attr.load("../Kero Blaster/Resource/img/" + file)
 	
 
 	for y in range(attr.height):

@@ -1,5 +1,7 @@
 # pylint: disable=no-member
 import os
+
+from sdl2.sdlttf import TTF_SetFontKerning
 os.environ["PYSDL2_DLL_PATH"] = "./"
 import sdl2.ext
 import const
@@ -316,6 +318,7 @@ class UITextInput(UIElement):
 		return True
 
 	def render(self, x, y):
+		#TODO: render highlighted box when focussed
 		renderWindowBox(self, *rectsUIConcave, self.parent.x, self.parent.y)
 
 		text = self.text
@@ -561,6 +564,7 @@ class UITooltip(UIWindow):
 
 		for lines in gxEdit.tooltipText:
 			TTF_SetFontStyle(gFont, lines[2])
+			TTF_SetFontKerning(gFont, False)
 			textSurf = TTF_RenderText_Blended_Wrapped(gFont, ctypes.c_char_p(lines[0].encode("utf-8")), lines[1], ctypes.c_uint(int(200)))
 
 			textWidths.append(textSurf.contents.w)
@@ -837,7 +841,7 @@ def editPxPackAttributes(window, elem, gxEdit):
 	curStage.pack.bg_g = int(paramG)
 	curStage.pack.bg_b = int(paramB)
 
-	for i in range(3):
+	for i in range(1):
 		paramST = window.elements[f"map{i}STEdit"].text
 		paramV = window.elements[f"map{i}VEdit"].text
 		try:
@@ -859,7 +863,7 @@ def editPxPackAttributes(window, elem, gxEdit):
 		#TODO fix path var
 		curStage.pack.layers[i].partsName = paramParts
 		if curStage.loadParts(i):
-			curStage.attrs[i].load("./Kero Blaster/rsc_k/img/" + paramParts + ".pxattr")
+			curStage.attrs[i].load("./Kero Blaster/Resource/img/" + paramParts + ".pxattr")
 			curStage.createMapSurface(i)
 			curStage.renderMapToSurface(i)
 		else:
@@ -896,13 +900,13 @@ def togglePxPackAttributes(window, elem, gxEdit):
 	elem.elements["map0STEdit"].text = str(curStage.pack.layers[0].scrolltype)
 	elem.elements["map0VEdit"].text = str(curStage.pack.layers[0].visibility)
 
-	elem.elements["map1PartsEdit"].text = curStage.pack.layers[1].partsName
-	elem.elements["map1STEdit"].text = str(curStage.pack.layers[1].scrolltype)
-	elem.elements["map1VEdit"].text = str(curStage.pack.layers[1].visibility)
-
-	elem.elements["map2PartsEdit"].text = curStage.pack.layers[2].partsName
-	elem.elements["map2STEdit"].text = str(curStage.pack.layers[2].scrolltype)
-	elem.elements["map2VEdit"].text = str(curStage.pack.layers[2].visibility)
+	#elem.elements["map1PartsEdit"].text = curStage.pack.layers[1].partsName
+	#elem.elements["map1STEdit"].text = str(curStage.pack.layers[1].scrolltype)
+	#elem.elements["map1VEdit"].text = str(curStage.pack.layers[1].visibility)
+#
+	#elem.elements["map2PartsEdit"].text = curStage.pack.layers[2].partsName
+	#elem.elements["map2STEdit"].text = str(curStage.pack.layers[2].scrolltype)
+	#elem.elements["map2VEdit"].text = str(curStage.pack.layers[2].visibility)
 
 	elem.x = gWindowWidth // 2 - elem.w // 2
 	elem.y = gWindowHeight // 2 - elem.h // 2
@@ -1714,7 +1718,7 @@ class Interface:
 				 self.renderer.copy(gSurfaces[SURF_COLOR_ORANGE_TRANSPARENT], dstrect=dstrect)
 
 			if o.string:
-				renderText(o.string, sdlColorWhite, TTF_STYLE_NORMAL, dstrect[0] + (const.tileWidth*mag), dstrect[1] + 2*mag)
+				renderText(o.string, sdlColorWhite, TTF_STYLE_NORMAL, dstrect[0] + (const.tileWidth//2*mag), dstrect[1] + 2*mag)
 			xys.append((dstx, dsty))
 			
 	def drawBox(self, renderer, surf, dstx, dsty, w, h, size=1):

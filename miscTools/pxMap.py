@@ -2,8 +2,6 @@ import io, os, struct
 import mmap
 from ctypes import c_short
 
-from const import ENTITY_SCALE
-
 def writePixelString(fp, string):
 	length = len(string.encode("shift-jis"))
 	fp.write(struct.pack("<B", length))
@@ -100,13 +98,13 @@ class PxPackLayer:
 		self.tiles = []
 
 		#TODO: verify header minus numbers
-		#stream.read(8) #PXMAP01
+		stream.read(8) #PXMAP01
 		self.width = readInt(stream, 2)
 		self.height = readInt(stream, 2)
 
 		if self.width * self.height == 0: return True
 
-		self.type = 0
+		self.type = readInt(stream, 1)
 		if self.type == 0:
 			for i in range(self.height):
 				byt = stream.read(self.width)
@@ -125,13 +123,13 @@ class PxPackLayer:
 		return self.loadFromPack(stream)
 
 	def saveToPack(self, f):
-		#f.write(bytes(pxmapMagic.encode("ascii")))
+		f.write(bytes(pxmapMagic.encode("ascii")))
 		f.write(struct.pack("<H", self.width))
 		f.write(struct.pack("<H", self.height))
 
 		if self.width * self.height == 0: return
 
-		#f.write(struct.pack("<B", self.type))
+		f.write(struct.pack("<B", self.type))
 
 		if self.type == 0:
 			for y in self.tiles:
@@ -212,11 +210,11 @@ class PxPack:
 		#stream.seek(16)
 
 		self.description = readPixelString(stream)
-		self.spritesheet = readPixelString(stream)
 		self.left_field = readPixelString(stream)
 		self.right_field = readPixelString(stream)
 		self.up_field = readPixelString(stream)
 		self.down_field = readPixelString(stream)
+		self.spritesheet = readPixelString(stream)
 
 		self.area_x = readInt(stream, 2)
 		self.area_y = readInt(stream, 2)
@@ -229,11 +227,13 @@ class PxPack:
 		for i in range(LAYER_COUNT):
 			layer = PxPackLayer()
 
+			layer.partsName = readPixelString(stream)
+			layer.visibility = readInt(stream, 1)
+			layer.scrolltype = readInt(stream, 1)
 			self.layers.append(layer)
 
 		for i in range(LAYER_COUNT):
 			layer = self.layers[i]
-			layer.partsName = self.spritesheet
 			layer.loadFromPack(stream)
 		
 		entityCount = readInt(stream, 2)
@@ -247,7 +247,7 @@ class PxPack:
 			flag = readInt(stream, 2)
 
 			string = readPixelString(stream)
-			self.eve.units.append(PxPackUnit(bits,code_char,param2,x*ENTITY_SCALE,y*ENTITY_SCALE,flag,string, self.eve._count))
+			self.eve.units.append(PxPackUnit(bits,code_char,param2,x,y,flag,string, self.eve._count))
 			self.eve._count += 1
 
 		stream.close()
@@ -261,13 +261,13 @@ class PxPack:
 			print("Error while opening {}: {}".format(path, e))
 			return False
 		else:
-			#f.write(bytes(pxpackMagic.encode("ascii")))
+			f.write(bytes(pxpackMagic.encode("ascii")))
 			writePixelString(f, self.description)
-			writePixelString(f, self.spritesheet)
 			writePixelString(f, self.left_field)
 			writePixelString(f, self.right_field)
 			writePixelString(f, self.up_field)
 			writePixelString(f, self.down_field)
+			writePixelString(f, self.spritesheet)
 
 			f.write(struct.pack("<H", self.area_x))
 			f.write(struct.pack("<H", self.area_y))
@@ -277,14 +277,14 @@ class PxPack:
 			f.write(struct.pack("<B", self.bg_g))
 			f.write(struct.pack("<B", self.bg_b))
 
-			LAYER_COUNT = 1
+			LAYER_COUNT = 3
 
 			for i in range(LAYER_COUNT):
 				layer = self.layers[i]
 
-				#writePixelString(f, layer.partsName)
-				#f.write(struct.pack("<B", layer.visibility))
-				#f.write(struct.pack("<B", layer.scrolltype))
+				writePixelString(f, layer.partsName)
+				f.write(struct.pack("<B", layer.visibility))
+				f.write(struct.pack("<B", layer.scrolltype))
 			for i in range(LAYER_COUNT):
 				self.layers[i].saveToPack(f)
 
@@ -294,8 +294,8 @@ class PxPack:
 				f.write(struct.pack("<B", o.type1))
 				f.write(struct.pack("<B", o.param2))
 
-				f.write(struct.pack("<h", o.x//2))
-				f.write(struct.pack("<h", o.y//2))
+				f.write(struct.pack("<h", o.x))
+				f.write(struct.pack("<h", o.y))
 				f.write(struct.pack("<H", o.flag))
 				writePixelString(f, o.string)
 
