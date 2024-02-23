@@ -131,7 +131,7 @@ class StagePrj:
 		if self.pack.load(fieldPath + self.stageName + pxPackExt):
 			for i in range(3):
 				self.loadParts(i)
-				self.attrs[i].load(imgPath + self.pack.layers[i].partsName + pxAttrExt)
+				self.attrs[i].load(imgPath + self.pack.layers[i].partsName + pxAttrExt, printError=False)
 				self.createMapSurface(i)
 				self.renderMapToSurface(i)
 			return True
@@ -146,7 +146,7 @@ class StagePrj:
 					self.attrs[layerNo].height = self.parts[layerNo].size[1] // const.tileWidth
 			return True
 		except (OSError, IOError, sdl2.ext.SDLError) as e:
-			print("Error while loading parts {} {}".format(layerNo, e))
+			#print("Error while loading parts {} {}".format(layerNo, e))
 			return False
 
 	def save(self):
@@ -176,7 +176,7 @@ class StagePrj:
 		if self.lastBackupPos == self.undoPos:
 			return False
 
-		print("--Backing up stage {}...--".format(self.stageName))
+		print("-- Backing up stage {}... --".format(self.stageName))
 
 		date = datetime.now()
 		dateMin = date.strftime(backupTimeFormat)
@@ -483,6 +483,9 @@ def main():
 	sdl2.ext.init()
 	#To disable texture destruction on window resize
 	sdl2.SDL_SetHint(sdl2.SDL_HINT_RENDER_DRIVER, b"opengl")
+#	sdl2.SDL_SetHint(sdl2.SDL_HINT_DPI_SCALING "0"
+#	sdl2.SDL_SetHint(sdl2.SDL_HINT_DPI_AWARENESS "system"
+#	sdl2.SDL_SetHint(sdl2.SDL_HINT_VIDEO_HIGHDPI_DISABLED "1"
 
 	if TTF_Init() == -1:
 		print("Error initting ttf: ", TTF_GetError())
@@ -591,9 +594,11 @@ def main():
 			if event.contents.window.event == sdl2.SDL_WINDOWEVENT_SIZE_CHANGED:
 				interface.gWindowWidth = event.contents.window.data1
 				interface.gWindowHeight = event.contents.window.data2
+
+				renderer.logical_size = (interface.gWindowWidth, interface.gWindowHeight)
 				
-				renderEditor()
-				renderer.present()
+				#renderEditor()
+				#renderer.present()
 		return 0
 	reFunc = sdl2.SDL_EventFilter(resizeEventWatch)
 	sdl2.SDL_AddEventWatch(reFunc, window.window)
@@ -772,7 +777,7 @@ def main():
 
 		#TODO: do a getticks system
 		renderer.present()
-		sdl2.SDL_Delay(8)
+		sdl2.SDL_Delay(20)
 
 		#window.refresh()
 	sdl2.ext.quit()

@@ -1,17 +1,21 @@
 import io, mmap
 
-#Variable-length midi stuff copy pasted from some place. Thank you open source contributors
- 
+
 def read_int(stream):
 	return struct.unpack('<i', stream.read(4))[0]
 
-# function for reading variable-length quantities from a byte stream
 def vlq(stream):
-	v = stream.read_byte()
-	if v > 0x7f:
-		return v + 0x80*(vlq(stream)-1)
-	else:
-		return v
+	count = 0
+	tot = 0
+	while True:
+		v = stream.read_byte()
+		if v >= 0x80:
+			tot += (v & 0x7f) << (count * 7)
+			count += 1
+		else:
+			tot += (v << (count * 7))
+			break
+	return tot
 		
 def writeVarLength(i):
 	'''Accept an input, and write a MIDI-compatible variable length stream

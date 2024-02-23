@@ -87,6 +87,8 @@ class PxPackLayer:
 		#max for an attr is 16*16
 		self.width = 16
 		self.height = 16
+
+		#TODO: compression
 		self.type = 0
 
 
@@ -109,12 +111,13 @@ class PxPackLayer:
 				self.tiles.append([tile for tile in byt])
 			return True
 	
-	def load(self, path): #readEntities
+	def load(self, path, printError=True): #readEntities
 		try:
 			f = open(path, 'rb')
 			stream = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
 		except (OSError, IOError) as e:
-			print("Error while opening {}: {}".format(path, e))
+			if printError:
+				print("Error while opening {}: {}".format(path, e))
 			return False
 
 		return self.loadFromPack(stream)

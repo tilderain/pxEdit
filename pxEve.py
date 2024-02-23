@@ -1,17 +1,19 @@
 import io, mmap
 import math, itertools
 from dataclasses import dataclass
-# function for reading variable-length quantities from a byte stream
-# from georgealways/pxtone.py
-
-#TODO: replace tihs with my own function
 
 def vlq(stream):
-	v = stream.read_byte()
-	if v > 0x7f:
-		return v + 0x80*(vlq(stream)-1)
-	else:
-		return v
+	count = 0
+	tot = 0
+	while True:
+		v = stream.read_byte()
+		if v >= 0x80:
+			tot += (v & 0x7f) << (count * 7)
+			count += 1
+		else:
+			tot += (v << (count * 7))
+			break
+	return tot
 
 def writeVarLength(i):
 	output = []

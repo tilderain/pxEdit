@@ -316,6 +316,7 @@ class UITextInput(UIElement):
 		return True
 
 	def render(self, x, y):
+		#TODO: render highlighted box when focussed
 		renderWindowBox(self, *rectsUIConcave, self.parent.x, self.parent.y)
 
 		text = self.text
