@@ -1408,6 +1408,7 @@ class Interface:
 						gxEdit.tooltipText.append([gxEdit.entityInfo[index][2], paramColor, TTF_STYLE_NORMAL])
 
 				gxEdit.tooltipText.append(["Param2: " + str(o.param2), sdlColorWhite, TTF_STYLE_NORMAL])
+				gxEdit.tooltipText.append(["Id: " + str(o.id), sdlColorWhite, TTF_STYLE_NORMAL])
 
 	def renderTilePreview(self, gxEdit, stage):
 
