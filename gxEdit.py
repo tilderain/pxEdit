@@ -146,7 +146,7 @@ class StagePrj:
 					self.attrs[layerNo].height = self.parts[layerNo].size[1] // const.tileWidth
 			return True
 		except (OSError, IOError, sdl2.ext.SDLError) as e:
-			#print("Error while loading parts {} {}".format(layerNo, e))
+			print("Error while loading parts {} {}".format(layerNo, e))
 			return False
 
 	def save(self):
