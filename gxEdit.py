@@ -412,6 +412,10 @@ class Editor:
 				stage.pack.eve.units.append(o)
 
 		stage.undoPos -= 1
+		if undoPos == 1:
+			return
+		if(undoStack[stage.undoPos].commit == False):
+			gxEdit.executeUndo()
 		
 
 	def executeRedo(self):
@@ -442,6 +446,9 @@ class Editor:
 
 											
 		stage.undoPos += 1
+
+		if(undoStack[stage.undoPos].commit == False):
+			gxEdit.executeRedo()
 
 	def backupStages(self):
 		if not os.path.exists(fieldPath + backupFolderName):
@@ -660,6 +667,7 @@ def main():
 				input.runMouse1(gxEdit, curStage, event.button)
 				input.runMouse2(gxEdit, curStage, event.button)
 				input.runMouse3(gxEdit, curStage, event.button)
+				input.runMouseDrag(gxEdit, curStage, event.button)
 			elif event.type == sdl2.SDL_MOUSEBUTTONUP:
 				input.runMouseUp(gxEdit, curStage, event.button)
 				mouseHeld = False
