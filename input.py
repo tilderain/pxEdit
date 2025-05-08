@@ -238,8 +238,9 @@ def runMouseUp(gxEdit, curStage, mouse):
 		gxEdit.elements["toolsWindow"].elements["butDraw"].handleMouse1(None, gxEdit)
 
 
-def runMouseDrag(gxEdit, stage):			
-	mouse = util.getMouseState()
+def runMouseDrag(gxEdit, stage, mouse):			
+	#mouse = util.getMouseState()
+	mouse.button = mouse.state
 
 	for i, elem in reversed(list(gxEdit.elements.items())):
 		if not elem.visible: continue

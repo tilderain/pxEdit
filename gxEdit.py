@@ -651,6 +651,8 @@ def main():
 					mouseover = False
 			elif event.type == sdl2.SDL_KEYDOWN:
 				input.runKeyboard(gxEdit, curStage, scaleFactor, event.key)
+			elif event.type == sdl2.SDL_MOUSEMOTION:
+				input.runMouseDrag(gxEdit, curStage, event.motion)
 			elif event.type == sdl2.SDL_MOUSEWHEEL:
 				input.runMouseWheel(curStage, event.wheel)
 			elif event.type == sdl2.SDL_MOUSEBUTTONDOWN:
@@ -739,7 +741,7 @@ def main():
 		clampUiWindows()
 
 		curStage = gxEdit.stages[gxEdit.curStage]
-		input.runMouseDrag(gxEdit, curStage)
+		#input.runMouseDrag(gxEdit, curStage)
 		runTileSelection(curStage)
 
 		gui.fill()
