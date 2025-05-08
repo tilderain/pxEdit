@@ -12,11 +12,12 @@ import copy
 
 #TODO: find a better place for this
 class UndoAction:
-	def __init__(self, action, reverse, forward, param=None):
+	def __init__(self, action, reverse, forward, param=None, commit=True):
 		self.action = action
 		self.reverse = copy.deepcopy(reverse)
 		self.forward = copy.deepcopy(forward)
 		self.param = param
+		self.commit = commit
 
 def runMouseWheel(stage, wheel):
 	stage.scroll -= wheel.y
@@ -145,7 +146,7 @@ def runMouseUp(gxEdit, curStage, mouse):
 			stage = gxEdit.stages[gxEdit.curStage]
 			undo = UndoAction(const.UNDO_ENTITY_MOVE, stage.selectedEntitiesDragStart, stage.selectedEntities)
 			stage.addUndo(undo)
-	elif gxEdit.currentEditMode == const.EDIT_TILE and gxEdit.rectanglePaintBoxStart != [-1, -1]:
+	elif gxEdit.currentEditMode == const.EDIT_TILE:
 		map = curStage.pack.layers[gxEdit.currentLayer]
 		if not len(map.tiles): return
 
@@ -364,7 +365,7 @@ def runMouseDrag(gxEdit, stage, mouse):
 		map.modify(tiles)
 		#TODO: disable undo while dragging
 		#TODO: commit undo action only when mouseup
-		undo = UndoAction(const.UNDO_TILE, oldTiles, tiles, gxEdit.currentLayer)
+		undo = UndoAction(const.UNDO_TILE, oldTiles, tiles, gxEdit.currentLayer, False)
 		stage.addUndo(undo)
 
 		stage.lastTileEdit = [x, y]
