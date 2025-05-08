@@ -131,7 +131,7 @@ class StagePrj:
 		if self.pack.load(fieldPath + self.stageName + pxPackExt):
 			for i in range(1):
 				self.loadParts(i)
-				self.attrs[i].load(imgPath + self.pack.layers[i].partsName + pxAttrExt, printError=False)
+				self.attrs[i].load(fieldPath + self.pack.layers[i].partsName + pxAttrExt, printError=False)
 				self.createMapSurface(i)
 				self.renderMapToSurface(i)
 			return True
@@ -777,7 +777,7 @@ def main():
 
 		#TODO: do a getticks system
 		renderer.present()
-		sdl2.SDL_Delay(20)
+		sdl2.SDL_Delay(12)
 
 		#window.refresh()
 	sdl2.ext.quit()
