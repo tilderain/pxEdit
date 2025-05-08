@@ -11,7 +11,6 @@ from datetime import datetime
 from dataclasses import dataclass
 
 from collections import Counter
-
 import pxEve, pxMap, interface, input
 import const
 os.environ["PYSDL2_DLL_PATH"] = "./"
@@ -186,12 +185,13 @@ def main():
 		gui.renderTilePalette(gxEdit, curStage)
 	
 		for _, elem in gxEdit.elements.items():
-			if elem.visible: 
+			if elem.visible and elem.type != const.WINDOW_TOOLTIP: 
 				gui.renderUIWindow(gxEdit, elem)
 				elem.render(gxEdit, curStage)
 
 		for _, elem in gxEdit.elements.items():
-			if elem.type == const.WINDOW_TOOLTIP and elem.visible: elem.render(gxEdit, curStage)
+			if elem.type == const.WINDOW_TOOLTIP and elem.visible:
+				elem.render(gxEdit, curStage)
 
 	#for continuous resizing
 	def resizeEventWatch(data, event):
