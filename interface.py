@@ -735,14 +735,17 @@ class EntityPaletteWindow(UIWindow):
 
 		mag = gxEdit.entityPaletteMag
 		units = gSurfaces[SURF_UNITS]
-		srcrect = units.area
+		srcrect = list(units.area)
+		recth = len(gxEdit.entityInfo) // 16 * 32
+		srcrect[3] = recth
 
 		dstx = self.x + self.elements["picker"].x
 		dsty = self.y + self.elements["picker"].y
 		
 		#TODO: add dstrect mag
 
-		dstrect = (dstx, dsty, units.size[0] * mag, units.size[1] * mag)
+		#dstrect = (dstx, dsty, units.size[0] * mag, units.size[1] * mag)
+		dstrect = [dstx, dsty, units.size[0] * mag, recth * mag]
 		gInterface.renderer.copy(units, srcrect=srcrect, dstrect=dstrect)
 
 		#TODO: add selected ent border (properly)
@@ -765,7 +768,7 @@ class EntityPaletteWindow(UIWindow):
 		y = (mouse.y - self.y - self.elements["picker"].y) // const.tileWidth2
 
 		index = x + (y * 16)
-		if index >= const.entityFuncCount:
+		if index >= len(gxEdit.entityInfo):
 			return False
 		if index < 0:
 			return False

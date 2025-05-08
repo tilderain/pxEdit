@@ -549,8 +549,9 @@ def main():
 	#gxEdit.elements.append(interface.UIWindow(22, 22, 256, 256))
 	#gxEdit.elements.append(interface.UIWindow(300, 300, 260, 272, const.WINDOW_TILEPALETTE))
 
+	entityinfoheight = len(gxEdit.entityInfo) // 16 * 34
 	gxEdit.elements["tilePalette"] = interface.TilePaletteWindow(1200, 400, 256, 280, const.WINDOW_TILEPALETTE)
-	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(1450, 400, 256, 280, const.WINDOW_ENTITYPALETTE)
+	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(1450, 400, 256*2, entityinfoheight, const.WINDOW_ENTITYPALETTE)
 
 	gxEdit.elements["toolsWindow"] = interface.ToolsWindow(800, 400, 190, 86, const.WINDOW_TOOLS)
 

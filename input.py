@@ -77,7 +77,7 @@ def runMouse1(gxEdit, stage, mouse):
 		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // const.tileWidth2
 
 		index = x + (y * 16)
-		if index > const.entityFuncCount:
+		if index > len(gxEdit.entityInfo):
 			return
 		if index < 0:
 			return
