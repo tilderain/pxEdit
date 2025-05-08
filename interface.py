@@ -745,7 +745,7 @@ class EntityPaletteWindow(UIWindow):
 		mag = gxEdit.entityPaletteMag
 		units = gSurfaces[SURF_UNITS]
 		srcrect = list(units.area)
-		recth = len(gxEdit.entityInfo) // 16 * 32
+		recth = (len(gxEdit.entityInfo) + 1) // 16 * 32
 		srcrect[3] = recth
 
 		dstx = self.x + self.elements["picker"].x
