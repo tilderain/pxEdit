@@ -10,6 +10,8 @@ import multi
 
 import copy
 
+from editor import gxEdit
+
 #TODO: find a better place for this
 class UndoAction:
 	def __init__(self, action, reverse, forward, param=None, commit=True):
@@ -23,7 +25,7 @@ def runMouseWheel(stage, wheel):
 	stage.scroll -= wheel.y
 
 
-def runMouse1(gxEdit, stage, mouse):
+def runMouse1(stage, mouse):
 	if mouse.button != sdl2.SDL_BUTTON_LEFT: return False
 
 	map = stage.pack.layers[gxEdit.currentLayer]
