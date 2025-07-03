@@ -41,6 +41,7 @@ backupFolderName = "backup"
 
 pxPackExt = current_game_config.get('stage_ext')
 pxAttrExt = current_game_config.get('attr_ext')
+backupTimeFormat = "%Y%m%d-%H%M%S"
 
 class StagePrj:
 	def __init__(self, stageName):
