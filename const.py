@@ -47,10 +47,8 @@ STYLE_TOOLTIP_YELLOW = 1
 TEXTINPUTTYPE_NORMAL = 0
 TEXTINPUTTYPE_NUMBER = 1
 
-#TODO... really gotta find somewhere good to put this
+
 tileScale = 1
-tileWidth = 8 * tileScale
-tileWidth2 = 16 * tileScale
 
 ENTITY_SCALE = 1
 

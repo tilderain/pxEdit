@@ -165,8 +165,8 @@ def runMouseUp(gxEdit, curStage, mouse):
 	elif gxEdit.currentEditMode == const.EDIT_TILE and gxEdit.currentTilePaintMode == const.PAINT_COPY:
 		stage = curStage
 		mag = gxEdit.magnification
-		x = int(mouse.x // (const.tileWidth * mag) + stage.hscroll)
-		y = int(mouse.y // (const.tileWidth * mag) + stage.scroll)
+		x = int(mouse.x // (gxEdit.tileWidth * mag) + stage.hscroll)
+		y = int(mouse.y // (gxEdit.tileWidth * mag) + stage.scroll)
 		stage.selectedTilesEnd[0] = x
 		stage.selectedTilesEnd[1] = y
 	
@@ -191,69 +191,7 @@ def runMouseUp(gxEdit, curStage, mouse):
 		gxEdit.copyingTiles = False
 
 		gxEdit.elements["toolsWindow"].elements["butDraw"].handleMouse1(None, gxEdit)
-	elif gxEdit.currentEditMode == const.EDIT_TILE:
-		map = curStage.pack.layers[gxEdit.currentLayer]
-		if not len(map.tiles): return
 
-		curStage.lastTileEdit == [-1, -1]
-
-		if gxEdit.tileHighlightAnimate:
-			gxEdit.tileHighlightTimer = 120
-
-		start = gxEdit.rectanglePaintBoxStart[:]
-		end = gxEdit.rectanglePaintBoxEnd[:]
-		start2 = curStage.selectedTilesStart[:]
-		end2 = curStage.selectedTilesEnd[:]
-
-		if start[0] > end[0]:
-			start[0], end[0] = end[0], start[0]
-		if end[1] < start[1]:
-			start[1], end[1] = end[1], start[1]
-		if start2[0] > end2[0]:
-			start2[0], end2[0] = end2[0], start2[0]
-		if end2[1] < start2[1]:
-			start2[1], end2[1] = end2[1], start2[1]
-		startX = curStage.selectedTilesStart[0]
-		startY = curStage.selectedTilesStart[1]
-		tiles = []
-		oldTiles = []
-
-		width = end[0] - start[0] + 1
-		height = end[1] - start[1] + 1
-
-		w2 = end2[0] - start2[0] + 1
-		for y in range(height):
-			for x in range(width):
-				tile = curStage.selectedTiles[((x % w2) + (y*w2)) % len(curStage.selectedTiles)]
-				xx = x + start[0]
-				yy = y + start[1]
-				if xx >= map.width or yy >= map.height: 
-					continue
-
-				tiles.append([[xx,yy], [tile[0], tile[1]]])
-
-				oldTileX = map.tiles[yy][xx] % 16
-				oldTileY = map.tiles[yy][xx] // 16
-
-				oldTiles.append([[xx,yy], [oldTileX, oldTileY]])
-
-		if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
-			multi.sendTileEditPacket(gxEdit, gxEdit.curStage, tiles, gxEdit.currentLayer)
-			return
-		if gxEdit.multiplayerState == const.MULTIPLAYER_HOST:
-			multi.serverSendTileEdit(gxEdit, gxEdit.curStage, tiles, gxEdit.currentLayer)
-		for pos, tile in tiles:
-			curStage.renderTileToSurface(pos[0], pos[1], tile[0],
-											tile[1], gxEdit.currentLayer)
-		map.modify(tiles)
-		#TODO: disable undo while dragging
-		#TODO: commit undo action only when mouseup
-		undo = UndoAction(const.UNDO_TILE, oldTiles, tiles, gxEdit.currentLayer)
-		curStage.addUndo(undo)
-
-		gxEdit.rectanglePaintBoxStart = [-1, -1]
-		gxEdit.rectanglePaintBoxEnd = [-1, -1]
-		
 def runMouseDrag(gxEdit, stage, mouse):			
 	#mouse = util.getMouseState()
 	mouse.button = mouse.state

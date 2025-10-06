@@ -38,7 +38,12 @@ class PxEve:
 		for ent in ents:
 			for o in self.units:
 				if ent.id == o.id:
-					self.units[self.units.index(o)] = ent
+					# Use list.index() to find and replace the object
+					try:
+						idx = self.units.index(o)
+						self.units[idx] = ent
+					except ValueError:
+						pass # Should not happen if 'o' is from self.units
 
 	def move(self, ids, xoffset, yoffset):
 		for num in ids:
@@ -303,11 +308,11 @@ class PxPack:
 
 			return True
 		
-
-class PxMapAttr: #use the same class for both
+# --- This is the class definition that matters ---
+class PxMapAttr:
 	def __init__(self):
-		self.width = None
-		self.height = None
+		self.width = 0   # <-- MUST be initialized to 0, not None
+		self.height = 0  # <-- MUST be initialized to 0, not None
 		self.tiles = []
 	def load(self, path):
 		try:
@@ -374,3 +379,35 @@ class PxMapAttr: #use the same class for both
 	def get(self):
 		return self.tiles[:]
 
+# This PxMap class is for loading Cave Story .pxm files.
+class PxMap:
+    def __init__(self):
+        self.width = 0
+        self.height = 0
+        self.tiles = []
+
+    def load(self, path, printError=True):
+        try:
+            with open(path, 'rb') as f:
+                magic = f.read(3)
+                if magic != b'PXM':
+                    raise ValueError(f"Invalid PXM file format in {path}")
+                f.read(1) # Skip one dummy byte
+                width_bytes = f.read(2)
+                height_bytes = f.read(2)
+                self.width = int.from_bytes(width_bytes, byteorder='little')
+                self.height = int.from_bytes(height_bytes, byteorder='little')
+                data = f.read(self.width * self.height)
+                self.tiles = []
+                for i in range(self.height):
+                    start = i * self.width
+                    end = start + self.width
+                    self.tiles.append(list(data[start:end]))
+        except (OSError, IOError) as e:
+            if printError:
+                print("Error while opening {}: {}".format(path, e))
+            return False
+        except (ValueError, struct.error) as e:
+            print(f"Error parsing map file {path}: {e}")
+            return False
+        return True

@@ -24,10 +24,14 @@ saver = Saver(game_manager)
 
 # Default game and path for now
 # TODO: Make this user selectable
-game_manager.set_game("cave_story")
-game_manager.set_game_path("./CaveStory/")
-defaultStage = "Almond"
-
+if False:
+	game_manager.set_game("cave_story")
+	game_manager.set_game_path("./CaveStory/")
+	defaultStage = "Almond"
+else:
+	game_manager.set_game("kero_blaster")
+	game_manager.set_game_path("./Kero Blaster/")
+	defaultStage = "01field1"
 current_game_config = game_manager.get_current_game()
 
 dataPath = os.path.join(game_manager.get_current_game().base_path, current_game_config.get('data_path'))
@@ -44,185 +48,7 @@ pxAttrExt = current_game_config.get('attr_ext')
 backupTimeFormat = "%Y%m%d-%H%M%S"
 
 class StagePrj:
-	def __init__(self, stageName):
-		self.stageName = stageName
-		self.pack = pxMap.PxPack()
-		self.attrs = [pxMap.PxPackLayer(), pxMap.PxPackLayer(), pxMap.PxPackLayer()]
-
-		#TODO: for multiplayer
-		self.oldEve = None
-		self.oldMap = None
-
-		# tileset texture
-		self.parts = [None, None, None]
-
-		self.scroll = 0
-		self.hscroll = 0
-
-		# x, y of drag selected tiles in the tileset
-		self.selectedTiles = [[0, 0]]
-		# x, y of drag selection mousedown
-		self.selectedTilesStart = [0, 0]
-		# x, y of drag selection mouse up
-		self.selectedTilesEnd = [0, 0]
-
-		self.selectedEntities = []
-		self.selectedEntitiesDragStart = []
-
-		self.undoStack = [None]
-		self.undoPos = 0
-
-		self.lastSavePos = 0
-		self.lastBackupPos = 0
-
-		# to not spam edit commands
-		self.lastTileEdit = [None, None]
-
-		self.surfaces = [None, None, None]
-
-	def createMapSurface(self, layerNo):
-		del self.surfaces[layerNo]
-		self.surfaces.insert(layerNo, None)
-		if self.pack.layers[layerNo].width * self.pack.layers[layerNo].height == 0: return
-		
-		self.surfaces[layerNo] = interface.gSprfactory.create_texture_sprite(interface.gRenderer, 
-			(self.pack.layers[layerNo].width*const.tileWidth, self.pack.layers[layerNo].height*const.tileWidth), access=sdl2.SDL_TEXTUREACCESS_TARGET)
-	
-	def load(self):
-		#TODO: open dialogue box to see if there is a newer backup
-			#read last modified date
-			#Choose the backup you want to open.
-		
-		if self.pack.load(self.stageName):
-			for i in range(1):
-				self.loadParts(i)
-				self.attrs[i].load(fieldPath + "parts" + self.pack.layers[i].partsName + pxAttrExt, printError=True)
-				self.createMapSurface(i)
-				self.renderMapToSurface(i)
-			return True
-
-		return False
-
-	def loadParts(self, layerNo):
-		try:
-			self.parts[layerNo] = interface.gSprfactory.from_image(imgPath + "parts" + self.pack.layers[layerNo].partsName + ".png")
-			if not self.attrs[layerNo].width:
-					self.attrs[layerNo].width = self.parts[layerNo].size[0] // const.tileWidth
-					self.attrs[layerNo].height = self.parts[layerNo].size[1] // const.tileWidth
-			return True
-		except (OSError, IOError, sdl2.ext.SDLError) as e:
-			print("Error while loading parts {} {}".format(layerNo, e))
-			return False
-
-	def save(self):
-		#if self.lastSavePos == self.undoPos: #TODO: and pxattr not modified
-		#	return False
-
-		print("--Saving stage {}...--".format(self.stageName))
-		
-		self.pack.save(self.stageName)
-		#TODO: save to _temp, rename existing to _temp2, rename _temp to orig and delete temp2
-
-		#TODO: for save as, open all pxpacks in folder and change all references to new name
-
-		self.lastSavePos = self.undoPos
-		self.lastBackupPos = self.undoPos
-		print("saved.")
-
-		return True
-		
-	def backup(self):
-		#periodic backup...
-		#if there are changes to the file, back it up
-		#should follow format of backup_[mapname]_[yymmddhhmmss]
-		#remove oldest backup (gxedit.backuplimit)
-		#msg Backing up unsaved changes..
-
-		if self.lastBackupPos == self.undoPos:
-			return False
-
-		print("-- Backing up stage {}... --".format(self.stageName))
-
-		date = datetime.now()
-		dateMin = date.strftime(backupTimeFormat)
-
-		self.pack.save(fieldPath + backupFolderName + "/" + dateMin + "_" + self.stageName + pxPackExt)
-		
-		#self.eve.save(dataPath + backupFolderName + "/" + dateMin + "_" + eventOut)
-		#self.map.save(dataPath + backupFolderName + "/" + dateMin + "_" + mapOut)
-
-		self.lastBackupPos = self.undoPos
-
-		#backupId += 1
-
-		return True
-
-	def renderMapToSurface(self, layerNo):
-		map = self.pack.layers[layerNo]
-		if len(map.tiles) == 0: return
-
-		sdlrenderer = interface.gRenderer.sdlrenderer
-		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surfaces[layerNo].texture)
-		#sdl2.SDL_SetRenderDrawBlendMode(sdlrenderer, sdl2.SDL_BLENDMODE_NONE)
-		sdl2.SDL_SetTextureBlendMode(self.surfaces[layerNo].texture, sdl2.SDL_BLENDMODE_BLEND)
-
-		srcrect = sdl2.SDL_Rect(0,0,const.tileWidth,const.tileWidth)
-		dstrect = sdl2.SDL_Rect(0,0,const.tileWidth,const.tileWidth)
-
-
-		for x in range(map.width):
-			for y in range(map.height):
-				#TODO: detect if blank tile
-				#if map.tiles[y][x] == 0: continue
-				dstx = x * const.tileWidth
-				dsty = y * const.tileWidth
-
-				xx = map.tiles[y][x] % 16 #the magic number so that each 4 bits in a byte corresponds to the x, y position in the tileset
-				yy = map.tiles[y][x] // 16
-				srcx = xx * const.tileWidth
-				srcy = yy * const.tileWidth
-
-
-				srcrect.x = srcx
-				srcrect.y = srcy
-				dstrect.x = dstx
-				dstrect.y = dsty
-				try:
-					sdl2.SDL_RenderCopy(sdlrenderer, self.parts[layerNo].texture, srcrect, dstrect)
-				except:
-					break
-				#interface.gRenderer.copy(self.parts, srcrect, dstrect)
-		sdl2.SDL_SetRenderTarget(sdlrenderer, None)
-			
-	
-	def renderTileToSurface(self, x, y, tx, ty, layerNo):
-		dstx = x * const.tileWidth
-		dsty = y * const.tileWidth
-
-		srcx = tx * const.tileWidth
-		srcy = ty * const.tileWidth
-
-		sdlrenderer = interface.gRenderer.sdlrenderer
-		srcrect = (srcx, srcy, const.tileWidth, const.tileWidth)
-		dstrect = (dstx, dsty, const.tileWidth, const.tileWidth)
-
-		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surfaces[layerNo].texture)
-
-		sdl2.SDL_SetTextureBlendMode(self.parts[layerNo].texture, sdl2.SDL_BLENDMODE_NONE)
-
-		interface.gRenderer.copy(self.parts[layerNo], srcrect, dstrect)
-
-		sdl2.SDL_SetTextureBlendMode(self.parts[layerNo].texture, sdl2.SDL_BLENDMODE_BLEND)
-
-		sdl2.SDL_SetRenderTarget(sdlrenderer, None)
-
-	def addUndo(self, undo):
-		self.undoPos += 1
-		self.undoStack = self.undoStack[:self.undoPos]
-		self.undoStack.append(undo)
-
-class StagePrj:
-	def __init__(self, stageName, pack: Stage):
+	def __init__(self, stageName, pack: Stage, tile_width):
 		self.stageName = stageName
 		self.pack = pack
 
@@ -258,7 +84,7 @@ class StagePrj:
 		self.attrs = [None, None, None]
 		self.surfaces = [None, None, None]
 
-		self.tileWidth = 16
+		self.tileWidth = tile_width 
 
 	def createMapSurface(self, layerNo):
 		layer = self.pack.layers[layerNo]
@@ -291,29 +117,35 @@ class StagePrj:
 			current_game_config = game_manager.get_current_game()
 			tileset_ext = current_game_config.get('tileset_ext')
 			
-			tileset_name = self.pack.spritesheet
-			if not tileset_name: # Fallback if spritesheet is not set in pack
-				if current_game_config.name == "kero_blaster":
-					tileset_name = "parts" # Default for Kero Blaster
-				elif current_game_config.name == "cave_story":
-					tileset_name = "Prt" + self.stageName # Default for Cave Story
-				
+			# Each layer has its own partsName. Get it directly.
+			if len(self.pack.layers) <= layerNo or not self.pack.layers[layerNo]:
+				return False # This layer doesn't exist.
+			
+			tileset_name = self.pack.layers[layerNo].partsName
+
+			# If the partsName is empty (e.g., for an unused layer), don't try to load anything.
+			if not tileset_name:
+				if current_game_config.name == "cave_story" and layerNo == 0:
+					# Fallback for Cave Story's main layer
+					tileset_name = "Prt" + self.stageName
+				else:
+					return False
+
 			self.parts[layerNo] = interface.gSprfactory.from_image(imgPath + tileset_name + tileset_ext)
 			
-			# The attrs are now part of the pack.layers
-			# This logic seems to intend to set the size of an empty layer based on its parts image.
-			# We'll apply it to the layer being loaded.
-			if len(self.pack.layers) > layerNo and self.pack.layers[layerNo] and not self.pack.layers[layerNo].width:
+			# If the layer dimensions were 0, update them from the image size.
+			if not self.pack.layers[layerNo].width and self.parts[layerNo]:
 				self.pack.layers[layerNo].width = self.parts[layerNo].size[0] // self.tileWidth
 				self.pack.layers[layerNo].height = self.parts[layerNo].size[1] // self.tileWidth
 					
 			return True
 		except (OSError, IOError, sdl2.ext.SDLError) as e:
-			print("Error while loading parts {} {}".format(layerNo, e))
+			print("Error while loading parts for layer {}: {}".format(layerNo, e))
+			self.parts[layerNo] = None # Ensure it's None on failure
 			return False
 	def loadAttrs(self, layerNo):
 		current_game_config = game_manager.get_current_game()
-		self.attrs[layerNo] = pxMap.PxMapAttr() # Create instance
+		self.attrs[layerNo] = pxMap.PxMapAttr() # ALWAYS create the instance first.
 
 		if current_game_config.name == 'kero_blaster':
 			# Kero Blaster uses explicit .pxattr files
@@ -323,16 +155,22 @@ class StagePrj:
 				attr_path = os.path.join(imgPath, tileset_name + attr_ext)
 				if os.path.exists(attr_path):
 					self.attrs[layerNo].load(attr_path)
-				else:
-					# If file doesn't exist, create based on image size
+				elif self.parts[layerNo]: # If file doesn't exist, create based on image size
 					self.attrs[layerNo].width = self.parts[layerNo].size[0] // self.tileWidth
 					self.attrs[layerNo].height = self.parts[layerNo].size[1] // self.tileWidth
+				else:
+					self.attrs[layerNo].width = 0
+					self.attrs[layerNo].height = 0
 		
 		elif current_game_config.name == 'cave_story':
 			# Cave Story has no .pxattr, so we create attributes based on the tileset image size
 			if self.parts[layerNo]:
 				self.attrs[layerNo].width = self.parts[layerNo].size[0] // self.tileWidth
 				self.attrs[layerNo].height = self.parts[layerNo].size[1] // self.tileWidth
+			else:
+				# If no parts exist for this layer, initialize with 0 to prevent crashes.
+				self.attrs[layerNo].width = 0
+				self.attrs[layerNo].height = 0
 		return True
 	def save(self):
 		#if self.lastSavePos == self.undoPos: #TODO: and pxattr not modified
@@ -462,7 +300,7 @@ class Editor:
 		self.curStage = 0
 
 		# Game-specific dimensions
-		self.tileWidth = const.tileWidth # Default, will be updated
+		self.tileWidth = 16 # Default, will be updated
 
 		# zoom level
 		self.magnification = 3
@@ -570,6 +408,12 @@ class Editor:
 		base_tile_size = current_game.get('tile_size', 8) # Default to 8 if not in config
 		self.tileWidth = base_tile_size * const.tileScale
 
+		current_game_name = gxEdit.game_manager.get_current_game().name
+		if current_game_name == "cave_story":
+			self.tileWidth2 = self.tileWidth # Standard for entities
+		else: # kero_blaster
+			self.tileWidth2 = self.tileWidth * 2 # Standard for entities
+
 	def loadMeta(self, sprfactory):
 		result = True
 		result &= self.readEntityInfo()
@@ -577,11 +421,11 @@ class Editor:
 
 	def loadStage(self, stageName):
 		if not len(stageName): return False
-		self.update_tile_dimensions()
+		self.update_tile_dimensions() # <-- Must be called FIRST
 		print("Loading stage " + stageName)
 		try:
 			pack = self.loader.load_stage(stageName)
-			stage = StagePrj(stageName, pack)
+			stage = StagePrj(stageName, pack, self.tileWidth) # <-- Pass the correct width
 			result = stage.load()
 			if result:
 				self.stages.append(stage)

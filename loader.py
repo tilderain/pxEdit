@@ -2,7 +2,7 @@ import os
 import struct
 import mmap
 from stage import Stage, Layer, Entity
-from pxMap import PxEve
+from pxMap import PxEve, PxMap, PxMapAttr  # <-- IMPORT THE CORRECT CLASSES
 
 def read_pixel_string(stream):
     length = stream.read_byte()
@@ -120,61 +120,7 @@ class PxPack:
         f.close()
         return True
 
-import struct
-
-class PxMap:
-    def __init__(self):
-        self.width = 0
-        self.height = 0
-        self.tiles = []
-
-    def load(self, path):
-        try:
-            with open(path, 'rb') as f:
-                # Check magic number "PXM"
-                magic = f.read(3)
-                if magic != b'PXM':
-                    raise ValueError(f"Invalid PXM file format in {path}")
-
-                # Skip one dummy byte
-                f.read(1)
-
-                # Read width and height (2 bytes each, little-endian)
-                width_bytes = f.read(2)
-                height_bytes = f.read(2)
-                self.width = int.from_bytes(width_bytes, byteorder='little')
-                self.height = int.from_bytes(height_bytes, byteorder='little')
-
-                # Read tile data
-                data = f.read(self.width * self.height)
-                for i in range(self.height):
-                    start = i * self.width
-                    end = start + self.width
-                    self.tiles.append(list(data[start:end]))
-        except (OSError, IOError) as e:
-            raise FileNotFoundError(f"Error while opening {path}: {e}")
-        except (ValueError, struct.error) as e:
-            print(f"Error parsing map file {path}: {e}")
-        return True
-
-class PxMapAttr: #use the same class for both
-    def __init__(self):
-        self.width = None
-        self.height = None
-        self.tiles = []
-    def load(self, path):
-        try:
-            with open(path, 'rb') as f:
-                data = f.read()
-        except (OSError, IOError) as e:
-            raise FileNotFoundError(f"Error while opening {path}: {e}")
-        
-        self.width = int.from_bytes(data[0:2], byteorder='little')
-        self.height = int.from_bytes(data[2:4], byteorder='little')
-        for i in range(self.height):
-            self.tiles.append(list( data[4+i*self.width:
-                                    4+(i*self.width)+self.width] ))
-        return True
+# <-- DELETED THE DUPLICATE PxMap and PxMapAttr CLASSES FROM HERE -->
 
 class Loader:
     def __init__(self, game_manager):
@@ -197,7 +143,6 @@ class Loader:
             return self._load_cave_story_stage(stage_name)
         else:
             raise NotImplementedError(f"Loading for game '{game.name}' is not implemented.")
-
     def _load_kero_blaster_stage(self, path, name):
         pxpack = PxPack()
         pxpack.load(path)
@@ -205,7 +150,8 @@ class Loader:
         # Convert PxPack to universal Stage format
         stage = Stage(name, pxpack.layers[0].width, pxpack.layers[0].height)
         stage.eve = PxEve()
-        stage.spritesheet = pxpack.layers[0].partsName # Set the spritesheet name
+        # Set the main spritesheet as a fallback, but per-layer is more important
+        stage.spritesheet = pxpack.spritesheet 
         stage.set_background_color(pxpack.bg_r, pxpack.bg_g, pxpack.bg_b)
         
         # Layers
@@ -214,6 +160,12 @@ class Loader:
             l = pxpack.layers[i]
             new_layer = Layer(l.width, l.height)
             new_layer.tiles = l.tiles
+            
+            # --- DEFINITIVE FIX: Copy the partsName for each layer ---
+            new_layer.partsName = l.partsName
+            new_layer.scrolltype = l.scrolltype
+            new_layer.visibility = l.visibility
+            
             stage.layers.append(new_layer)
         # Ensure 3 layers exist for consistency, even if empty
         while len(stage.layers) < 3:
@@ -284,7 +236,6 @@ class Loader:
                     
                     entity = Entity(code_char, x, y, code_flag, code_event, id=i)
                     entity.bits = bits
-                    entity.param2 = code_event
                     entities.append(entity)
         except FileNotFoundError:
             print(f"Entity file not found: {path}")
