@@ -200,6 +200,15 @@ def getTextSize(text, font):
 	TTF_SizeText(font, ctypes.c_char_p(text.encode("utf-8")), w, h)
 	return [w.value, h.value]
 
+def getRenderedTextSize(text, color, style):
+	if not text: return [0, 0]
+	TTF_SetFontStyle(gFont, style)
+	textSurf = TTF_RenderText_Blended(gFont, ctypes.c_char_p(text.encode("utf-8")), color)
+	if not textSurf: return [0, 0]
+	w, h = textSurf.contents.w, textSurf.contents.h
+	sdl2.SDL_FreeSurface(textSurf)
+	return [w, h]
+
 #lazy function
 def renderText(text, color, style, x, y):
 	if text == "" or text == None: return
@@ -1433,6 +1442,7 @@ class Interface:
 
 		mouse = util.getMouseState()
 		mag = gxEdit.magnification
+		offset_y = mouse.y - gxEdit.content_y_offset
 		
 		map_layer = stage.pack.layers[gxEdit.currentLayer] if len(stage.pack.layers) > gxEdit.currentLayer else None
 
@@ -1441,7 +1451,7 @@ class Interface:
 		if gxEdit.currentEditMode == const.EDIT_TILE:
 			if gxEdit.rectanglePaintBoxStart == [-1, -1]: #normal
 				x = int(mouse.x // (gxEdit.tileWidth * mag))
-				y = int(mouse.y // (gxEdit.tileWidth * mag))
+				y = int(offset_y // (gxEdit.tileWidth * mag))
 
 				if x >= map_layer.width or y >= map_layer.height: return
 
@@ -1516,7 +1526,7 @@ class Interface:
 			# ---------------------------
 
 			x = int(mouse.x // (entity_pos_scale * mag))
-			y = int(mouse.y // (entity_pos_scale * mag))
+			y = int(offset_y // (entity_pos_scale * mag))
 
 			if x >= map_layer.width*const.ENTITY_SCALE or y >= map_layer.height*const.ENTITY_SCALE: return
 
@@ -1878,3 +1888,67 @@ class Interface:
 		if self.magnification <= 0:
 			self.magnification = 1
 	'''
+
+class StageTabsBar(UIWindow):
+    def __init__(self, x, y, w, h, type=const.WINDOW_NONE, style=0, visible=True):
+        UIWindow.__init__(self, x, y, w, h, type, style, visible)
+        self.draghitbox = [0, 0, 0, 0] # Not draggable
+        self.tab_start_x = 4
+        self.tab_padding = 8
+        self.tab_height = 20
+
+    def render(self, gxEdit, stage):
+        # Draw the main bar background
+        self.w = gWindowWidth # Ensure it spans the window width
+        gRenderer.fill((self.x, self.y, self.w, self.h), sdl2.ext.Color(40, 40, 50))
+        gRenderer.fill((self.x, self.y + self.h - 1, self.w, 1), sdl2.ext.Color(0, 0, 0)) # Bottom border
+
+        current_x = self.tab_start_x
+        for i, stage_prj in enumerate(gxEdit.stages):
+            text_w, text_h = getTextSize(stage_prj.stageName, gFont)
+            tab_width = text_w + self.tab_padding * 2
+            
+            # Determine tab color
+            if i == gxEdit.curStage:
+                tab_color = sdl2.ext.Color(70, 70, 85) # Active tab
+                text_color = sdlColorYellow
+            else:
+                tab_color = sdl2.ext.Color(30, 30, 40) # Inactive tab
+                text_color = sdlColorWhite
+
+            # Draw tab background
+            gRenderer.fill((current_x, self.y + 2, tab_width, self.tab_height), tab_color)
+            
+            # Draw tab text
+            renderText(stage_prj.stageName, text_color, TTF_STYLE_NORMAL, current_x + self.tab_padding, self.y + 5)
+
+            current_x += tab_width + 1 # A small gap between tabs
+
+    def handleMouse1(self, mouse, gxEdit):
+        # First, check if the click is within the bar's vertical bounds at all.
+        if mouse.y < self.y or mouse.y > self.y + self.h:
+            return False
+
+        current_x = self.tab_start_x
+        for i, stage_prj in enumerate(gxEdit.stages):
+            # We must use the same text properties to get the correct size for hit detection
+            text_color = sdlColorYellow if i == gxEdit.curStage else sdlColorWhite
+            text_w, _ = getRenderedTextSize(stage_prj.stageName, text_color, TTF_STYLE_NORMAL)
+            tab_width = text_w + self.tab_padding * 2
+
+            # Check if mouse is within this tab's specific bounding box
+            if util.inBoundingBox(mouse.x, mouse.y, current_x, self.y, tab_width, self.h):
+                gxEdit.curStage = i
+                return True # Event handled: a tab was clicked.
+
+            current_x += tab_width + 1
+        
+        # If no tab was clicked but the mouse is on the bar, consume the click.
+        if util.inBoundingBox(mouse.x, mouse.y, self.x, self.y, self.w, self.h):
+            return True 
+        
+        return False
+
+    # Override other handlers to prevent interaction with elements underneath
+    def handleMouseOver(self, mouse, gxEdit):
+        return util.inBoundingBox(mouse.x, mouse.y, self.x, self.y, self.w, self.h)

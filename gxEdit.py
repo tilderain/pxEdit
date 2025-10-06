@@ -139,6 +139,9 @@ def main():
 	#gxEdit.elements.append(interface.UIWindow(22, 22, 256, 256))
 	#gxEdit.elements.append(interface.UIWindow(300, 300, 260, 272, const.WINDOW_TILEPALETTE))
 
+	# Make sure stage tabs are added first to be drawn under other windows
+	gxEdit.elements["stageTabs"] = interface.StageTabsBar(0, 0, interface.gWindowWidth, 24)
+
 	entityinfoheight = len(gxEdit.entityInfo) // 16 * 18
 	gxEdit.elements["tilePalette"] = interface.TilePaletteWindow(1200, 400, 256, 280, const.WINDOW_TILEPALETTE)
 	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(1450, 400, 256, entityinfoheight, const.WINDOW_ENTITYPALETTE)
@@ -157,9 +160,20 @@ def main():
 
 	def renderEditor():
 		#TODO: placeholder
-
-		#gui.renderMainBg(introAnimTimer, mouseover)
 		gui.renderEditorBg()
+
+		# --- RENDER TABS BAR ---
+		# Render tabs bar first, outside of the main map viewport
+		tabs_bar = gxEdit.elements.get("stageTabs")
+		if tabs_bar and tabs_bar.visible:
+			tabs_bar.render(gxEdit, curStage)
+
+		# --- SET VIEWPORT FOR MAP RENDERING ---
+		# This restricts all subsequent drawing to the area below the tabs bar
+		viewport = sdl2.SDL_Rect(0, gxEdit.content_y_offset, interface.gWindowWidth, interface.gWindowHeight - gxEdit.content_y_offset)
+		sdl2.SDL_RenderSetViewport(renderer.sdlrenderer, ctypes.byref(viewport))
+
+		# --- MAP RENDERING (within viewport) ---
 		gui.renderBgColor(gxEdit, curStage)
 		for i in reversed(range(3)):
 			if gxEdit.visibleLayers[i]:
@@ -177,10 +191,13 @@ def main():
 		if gxEdit.visibleLayers[3] or gxEdit.currentEditMode == const.EDIT_ENTITY:
 			gui.renderEntities(gxEdit, curStage)
 	
-		gui.renderEntityPalette(gxEdit, curStage)
-		gui.renderTilePalette(gxEdit, curStage)
-	
-		for _, elem in gxEdit.elements.items():
+		# --- RESET VIEWPORT FOR UI WINDOWS ---
+		# This allows UI windows to be drawn anywhere on the screen
+		sdl2.SDL_RenderSetViewport(renderer.sdlrenderer, None)
+
+		# --- UI WINDOW RENDERING (absolute coordinates) ---
+		for key, elem in gxEdit.elements.items():
+			if key == "stageTabs": continue # Already rendered
 			if elem.visible and elem.type != const.WINDOW_TOOLTIP: 
 				gui.renderUIWindow(gxEdit, elem)
 				elem.render(gxEdit, curStage)
@@ -188,7 +205,6 @@ def main():
 		for _, elem in gxEdit.elements.items():
 			if elem.type == const.WINDOW_TOOLTIP and elem.visible:
 				elem.render(gxEdit, curStage)
-
 	#for continuous resizing
 	def resizeEventWatch(data, event):
 		#TODO: recreate map textures for our poor software rendered boys
@@ -366,8 +382,9 @@ def main():
 				mouse = util.getMouseState()
 
 				#maybe it'd be fun to send their zoom level
+				offset_y = mouse.y - gxEdit.content_y_offset
 				x = int(mouse.x // gxEdit.magnification) + int(curStage.hscroll * gxEdit.tileWidth)
-				y = int(mouse.y // gxEdit.magnification) + int(curStage.scroll * gxEdit.tileWidth)
+				y = int(offset_y // gxEdit.magnification) + int(curStage.scroll * gxEdit.tileWidth)
 				if(x, y) is not gxEdit.lastMousePos:
 					if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
 						multi.sendMousePosPacket(gxEdit, x, y, gxEdit.curStage)

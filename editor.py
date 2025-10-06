@@ -292,6 +292,8 @@ class Editor:
 		self.stages = []
 
 		self.curStage = 0
+		
+		self.content_y_offset = 24
 
 		# Game-specific dimensions
 		self.tileWidth = 16 # Default, will be updated

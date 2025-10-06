@@ -27,12 +27,19 @@ def runMouseWheel(stage, wheel):
 def runMouse1(stage, mouse):
 	if mouse.button != sdl2.SDL_BUTTON_LEFT: return False
 
+	# --- 2. If no floating window was clicked, check the static tabs bar ---
+	tabs_bar = gxEdit.elements.get("stageTabs")
+	if tabs_bar and tabs_bar.visible:
+		if tabs_bar.handleMouse1(mouse, gxEdit):
+			return True # The click was handled (or consumed) by the bar.
+
 	map = stage.pack.layers[gxEdit.currentLayer]
 	eve = stage.pack.eve.units
 
 	mag = gxEdit.magnification
 
 	for i, elem in reversed(list(gxEdit.elements.items())):
+		if i == "stageTabs": continue # Already handled
 		if not elem.visible: continue
 
 		if util.inWindowBoundingBox(mouse, elem):
@@ -86,8 +93,9 @@ def runMouse1(stage, mouse):
 		gxEdit.currentEntity = index
 
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
+		offset_y = mouse.y - gxEdit.content_y_offset
 		x = int(mouse.x + (stage.hscroll * gxEdit.tileWidth * mag))
-		y = int(mouse.y + (stage.scroll * gxEdit.tileWidth * mag))
+		y = int(offset_y + (stage.scroll * gxEdit.tileWidth * mag))
 
 		if stage.selectedEntities != []:
 			# --- Game-specific scaling ---
@@ -99,7 +107,7 @@ def runMouse1(stage, mouse):
 			# ---------------------------
 
 			xe = int(mouse.x // (entity_pos_scale * mag)) + stage.hscroll*const.ENTITY_SCALE
-			ye = int(mouse.y // (entity_pos_scale * mag)) + stage.scroll*const.ENTITY_SCALE
+			ye = int(offset_y // (entity_pos_scale * mag)) + stage.scroll*const.ENTITY_SCALE
 			for o in stage.selectedEntities:
 				if o.x == xe and o.y == ye:
 					gxEdit.draggingEntities = True
@@ -117,11 +125,12 @@ def runMouse3(gxEdit, stage, mouse):
 	eve = stage.pack.eve.units
 
 	mag = gxEdit.magnification
+	offset_y = mouse.y - gxEdit.content_y_offset
 
 	if gxEdit.currentEditMode == const.EDIT_TILE:
 		if not len(map.tiles): return
 		x = int(mouse.x // (gxEdit.tileWidth * mag) + stage.hscroll)
-		y = int(mouse.y // (gxEdit.tileWidth * mag) + stage.scroll)
+		y = int(offset_y // (gxEdit.tileWidth * mag) + stage.scroll)
 
 		if x >= map.width or y >= map.height:
 			return
@@ -165,8 +174,9 @@ def runMouseUp(gxEdit, curStage, mouse):
 	elif gxEdit.currentEditMode == const.EDIT_TILE and gxEdit.currentTilePaintMode == const.PAINT_COPY:
 		stage = curStage
 		mag = gxEdit.magnification
+		offset_y = mouse.y - gxEdit.content_y_offset
 		x = int(mouse.x // (gxEdit.tileWidth * mag) + stage.hscroll)
-		y = int(mouse.y // (gxEdit.tileWidth * mag) + stage.scroll)
+		y = int(offset_y // (gxEdit.tileWidth * mag) + stage.scroll)
 		stage.selectedTilesEnd[0] = x
 		stage.selectedTilesEnd[1] = y
 	
@@ -192,6 +202,7 @@ def runMouseUp(gxEdit, curStage, mouse):
 
 		gxEdit.elements["toolsWindow"].elements["butDraw"].handleMouse1(None, gxEdit)
 
+
 def runMouseDrag(gxEdit, stage, mouse):			
 	#mouse = util.getMouseState()
 	mouse.button = mouse.state
@@ -208,6 +219,14 @@ def runMouseDrag(gxEdit, stage, mouse):
 	keystate = util.getKeyState()
 	if (mouse.button != sdl2.SDL_BUTTON_LEFT and not keystate[sdl2.SDL_SCANCODE_SPACE]): return False
 
+	if mouse.y < gxEdit.content_y_offset:
+		# Still allow dragging of UI windows if one is selected
+		if gxEdit.draggedElem:
+			gxEdit.draggedElem.x = mouse.x - gxEdit.dragX
+			gxEdit.draggedElem.y = mouse.y - gxEdit.dragY
+		return
+		
+	offset_y = mouse.y - gxEdit.content_y_offset
 	map = stage.pack.layers[gxEdit.currentLayer]
 	mag = gxEdit.magnification
 
@@ -218,15 +237,23 @@ def runMouseDrag(gxEdit, stage, mouse):
 		gxEdit.draggedElem.y = mouse.y - gxEdit.dragY
 		return
 	
-	for _, elem in gxEdit.elements.items():
-		if not elem.visible: continue
-		if util.inBoundingBox(mouse.x, mouse.y, elem.x, elem.y, elem.w, elem.h):
-			if gxEdit.draggedElem:
-				return
-			if elem.type != const.WINDOW_TILEPALETTE and elem.type != const.WINDOW_TOOLTIP:
-				return
-
+	# --- THIS IS THE FIX ---
+	# Before attempting any map interaction, check if the mouse is over ANY UI element.
+	# If so, do not proceed, as the UI should consume the event.
+	is_over_ui = False
+	for key, elem in gxEdit.elements.items():
+		if not elem.visible or elem.type == const.WINDOW_TOOLTIP:
+			continue
+		if util.inWindowBoundingBox(mouse, elem):
+			is_over_ui = True
+			break
+	
 	tilePalette = gxEdit.elements["tilePalette"]
+	# Exception: We allow dragging ON the tile palette to select multiple tiles.
+	if is_over_ui and not util.inWindowBoundingBox(mouse, tilePalette):
+		return
+	# --- END OF FIX ---
+
 	#Tiles selection
 	if util.inWindowBoundingBox(mouse, tilePalette):
 		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // gxEdit.tileWidth // gxEdit.tilePaletteMag
@@ -245,7 +272,7 @@ def runMouseDrag(gxEdit, stage, mouse):
 	elif gxEdit.currentEditMode == const.EDIT_TILE:
 		if not len(map.tiles): return
 		x = int(mouse.x // (gxEdit.tileWidth * mag) + stage.hscroll)
-		y = int(mouse.y // (gxEdit.tileWidth * mag) + stage.scroll)
+		y = int(offset_y // (gxEdit.tileWidth * mag) + stage.scroll)
 
 		if x >= map.width or y >= map.height:
 			return
@@ -327,7 +354,7 @@ def runMouseDrag(gxEdit, stage, mouse):
 		
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 		x = int(mouse.x + (stage.hscroll * gxEdit.tileWidth * mag))
-		y = int(mouse.y + (stage.scroll * gxEdit.tileWidth * mag))
+		y = int(offset_y + (stage.scroll * gxEdit.tileWidth * mag))
 
 		# --- Game-specific scaling ---
 		current_game_name = gxEdit.game_manager.get_current_game().name
@@ -340,7 +367,7 @@ def runMouseDrag(gxEdit, stage, mouse):
 
 		if gxEdit.draggingEntities:
 			x = int((mouse.x // scale) + stage.hscroll*const.ENTITY_SCALE)
-			y = int((mouse.y // scale) + stage.scroll*const.ENTITY_SCALE)
+			y = int((offset_y // scale) + stage.scroll*const.ENTITY_SCALE)
 
 			xe = gxEdit.entDragPos[0]
 			ye = gxEdit.entDragPos[1]
@@ -439,6 +466,7 @@ def runMouse2(gxEdit, stage, mouse):
 	if (mouse.button != sdl2.SDL_BUTTON_RIGHT): return False
 
 	mag = gxEdit.magnification
+	offset_y = mouse.y - gxEdit.content_y_offset
 
 	if gxEdit.currentEditMode == const.EDIT_ENTITY:
 		# --- Game-specific scaling ---
@@ -450,7 +478,7 @@ def runMouse2(gxEdit, stage, mouse):
 		# ---------------------------
 
 		x = int(mouse.x / (entity_pos_scale * mag)) + stage.hscroll*const.ENTITY_SCALE
-		y = int(mouse.y / (entity_pos_scale * mag)) + stage.scroll*const.ENTITY_SCALE
+		y = int(offset_y / (entity_pos_scale * mag)) + stage.scroll*const.ENTITY_SCALE
 		x = math.floor(x) 
 		y = math.floor(y)
 
@@ -708,10 +736,11 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	elif sym == sdl2.SDL_SCANCODE_I:
 		if gxEdit.currentEditMode == const.EDIT_ENTITY:
 			mouse = util.getMouseState()
+			offset_y = mouse.y - gxEdit.content_y_offset
 			mag = gxEdit.magnification
 
 			x = int(mouse.x // (gxEdit.tileWidth//const.ENTITY_SCALE * mag)) + stage.hscroll* const.ENTITY_SCALE
-			y = int(mouse.y // (gxEdit.tileWidth//const.ENTITY_SCALE * mag)) + stage.scroll* const.ENTITY_SCALE
+			y = int(offset_y // (gxEdit.tileWidth//const.ENTITY_SCALE * mag)) + stage.scroll* const.ENTITY_SCALE
 			if x >= stage.pack.layers[0].width*const.ENTITY_SCALE or y >= stage.pack.layers[0].height*const.ENTITY_SCALE:
 				return
 
