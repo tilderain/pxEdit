@@ -16,11 +16,11 @@ from game import GameManager
 from loader import Loader
 from saver import Saver
 from stage import Stage, Layer, Entity
-from editor import gxEdit
 
-with open("./basepath.txt") as f:
-	basePath = f.read().strip('\n')
-print(basePath)
+# Global instances of our new classes
+game_manager = GameManager()
+loader = Loader(game_manager)
+saver = Saver(game_manager)
 
 # Default game and path for now
 # TODO: Make this user selectable

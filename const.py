@@ -20,7 +20,7 @@ PAINT_RECTANGLE = 6
 #used to determine if they crash the game or not
 entityCrashIds = [12, 16, 17, 33, 34, 36, 50, 51, 52, 53, 55, 57, 62, 71, 77, 78, 79, 80, 82, 89, 95, 101, 103, 109, 110, 112, 113]
 #total entity ids
-entityFuncCount = 250
+entityFuncCount = 500
 
 #for a green title color
 entityGoodIds = [1, 2, 3, 4, 7, 37, 45, 47, 60, 61, 64, 74, 75, 91, 92, 96, 116, 119, 121]

@@ -25,6 +25,9 @@ from loader import Loader
 from saver import Saver
 from stage import Stage, Layer, Entity
 
+from editor import gxEdit
+from editor import defaultStage
+
 #You must agree to the terms of use to continue.
 #Terms of Use
 #THIS INDEPENDANT
@@ -40,14 +43,7 @@ from stage import Stage, Layer, Entity
 
 
 
-# Global instances of our new classes
-game_manager = GameManager()
-loader = Loader(game_manager)
-saver = Saver(game_manager)
-
 #for debugging
-dataPath = "./" + dataPath
-gamePath = "./" + gamePath
 mapPath = "map{}.pxmap"
 partsPath = "parts{}.bmp"
 attrPath = "parts{}.pxatrb"

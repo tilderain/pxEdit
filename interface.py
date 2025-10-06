@@ -16,7 +16,7 @@ import copy
 
 from sdl2.sdlttf import *
 
-from gxEdit import game_manager, imgPath
+from editor import game_manager, imgPath
 
 #from gxEdit import gxEdit as gxEdit
 
