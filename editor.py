@@ -8,7 +8,21 @@ import sdl2
 
 from datetime import datetime
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+@dataclass
+class StageInfo:
+    """Holds the decoded data for a single entry from stage.tbl."""
+    index: int
+    parts: str
+    map: str
+    bkType: int
+    back: str
+    npc: str
+    boss: str
+    boss_no: int
+    name: str
+    name_jp: str
 
 from collections import Counter
 
@@ -112,59 +126,58 @@ class StagePrj:
 		return True
 
 	def loadParts(self, layerNo):
-		try:
-			current_game_config = game_manager.get_current_game()
-			tileset_ext = current_game_config.get('tileset_ext')
-			
-			# Each layer has its own partsName. Get it directly.
-			if len(self.pack.layers) <= layerNo or not self.pack.layers[layerNo]:
-				return False # This layer doesn't exist.
-			
-			tileset_name = self.pack.layers[layerNo].partsName
-
-			# If the partsName is empty (e.g., for an unused layer), don't try to load anything.
-			if not tileset_name:
-				if current_game_config.name == "cave_story" and layerNo == 0:
-					# Fallback for Cave Story's main layer
-					tileset_name = "Prt" + self.stageName
-				else:
-					return False
-
-			self.parts[layerNo] = interface.gSprfactory.from_image(imgPath + tileset_name + tileset_ext)
-			
-			return True
-		except (OSError, IOError, sdl2.ext.SDLError) as e:
-			print("Error while loading parts for layer {}: {}".format(layerNo, e))
-			self.parts[layerNo] = None # Ensure it's None on failure
-			return False
-	def loadAttrs(self, layerNo):
+		# This method is now simpler. It trusts that the format handler
+		# has already figured out the correct tileset name.
 		current_game_config = game_manager.get_current_game()
-		self.attrs[layerNo] = pxMap.PxMapAttr() # ALWAYS create the instance first.
-
-		if current_game_config.name == 'kero_blaster':
-			# Kero Blaster uses explicit .pxattr files
-			attr_ext = current_game_config.get('attr_ext')
-			tileset_name = self.pack.layers[layerNo].partsName
-			if tileset_name:
-				attr_path = os.path.join(imgPath, tileset_name + attr_ext)
-				if os.path.exists(attr_path):
-					self.attrs[layerNo].load(attr_path)
-				elif self.parts[layerNo]: # If file doesn't exist, create based on image size
-					self.attrs[layerNo].width = self.parts[layerNo].size[0] // self.tileWidth
-					self.attrs[layerNo].height = self.parts[layerNo].size[1] // self.tileWidth
-				else:
-					self.attrs[layerNo].width = 0
-					self.attrs[layerNo].height = 0
 		
-		elif current_game_config.name == 'cave_story':
-			# Cave Story has no .pxattr, so we create attributes based on the tileset image size
-			if self.parts[layerNo]:
-				self.attrs[layerNo].width = self.parts[layerNo].size[0] // self.tileWidth
-				self.attrs[layerNo].height = self.parts[layerNo].size[1] // self.tileWidth
-			else:
-				# If no parts exist for this layer, initialize with 0 to prevent crashes.
-				self.attrs[layerNo].width = 0
-				self.attrs[layerNo].height = 0
+		if len(self.pack.layers) <= layerNo or not self.pack.layers[layerNo]:
+			return False # This layer doesn't exist.
+		
+		tileset_name = self.pack.layers[layerNo].partsName
+
+		# If the layer exists but has no assigned tileset, do nothing.
+		if not tileset_name:
+			return False
+
+		# --- NEW LOADING LOGIC ---
+		# Build a list of potential file paths to try in order.
+		potential_paths = []
+		if current_game_config.name == 'cave_story':
+			# For Cave Story, prioritize .bmp then .pbm.
+			# We now correctly use the full tileset_name ('PrtAlmond'), not the stage name.
+			potential_paths.append(os.path.join(imgPath, tileset_name + ".bmp"))
+			potential_paths.append(os.path.join(imgPath, tileset_name + ".pbm"))
+		else:
+			# For other games (like Kero Blaster), use the configured extension.
+			tileset_ext = current_game_config.get('tileset_ext', '.png')
+			potential_paths.append(os.path.join(imgPath, tileset_name + tileset_ext))
+
+		# Loop through the paths and try to load the first one that exists.
+		for path in potential_paths:
+			try:
+				if os.path.exists(path):
+					self.parts[layerNo] = interface.gSprfactory.from_image(path)
+					print(f"Successfully loaded tileset: {os.path.basename(path)}")
+					return True
+			except (OSError, IOError, sdl2.ext.SDLError):
+				# This path failed (file corrupt, etc.), so we continue to the next one.
+				continue
+		
+		# If the loop completes, it means no valid tileset could be loaded.
+		print(f"Error: Could not find or load a valid tileset for '{tileset_name}'")
+		self.parts[layerNo] = None # Ensure it's None on failure
+		return False
+	def loadAttrs(self, layerNo):
+		tileset_name = self.pack.layers[layerNo].partsName
+		tileset_surface = self.parts[layerNo]
+
+		# Dispatch to the format manager to handle game-specific loading
+		self.attrs[layerNo] = format_manager.load_attrs(tileset_name, tileset_surface)
+		
+		# Ensure we always have a valid PxMapAttr object, even if loading fails
+		if not self.attrs[layerNo]:
+			self.attrs[layerNo] = pxMap.PxMapAttr()
+			
 		return True
 	def save(self):
 		#if self.lastSavePos == self.undoPos: #TODO: and pxattr not modified
@@ -288,11 +301,13 @@ class Editor:
 		self.game_manager = game_manager
 		self.format_manager = format_manager 
 
+
 		self.entityInfo = []
+		self.stage_table = []
 		self.stages = []
 
 		self.curStage = 0
-		
+
 		self.content_y_offset = 24
 
 		# Game-specific dimensions
@@ -398,6 +413,69 @@ class Editor:
 			print("Error reading entityInfo! {}".format(e))
 			return False
 		return True
+		
+	def _decode_tbl_string(self, data: bytes) -> str:
+		"""Decodes a null-terminated byte string from the stage table."""
+		try:
+			null_pos = data.find(b'\x00')
+			if null_pos != -1:
+				data = data[:null_pos]
+			# Shift-JIS is the standard for CS and is compatible with ASCII for English names
+			return data.decode('shift-jis')
+		except UnicodeDecodeError:
+			return "DECODE_ERROR"
+
+	def readStageTable(self):
+		"""Loads and parses the stage.tbl file for Cave Story."""
+		import struct
+
+		current_game_config = self.game_manager.get_current_game()
+		# This file is specific to Cave Story
+		if current_game_config.name != "cave_story":
+			return True # Not an error, just not applicable for this game.
+
+		stage_tbl_path = os.path.join(
+			current_game_config.base_path,
+			current_game_config.get('data_path'),
+			'stage.tbl'
+		)
+
+		try:
+			with open(stage_tbl_path, 'rb') as f:
+				file_data = f.read()
+		except (IOError, FileNotFoundError) as e:
+			print(f"Warning: could not load 'stage.tbl': {e}")
+			return False
+
+		ENTRY_SIZE = 229  # 0xE5
+		entry_count = len(file_data) // ENTRY_SIZE
+
+		if entry_count == 0:
+			print("Warning: 'stage.tbl' is empty or has an invalid size.")
+			return False
+
+		self.stage_table.clear()
+		for i in range(entry_count):
+			offset = i * ENTRY_SIZE
+			entry = file_data[offset : offset + ENTRY_SIZE]
+
+			stage_info = StageInfo(
+				index=i,
+				parts=self._decode_tbl_string(entry[0x00:0x20]),
+				map=self._decode_tbl_string(entry[0x20:0x40]),
+				bkType=struct.unpack('<I', entry[0x40:0x44])[0],
+				back=self._decode_tbl_string(entry[0x44:0x64]),
+				npc=self._decode_tbl_string(entry[0x64:0x84]),
+				boss=self._decode_tbl_string(entry[0x84:0xA4]),
+				boss_no=entry[0xA4],
+				name_jp=self._decode_tbl_string(entry[0xA5:0xC5]),
+				name=self._decode_tbl_string(entry[0xC5:0xE5])
+			)
+			self.stage_table.append(stage_info)
+
+		print(f"Successfully loaded {len(self.stage_table)} entries from stage.tbl.")
+		return True
+
 
 	def update_tile_dimensions(self):
 		current_game = self.game_manager.get_current_game()
@@ -413,6 +491,7 @@ class Editor:
 	def loadMeta(self, sprfactory):
 		result = True
 		result &= self.readEntityInfo()
+		result &= self.readStageTable()
 		return result
 
 	def loadStage(self, stageName):
@@ -420,7 +499,8 @@ class Editor:
 		self.update_tile_dimensions()
 		print("Loading stage " + stageName)
 		try:
-			pack = self.format_manager.load_stage(stageName) # <-- CHANGE to use format_manager
+			# Pass the stage table to the format manager
+			pack = self.format_manager.load_stage(stageName, self.stage_table)
 			stage = StagePrj(stageName, pack, self.tileWidth)
 			result = stage.load()
 			if result:

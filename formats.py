@@ -25,12 +25,13 @@ class FormatManager:
             
         return self.handlers[handler_name]
 
-    def load_stage(self, stage_name):
+    def load_stage(self, stage_name, stage_table=None):
         """
         Loads a stage by dispatching to the current game's format handler.
+        Passes along the stage_table if provided.
         """
         handler = self._get_handler()
-        return handler.load_stage(self.game_manager, stage_name)
+        return handler.load_stage(self.game_manager, stage_name, stage_table)
 
     def save_stage(self, stage):
         """
@@ -38,3 +39,13 @@ class FormatManager:
         """
         handler = self._get_handler()
         return handler.save_stage(self.game_manager, stage)
+
+    def load_attrs(self, tileset_name, tileset_surface):
+        """
+        Loads a PxMapAttr object by dispatching to the current game's format handler.
+        """
+        handler = self._get_handler()
+        # Check if the handler supports the new method before calling
+        if hasattr(handler, 'load_attrs'):
+            return handler.load_attrs(self.game_manager, tileset_name, tileset_surface)
+        return None

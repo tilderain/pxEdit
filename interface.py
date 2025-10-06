@@ -1350,6 +1350,7 @@ class Interface:
 		self.window = window
 		self.sprfactory = sprfactory
 
+
 	def loadSurfaces(self):
 		RESOURCES = "./BITMAP/"
 
@@ -1389,10 +1390,24 @@ class Interface:
                   0x000000FF))   
 
 		current_game_config = game_manager.get_current_game()
+		
+		# --- DYNAMIC ASSET LOADING ---
+		# Load the unittype and attribute images specified in the game's config
 		unittype_image_path = os.path.join("assist", current_game_config.get('unittype_image'))
-		gSurfaces[SURF_UNITS] = self.sprfactory.from_image(unittype_image_path)
-		gSurfaces[SURF_ATTRIBUTE] = self.sprfactory.from_image("assist/attribute.png")
-
+		attribute_image_path = os.path.join("assist", current_game_config.get('attribute_image'))
+		
+		try:
+			gSurfaces[SURF_UNITS] = self.sprfactory.from_image(unittype_image_path)
+		except Exception as e:
+			print(f"ERROR: Could not load unittype image '{unittype_image_path}': {e}")
+			# Optional: load a fallback image or exit
+		
+		try:
+			gSurfaces[SURF_ATTRIBUTE] = self.sprfactory.from_image(attribute_image_path)
+		except Exception as e:
+			print(f"ERROR: Could not load attribute image '{attribute_image_path}': {e}")
+			# Optional: load a fallback image or exit
+		# ---------------------------
 
 		gSurfaces[SURF_UIWINDOW] = self.sprfactory.from_image(RESOURCES + "Window.bmp")
 
@@ -1670,28 +1685,45 @@ class Interface:
 
 		
 	def renderTileAttr(self, gxEdit, stage, map_layer):
-		attr_layer = stage.pack.layers[gxEdit.currentLayer] if len(stage.pack.layers) > gxEdit.currentLayer else None
+		# --- THE FIX IS HERE ---
+		# We must use the 'attrs' list from the StagePrj object, not the map's layers.
+		attr_layer = stage.attrs[gxEdit.currentLayer] if len(stage.attrs) > gxEdit.currentLayer else None
 
-		if not attr_layer: return
+		if not attr_layer or not attr_layer.tiles:
+			return
 
 		mag = gxEdit.magnification
-		for y in range(stage.scroll, stage.scroll + int(gWindowHeight // gxEdit.tileWidth // mag)):
-			if y >= map_layer.height: break
-			for x in range(stage.hscroll, stage.hscroll + int(gWindowWidth // gxEdit.tileWidth // mag)):
-				if x >= map_layer.width: break
+		
+		# Calculate the visible range of tiles on screen to avoid unnecessary looping
+		start_y = stage.scroll
+		end_y = stage.scroll + math.ceil(gWindowHeight / (gxEdit.tileWidth * mag)) + 1
+		start_x = stage.hscroll
+		end_x = stage.hscroll + math.ceil(gWindowWidth / (gxEdit.tileWidth * mag)) + 1
+
+		for y in range(start_y, min(end_y, map_layer.height)):
+			for x in range(start_x, min(end_x, map_layer.width)):
 
 				dstx = (x - stage.hscroll) * gxEdit.tileWidth
 				dsty = (y - stage.scroll) * gxEdit.tileWidth
 
-				tile = map_layer.tiles[y][x]
-				xx = tile % 16 
-				yy = tile // 16
-				tile = attr_layer.tiles[yy][xx]
+				# 1. Get the tile ID from the map (e.g., 35)
+				tile_id = map_layer.tiles[y][x]
+				
+				# 2. Convert the tile ID to its coordinate on the tileset (e.g., x=3, y=2)
+				tileset_x = tile_id % 16 
+				tileset_y = tile_id // 16
 
-				xxx = tile % 16 
-				yyy = tile // 16
-				srcx = xxx * 16
-				srcy = yyy * 16
+				# 3. Look up the attribute value from the correct attr_layer using the tileset coordinate
+				try:
+					attr_id = attr_layer.tiles[tileset_y][tileset_x]
+				except IndexError:
+					continue # This tileset coordinate is outside the bounds of the attribute map
+
+				# 4. Convert the attribute ID to its coordinate on the attribute.png sheet
+				attr_sheet_x = attr_id % 16 
+				attr_sheet_y = attr_id // 16
+				srcx = attr_sheet_x * 16
+				srcy = attr_sheet_y * 16
 
 				srcrect = (srcx, srcy, 16, 16)
 				dstrect = (dstx*int(mag), dsty*int(mag), gxEdit.tileWidth*int(mag), gxEdit.tileWidth*int(mag))

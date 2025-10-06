@@ -13,7 +13,8 @@
         "tile_size": 8,
         "entity_scale": 1,
         "tileset_ext": ".png",
-        "unittype_image": "unittype-kero.png"
+        "unittype_image": "unittype-kero.png",
+        "attribute_image": "attribute-kero.png"
     },
     "cave_story": {
         "name": "Cave Story",
@@ -30,6 +31,7 @@
         "tile_size": 16,
         "entity_scale": 2,
         "tileset_ext": ".pbm",
-        "unittype_image": "unittype-cave.png"
+        "unittype_image": "unittype-cave.png",
+        "attribute_image": "attribute-cave.png"
     }
 }

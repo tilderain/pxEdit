@@ -92,7 +92,8 @@ class PxMapAttr: #use the same class for both
 	def load(self, path):
 		"""
 		Loads tile data from a file, intelligently handling whether a
-		'pxMAP01' header is present or not.
+		'pxMAP01' header is present or not. Also handles the 1-byte
+		type field present in Kero Blaster map/attribute formats.
 		"""
 		try:
 			with open(path, 'rb') as f:
@@ -104,8 +105,8 @@ class PxMapAttr: #use the same class for both
 		offset = 0
 
 		# Check if the file starts with the 8-byte pxMAP01 header.
+		# Standalone .pxattr files do not have this header.
 		if data.startswith(b"pxMAP01\0"):
-			# If it does, skip the header.
 			offset = 8
 		
 		try:
@@ -118,15 +119,27 @@ class PxMapAttr: #use the same class for both
 				self.tiles = []
 				return True
 
-			data_start = offset + 4
+			# --- THE FIX ---
+			# Kero Blaster's map/attribute format has a 1-byte 'type' field after the dimensions.
+			# We must skip this byte to read the tile data correctly.
+			data_start = offset + 5  # Was offset + 4
+
 			self.tiles = [] # Clear any previous tile data
 			for i in range(self.height):
 				row_start = data_start + (i * self.width)
 				row_end = row_start + self.width
-				self.tiles.append(list(data[row_start:row_end]))
+				# Ensure we don't read past the end of the file data
+				if row_end > len(data):
+					print(f"Warning: Truncated data in {path} at row {i}. Padding with zeroes.")
+					row_data = list(data[row_start:])
+					row_data.extend([0] * (self.width - len(row_data)))
+					self.tiles.append(row_data)
+					break # Stop processing if data is truncated
+				else:
+					self.tiles.append(list(data[row_start:row_end]))
 
-		except (struct.error, IndexError):
-			print(f"Error parsing data in {path}. File might be corrupt.")
+		except (struct.error, IndexError) as e:
+			print(f"Error parsing data in {path}. File might be corrupt: {e}")
 			self.width = 0
 			self.height = 0
 			self.tiles = []

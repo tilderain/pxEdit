@@ -208,7 +208,7 @@ class PxPack:
 
 # --- Public Interface Functions ---
 
-def load_stage(game_manager, stage_name):
+def load_stage(game_manager, stage_name, stage_table=None):
     game = game_manager.get_current_game()
     path = os.path.join(game.base_path, game.get('data_path'), game.get('stage_path'), stage_name + game.get('stage_ext'))
     return PxPack().load(path).to_stage(stage_name)
@@ -217,3 +217,32 @@ def save_stage(game_manager, stage):
     game = game_manager.get_current_game()
     path = os.path.join(game.base_path, game.get('data_path'), game.get('stage_path'), stage.name + game.get('stage_ext'))
     return PxPack.from_stage(stage).save(path)
+
+import const
+
+def load_attrs(game_manager, tileset_name, tileset_surface):
+    """Loads attributes for a Kero Blaster tileset."""
+    from pxMap import PxMapAttr
+    
+    game = game_manager.get_current_game()
+    img_path_base = os.path.join(game.base_path, game.get('data_path'), game.get('image_path'))
+    attr = PxMapAttr()
+
+    attr_ext = game.get('attr_ext')
+    if tileset_name:
+        attr_path = os.path.join(img_path_base, tileset_name + attr_ext)
+        if os.path.exists(attr_path):
+            attr.load(attr_path)
+            return attr
+
+    # If file doesn't exist, create attributes based on the loaded image surface
+    if tileset_surface:
+        tile_width = game.get('tile_size', 8) * const.tileScale
+        attr.width = tileset_surface.size[0] // tile_width
+        attr.height = tileset_surface.size[1] // tile_width
+        attr.tiles = [[0] * attr.width for _ in range(attr.height)]
+    else:
+        attr.width = 0
+        attr.height = 0
+        
+    return attr
