@@ -1,6 +1,7 @@
 # pylint: disable=no-member
 import os
 os.environ["PYSDL2_DLL_PATH"] = "./"
+from sdl2.sdlttf import TTF_SetFontKerning
 import sdl2.ext
 import const
 import math
@@ -751,11 +752,11 @@ class EntityPaletteWindow(UIWindow):
 			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, const.tileWidth2 * mag, const.tileWidth2 * mag)
 
 		#crashing entities
-		for i in range (const.entityFuncCount):
-			if i in const.entityCrashIds:
-				dstx = (i % 16) * const.tileWidth * mag + (self.x + self.elements["picker"].x)
-				dsty = (i // 16) * const.tileWidth * mag + (self.y + self.elements["picker"].y) 
-				gInterface.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=(dstx, dsty, const.tileWidth, const.tileWidth))
+		#for i in range (const.entityFuncCount):
+		#	if i in const.entityCrashIds:
+		#		dstx = (i % 16) * const.tileWidth * mag + (self.x + self.elements["picker"].x)
+		#		dsty = (i // 16) * const.tileWidth * mag + (self.y + self.elements["picker"].y) 
+		#		gInterface.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=(dstx, dsty, const.tileWidth, const.tileWidth))
 
 	def handleMouseOver(self, mouse, gxEdit):
 		UIWindow.handleMouseOver(self, mouse, gxEdit)
