@@ -1424,8 +1424,9 @@ class Interface:
 				if gxEdit.elements["entEdit"].visible and gxEdit.entityInfo[index][2] != "":
 					gxEdit.tooltipText.append([gxEdit.entityInfo[index][2], paramColor, TTF_STYLE_NORMAL])
 
+				gxEdit.tooltipText.append(["Flag: " + str(o.flag), sdlColorWhite, TTF_STYLE_NORMAL])
 				gxEdit.tooltipText.append(["Param2: " + str(o.param2), sdlColorWhite, TTF_STYLE_NORMAL])
-				gxEdit.tooltipText.append(["Id: " + str(o.type1), sdlColorWhite, TTF_STYLE_NORMAL])
+				gxEdit.tooltipText.append(["Id: " + str(o.id), sdlColorWhite, TTF_STYLE_NORMAL])
 
 
 	def renderTilePreview(self, gxEdit, stage):
@@ -1506,18 +1507,26 @@ class Interface:
 
 		elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 			if gxEdit.draggingEntities: return
-			x = int(mouse.x // (gxEdit.tileWidth2//2 * mag)) 
-			y = int(mouse.y // (gxEdit.tileWidth2//2 * mag))
+			# --- Game-specific scaling ---
+			current_game_name = gxEdit.game_manager.get_current_game().name
+			if current_game_name == "cave_story":
+				entity_pos_scale = gxEdit.tileWidth
+			else: # kero_blaster
+				entity_pos_scale = gxEdit.tileWidth2 // 2
+			# ---------------------------
+
+			x = int(mouse.x // (entity_pos_scale * mag))
+			y = int(mouse.y // (entity_pos_scale * mag))
 
 			if x >= map_layer.width*const.ENTITY_SCALE or y >= map_layer.height*const.ENTITY_SCALE: return
 
 			self.setMapEntityTooltip(gxEdit, stage, x, y)
 
-			x *= int(gxEdit.tileWidth2//2 * mag)
-			y *= int(gxEdit.tileWidth2//2 * mag)
+			x *= int(entity_pos_scale * mag)
+			y *= int(entity_pos_scale * mag)
 
-			w = int(gxEdit.tileWidth2//2 * mag)
-			h = int(gxEdit.tileWidth2//2 * mag)
+			w = int(entity_pos_scale * mag)
+			h = int(entity_pos_scale * mag)
 		#TODO: different color with rectangle and copy?
 		sdl2.SDL_SetTextureColorMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, *gxEdit.tileHighlightColor)
 		sdl2.SDL_SetTextureAlphaMod(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT].texture, gxEdit.tileHighlightTimer)
@@ -1532,7 +1541,6 @@ class Interface:
 			gxEdit.tileHighlightTimer = 48*2
 		
 		self.renderer.copy(gSurfaces[SURF_COLOR_WHITE_TRANSPARENT], dstrect=(x, y, w, h))
-
 		
 	def renderPlayers(self, gxEdit, stage):
 		mag = gxEdit.magnification
@@ -1692,24 +1700,36 @@ class Interface:
 		eve = stage.pack.eve.units
 		units = gSurfaces[SURF_UNITS]
 		xys = []
+
+		# --- Game-specific scaling ---
+		current_game_name = gxEdit.game_manager.get_current_game().name
+		if current_game_name == "cave_story":
+			entity_pos_scale = gxEdit.tileWidth
+			entity_render_size = gxEdit.tileWidth2
+		else:  # kero_blaster
+			entity_pos_scale = gxEdit.tileWidth2 // 2
+			entity_render_size = gxEdit.tileWidth2 // 2
+		# ---------------------------
+
 		for o in eve:
 			y = o.y
 			mag = gxEdit.magnification
-			if y < stage.scroll*const.ENTITY_SCALE:
+			# Culling logic needs to use the correct scale
+			if y < stage.scroll * const.ENTITY_SCALE:
 				continue
-			if (y - stage.scroll*const.ENTITY_SCALE) * gxEdit.tileWidth2//2 * mag > gWindowHeight:	
+			if (y - stage.scroll * const.ENTITY_SCALE) * entity_pos_scale * mag > gWindowHeight:
 				continue
 			y -= stage.scroll*const.ENTITY_SCALE
 
 			x = o.x
 			if x < stage.hscroll*const.ENTITY_SCALE:
 				continue
-			if (x - stage.hscroll*const.ENTITY_SCALE) * gxEdit.tileWidth2//2 * mag > gWindowWidth:
+			if (x - stage.hscroll*const.ENTITY_SCALE) * entity_pos_scale * mag > gWindowWidth:
 				continue
 			x -= stage.hscroll*const.ENTITY_SCALE
 
-			dstx = x * (gxEdit.tileWidth2 // 2)
-			dsty = y * (gxEdit.tileWidth2 // 2)
+			dstx = x * entity_pos_scale
+			dsty = y * entity_pos_scale
 
 			x = o.type1 % 16 #row size in units.bmp
 			y = o.type1 // 16
@@ -1717,12 +1737,12 @@ class Interface:
 			srcy = y * gxEdit.tileWidth2
 
 			srcrect = (srcx, srcy, gxEdit.tileWidth2, gxEdit.tileWidth2)
-			dstrect = (int(dstx*mag), int(dsty*mag), int(gxEdit.tileWidth2//2*mag), int(gxEdit.tileWidth2//2*mag))
+			dstrect = (int(dstx*mag), int(dsty*mag), int(entity_render_size*mag), int(entity_render_size*mag))
 
 			self.renderer.copy(units, srcrect=srcrect, dstrect=dstrect)
 
 			if o in stage.selectedEntities:
-				self.drawBox(self.renderer, SURF_SDLCOLOR_CYAN, int(dstx*mag)-3, int(dsty*mag)-3, int(gxEdit.tileWidth2//2*mag)+4, int(gxEdit.tileWidth2//2*mag)+4, 2)
+				self.drawBox(self.renderer, SURF_SDLCOLOR_CYAN, int(dstx*mag)-3, int(dsty*mag)-3, int(entity_render_size*mag)+4, int(entity_render_size*mag)+4, 2)
 			else:
 				if o.type1 in const.entityCrashIds:
 					self.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=dstrect)
@@ -1734,9 +1754,9 @@ class Interface:
 				elif o.type1 in const.entityUtilIds:
 					titleColor = SURF_SDLCOLOR_GOLD
 				else:
-					titleColor = SURF_SDLCOLOR_RED
+					titleColor = SURF_SDLCOLOR_GREEN
 				#entity borders
-				self.drawBox(self.renderer, titleColor, int(dstx*mag), int(dsty*mag), int(gxEdit.tileWidth2//2*mag), int(gxEdit.tileWidth2//2*mag))
+				self.drawBox(self.renderer, titleColor, int(dstx*mag), int(dsty*mag), int(entity_render_size*mag), int(entity_render_size*mag))
 
 			if (dstx, dsty) in xys: #distinguish layered entities
 				 self.renderer.copy(gSurfaces[SURF_COLOR_ORANGE_TRANSPARENT], dstrect=dstrect)
@@ -1744,6 +1764,7 @@ class Interface:
 			if o.string:
 				renderText(o.string, sdlColorWhite, TTF_STYLE_NORMAL, dstrect[0] + (gxEdit.tileWidth*mag), dstrect[1] + 2*mag)
 			xys.append((dstx, dsty))
+
 			
 	def drawBox(self, renderer, surf, dstx, dsty, w, h, size=1):
 		#mag = gxEdit.magnification

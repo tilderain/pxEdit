@@ -284,6 +284,7 @@ class Loader:
                     
                     entity = Entity(code_char, x, y, code_flag, code_event, id=i)
                     entity.bits = bits
+                    entity.param2 = code_event
                     entities.append(entity)
         except FileNotFoundError:
             print(f"Entity file not found: {path}")

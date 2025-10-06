@@ -24,7 +24,6 @@ class UndoAction:
 def runMouseWheel(stage, wheel):
 	stage.scroll -= wheel.y
 
-
 def runMouse1(stage, mouse):
 	if mouse.button != sdl2.SDL_BUTTON_LEFT: return False
 
@@ -91,8 +90,16 @@ def runMouse1(stage, mouse):
 		y = int(mouse.y + (stage.scroll * gxEdit.tileWidth * mag))
 
 		if stage.selectedEntities != []:
-			xe = int(mouse.x // (gxEdit.tileWidth2//2 * mag)) + stage.hscroll*const.ENTITY_SCALE
-			ye = int(mouse.y // (gxEdit.tileWidth2//2 * mag)) + stage.scroll*const.ENTITY_SCALE
+			# --- Game-specific scaling ---
+			current_game_name = gxEdit.game_manager.get_current_game().name
+			if current_game_name == "cave_story":
+				entity_pos_scale = gxEdit.tileWidth
+			else: # kero_blaster
+				entity_pos_scale = gxEdit.tileWidth2 // 2
+			# ---------------------------
+
+			xe = int(mouse.x // (entity_pos_scale * mag)) + stage.hscroll*const.ENTITY_SCALE
+			ye = int(mouse.y // (entity_pos_scale * mag)) + stage.scroll*const.ENTITY_SCALE
 			for o in stage.selectedEntities:
 				if o.x == xe and o.y == ye:
 					gxEdit.draggingEntities = True
@@ -144,10 +151,17 @@ def runMouseUp(gxEdit, curStage, mouse):
 		gxEdit.selectionBoxEnd = [-1, -1]
 		if gxEdit.draggingEntities:
 			gxEdit.draggingEntities = False
-
 			stage = gxEdit.stages[gxEdit.curStage]
-			undo = UndoAction(const.UNDO_ENTITY_MOVE, stage.selectedEntitiesDragStart, stage.selectedEntities)
+			
+			# The forward state is the current state of the entities AFTER the move.
+			# We need to find these specific entities in the main list to get their updated references.
+			current_entity_ids = {o.id for o in stage.selectedEntitiesDragStart}
+			forward_state = [e for e in stage.pack.eve.units if e.id in current_entity_ids]
+
+			# The reverse state was already captured on MouseDown in stage.selectedEntitiesDragStart
+			undo = UndoAction(const.UNDO_ENTITY_MOVE, stage.selectedEntitiesDragStart, forward_state)
 			stage.addUndo(undo)
+
 	elif gxEdit.currentEditMode == const.EDIT_TILE and gxEdit.currentTilePaintMode == const.PAINT_COPY:
 		stage = curStage
 		mag = gxEdit.magnification
@@ -239,7 +253,7 @@ def runMouseUp(gxEdit, curStage, mouse):
 
 		gxEdit.rectanglePaintBoxStart = [-1, -1]
 		gxEdit.rectanglePaintBoxEnd = [-1, -1]
-
+		
 def runMouseDrag(gxEdit, stage, mouse):			
 	#mouse = util.getMouseState()
 	mouse.button = mouse.state
@@ -376,7 +390,15 @@ def runMouseDrag(gxEdit, stage, mouse):
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 		x = int(mouse.x + (stage.hscroll * gxEdit.tileWidth * mag))
 		y = int(mouse.y + (stage.scroll * gxEdit.tileWidth * mag))
-		scale = (gxEdit.tileWidth2//2 * mag)
+
+		# --- Game-specific scaling ---
+		current_game_name = gxEdit.game_manager.get_current_game().name
+		if current_game_name == "cave_story":
+			entity_pos_scale = gxEdit.tileWidth
+		else: # kero_blaster
+			entity_pos_scale = gxEdit.tileWidth2 // 2
+		scale = entity_pos_scale * mag
+		# ---------------------------
 
 		if gxEdit.draggingEntities:
 			x = int((mouse.x // scale) + stage.hscroll*const.ENTITY_SCALE)
@@ -474,17 +496,23 @@ def runMouseDrag(gxEdit, stage, mouse):
 
 			#TODO: scroll into view for expanded entity list
 			gxEdit.currentEntity = selectedEntities[0].type1
-			
 
-					
 def runMouse2(gxEdit, stage, mouse):
 	if (mouse.button != sdl2.SDL_BUTTON_RIGHT): return False
 
 	mag = gxEdit.magnification
 
 	if gxEdit.currentEditMode == const.EDIT_ENTITY:
-		x = int(mouse.x / (gxEdit.tileWidth2/2 * mag)) + stage.hscroll*const.ENTITY_SCALE
-		y = int(mouse.y / (gxEdit.tileWidth2/2 * mag)) + stage.scroll*const.ENTITY_SCALE
+		# --- Game-specific scaling ---
+		current_game_name = gxEdit.game_manager.get_current_game().name
+		if current_game_name == "cave_story":
+			entity_pos_scale = gxEdit.tileWidth
+		else: # kero_blaster
+			entity_pos_scale = gxEdit.tileWidth2 // 2
+		# ---------------------------
+
+		x = int(mouse.x / (entity_pos_scale * mag)) + stage.hscroll*const.ENTITY_SCALE
+		y = int(mouse.y / (entity_pos_scale * mag)) + stage.scroll*const.ENTITY_SCALE
 		x = math.floor(x) 
 		y = math.floor(y)
 

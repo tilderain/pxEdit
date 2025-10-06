@@ -609,22 +609,17 @@ class Editor:
 
 		if undo.action == const.UNDO_TILE:
 			stage.lastTileEdit = [None, None]
-			# This needs to use the pack layers
 			map_layer = stage.pack.layers[undo.param] if len(stage.pack.layers) > undo.param else None
-			if map_layer: # Assuming modify method exists on Layer
-				# This modify method needs to be implemented in the universal Layer class
-				# For now, direct modification
-				for pos, tile_val in undo.reverse:
-					map_layer.tiles[pos[1]][pos[0]] = tile_val
-				for pos, tile in undo.reverse:
-					stage.renderTileToSurface(pos[0], pos[1], tile[0],
-												tile[1], undo.param)
+			if map_layer:
+				for pos, tile_coords in undo.reverse: # tile_coords is [tx, ty]
+					# Reconstruct the single integer tile ID for the map data array
+					tile_value = tile_coords[0] + (tile_coords[1] * 16)
+					map_layer.tiles[pos[1]][pos[0]] = tile_value
+					# Use the tile coordinates directly for rendering to the surface
+					stage.renderTileToSurface(pos[0], pos[1], tile_coords[0], tile_coords[1], undo.param)
 		elif undo.action == const.UNDO_ENTITY_MOVE:
-			# This needs to use the pack entities
-			# Assuming replace method exists or direct manipulation
-			# For now, direct manipulation
-			stage.pack.eve.units = undo.reverse # This is a simplification
-			stage.selectedEntities = undo.reverse
+			stage.pack.eve.replace(undo.reverse)
+			stage.selectedEntities = [e for e in stage.pack.eve.units if e.id in [o.id for o in undo.reverse]]
 
 		elif undo.action == const.UNDO_ENTITY_ADD:
 			# This needs to use the pack entities
@@ -640,7 +635,6 @@ class Editor:
 			return
 		if(undoStack[undoPos].commit == False):
 			gxEdit.executeUndo()
-		
 
 	def executeRedo(self):
 		stage = self.stages[self.curStage]
@@ -654,22 +648,17 @@ class Editor:
 
 		if redo.action == const.UNDO_TILE:
 			stage.lastTileEdit = [None, None]
-			# This needs to use the pack layers
 			map_layer = stage.pack.layers[redo.param] if len(stage.pack.layers) > redo.param else None
-			if map_layer: # Assuming modify method exists on Layer
-				# This modify method needs to be implemented in the universal Layer class
-				# For now, direct modification
-				for pos, tile_val in redo.forward:
-					map_layer.tiles[pos[1]][pos[0]] = tile_val
-				for pos, tile in redo.forward:
-					stage.renderTileToSurface(pos[0], pos[1], tile[0],
-												tile[1], redo.param)
+			if map_layer:
+				for pos, tile_coords in redo.forward: # tile_coords is [tx, ty]
+					# Reconstruct the single integer tile ID for the map data array
+					tile_value = tile_coords[0] + (tile_coords[1] * 16)
+					map_layer.tiles[pos[1]][pos[0]] = tile_value
+					# Use the tile coordinates directly for rendering to the surface
+					stage.renderTileToSurface(pos[0], pos[1], tile_coords[0], tile_coords[1], redo.param)
 		elif redo.action == const.UNDO_ENTITY_MOVE:
-			# This needs to use the pack entities
-			# Assuming replace method exists or direct manipulation
-			# For now, direct manipulation
-			stage.pack.eve.units = redo.forward # This is a simplification
-			stage.selectedEntities = redo.forward
+			stage.pack.eve.replace(redo.forward)
+			stage.selectedEntities = [e for e in stage.pack.eve.units if e.id in [o.id for o in redo.forward]]
 		elif redo.action == const.UNDO_ENTITY_ADD:
 			# This needs to use the pack entities
 			for o in redo.forward:
