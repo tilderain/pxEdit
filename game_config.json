@@ -1,0 +1,29 @@
+{
+    "kero_blaster": {
+        "name": "Kero Blaster",
+        "data_path": "rsc_k/",
+        "stage_path": "field/",
+        "image_path": "img/",
+        "script_path": "script/",
+        "stage_ext": ".pxpack",
+        "script_ext": ".pxeve",
+        "attr_ext": ".pxattr",
+        "entity_info": "entityinfo-kero.txt",
+        "tile_size": 8,
+        "entity_scale": 1
+    },
+    "cave_story": {
+        "name": "Cave Story",
+        "data_path": "data/",
+        "stage_path": "Stage/",
+        "image_path": "Npc/",
+        "script_path": "Stage/",
+        "stage_ext": ".pxm",
+        "script_ext": ".tsc",
+        "entity_ext": ".pxe",
+        "attr_ext": ".pxa",
+        "entity_info": "entityinfo-cave.txt",
+        "tile_size": 16,
+        "entity_scale": 2
+    }
+}
