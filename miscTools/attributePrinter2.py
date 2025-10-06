@@ -1,5 +1,7 @@
 import os
 from bitstring import ConstBitStream
+from PIL import Image
+
 
 s = ConstBitStream(filename="../Kero Blaster/KeroBlaster orig.exe")
 s.pos = s.find(bytearray.fromhex("0000000005000000000000000000000000000000000000000000000000000000"))[0]
@@ -17,7 +19,7 @@ def readEntityInfo():
 entityInfo = readEntityInfo()
 
 image_base = 0x401200                          #current npc
-sheets = ["wallpaper", "/2", "/1", "fuFixNPC", "CurrentNPCSheet", "fuFixChar", "fuFixPtcl", "/0", "button", "item", "localize", "item", "kerofont"]
+sheets = ["wallpaper", "/2", "/1", "fuFixNPC", "CurrentNPCSheet", "fuFixChar", "fuFixPtcle", "/0", "button", "item", "localize", "item", "kerofont"]
 for i in range(787):#787
 	if i > 249:
 		print("npc no: " + str(i))
@@ -59,4 +61,17 @@ for i in range(787):#787
 
 	
 	print("\n")
+
+
+	try:
+		file = "../Kero Blaster/rsc_k/img/" + sheets[surf_no] + ".png"
+		im = Image.open(file)
+		width, height = im.size
+
+		im2 = im.crop((rect1//2, rect2//2, rect1//2 + rect3//2, rect2//2 + rect4//2))
+		im2.save("./img/" + str(i) + ".png")
+	except Exception as e:
+		print(e)
+		pass
+	
 

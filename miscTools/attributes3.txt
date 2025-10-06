@@ -1,0 +1,3148 @@
+(000) -
+func 0x0, surf ?fuFixChar, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(001) Empty
+func 0x462580, surf ?fuFixChar, X:824, Y:1008, Width:8, Height:8, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(002) Trush Box
+func 0x458940, surf ?CurrentNPCSheet, X:192, Y:160, Width:32, Height:48, 2, 0, 12, 12, 12, #14, health 22, coin -50, bonus 3, nameptr0x0, namestring 0
+
+
+(003) Event
+func 0x4685c0, surf ?fuFixChar, X:768, Y:1016, Width:8, Height:8, 0, 0, 3, 3, 3, #3, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(004) Anchor
+func 0x4625e0, surf ?fuFixChar, X:816, Y:1016, Width:8, Height:8, 0, 0, 3, 3, 3, #3, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(005) Shutter
+func 0x4629a0, surf ?fuFixChar, X:840, Y:1016, Width:8, Height:8, 0, 1, 3, 3, 3, #3, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(006) Long Weed
+func 0x44afc0, surf ?/0, X:128, Y:256, Width:32, Height:48, 8, 0, 8, 20, 4, #4, health 1, coin -1022, bonus 1, nameptr0x0, namestring 0
+
+
+(007) Kankisen 1
+func 0x475970, surf ?/0, X:384, Y:128, Width:32, Height:32, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(008) Trunk
+func 0x466500, surf ?CurrentNPCSheet, X:128, Y:384, Width:64, Height:16, 0, 0, 22, 8, 24, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(009) Test
+func 0x453c80, surf ?fuFixChar, X:0, Y:0, Width:32, Height:32, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(010) Block Generator
+func 0x466730, surf ?CurrentNPCSheet, X:224, Y:504, Width:8, Height:8, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(011) Kurobo-
+func 0x44e560, surf ?/0, X:64, Y:320, Width:32, Height:32, 1, 0, 12, 12, 12, #12, health 6, coin -1, bonus 3, nameptr0x0, namestring 0
+
+
+(012) Snow Trunk
+func 0x466500, surf ?CurrentNPCSheet, X:448, Y:480, Width:64, Height:32, 0, 0, 22, 8, 24, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(013) Cat & Frog Step
+func 0x475a20, surf ?fuFixNPC, X:720, Y:736, Width:48, Height:16, 5, 0, 16, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(014) Gearshift
+func 0x479e30, surf ?fuFixNPC, X:512, Y:576, Width:16, Height:32, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(015) Timer Kun
+func 0x468d60, surf ?fuFixNPC, X:704, Y:960, Width:32, Height:32, 0, 0, 8, 8, 8, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(016) Kajiya
+func 0x479c50, surf ?fuFixNPC, X:512, Y:448, Width:32, Height:32, 2, 0, 10, 10, 10, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(017) Endless Ice
+func 0x456770, surf ?CurrentNPCSheet, X:192, Y:384, Width:32, Height:32, 1, 0, 8, 10, 4, #8, health 12, coin 1, bonus 1, nameptr0x0, namestring 0
+
+
+(018) MiniSpiral
+func 0x469e80, surf ?CurrentNPCSheet, X:96, Y:432, Width:24, Height:24, 1, 0, 9, 9, 9, #12, health 2, coin -1, bonus 0, nameptr0x0, namestring 0
+
+
+(019) Elevator Door
+func 0x468e80, surf ?fuFixNPC, X:768, Y:448, Width:48, Height:64, 0, 0, 2, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(020) BigPress
+func 0x469bd0, surf ?CurrentNPCSheet, X:480, Y:368, Width:32, Height:64, 0, 1, 16, 32, 16, #32, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(021) Train
+func 0x475c40, surf ?CurrentNPCSheet, X:0, Y:224, Width:112, Height:144, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(022) Drop
+func 0x46ee10, surf ?fuFixPtcl, X:208, Y:144, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(023) Green Fish
+func 0x44ca00, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 2, 0, 12, 6, 8, #8, health 12, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(024) Shield Plant
+func 0x438880, surf ?CurrentNPCSheet, X:0, Y:0, Width:128, Height:80, 3, 0, 1, 1, 30, #32, health 110, coin 99, bonus 0, nameptr0x0, namestring 0
+
+
+(025) Kani mini
+func 0x46b1c0, surf ?CurrentNPCSheet, X:144, Y:432, Width:24, Height:24, 1, 0, 8, 8, 8, #12, health 6, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(026) Relay
+func 0x468800, surf ?fuFixChar, X:856, Y:1016, Width:8, Height:8, 0, 0, 16, 16, 3, #3, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(027) toL2
+func 0x4689e0, surf ?fuFixPtcl, X:432, Y:464, Width:48, Height:16, 0, 0, 3, 3, 6, #6, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(028) toU2
+func 0x468aa0, surf ?fuFixPtcl, X:480, Y:464, Width:16, Height:48, 0, 0, 3, 3, 6, #6, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(029) toR2
+func 0x468a40, surf ?fuFixPtcl, X:432, Y:480, Width:48, Height:16, 0, 0, 3, 3, 6, #6, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(030) toD2
+func 0x468b00, surf ?fuFixPtcl, X:496, Y:464, Width:16, Height:48, 0, 0, 3, 3, 6, #6, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(031) FirePlant
+func 0x46a280, surf ?CurrentNPCSheet, X:128, Y:128, Width:32, Height:32, 2, 0, 10, 10, 16, #16, health 16, coin 6, bonus 0, nameptr0x0, namestring 0
+
+
+(032) LadderBox
+func 0x462bd0, surf ?fuFixNPC, X:208, Y:304, Width:24, Height:24, 2, 0, 11, 11, 12, #12, health 6, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(033) Debug Link
+func 0x466b50, surf ?fuFixChar, X:800, Y:976, Width:16, Height:16, 2, 0, 8, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(034) ComboCue
+func 0x463b30, surf ?fuFixChar, X:176, Y:976, Width:24, Height:24, 1, 1, 12, 8, 0, #0, health 12, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(035) Kinko
+func 0x451040, surf ?fuFixNPC, X:0, Y:960, Width:48, Height:32, 2, 0, 20, 14, 22, #16, health 40, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(036) The Tire
+func 0x4782d0, surf ?fuFixNPC, X:512, Y:768, Width:80, Height:80, 0, 0, 24, 24, 24, #24, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(037) Doro Hole
+func 0x458e30, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 1, 0, 10, 10, 10, #12, health 9, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(038) Heart
+func 0x463c40, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(039) Doro Jump
+func 0x459440, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 1, 0, 10, 10, 10, #12, health 9, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(040) Lift V3
+func 0x462fc0, surf ?fuFixNPC, X:976, Y:672, Width:48, Height:16, 0, 0, 20, 8, 20, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(041) Ice Spike
+func 0x44b6c0, surf ?/0, X:0, Y:256, Width:32, Height:32, 2, 0, 8, 8, 8, #8, health 24, coin 10, bonus 1, nameptr0x0, namestring 0
+
+
+(042) Camp Gate
+func 0x462da0, surf ?fuFixChar, X:928, Y:672, Width:48, Height:48, 0, 0, 16, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(043) Chibi Uzo
+func 0x453d90, surf ?fuFixNPC, X:64, Y:752, Width:32, Height:32, 4, 0, 8, 8, 8, #8, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(044) Uzo Void layer 0
+func 0x47c270, surf ?/0, X:256, Y:128, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(045) Tar
+func 0x456c00, surf ?CurrentNPCSheet, X:160, Y:192, Width:48, Height:32, 5, 0, 12, 12, 12, #10, health 4, coin 10, bonus 3, nameptr0x0, namestring 0
+
+
+(046) Block Eater
+func 0x4636d0, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(047) Uzo Void layer 1
+func 0x47c270, surf ?fuFixNPC, X:512, Y:608, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(048) HiddenChest
+func 0x4637c0, surf ?fuFixNPC, X:224, Y:280, Width:32, Height:24, 2, 0, 8, 8, 0, #0, health 18, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(049) Call Missile Bird 7
+func 0x44d920, surf ?fuFixChar, X:824, Y:1016, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+(050) Trunk Mini
+func 0x466500, surf ?CurrentNPCSheet, X:384, Y:384, Width:48, Height:16, 0, 0, 8, 8, 10, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(051) Kani 7
+func 0x46b1c0, surf ?CurrentNPCSheet, X:0, Y:224, Width:32, Height:32, 2, 0, 10, 14, 10, #16, health 12, coin -20, bonus 3, nameptr0x0, namestring 0
+
+
+(052) Kani Chibi 7
+func 0x46b1c0, surf ?CurrentNPCSheet, X:128, Y:432, Width:24, Height:24, 1, 0, 8, 8, 8, #12, health 6, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(053) Phone
+func 0x47ba30, surf ?fuFixNPC, X:576, Y:576, Width:32, Height:32, 2, 1, 12, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(054) Nurse
+func 0x4794d0, surf ?fuFixNPC, X:512, Y:512, Width:32, Height:32, 1, 0, 10, 4, 10, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(055) Fire bubble Set
+func 0x46a870, surf ?CurrentNPCSheet, X:192, Y:440, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(056) Mole
+func 0x46a970, surf ?CurrentNPCSheet, X:192, Y:128, Width:32, Height:32, 1, 0, 12, 14, 12, #16, health 12, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(057) Uzo Void layer 2
+func 0x47c270, surf ?/2, X:192, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(058) comic balloon
+func 0x47c480, surf ?fuFixChar, X:512, Y:512, Width:128, Height:64, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(059) Rolling Fiber
+func 0x457040, surf ?CurrentNPCSheet, X:176, Y:0, Width:48, Height:48, 2, 0, 18, 18, 16, #20, health 24, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(060) Barbwire
+func 0x46aed0, surf ?CurrentNPCSheet, X:224, Y:464, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(061) Domino
+func 0x463ce0, surf ?CurrentNPCSheet, X:160, Y:496, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(062) Explain
+func 0x468cb0, surf ?fuFixChar, X:824, Y:1008, Width:8, Height:8, 0, 0, 8, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(063) Door A
+func 0x4696d0, surf ?fuFixNPC, X:768, Y:448, Width:48, Height:64, 0, 0, 0, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(064) Walking Black
+func 0x459a10, surf ?fuFixNPC, X:0, Y:256, Width:64, Height:64, 6, 0, 16, 24, 8, #24, health 100, coin -50, bonus 3, nameptr0x0, namestring 0
+
+
+(065) Focus Control
+func 0x468300, surf ?fuFixChar, X:832, Y:1008, Width:8, Height:8, 0, 0, 8, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(066) Uzo Flame
+func 0x4577b0, surf ?/0, X:0, Y:320, Width:32, Height:32, 4, 0, 14, 14, 8, #8, health 8, coin -20, bonus 0, nameptr0x0, namestring 0
+
+
+(067) Creeper
+func 0x457c40, surf ?CurrentNPCSheet, X:0, Y:0, Width:48, Height:32, 2, 0, 18, 10, 18, #10, health 28, coin -50, bonus 2, nameptr0x0, namestring 0
+
+
+(068) Shacho Act stage 7 office
+func 0x480790, surf ?CurrentNPCSheet, X:192, Y:0, Width:48, Height:64, 2, 0, 10, 14, 12, #16, health 32, coin 19, bonus 0, nameptr0x0, namestring 0
+
+
+(069) Room Locker
+func 0x451330, surf ?fuFixNPC, X:192, Y:528, Width:32, Height:32, 1, 0, 10, 8, 0, #0, health 8, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(070) Bent Plate
+func 0x47cf00, surf ?CurrentNPCSheet, X:0, Y:320, Width:112, Height:96, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(071) Boss Desk
+func 0x478280, surf ?CurrentNPCSheet, X:448, Y:416, Width:64, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(072) Barricade
+func 0x46b0d0, surf ?fuFixNPC, X:96, Y:864, Width:32, Height:32, 1, 0, 10, 12, 10, #12, health 16, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(073) Uzo Tank
+func 0x47bd80, surf ?fuFixNPC, X:512, Y:928, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(074) Elevator 00
+func 0x47d1f0, surf ?/0, X:256, Y:0, Width:128, Height:96, 0, 0, 0, 0, 8, #24, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(075) Kani
+func 0x46b1c0, surf ?CurrentNPCSheet, X:64, Y:288, Width:32, Height:32, 2, 0, 10, 14, 10, #16, health 16, coin -20, bonus 3, nameptr0x0, namestring 0
+
+
+(076) Tokobushi
+func 0x46b850, surf ?CurrentNPCSheet, X:0, Y:256, Width:32, Height:32, 1, 0, 12, 8, 12, #8, health 12, coin -9, bonus 0, nameptr0x0, namestring 0
+
+
+(077) Anemone
+func 0x46bb20, surf ?CurrentNPCSheet, X:80, Y:128, Width:48, Height:32, 2, 0, 12, 14, 12, #10, health 32, coin -50, bonus 2, nameptr0x0, namestring 0
+
+
+(078) to Back
+func 0x468b60, surf ?fuFixChar, X:768, Y:976, Width:16, Height:16, 0, 0, 4, 4, 4, #4, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(079) Position Half Up
+func 0x466c70, surf ?fuFixChar, X:888, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(080) Door Vertical
+func 0x466ce0, surf ?/0, X:256, Y:128, Width:48, Height:64, 0, 0, 6, 32, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(081) Line Censor
+func 0x466fa0, surf ?fuFixPtcl, X:80, Y:368, Width:8, Height:128, 0, 0, 2, 64, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(082) Route Arrow
+func 0x467120, surf ?fuFixNPC, X:928, Y:720, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(083) Fly Wave
+func 0x44e220, surf ?CurrentNPCSheet, X:96, Y:160, Width:32, Height:32, 1, 0, 6, 6, 6, #6, health 4, coin 1, bonus 3, nameptr0x0, namestring 0
+
+
+(084) Spin
+func 0x46bf20, surf ?CurrentNPCSheet, X:64, Y:160, Width:24, Height:24, 1, 0, 10, 10, 6, #6, health 8, coin -1, bonus 1, nameptr0x0, namestring 0
+
+
+(085) Altar
+func 0x47b2f0, surf ?/1, X:64, Y:0, Width:128, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(086) Call Small
+func 0x47bcf0, surf ?fuFixChar, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(087) Snow Setter
+func 0x46f440, surf ?fuFixChar, X:888, Y:1016, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(088) Icicle
+func 0x46c140, surf ?CurrentNPCSheet, X:192, Y:384, Width:32, Height:32, 1, 0, 6, 12, 4, #8, health 8, coin -1023, bonus 0, nameptr0x0, namestring 0
+
+
+(089) Uzo Slime
+func 0x458460, surf ?fuFixChar, X:0, Y:768, Width:48, Height:48, 4, 0, 12, 12, 12, #8, health 20, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(090) Goldrush
+func 0x46c640, surf ?CurrentNPCSheet, X:64, Y:288, Width:32, Height:32, 1, 0, 12, 12, 14, #16, health 48, coin 29, bonus 0, nameptr0x0, namestring 0
+
+
+(091) Ebi Flower 7
+func 0x44ba00, surf ?CurrentNPCSheet, X:192, Y:384, Width:32, Height:32, 2, 0, 12, 10, 8, #10, health 10, coin 1, bonus 3, nameptr0x0, namestring 0
+
+
+(092) Nikubae
+func 0x45a000, surf ?fuFixNPC, X:96, Y:816, Width:16, Height:16, 4, 0, 4, 4, 4, #4, health 1, coin -1023, bonus 2, nameptr0x0, namestring 0
+
+
+(093) Uzo Gray (layer0)
+func 0x47d8f0, surf ?/0, X:448, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(094) 4 Boss Barricade.
+func 0x46b0d0, surf ?/0, X:128, Y:256, Width:32, Height:32, 1, 0, 10, 12, 10, #12, health 16, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(095) Quaker
+func 0x463f00, surf ?fuFixChar, X:832, Y:1016, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(096) Flag Mine
+func 0x463f90, surf ?fuFixChar, X:880, Y:1008, Width:8, Height:8, 0, 0, 3, 3, 3, #3, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(097) Uzo Red
+func 0x453df0, surf ?fuFixNPC, X:128, Y:656, Width:32, Height:48, 4, 0, 12, 12, 12, #12, health 8, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(098) Saucer
+func 0x441f10, surf ?CurrentNPCSheet, X:0, Y:0, Width:176, Height:32, 0, 1, 48, 14, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(099) Uzo Over Fence
+func 0x47c270, surf ?/2, X:192, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(100) Fluo Lamp
+func 0x4599a0, surf ?fuFixNPC, X:608, Y:720, Width:64, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(101) Gravity Block 3
+func 0x4652c0, surf ?fuFixChar, X:176, Y:768, Width:48, Height:48, 2, 0, 22, 24, 24, #24, health 20, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(102) Uzo Chibi Red
+func 0x453f00, surf ?fuFixNPC, X:0, Y:752, Width:32, Height:32, 4, 0, 8, 8, 8, #8, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(103) Uzo Gray (layer2)
+func 0x47d8f0, surf ?/2, X:128, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(104) Sparker
+func 0x47db80, surf ?fuFixChar, X:888, Y:1016, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(105) Bacteria
+func 0x46ca60, surf ?CurrentNPCSheet, X:96, Y:416, Width:32, Height:32, 2, 0, 12, 12, 12, #12, health 10, coin -5, bonus 0, nameptr0x0, namestring 0
+
+
+(106) Digesty
+func 0x46d0d0, surf ?/1, X:224, Y:64, Width:32, Height:32, 0, 0, 6, 10, 8, #12, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(107) Roof Worm
+func 0x46d360, surf ?CurrentNPCSheet, X:64, Y:0, Width:32, Height:24, 2, 0, 12, 8, 12, #8, health 8, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(108) Big Worm
+func 0x46d6d0, surf ?CurrentNPCSheet, X:96, Y:0, Width:64, Height:48, 2, 0, 24, 16, 24, #16, health 64, coin 39, bonus 0, nameptr0x0, namestring 0
+
+
+(109) Silhoette
+func 0x46da90, surf ?CurrentNPCSheet, X:448, Y:368, Width:32, Height:48, 1, 0, 10, 22, 10, #24, health 10, coin -1, bonus 0, nameptr0x0, namestring 0
+
+
+(110) Zombie
+func 0x46dda0, surf ?CurrentNPCSheet, X:0, Y:0, Width:48, Height:48, 1, 0, 8, 18, 8, #20, health 48, coin -1, bonus 0, nameptr0x0, namestring 0
+
+
+(111) Leather
+func 0x46e2e0, surf ?CurrentNPCSheet, X:0, Y:144, Width:48, Height:48, 1, 0, 8, 18, 8, #20, health 120, coin -20, bonus 0, nameptr0x0, namestring 0
+
+
+(112) White Setter
+func 0x47df00, surf ?fuFixChar, X:888, Y:1016, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(113) Egg Worm
+func 0x46e750, surf ?CurrentNPCSheet, X:192, Y:256, Width:32, Height:32, 1, 0, 8, 8, 8, #8, health 2, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(114) Stone Gate
+func 0x464110, surf ?CurrentNPCSheet, X:480, Y:368, Width:32, Height:64, 0, 1, 16, 32, 16, #32, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(115) Frog Plant
+func 0x44a5d0, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 2, 0, 12, 12, 14, #14, health 5, coin 1, bonus 2, nameptr0x0, namestring 0
+
+
+(116) Weak Weed
+func 0x44adf0, surf ?/0, X:0, Y:256, Width:32, Height:32, 8, 0, 6, 6, 4, #4, health 1, coin -1022, bonus 1, nameptr0x0, namestring 0
+
+
+(117) Ebi Floser
+func 0x44ba00, surf ?CurrentNPCSheet, X:64, Y:0, Width:32, Height:32, 2, 0, 12, 10, 8, #10, health 10, coin 1, bonus 3, nameptr0x0, namestring 0
+
+
+(118) Bubble 1UP
+func 0x4644f0, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(119) Shacho A
+func 0x480430, surf ?fuFixNPC, X:256, Y:0, Width:48, Height:64, 0, 0, 0, 8, 16, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(120) Frozen Fish
+func 0x46a120, surf ?CurrentNPCSheet, X:0, Y:224, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(121) Uzo Elec
+func 0x45a760, surf ?fuFixNPC, X:192, Y:560, Width:32, Height:32, 4, 0, 8, 8, 12, #12, health 10, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(122) Flower Vase
+func 0x47df70, surf ?fuFixNPC, X:768, Y:928, Width:48, Height:48, 0, 0, 0, 0, 6, #24, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(123) Gray Spiral
+func 0x47e190, surf ?fuFixNPC, X:0, Y:192, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(124) Time Attack Display
+func 0x467380, surf ?fuFixNPC, X:768, Y:672, Width:144, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(125) Metalmushi
+func 0x464670, surf ?fuFixNPC, X:608, Y:672, Width:32, Height:16, 1, 0, 12, 8, 12, #8, health 12, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(126) The Bar
+func 0x463d90, surf ?/0, X:224, Y:32, Width:32, Height:192, 0, 0, 16, 96, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(127) Gravity Ice
+func 0x4653d0, surf ?fuFixChar, X:144, Y:768, Width:32, Height:32, 2, 0, 16, 16, 16, #16, health 64, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(128) EarthFly
+func 0x46ea10, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 1, 0, 8, 8, 4, #4, health 3, coin -1023, bonus 0, nameptr0x0, namestring 0
+
+
+(129) Walking Moss
+func 0x464a00, surf ?CurrentNPCSheet, X:64, Y:0, Width:32, Height:32, 1, 0, 10, 10, 8, #8, health 2, coin -1023, bonus 0, nameptr0x0, namestring 0
+
+
+(130) Mob Stand
+func 0x46eca0, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 2, 0, 12, 10, 12, #16, health 2, coin -2, bonus 2, nameptr0x0, namestring 0
+
+
+(131) Spike Plant
+func 0x44b1c0, surf ?/0, X:64, Y:256, Width:32, Height:32, 1, 0, 8, 8, 10, #12, health 4, coin -1, bonus 2, nameptr0x0, namestring 0
+
+
+(132) Sidewinder
+func 0x44be10, surf ?CurrentNPCSheet, X:128, Y:0, Width:32, Height:32, 2, 0, 12, 12, 12, #14, health 4, coin 1, bonus 3, nameptr0x0, namestring 0
+
+
+(133) Katanakaji
+func 0x464ab0, surf ?fuFixNPC, X:256, Y:448, Width:32, Height:32, 2, 0, 6, 8, 12, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(134) Chest2
+func 0x464b60, surf ?fuFixNPC, X:208, Y:448, Width:48, Height:24, 1, 1, 12, 6, 12, #12, health 10, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(135) Walk Plant
+func 0x44c510, surf ?CurrentNPCSheet, X:0, Y:160, Width:32, Height:48, 2, 0, 10, 18, 10, #18, health 10, coin 1, bonus 2, nameptr0x0, namestring 0
+
+
+(136) Blue Fish
+func 0x44ca00, surf ?CurrentNPCSheet, X:0, Y:160, Width:32, Height:32, 1, 0, 8, 4, 4, #4, health 4, coin 1, bonus 3, nameptr0x0, namestring 0
+
+
+(137) Dragon Flower
+func 0x44a9f0, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 2, 0, 12, 12, 14, #14, health 10, coin -1, bonus 3, nameptr0x0, namestring 0
+
+
+(138) Set Birds
+func 0x44d920, surf ?fuFixChar, X:824, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(139) Fly Evade
+func 0x44dca0, surf ?CurrentNPCSheet, X:96, Y:0, Width:32, Height:32, 1, 0, 6, 6, 6, #6, health 4, coin 1, bonus 3, nameptr0x0, namestring 0
+
+
+(140) Gravity Block 2
+func 0x4652c0, surf ?fuFixChar, X:224, Y:768, Width:32, Height:32, 2, 0, 16, 16, 16, #16, health 12, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(141) Doronko
+func 0x44e560, surf ?CurrentNPCSheet, X:128, Y:224, Width:32, Height:32, 1, 0, 12, 12, 12, #12, health 6, coin -1, bonus 3, nameptr0x0, namestring 0
+
+
+(142) Tumbleweed
+func 0x44f620, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 1, 0, 8, 8, 12, #14, health 2, coin 1, bonus 2, nameptr0x0, namestring 0
+
+
+(143) New Arms
+func 0x465580, surf ?CurrentNPCSheet, X:0, Y:192, Width:32, Height:32, 0, 1, 12, 2, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(144) Bat ceiling
+func 0x44fe10, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 1, 0, 10, 10, 12, #12, health 8, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(145) Strong Box
+func 0x450810, surf ?fuFixNPC, X:0, Y:832, Width:48, Height:32, 2, 0, 20, 14, 22, #16, health 40, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(146) Chandelier
+func 0x4519b0, surf ?fuFixNPC, X:128, Y:560, Width:64, Height:32, 2, 0, 26, 12, 26, #12, health 10, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(147) Bubble Lift
+func 0x4656b0, surf ?fuFixChar, X:896, Y:768, Width:48, Height:32, 1, 0, 24, 10, 10, #10, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(148) Call Bats
+func 0x454430, surf ?CurrentNPCSheet, X:128, Y:128, Width:32, Height:32, 1, 0, 4, 4, 4, #12, health 20, coin -10, bonus 0, nameptr0x0, namestring 0
+
+
+(149) Booster
+func 0x4659a0, surf ?fuFixChar, X:128, Y:512, Width:48, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(150) Bat Passing
+func 0x450380, surf ?CurrentNPCSheet, X:64, Y:0, Width:32, Height:32, 1, 0, 10, 10, 12, #12, health 5, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(151) Orange Fish
+func 0x452150, surf ?CurrentNPCSheet, X:64, Y:160, Width:32, Height:32, 1, 0, 8, 4, 4, #4, health 6, coin -1, bonus 3, nameptr0x0, namestring 0
+
+
+(152) Echinus
+func 0x452350, surf ?CurrentNPCSheet, X:0, Y:384, Width:32, Height:32, 1, 0, 10, 10, 10, #10, health 20, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(153) KillerSensor
+func 0x452620, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 2, 0, 14, 12, 12, #12, health 12, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(154) Moving Box Horizontal
+func 0x465ac0, surf ?CurrentNPCSheet, X:336, Y:352, Width:48, Height:32, 0, 0, 24, 14, 24, #14, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(155) BomBox
+func 0x452e80, surf ?CurrentNPCSheet, X:0, Y:416, Width:48, Height:32, 1, 0, 24, 16, 24, #16, health 10, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(156) Edge Coin (s)
+func 0x453190, surf ?CurrentNPCSheet, X:32, Y:160, Width:24, Height:24, 1, 0, 10, 10, 6, #6, health 8, coin 10, bonus 3, nameptr0x0, namestring 0
+
+
+(157) Edge Medal
+func 0x4536f0, surf ?CurrentNPCSheet, X:0, Y:160, Width:32, Height:32, 2, 0, 12, 12, 14, #14, health 8, coin -10, bonus 5, nameptr0x0, namestring 0
+
+
+(158) Fall Light
+func 0x4772b0, surf ?fuFixChar, X:928, Y:976, Width:48, Height:48, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(159) Intro
+func 0x4669a0, surf ?fuFixChar, X:896, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(160) Uzouzo
+func 0x453cc0, surf ?fuFixNPC, X:0, Y:656, Width:32, Height:48, 4, 0, 12, 12, 12, #12, health 8, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(161) Office Fly
+func 0x454040, surf ?CurrentNPCSheet, X:480, Y:384, Width:16, Height:16, 1, 0, 4, 4, 4, #4, health 10, coin -1, bonus 2, nameptr0x0, namestring 0
+
+
+(162) Sister
+func 0x4795e0, surf ?fuFixNPC, X:640, Y:0, Width:32, Height:32, 1, 0, 10, 4, 10, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(163) Sasuke
+func 0x4776d0, surf ?fuFixNPC, X:768, Y:0, Width:48, Height:64, 2, 1, 0, 0, 0, #26, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(164) Hanger
+func 0x466a10, surf ?fuFixNPC, X:640, Y:576, Width:32, Height:48, 0, 0, 8, 4, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(165) Rolling Snow
+func 0x44f9f0, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 1, 0, 12, 12, 12, #12, health 12, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(166) Ball Flyer
+func 0x454bd0, surf ?CurrentNPCSheet, X:224, Y:128, Width:32, Height:32, 1, 0, 8, 8, 6, #10, health 12, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(167) Rolling Big
+func 0x44f9f0, surf ?CurrentNPCSheet, X:144, Y:0, Width:48, Height:48, 2, 0, 18, 18, 16, #20, health 24, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(168) Refrigerator
+func 0x4553a0, surf ?CurrentNPCSheet, X:64, Y:0, Width:32, Height:48, 2, 0, 12, 20, 14, #20, health 40, coin -50, bonus 3, nameptr0x0, namestring 0
+
+
+(169) Ice Hillock
+func 0x4558f0, surf ?CurrentNPCSheet, X:64, Y:288, Width:32, Height:32, 1, 0, 10, 10, 12, #12, health 12, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(170) Bear Core
+func 0x455ce0, surf ?CurrentNPCSheet, X:64, Y:192, Width:48, Height:32, 2, 0, 12, 12, 12, #10, health 30, coin -50, bonus 2, nameptr0x0, namestring 0
+
+
+(171) Animal Bone
+func 0x47e1f0, surf ?fuFixNPC, X:128, Y:816, Width:32, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(172) Kankisen 2
+func 0x475970, surf ?/2, X:192, Y:0, Width:32, Height:32, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(173) Carton Box L
+func 0x47e320, surf ?/0, X:256, Y:384, Width:48, Height:32, 0, 0, 24, 16, 24, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(174) Carton Box s
+func 0x47e320, surf ?/0, X:304, Y:384, Width:32, Height:32, 0, 0, 16, 16, 16, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(175) Broken Plant
+func 0x47e540, surf ?/0, X:448, Y:432, Width:64, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(176) Phone Dark
+func 0x47ba30, surf ?fuFixNPC, X:608, Y:576, Width:32, Height:32, 2, 1, 12, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(177) Core Debug
+func 0x462580, surf ?fuFixChar, X:912, Y:976, Width:16, Height:16, 0, 0, 4, 4, 4, #4, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(178) Spike Plant Fly
+func 0x44b4e0, surf ?/0, X:128, Y:256, Width:32, Height:32, 1, 0, 8, 8, 10, #12, health 4, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(179) Call Glider Bird (Fire)
+func 0x44d920, surf ?fuFixChar, X:824, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+(180) Spike Plant Side.
+func 0x44b3b0, surf ?/0, X:128, Y:256, Width:32, Height:32, 1, 0, 8, 8, 10, #12, health 4, coin -1, bonus 2, nameptr0x0, namestring 0
+
+
+(181) Doroman
+func 0x44eed0, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 1, 0, 10, 10, 10, #12, health 9, coin -1023, bonus 2, nameptr0x0, namestring 0
+
+
+(182) Doronko Turn
+func 0x44e910, surf ?CurrentNPCSheet, X:192, Y:160, Width:32, Height:32, 1, 0, 12, 12, 12, #12, health 6, coin -1, bonus 3, nameptr0x0, namestring 0
+
+
+(183) Vertical Beam
+func 0x452a40, surf ?CurrentNPCSheet, X:0, Y:256, Width:32, Height:32, 2, 0, 14, 12, 12, #12, health 12, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(184) Moving Box Vertical
+func 0x465f20, surf ?CurrentNPCSheet, X:336, Y:288, Width:48, Height:32, 0, 0, 24, 14, 24, #14, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(185) Propeller Fish
+func 0x44d0c0, surf ?CurrentNPCSheet, X:192, Y:288, Width:32, Height:32, 1, 0, 8, 4, 4, #4, health 8, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(186) Hopper
+func 0x45a9f0, surf ?fuFixNPC, X:0, Y:512, Width:32, Height:48, 2, 0, 10, 10, 6, #14, health 14, coin 10, bonus 2, nameptr0x0, namestring 0
+
+
+(187) Zundou Lift
+func 0x4631d0, surf ?fuFixNPC, X:576, Y:672, Width:32, Height:64, 0, 0, 14, 32, 16, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(188) Slip Lift
+func 0x463310, surf ?fuFixNPC, X:576, Y:736, Width:64, Height:32, 0, 0, 30, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(189) Maruta Lift
+func 0x463450, surf ?fuFixNPC, X:640, Y:736, Width:64, Height:32, 0, 0, 30, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(190) Sliding Block
+func 0x4676b0, surf ?/0, X:64, Y:64, Width:32, Height:32, 0, 0, 16, 16, 16, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(191) Frost Generic
+func 0x47a190, surf ?CurrentNPCSheet, X:0, Y:416, Width:64, Height:48, 2, 0, 26, 18, 16, #12, health 12, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(192) zan Bito bag
+func 0x481040, surf ?CurrentNPCSheet, X:256, Y:0, Width:32, Height:64, 2, 0, 0, 0, 16, #32, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(193) Wind Hopper
+func 0x45abe0, surf ?fuFixNPC, X:0, Y:512, Width:32, Height:48, 2, 0, 10, 10, 6, #14, health 14, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(194) zan Bito type
+func 0x481970, surf ?CurrentNPCSheet, X:448, Y:416, Width:32, Height:48, 0, 0, 0, 0, 16, #32, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(195) Hazy Worm
+func 0x45ae10, surf ?CurrentNPCSheet, X:0, Y:0, Width:64, Height:32, 4, 0, 10, 8, 0, #0, health 10, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(196) Pink Hopper
+func 0x45afa0, surf ?CurrentNPCSheet, X:128, Y:128, Width:32, Height:48, 2, 0, 10, 10, 6, #14, health 3, coin -1, bonus 2, nameptr0x0, namestring 0
+
+
+(197) Rolling Spark
+func 0x4647e0, surf ?fuFixNPC, X:544, Y:672, Width:32, Height:32, 0, 0, 8, 8, 8, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(198) Spike Plant2
+func 0x44b1c0, surf ?/0, X:64, Y:256, Width:32, Height:32, 1, 0, 8, 8, 10, #12, health 12, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(199) Puddie Lift
+func 0x438610, surf ?/1, X:64, Y:64, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(200) Walking Box
+func 0x459a10, surf ?fuFixNPC, X:128, Y:256, Width:64, Height:64, 2, 0, 16, 24, 8, #24, health 100, coin -50, bonus 3, nameptr0x0, namestring 0
+
+
+(201) Steel Spiral
+func 0x45b600, surf ?CurrentNPCSheet, X:0, Y:0, Width:48, Height:32, 3, 0, 16, 10, 16, #10, health 40, coin 50, bonus 2, nameptr0x0, namestring 0
+
+
+(202) Junk Hopper
+func 0x45b9f0, surf ?CurrentNPCSheet, X:96, Y:0, Width:32, Height:32, 1, 0, 10, 10, 10, #10, health 12, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(203) Togetoge
+func 0x45f470, surf ?CurrentNPCSheet, X:480, Y:448, Width:32, Height:32, 2, 0, 10, 6, 8, #8, health 8, coin -20, bonus 3, nameptr0x0, namestring 0
+
+
+(204) Masamune
+func 0x45bc30, surf ?fuFixNPC, X:928, Y:688, Width:48, Height:32, 2, 0, 16, 6, 16, #8, health 8, coin 1, bonus 2, nameptr0x0, namestring 0
+
+
+(205) Datsu
+func 0x45be40, surf ?/0, X:0, Y:464, Width:64, Height:16, 1, 0, 18, 4, 16, #6, health 6, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(206) Carry(color)
+func 0x45c180, surf ?fuFixNPC, X:592, Y:768, Width:32, Height:32, 5, 0, 12, 12, 12, #12, health 22, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(207) Sheaf(color)
+func 0x45cda0, surf ?fuFixNPC, X:608, Y:256, Width:32, Height:32, 1, 0, 12, 8, 12, #8, health 44, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(208) Seagull
+func 0x45d7b0, surf ?CurrentNPCSheet, X:0, Y:0, Width:48, Height:32, 1, 0, 10, 10, 10, #16, health 16, coin -20, bonus 3, nameptr0x0, namestring 0
+
+
+(209) Beach Mole
+func 0x45e2c0, surf ?CurrentNPCSheet, X:96, Y:0, Width:32, Height:32, 2, 0, 12, 8, 14, #10, health 22, coin -20, bonus 3, nameptr0x0, namestring 0
+
+
+(210) Sea Dragon
+func 0x45ec00, surf ?CurrentNPCSheet, X:0, Y:368, Width:64, Height:48, 2, 0, 12, 14, 0, #0, health 51, coin -50, bonus 3, nameptr0x0, namestring 0
+
+
+(211) Garbage Bag
+func 0x45d500, surf ?fuFixNPC, X:96, Y:512, Width:48, Height:32, 1, 0, 10, 10, 10, #10, health 33, coin -1, bonus 2, nameptr0x0, namestring 0
+
+
+(212) Tarai
+func 0x45b1d0, surf ?fuFixNPC, X:64, Y:592, Width:64, Height:32, 2, 0, 24, 8, 24, #8, health 24, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(213) za Crew
+func 0x4812f0, surf ?CurrentNPCSheet, X:0, Y:0, Width:40, Height:64, 3, 0, 0, 0, 16, #32, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(214) Togemushi
+func 0x45f550, surf ?CurrentNPCSheet, X:160, Y:0, Width:16, Height:16, 1, 0, 4, 6, 4, #4, health 4, coin -10, bonus 3, nameptr0x0, namestring 0
+
+
+(215) Seagull Fly
+func 0x45dc20, surf ?CurrentNPCSheet, X:0, Y:0, Width:48, Height:32, 1, 0, 10, 10, 10, #16, health 16, coin -20, bonus 3, nameptr0x0, namestring 0
+
+
+(216) za Nakai
+func 0x4812f0, surf ?CurrentNPCSheet, X:160, Y:0, Width:40, Height:64, 2, 0, 0, 0, 16, #32, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(217) Position
+func 0x4679c0, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(218) Oshima
+func 0x481d30, surf ?CurrentNPCSheet, X:96, Y:0, Width:64, Height:48, 3, 0, 0, 0, 10, #24, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(219) Ashidaka
+func 0x45fc10, surf ?CurrentNPCSheet, X:0, Y:224, Width:48, Height:32, 2, 0, 14, 12, 6, #12, health 32, coin -20, bonus 4, nameptr0x0, namestring 0
+
+
+(220) Puti Step
+func 0x460340, surf ?CurrentNPCSheet, X:160, Y:384, Width:48, Height:32, 2, 0, 16, 6, 16, #6, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(221) Dark Ameba
+func 0x460400, surf ?CurrentNPCSheet, X:0, Y:416, Width:32, Height:32, 2, 0, 12, 12, 12, #12, health 20, coin -5, bonus 0, nameptr0x0, namestring 0
+
+
+(222) Side Snail
+func 0x460af0, surf ?CurrentNPCSheet, X:96, Y:96, Width:32, Height:32, 5, 0, 10, 10, 10, #10, health 10, coin -1023, bonus 2, nameptr0x0, namestring 0
+
+
+(223) Tower Cloud
+func 0x47f430, surf ?/2, X:0, Y:0, Width:224, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(224) Orange Fish 9
+func 0x452150, surf ?CurrentNPCSheet, X:192, Y:208, Width:32, Height:32, 1, 0, 8, 4, 4, #4, health 6, coin -1, bonus 3, nameptr0x0, namestring 0
+
+
+(225) Umineko
+func 0x45dfc0, surf ?CurrentNPCSheet, X:0, Y:128, Width:48, Height:32, 1, 0, 10, 10, 10, #16, health 10, coin -20, bonus 3, nameptr0x0, namestring 0
+
+
+(226) Entrance
+func 0x467a00, surf ?fuFixChar, X:824, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 32, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(227) Spider
+func 0x461200, surf ?CurrentNPCSheet, X:128, Y:256, Width:32, Height:32, 1, 0, 8, 12, 8, #12, health 10, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(228) Weak Web
+func 0x44adf0, surf ?fuFixNPC, X:64, Y:448, Width:32, Height:32, 8, 0, 8, 8, 14, #16, health 1, coin -1022, bonus 1, nameptr0x0, namestring 0
+
+
+(229) Hinotama
+func 0x461720, surf ?fuFixNPC, X:944, Y:384, Width:32, Height:32, 9, 0, 6, 6, 6, #6, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(230) Cabinet Monster
+func 0x461b80, surf ?fuFixNPC, X:512, Y:400, Width:32, Height:16, 5, 0, 0, 0, 12, #12, health 51, coin -50, bonus 2, nameptr0x0, namestring 0
+
+
+(231) Step Books
+func 0x467af0, surf ?/1, X:128, Y:192, Width:16, Height:16, 0, 0, 8, 6, 6, #6, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(232) Step Desk
+func 0x467af0, surf ?/1, X:208, Y:224, Width:48, Height:32, 0, 0, 24, 12, 22, #12, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(233) Step Cabinet1
+func 0x467af0, surf ?/1, X:128, Y:208, Width:32, Height:48, 0, 0, 14, 18, 14, #18, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(234) Step Cabinet2
+func 0x467af0, surf ?/1, X:160, Y:224, Width:48, Height:32, 0, 0, 18, 14, 18, #16, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(235) Circle Kurono
+func 0x4199a0, surf ?CurrentNPCSheet, X:96, Y:480, Width:16, Height:16, 3, 0, 0, 0, 0, #0, health 800, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(236) Sky Kurono
+func 0x439880, surf ?CurrentNPCSheet, X:144, Y:496, Width:16, Height:16, 3, 0, 0, 0, 0, #0, health 654, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(237) Sky Kurono cloud 0
+func 0x43b640, surf ?/0, X:0, Y:440, Width:200, Height:72, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(238) Sky Kurono cloud 1
+func 0x43b640, surf ?/1, X:0, Y:128, Width:160, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(239) Random Flash.
+func 0x469b70, surf ?fuFixChar, X:856, Y:1016, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(240) Work Books(color)
+func 0x47f9e0, surf ?fuFixChar, X:112, Y:832, Width:32, Height:80, 2, 0, 10, 0, 0, #0, health 10, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(241) effect Smokes
+func 0x47fff0, surf ?fuFixChar, X:888, Y:1016, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(242) effect Dust
+func 0x4801c0, surf ?fuFixChar, X:888, Y:1016, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(243) Hidden Sheaf(color)
+func 0x45d360, surf ?fuFixNPC, X:608, Y:256, Width:32, Height:32, 1, 0, 12, 8, 12, #8, health 44, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(244) Work Books(gray)
+func 0x47fc50, surf ?fuFixChar, X:112, Y:912, Width:32, Height:80, 5, 0, 10, 0, 0, #0, health 10, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(245) Carry(gray)
+func 0x45c180, surf ?fuFixNPC, X:656, Y:768, Width:32, Height:32, 5, 0, 12, 12, 12, #12, health 1, coin -10, bonus 2, nameptr0x0, namestring 0
+
+
+(246) Sheaf(gray)
+func 0x45cda0, surf ?fuFixNPC, X:672, Y:256, Width:32, Height:32, 1, 0, 12, 8, 12, #8, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(247) Hidden Sheaf(gray)
+func 0x45d360, surf ?fuFixNPC, X:672, Y:256, Width:32, Height:32, 1, 0, 12, 8, 12, #8, health 44, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(248) Uzo(car3)
+func 0x453cc0, surf ?fuFixChar, X:864, Y:672, Width:32, Height:48, 4, 0, 12, 12, 12, #12, health 8, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+(249) Sky Kurono cloud 2
+func 0x43b640, surf ?/2, X:0, Y:128, Width:160, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 250
+func 0x46f7d0, surf ?CurrentNPCSheet, X:0, Y:432, Width:24, Height:24, 0, 0, 4, 4, 4, #4, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 251
+func 0x46f8d0, surf ?CurrentNPCSheet, X:0, Y:464, Width:24, Height:24, 7, 0, 6, 6, 8, #8, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 252
+func 0x46fb00, surf ?CurrentNPCSheet, X:48, Y:448, Width:24, Height:24, 1, 0, 4, 4, 8, #8, health 6, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 253
+func 0x4733b0, surf ?CurrentNPCSheet, X:160, Y:192, Width:24, Height:32, 4, 0, 4, 5, 4, #4, health 1, coin 3, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 254
+func 0x46fe20, surf ?CurrentNPCSheet, X:192, Y:496, Width:32, Height:16, 0, 0, 4, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 255
+func 0x46f8d0, surf ?CurrentNPCSheet, X:192, Y:352, Width:24, Height:24, 1, 0, 6, 6, 8, #8, health 3, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 256
+func 0x46fea0, surf ?CurrentNPCSheet, X:128, Y:0, Width:24, Height:24, 0, 0, 4, 6, 4, #6, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 257
+func 0x470350, surf ?CurrentNPCSheet, X:144, Y:304, Width:24, Height:24, 1, 0, 4, 4, 8, #8, health 4, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 258
+func 0x472e60, surf ?CurrentNPCSheet, X:128, Y:352, Width:32, Height:32, 8, 0, 6, 6, 6, #6, health 12, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 259
+func 0x470a10, surf ?CurrentNPCSheet, X:0, Y:288, Width:32, Height:32, 8, 0, 6, 6, 2, #2, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 260
+func 0x470b90, surf ?CurrentNPCSheet, X:64, Y:384, Width:32, Height:32, 0, 0, 6, 6, 6, #6, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 261
+func 0x473d80, surf ?fuFixNPC, X:0, Y:448, Width:32, Height:32, 4, 0, 8, 8, 8, #8, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 262
+func 0x470cc0, surf ?CurrentNPCSheet, X:96, Y:112, Width:32, Height:32, 2, 0, 10, 10, 10, #10, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 263
+func 0x470e60, surf ?CurrentNPCSheet, X:48, Y:320, Width:32, Height:32, 7, 0, 10, 10, 12, #12, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 264
+func 0x46ca60, surf ?CurrentNPCSheet, X:0, Y:432, Width:24, Height:24, 2, 0, 12, 12, 12, #12, health 4, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 265
+func 0x470ff0, surf ?CurrentNPCSheet, X:160, Y:464, Width:24, Height:24, 1, 0, 4, 4, 4, #4, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 266
+func 0x471150, surf ?CurrentNPCSheet, X:96, Y:416, Width:24, Height:24, 0, 0, 4, 4, 8, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 267
+func 0x471330, surf ?CurrentNPCSheet, X:192, Y:416, Width:32, Height:32, 1, 0, 12, 12, 12, #12, health 3, coin -1023, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 268
+func 0x471700, surf ?CurrentNPCSheet, X:0, Y:288, Width:24, Height:24, 1, 0, 8, 12, 8, #12, health 3, coin -1023, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 269
+func 0x4700f0, surf ?CurrentNPCSheet, X:144, Y:432, Width:24, Height:24, 8, 0, 8, 8, 8, #8, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 270
+func 0x471a00, surf ?CurrentNPCSheet, X:168, Y:432, Width:24, Height:24, 1, 0, 8, 8, 8, #8, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 271
+func 0x4700f0, surf ?CurrentNPCSheet, X:224, Y:416, Width:32, Height:32, 9, 0, 10, 10, 10, #10, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 272
+func 0x471bc0, surf ?fuFixPtcl, X:512, Y:256, Width:32, Height:32, 0, 0, 4, 4, 4, #4, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 273
+func 0x474070, surf ?CurrentNPCSheet, X:64, Y:416, Width:32, Height:32, 9, 0, 4, 4, 4, #4, health 6, coin -1023, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 274
+func 0x471df0, surf ?fuFixPtcl, X:64, Y:48, Width:16, Height:16, 0, 0, 6, 2, 6, #2, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 275
+func 0x4728e0, surf ?CurrentNPCSheet, X:192, Y:96, Width:32, Height:32, 8, 0, 6, 6, 6, #6, health 4, coin 1, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 276
+func 0x472210, surf ?CurrentNPCSheet, X:128, Y:448, Width:32, Height:32, 1, 0, 8, 8, 10, #10, health 10, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 277
+func 0x4725f0, surf ?fuFixChar, X:768, Y:768, Width:32, Height:32, 0, 0, 6, 6, 8, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 278
+func 0x4727f0, surf ?fuFixChar, X:768, Y:832, Width:32, Height:48, 0, 0, 6, 6, 1, #1, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 279
+func 0x472af0, surf ?CurrentNPCSheet, X:96, Y:192, Width:32, Height:32, 8, 0, 6, 6, 6, #6, health 5, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 280
+func 0x4731f0, surf ?CurrentNPCSheet, X:96, Y:480, Width:32, Height:32, 1, 0, 8, 8, 8, #8, health 5, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 281
+func 0x473610, surf ?CurrentNPCSheet, X:160, Y:240, Width:16, Height:16, 1, 0, 4, 2, 4, #4, health 3, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 282
+func 0x471bc0, surf ?fuFixPtcl, X:512, Y:320, Width:32, Height:32, 0, 0, 4, 4, 4, #4, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 283
+func 0x45a3a0, surf ?CurrentNPCSheet, X:192, Y:464, Width:16, Height:16, 1, 0, 6, 6, 4, #4, health 1, coin -1, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 284
+func 0x471ff0, surf ?fuFixPtcl, X:80, Y:48, Width:16, Height:16, 0, 0, 2, 6, 2, #6, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 285
+func 0x473ac0, surf ?CurrentNPCSheet, X:64, Y:464, Width:24, Height:24, 9, 0, 8, 8, 4, #4, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 286
+func 0x4742a0, surf ?fuFixNPC, X:992, Y:512, Width:32, Height:16, 9, 0, 8, 4, 8, #4, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 287
+func 0x474630, surf ?CurrentNPCSheet, X:448, Y:320, Width:32, Height:32, 9, 0, 8, 8, 8, #8, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 288
+func 0x474830, surf ?fuFixPtcl, X:288, Y:352, Width:16, Height:16, 0, 0, 4, 4, 4, #4, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 289
+func 0x460400, surf ?CurrentNPCSheet, X:112, Y:384, Width:24, Height:24, 1, 0, 12, 12, 12, #12, health 10, coin -50, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 290
+func 0x471bc0, surf ?fuFixPtcl, X:512, Y:256, Width:32, Height:32, 0, 0, 4, 4, 4, #4, health 6, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 291
+func 0x474940, surf ?CurrentNPCSheet, X:160, Y:464, Width:24, Height:24, 1, 0, 4, 4, 8, #8, health 6, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 292
+func 0x474c00, surf ?fuFixPtcl, X:96, Y:768, Width:24, Height:24, 1, 0, 6, 6, 6, #6, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 293
+func 0x473610, surf ?CurrentNPCSheet, X:240, Y:240, Width:16, Height:16, 1, 0, 4, 2, 4, #2, health 7, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 294
+func 0x46f160, surf ?fuFixPtcl, X:32, Y:176, Width:8, Height:8, 0, 0, 0, 0, 2, #2, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 295
+func 0x46f310, surf ?fuFixPtcl, X:32, Y:48, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 296
+func 0x41d710, surf ?fuFixNPC, X:720, Y:832, Width:64, Height:48, 0, 0, 30, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 297
+func 0x47b7c0, surf ?/0, X:352, Y:0, Width:160, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 298
+func 0x437c60, surf ?CurrentNPCSheet, X:224, Y:96, Width:32, Height:32, 1, 0, 2, 8, 2, #2, health 20, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 299
+func 0x41c5a0, surf ?/0, X:192, Y:208, Width:16, Height:16, 1, 0, 4, 4, 4, #4, health 2, coin -1023, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 300
+func 0x476790, surf ?CurrentNPCSheet, X:336, Y:448, Width:32, Height:32, 0, 1, 0, 0, 16, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 301
+func 0x41bd70, surf ?CurrentNPCSheet, X:32, Y:304, Width:32, Height:32, 0, 0, 10, 10, 4, #4, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 302
+func 0x46a590, surf ?CurrentNPCSheet, X:192, Y:384, Width:32, Height:32, 7, 0, 8, 8, 8, #8, health 1, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 303
+func 0x476a50, surf ?CurrentNPCSheet, X:336, Y:240, Width:32, Height:32, 0, 1, 0, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 304
+func 0x41b950, surf ?CurrentNPCSheet, X:0, Y:304, Width:32, Height:32, 0, 0, 12, 12, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 305
+func 0x41bf90, surf ?CurrentNPCSheet, X:64, Y:240, Width:32, Height:32, 0, 0, 8, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 306
+func 0x462ee0, surf ?fuFixNPC, X:208, Y:496, Width:48, Height:16, 1, 0, 16, 2, 0, #0, health 24, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 307
+func 0x4766d0, surf ?CurrentNPCSheet, X:496, Y:272, Width:16, Height:96, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 308
+func 0x436bc0, surf ?CurrentNPCSheet, X:0, Y:192, Width:128, Height:80, 0, 0, 20, 22, 20, #20, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 309
+func 0x439690, surf ?CurrentNPCSheet, X:160, Y:320, Width:32, Height:32, 9, 0, 8, 8, 6, #6, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 310
+func 0x436e80, surf ?CurrentNPCSheet, X:0, Y:96, Width:128, Height:96, 0, 0, 48, 48, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 311
+func 0x4372e0, surf ?CurrentNPCSheet, X:128, Y:96, Width:48, Height:48, 2, 0, 16, 16, 0, #0, health 60, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 312
+func 0x437730, surf ?CurrentNPCSheet, X:128, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 313
+func 0x437850, surf ?CurrentNPCSheet, X:192, Y:0, Width:64, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 314
+func 0x437080, surf ?CurrentNPCSheet, X:160, Y:0, Width:32, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 315
+func 0x4768d0, surf ?CurrentNPCSheet, X:464, Y:272, Width:32, Height:48, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 316
+func 0x47bf30, surf ?item, X:256, Y:448, Width:32, Height:32, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 317
+func 0x41c830, surf ?/0, X:0, Y:256, Width:32, Height:64, 2, 0, 10, 10, 0, #0, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 318
+func 0x46f5b0, surf ?fuFixPtcl, X:64, Y:208, Width:16, Height:16, 0, 0, 0, 0, 4, #4, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 319
+func 0x463ea0, surf ?/0, X:224, Y:32, Width:16, Height:192, 0, 0, 8, 96, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 320
+func 0x439170, surf ?CurrentNPCSheet, X:0, Y:320, Width:80, Height:48, 0, 0, 16, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 321
+func 0x4393c0, surf ?CurrentNPCSheet, X:0, Y:496, Width:16, Height:16, 0, 0, 26, 26, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 322
+func 0x439480, surf ?CurrentNPCSheet, X:224, Y:416, Width:32, Height:32, 9, 0, 8, 8, 6, #6, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 323
+func 0x44d690, surf ?/0, X:128, Y:352, Width:48, Height:48, 2, 0, 14, 10, 10, #8, health 6, coin -1, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 324
+func 0x476cd0, surf ?CurrentNPCSheet, X:224, Y:416, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 325
+func 0x427770, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 1, 0, 10, 10, 10, #12, health 9, coin -1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 326
+func 0x462580, surf ?/0, X:0, Y:352, Width:48, Height:48, 2, 0, 14, 10, 10, #8, health 6, coin -1, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 327
+func 0x4236e0, surf ?CurrentNPCSheet, X:160, Y:224, Width:48, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 328
+func 0x423210, surf ?CurrentNPCSheet, X:160, Y:96, Width:96, Height:64, 0, 0, 40, 32, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 329
+func 0x4234d0, surf ?CurrentNPCSheet, X:0, Y:96, Width:32, Height:48, 0, 0, 2, 2, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 330
+func 0x4235f0, surf ?CurrentNPCSheet, X:0, Y:192, Width:80, Height:48, 0, 0, 18, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 331
+func 0x4237c0, surf ?CurrentNPCSheet, X:0, Y:288, Width:32, Height:32, 1, 0, 8, 4, 4, #4, health 6, coin -1023, bonus 3, nameptr0x0, namestring 0
+
+
+npc no: 332
+func 0x4693f0, surf ?fuFixNPC, X:1008, Y:448, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 333
+func 0x4188d0, surf ?CurrentNPCSheet, X:0, Y:480, Width:48, Height:16, 0, 0, 16, 6, 20, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 334
+func 0x418920, surf ?CurrentNPCSheet, X:0, Y:496, Width:48, Height:16, 0, 0, 20, 8, 20, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 335
+func 0x453ae0, surf ?fuFixPtcl, X:384, Y:432, Width:0, Height:48, 0, 0, 20, 20, 24, #24, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 336
+func 0x429310, surf ?CurrentNPCSheet, X:0, Y:0, Width:240, Height:112, 0, 0, 4, 12, 8, #8, health 0, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 337
+func 0x4293d0, surf ?CurrentNPCSheet, X:176, Y:352, Width:80, Height:80, 0, 0, 24, 24, 24, #24, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 338
+func 0x478a40, surf ?CurrentNPCSheet, X:352, Y:352, Width:80, Height:80, 0, 0, 36, 36, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 339
+func 0x4295b0, surf ?CurrentNPCSheet, X:240, Y:32, Width:16, Height:16, 3, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 340
+func 0x4297a0, surf ?CurrentNPCSheet, X:96, Y:352, Width:32, Height:32, 2, 0, 12, 12, 14, #14, health 10, coin -1023, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 341
+func 0x429ad0, surf ?CurrentNPCSheet, X:112, Y:224, Width:16, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 342
+func 0x429dc0, surf ?CurrentNPCSheet, X:192, Y:224, Width:64, Height:32, 0, 0, 22, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 343
+func 0x42a0d0, surf ?CurrentNPCSheet, X:0, Y:464, Width:48, Height:16, 1, 0, 14, 6, 14, #6, health 12, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 344
+func 0x42a530, surf ?CurrentNPCSheet, X:240, Y:16, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 345
+func 0x42a6c0, surf ?CurrentNPCSheet, X:128, Y:352, Width:48, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 346
+func 0x42a9b0, surf ?CurrentNPCSheet, X:160, Y:224, Width:32, Height:32, 1, 0, 8, 10, 8, #10, health 12, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 347
+func 0x42ae60, surf ?CurrentNPCSheet, X:240, Y:96, Width:16, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 348
+func 0x478110, surf ?CurrentNPCSheet, X:448, Y:448, Width:32, Height:32, 0, 0, 0, 0, 4, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 349
+func 0x454a30, surf ?/0, X:0, Y:448, Width:16, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 350
+func 0x455050, surf ?CurrentNPCSheet, X:224, Y:0, Width:32, Height:32, 1, 0, 10, 10, 10, #10, health 10, coin 1, bonus 5, nameptr0x0, namestring 0
+
+
+npc no: 351
+func 0x456440, surf ?CurrentNPCSheet, X:96, Y:432, Width:64, Height:32, 0, 0, 30, 12, 12, #10, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 352
+func 0x4566c0, surf ?CurrentNPCSheet, X:96, Y:464, Width:64, Height:16, 0, 0, 28, 8, 10, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 353
+func 0x47a720, surf ?/2, X:224, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 354
+func 0x419480, surf ?CurrentNPCSheet, X:0, Y:352, Width:32, Height:32, 9, 0, 8, 8, 8, #8, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 355
+func 0x4196e0, surf ?CurrentNPCSheet, X:0, Y:192, Width:48, Height:48, 0, 0, 12, 12, 12, #12, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 356
+func 0x421170, surf ?CurrentNPCSheet, X:0, Y:0, Width:160, Height:144, 6, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 357
+func 0x4212d0, surf ?CurrentNPCSheet, X:0, Y:288, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 358
+func 0x421500, surf ?CurrentNPCSheet, X:160, Y:0, Width:48, Height:48, 5, 0, 20, 20, 0, #0, health 40, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 359
+func 0x473820, surf ?fuFixPtcl, X:0, Y:656, Width:32, Height:32, 4, 0, 6, 6, 4, #4, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 360
+func 0x421c40, surf ?CurrentNPCSheet, X:128, Y:384, Width:32, Height:32, 9, 0, 10, 6, 4, #4, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 361
+func 0x420e70, surf ?CurrentNPCSheet, X:160, Y:96, Width:48, Height:48, 6, 0, 20, 20, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 362
+func 0x421430, surf ?CurrentNPCSheet, X:0, Y:352, Width:112, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 363
+func 0x41b710, surf ?CurrentNPCSheet, X:96, Y:0, Width:80, Height:64, 0, 0, 28, 20, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 364
+func 0x41cbe0, surf ?CurrentNPCSheet, X:0, Y:384, Width:176, Height:64, 0, 0, 60, 24, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 365
+func 0x41d090, surf ?CurrentNPCSheet, X:176, Y:416, Width:32, Height:32, 1, 0, 12, 12, 12, #12, health 12, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 366
+func 0x469480, surf ?fuFixNPC, X:0, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 367
+func 0x4695a0, surf ?fuFixNPC, X:816, Y:448, Width:24, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 368
+func 0x42fd40, surf ?CurrentNPCSheet, X:0, Y:288, Width:16, Height:24, 0, 0, 6, 10, 0, #0, health 100, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 369
+func 0x423d80, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 370
+func 0x42ff00, surf ?CurrentNPCSheet, X:96, Y:0, Width:16, Height:144, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 371
+func 0x4300e0, surf ?CurrentNPCSheet, X:128, Y:0, Width:96, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 372
+func 0x42fb80, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 373
+func 0x430190, surf ?CurrentNPCSheet, X:160, Y:416, Width:16, Height:16, 2, 0, 4, 4, 4, #4, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 374
+func 0x4305b0, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 375
+func 0x4307b0, surf ?CurrentNPCSheet, X:128, Y:96, Width:96, Height:16, 0, 0, 24, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 376
+func 0x430960, surf ?CurrentNPCSheet, X:240, Y:0, Width:16, Height:32, 0, 0, 2, 16, 2, #16, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 377
+func 0x430ae0, surf ?CurrentNPCSheet, X:480, Y:384, Width:32, Height:32, 0, 0, 8, 4, 4, #4, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 378
+func 0x430c10, surf ?CurrentNPCSheet, X:96, Y:288, Width:32, Height:24, 4, 0, 8, 6, 8, #8, health 24, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 379
+func 0x430ee0, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 380
+func 0x453df0, surf ?CurrentNPCSheet, X:96, Y:416, Width:32, Height:48, 4, 0, 12, 12, 12, #12, health 8, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 381
+func 0x458460, surf ?fuFixChar, X:0, Y:768, Width:48, Height:48, 4, 0, 12, 12, 12, #8, health 20, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 382
+func 0x453f00, surf ?CurrentNPCSheet, X:160, Y:352, Width:32, Height:32, 4, 0, 8, 8, 8, #8, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 383
+func 0x43eb70, surf ?CurrentNPCSheet, X:0, Y:0, Width:96, Height:80, 5, 0, 20, 36, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 384
+func 0x43ee60, surf ?CurrentNPCSheet, X:0, Y:240, Width:80, Height:16, 5, 0, 18, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 385
+func 0x43eed0, surf ?CurrentNPCSheet, X:0, Y:304, Width:48, Height:48, 5, 0, 10, 10, 10, #10, health 48, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 386
+func 0x43eed0, surf ?CurrentNPCSheet, X:96, Y:304, Width:32, Height:32, 4, 0, 6, 6, 6, #6, health 32, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 387
+func 0x43f4c0, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 4, 0, 8, 8, 8, #8, health 4, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 388
+func 0x43f660, surf ?CurrentNPCSheet, X:0, Y:464, Width:16, Height:16, 4, 0, 4, 4, 4, #4, health 1, coin -1023, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 389
+func 0x43fa80, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 390
+func 0x451d90, surf ?fuFixNPC, X:96, Y:928, Width:64, Height:32, 2, 0, 26, 10, 26, #10, health 10, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 391
+func 0x4678b0, surf ?fuFixPtcl, X:432, Y:496, Width:16, Height:16, 0, 0, 8, 8, 8, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 392
+func 0x43d910, surf ?CurrentNPCSheet, X:128, Y:336, Width:32, Height:48, 5, 0, 8, 20, 8, #20, health 40, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 393
+func 0x43db90, surf ?CurrentNPCSheet, X:0, Y:320, Width:64, Height:64, 5, 0, 24, 10, 24, #10, health 49, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 394
+func 0x43e170, surf ?CurrentNPCSheet, X:32, Y:448, Width:32, Height:32, 5, 0, 8, 8, 8, #8, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 395
+func 0x44d690, surf ?CurrentNPCSheet, X:64, Y:240, Width:48, Height:48, 2, 0, 14, 10, 10, #8, health 6, coin -1, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 396
+func 0x469960, surf ?fuFixNPC, X:768, Y:512, Width:48, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 397
+func 0x47d0e0, surf ?CurrentNPCSheet, X:400, Y:288, Width:96, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 398
+func 0x47c7b0, surf ?fuFixChar, X:768, Y:512, Width:192, Height:96, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 399
+func 0x47ca30, surf ?fuFixChar, X:960, Y:512, Width:32, Height:32, 0, 0, 0, 0, 8, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 400
+func 0x47d620, surf ?fuFixNPC, X:768, Y:576, Width:112, Height:96, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 401
+func 0x47d680, surf ?/0, X:256, Y:96, Width:128, Height:16, 0, 0, 64, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 402
+func 0x47d700, surf ?fuFixChar, X:880, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 403
+func 0x47d830, surf ?/0, X:384, Y:0, Width:16, Height:96, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 404
+func 0x430190, surf ?CurrentNPCSheet, X:416, Y:384, Width:32, Height:32, 2, 0, 6, 6, 8, #8, health 3, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 405
+func 0x430000, surf ?CurrentNPCSheet, X:384, Y:96, Width:64, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 406
+func 0x430960, surf ?CurrentNPCSheet, X:224, Y:96, Width:32, Height:32, 0, 0, 6, 16, 6, #16, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 407
+func 0x42af50, surf ?CurrentNPCSheet, X:128, Y:288, Width:32, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 408
+func 0x467180, surf ?fuFixNPC, X:768, Y:736, Width:16, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 409
+func 0x467320, surf ?localize, X:160, Y:0, Width:144, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 410
+func 0x474fa0, surf ?CurrentNPCSheet, X:6, Y:0, Width:42, Height:56, 0, 0, 0, 24, 0, #0, health 100, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 411
+func 0x469ac0, surf ?fuFixNPC, X:912, Y:512, Width:32, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 412
+func 0x4405f0, surf ?CurrentNPCSheet, X:0, Y:0, Width:128, Height:64, 0, 0, 48, 32, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 413
+func 0x440af0, surf ?CurrentNPCSheet, X:16, Y:496, Width:16, Height:16, 0, 0, 0, 0, 8, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 414
+func 0x440be0, surf ?CurrentNPCSheet, X:208, Y:384, Width:32, Height:32, 2, 0, 12, 2, 12, #2, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 415
+func 0x41da00, surf ?/0, X:224, Y:160, Width:32, Height:32, 2, 0, 8, 4, 0, #0, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 416
+func 0x436c60, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 20, 22, 20, #20, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 417
+func 0x436dd0, surf ?CurrentNPCSheet, X:224, Y:480, Width:32, Height:32, 0, 0, 0, 0, 16, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 418
+func 0x438380, surf ?CurrentNPCSheet, X:128, Y:256, Width:32, Height:32, 1, 0, 8, 8, 12, #12, health 12, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 419
+func 0x437ed0, surf ?CurrentNPCSheet, X:0, Y:352, Width:32, Height:32, 1, 0, 6, 14, 0, #0, health 20, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 420
+func 0x45f230, surf ?CurrentNPCSheet, X:128, Y:448, Width:32, Height:32, 1, 0, 6, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 421
+func 0x45f3d0, surf ?CurrentNPCSheet, X:128, Y:336, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 422
+func 0x432ad0, surf ?CurrentNPCSheet, X:0, Y:0, Width:144, Height:32, 0, 0, 68, 12, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 423
+func 0x4333a0, surf ?CurrentNPCSheet, X:80, Y:160, Width:176, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 424
+func 0x434f00, surf ?CurrentNPCSheet, X:96, Y:64, Width:24, Height:24, 0, 0, 6, 6, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 425
+func 0x432c00, surf ?CurrentNPCSheet, X:0, Y:32, Width:144, Height:32, 0, 0, 58, 12, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 426
+func 0x432e50, surf ?CurrentNPCSheet, X:0, Y:64, Width:96, Height:32, 0, 0, 36, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 427
+func 0x433710, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 1, 0, 6, 8, 6, #8, health 10, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 428
+func 0x433910, surf ?CurrentNPCSheet, X:224, Y:0, Width:32, Height:32, 1, 0, 6, 8, 6, #8, health 5, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 429
+func 0x4331c0, surf ?CurrentNPCSheet, X:496, Y:496, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 430
+func 0x4340b0, surf ?CurrentNPCSheet, X:0, Y:160, Width:64, Height:48, 0, 0, 20, 10, 24, #16, health 120, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 431
+func 0x434dd0, surf ?CurrentNPCSheet, X:0, Y:400, Width:64, Height:32, 0, 0, 26, 16, 26, #16, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 432
+func 0x4351b0, surf ?CurrentNPCSheet, X:64, Y:400, Width:32, Height:32, 0, 0, 6, 6, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 433
+func 0x4355f0, surf ?CurrentNPCSheet, X:0, Y:464, Width:24, Height:24, 4, 0, 8, 8, 8, #8, health 2, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 434
+func 0x4359b0, surf ?CurrentNPCSheet, X:0, Y:464, Width:16, Height:16, 1, 0, 4, 4, 5, #5, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 435
+func 0x433b10, surf ?CurrentNPCSheet, X:128, Y:384, Width:128, Height:64, 0, 0, 38, 20, 5, #5, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 436
+func 0x433dd0, surf ?CurrentNPCSheet, X:144, Y:0, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 437
+func 0x435b70, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 2, 0, 6, 8, 6, #8, health 10, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 438
+func 0x433f80, surf ?CurrentNPCSheet, X:0, Y:352, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 439
+func 0x434bb0, surf ?CurrentNPCSheet, X:64, Y:240, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 440
+func 0x45b550, surf ?fuFixNPC, X:64, Y:560, Width:48, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 441
+func 0x45f960, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:24, 2, 0, 10, 6, 8, #8, health 8, coin -20, bonus 3, nameptr0x0, namestring 0
+
+
+npc no: 442
+func 0x47f2b0, surf ?fuFixChar, X:832, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 443
+func 0x441f20, surf ?CurrentNPCSheet, X:0, Y:80, Width:112, Height:32, 0, 1, 26, 14, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 444
+func 0x441f20, surf ?CurrentNPCSheet, X:0, Y:64, Width:176, Height:16, 0, 1, 72, 6, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 445
+func 0x441fa0, surf ?CurrentNPCSheet, X:112, Y:80, Width:48, Height:16, 0, 1, 8, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 446
+func 0x442130, surf ?CurrentNPCSheet, X:176, Y:0, Width:48, Height:48, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 447
+func 0x441c00, surf ?CurrentNPCSheet, X:0, Y:112, Width:64, Height:32, 0, 0, 24, 10, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 448
+func 0x442510, surf ?CurrentNPCSheet, X:64, Y:112, Width:32, Height:32, 9, 0, 10, 10, 10, #10, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 449
+func 0x442260, surf ?CurrentNPCSheet, X:64, Y:176, Width:32, Height:32, 2, 0, 12, 10, 12, #16, health 12, coin -1023, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 450
+func 0x4600d0, surf ?CurrentNPCSheet, X:48, Y:224, Width:32, Height:32, 1, 0, 10, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 451
+func 0x4588b0, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 1, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 452
+func 0x42be40, surf ?CurrentNPCSheet, X:0, Y:496, Width:16, Height:16, 9, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 453
+func 0x42bfa0, surf ?CurrentNPCSheet, X:0, Y:400, Width:32, Height:32, 9, 0, 12, 10, 12, #12, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 454
+func 0x42c410, surf ?CurrentNPCSheet, X:0, Y:0, Width:2, Height:2, 1, 0, 8, 22, 12, #24, health 60, coin -1023, bonus 3, nameptr0x0, namestring 0
+
+
+npc no: 455
+func 0x42c720, surf ?fuFixPtcl, X:912, Y:384, Width:48, Height:48, 1, 0, 8, 20, 0, #0, health 60, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 456
+func 0x42ca40, surf ?CurrentNPCSheet, X:0, Y:400, Width:32, Height:32, 1, 0, 12, 12, 12, #12, health 10, coin 20, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 457
+func 0x42d0a0, surf ?/1, X:224, Y:0, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 458
+func 0x42d300, surf ?CurrentNPCSheet, X:176, Y:416, Width:80, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 459
+func 0x461610, surf ?fuFixNPC, X:1008, Y:0, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 460
+func 0x461f80, surf ?fuFixNPC, X:512, Y:256, Width:48, Height:48, 5, 0, 14, 18, 14, #18, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 461
+func 0x4601b0, surf ?CurrentNPCSheet, X:80, Y:224, Width:32, Height:32, 5, 0, 8, 8, 8, #8, health 10, coin -50, bonus 3, nameptr0x0, namestring 0
+
+
+npc no: 462
+func 0x47f5d0, surf ?CurrentNPCSheet, X:192, Y:112, Width:32, Height:32, 5, 0, 8, 12, 8, #12, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 463
+func 0x426b00, surf ?/1, X:128, Y:0, Width:64, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 464
+func 0x4249e0, surf ?/1, X:0, Y:0, Width:48, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 465
+func 0x424fa0, surf ?CurrentNPCSheet, X:0, Y:448, Width:32, Height:32, 5, 0, 10, 10, 12, #12, health 12, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 466
+func 0x425340, surf ?CurrentNPCSheet, X:128, Y:448, Width:64, Height:32, 2, 0, 24, 8, 24, #8, health 24, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 467
+func 0x425750, surf ?CurrentNPCSheet, X:448, Y:464, Width:48, Height:48, 2, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 468
+func 0x425850, surf ?CurrentNPCSheet, X:0, Y:352, Width:64, Height:48, 5, 0, 18, 18, 16, #22, health 66, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 469
+func 0x426a50, surf ?CurrentNPCSheet, X:112, Y:480, Width:16, Height:32, 0, 0, 8, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 470
+func 0x425d30, surf ?CurrentNPCSheet, X:64, Y:480, Width:16, Height:16, 0, 0, 4, 4, 6, #6, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 471
+func 0x4260a0, surf ?CurrentNPCSheet, X:64, Y:496, Width:16, Height:16, 0, 0, 4, 4, 6, #6, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 472
+func 0x426110, surf ?CurrentNPCSheet, X:0, Y:320, Width:64, Height:16, 1, 0, 18, 4, 16, #6, health 6, coin -1023, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 473
+func 0x426520, surf ?/1, X:0, Y:192, Width:64, Height:32, 0, 0, 24, 8, 24, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 474
+func 0x4267f0, surf ?CurrentNPCSheet, X:128, Y:240, Width:64, Height:48, 1, 0, 14, 12, 14, #12, health 20, coin -1023, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 475
+func 0x419c90, surf ?CurrentNPCSheet, X:0, Y:0, Width:64, Height:80, 3, 0, 8, 24, 0, #0, health 100, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 476
+func 0x41a710, surf ?CurrentNPCSheet, X:224, Y:384, Width:32, Height:32, 1, 0, 6, 6, 0, #0, health 3, coin -1023, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 477
+func 0x43a550, surf ?CurrentNPCSheet, X:0, Y:0, Width:112, Height:112, 6, 0, 24, 24, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 478
+func 0x43aac0, surf ?CurrentNPCSheet, X:0, Y:384, Width:48, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 479
+func 0x43acd0, surf ?CurrentNPCSheet, X:112, Y:480, Width:32, Height:32, 0, 0, 12, 12, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 480
+func 0x43ad80, surf ?CurrentNPCSheet, X:224, Y:0, Width:32, Height:32, 1, 0, 10, 10, 0, #0, health 9, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 481
+func 0x43b350, surf ?CurrentNPCSheet, X:96, Y:448, Width:16, Height:16, 0, 0, 10, 10, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 482
+func 0x43af20, surf ?CurrentNPCSheet, X:96, Y:480, Width:16, Height:16, 0, 0, 10, 10, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 483
+func 0x43b560, surf ?fuFixPtcl, X:384, Y:384, Width:32, Height:16, 0, 0, 12, 4, 0, #0, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 484
+func 0x43b730, surf ?CurrentNPCSheet, X:96, Y:496, Width:16, Height:16, 0, 0, 10, 10, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 485
+func 0x43b8b0, surf ?fuFixPtcl, X:96, Y:768, Width:24, Height:24, 9, 0, 4, 4, 0, #0, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 486
+func 0x43ba10, surf ?CurrentNPCSheet, X:208, Y:448, Width:48, Height:32, 0, 0, 14, 14, 0, #0, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 487
+func 0x43bda0, surf ?CurrentNPCSheet, X:224, Y:160, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 488
+func 0x43c670, surf ?CurrentNPCSheet, X:384, Y:448, Width:80, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 489
+func 0x43c830, surf ?CurrentNPCSheet, X:192, Y:336, Width:32, Height:32, 4, 0, 8, 8, 0, #0, health 6, coin -1023, bonus 2, nameptr0x0, namestring 0
+
+
+npc no: 490
+func 0x43b0a0, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 491
+func 0x481f40, surf ?CurrentNPCSheet, X:0, Y:0, Width:48, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 492
+func 0x482580, surf ?/2, X:224, Y:208, Width:4, Height:4, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 493
+func 0x41efa0, surf ?CurrentNPCSheet, X:0, Y:384, Width:80, Height:64, 0, 0, 28, 20, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 494
+func 0x41f270, surf ?CurrentNPCSheet, X:0, Y:304, Width:32, Height:32, 0, 0, 10, 10, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 495
+func 0x41f9f0, surf ?fuFixNPC, X:720, Y:832, Width:64, Height:48, 0, 0, 30, 8, 4, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 496
+func 0x41fb20, surf ?CurrentNPCSheet, X:0, Y:240, Width:32, Height:32, 1, 0, 10, 10, 10, #10, health 4, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 497
+func 0x41fe00, surf ?CurrentNPCSheet, X:64, Y:240, Width:32, Height:32, 0, 0, 4, 4, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 498
+func 0x42d4b0, surf ?CurrentNPCSheet, X:208, Y:320, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 499
+func 0x4280b0, surf ?fuFixNPC, X:64, Y:592, Width:64, Height:32, 2, 0, 24, 8, 24, #8, health 24, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 500
+func 0x425750, surf ?CurrentNPCSheet, X:64, Y:448, Width:48, Height:48, 2, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 501
+func 0x480380, surf ?CurrentNPCSheet, X:128, Y:32, Width:48, Height:32, 0, 1, 0, 0, 0, #0, health 2, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 502
+func 0x440860, surf ?CurrentNPCSheet, X:0, Y:320, Width:128, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 503
+func 0x42e280, surf ?CurrentNPCSheet, X:64, Y:464, Width:24, Height:24, 9, 0, 8, 8, 8, #12, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 504
+func 0x42e650, surf ?CurrentNPCSheet, X:0, Y:288, Width:80, Height:80, 0, 0, 22, 22, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 505
+func 0x42c880, surf ?fuFixPtcl, X:960, Y:624, Width:64, Height:64, 3, 0, 22, 26, 0, #0, health 60, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 506
+func 0x462580, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4dd8, namestring Empty
+
+
+npc no: 507
+func 0x47b120, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4dd0, namestring UzoEye
+
+
+npc no: 508
+func 0x47ade0, surf ?CurrentNPCSheet, X:448, Y:448, Width:64, Height:32, 0, 0, 32, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4dc4, namestring Elevator06
+
+
+npc no: 509
+func 0x476720, surf ?/0, X:448, Y:448, Width:32, Height:32, 0, 1, 12, 24, 0, #32, health 0, coin 0, bonus 0, nameptr0x4e4db8, namestring TrainWheel0
+
+
+npc no: 510
+func 0x47a9f0, surf ?CurrentNPCSheet, X:96, Y:416, Width:80, Height:32, 0, 0, 40, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4dac, namestring Elevator05
+
+
+npc no: 511
+func 0x47be50, surf ?/1, X:96, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4da0, namestring CrazyClock
+
+
+npc no: 512
+func 0x476f60, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 1, 0, 10, 10, 10, #12, health 9, coin -1, bonus 0, nameptr0x4e4d98, namestring Untier
+
+
+npc no: 513
+func 0x47be50, surf ?/1, X:176, Y:128, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4d8c, namestring CrazyClock2
+
+
+npc no: 514
+func 0x44f620, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 1, 0, 8, 8, 12, #14, health 2, coin 1, bonus 2, nameptr0x4e4d80, namestring Tumbleweed
+
+
+npc no: 515
+func 0x46b1c0, surf ?CurrentNPCSheet, X:64, Y:288, Width:32, Height:32, 2, 0, 10, 14, 10, #16, health 16, coin -20, bonus 3, nameptr0x4e4d78, namestring Kani
+
+
+npc no: 516
+func 0x464570, surf ?/1, X:160, Y:160, Width:48, Height:48, 0, 0, 8, 8, 8, #8, health 0, coin 0, bonus 0, nameptr0x4e4d6c, namestring JetCharge
+
+
+npc no: 517
+func 0x476b90, surf ?/0, X:16, Y:128, Width:32, Height:16, 0, 0, 16, 8, 16, #8, health 0, coin 0, bonus 0, nameptr0x4e4d60, namestring KllslfBlock
+
+
+npc no: 518
+func 0x476e20, surf ?/1, X:0, Y:208, Width:192, Height:16, 0, 0, 96, 8, 96, #0, health 0, coin 0, bonus 0, nameptr0x4e4d54, namestring FallBridge
+
+
+npc no: 519
+func 0x4654c0, surf ?fuFixChar, X:880, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4d48, namestring FocusTarget
+
+
+npc no: 520
+func 0x4770a0, surf ?CurrentNPCSheet, X:192, Y:0, Width:32, Height:32, 1, 0, 8, 10, 10, #12, health 12, coin 1, bonus 5, nameptr0x4e4d3c, namestring ChestDoro
+
+
+npc no: 521
+func 0x477c30, surf ?CurrentNPCSheet, X:0, Y:0, Width:64, Height:64, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4d30, namestring OfficeBoss
+
+
+npc no: 522
+func 0x4515d0, surf ?CurrentNPCSheet, X:192, Y:0, Width:64, Height:48, 1, 0, 14, 14, 0, #0, health 64, coin 0, bonus 0, nameptr0x4e4d24, namestring Reception
+
+
+npc no: 523
+func 0x466380, surf ?fuFixNPC, X:704, Y:512, Width:32, Height:32, 0, 1, 14, 12, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4d18, namestring TouchPanel
+
+
+npc no: 524
+func 0x453c40, surf ?/0, X:144, Y:144, Width:112, Height:112, 0, 0, 54, 54, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4d0c, namestring testCircle
+
+
+npc no: 525
+func 0x478b30, surf ?CurrentNPCSheet, X:0, Y:160, Width:32, Height:48, 1, 0, 12, 10, 12, #16, health 80, coin 50, bonus 5, nameptr0x4e4d00, namestring MoleJetpack
+
+
+npc no: 526
+func 0x479270, surf ?fuFixChar, X:768, Y:608, Width:32, Height:32, 0, 1, 10, 4, 10, #10, health 0, coin 0, bonus 0, nameptr0x4e4cf8, namestring PopItem
+
+
+npc no: 527
+func 0x477e30, surf ?CurrentNPCSheet, X:0, Y:224, Width:64, Height:80, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4cec, namestring OfficeBoss2
+
+
+npc no: 528
+func 0x477f70, surf ?CurrentNPCSheet, X:416, Y:0, Width:96, Height:96, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4ce0, namestring OfficeBoss3
+
+
+npc no: 529
+func 0x47d1f0, surf ?/0, X:256, Y:0, Width:128, Height:96, 0, 0, 0, 0, 8, #24, health 0, coin 0, bonus 0, nameptr0x4e4cd4, namestring eveElvtr00
+
+
+npc no: 530
+func 0x46a120, surf ?CurrentNPCSheet, X:448, Y:400, Width:32, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4ccc, namestring Ribbon
+
+
+npc no: 531
+func 0x479ef0, surf ?CurrentNPCSheet, X:0, Y:416, Width:64, Height:48, 2, 0, 26, 12, 16, #12, health 20, coin 0, bonus 0, nameptr0x4e4cc4, namestring Frost
+
+
+npc no: 532
+func 0x47a580, surf ?/2, X:192, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4cbc, namestring Fan05
+
+
+npc no: 533
+func 0x47a950, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4cb0, namestring CallBall05
+
+
+npc no: 534
+func 0x4220a0, surf ?/0, X:256, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4ca4, namestring Dark2Block
+
+
+npc no: 535
+func 0x47b610, surf ?/2, X:80, Y:16, Width:16, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c98, namestring ServerLamp
+
+
+npc no: 536
+func 0x47c1c0, surf ?CurrentNPCSheet, X:0, Y:288, Width:80, Height:40, 3, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c90, namestring Drunk
+
+
+npc no: 537
+func 0x46a120, surf ?CurrentNPCSheet, X:336, Y:400, Width:64, Height:48, 0, 0, 0, 0, 8, #0, health 0, coin 0, bonus 0, nameptr0x4e4c84, namestring TimeTable
+
+
+npc no: 538
+func 0x47cbe0, surf ?CurrentNPCSheet, X:0, Y:0, Width:384, Height:112, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c78, namestring TitleLogo
+
+
+npc no: 539
+func 0x46a120, surf ?localize, X:0, Y:0, Width:160, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c6c, namestring PixelLogo
+
+
+npc no: 540
+func 0x43fbe0, surf ?CurrentNPCSheet, X:128, Y:432, Width:64, Height:80, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c60, namestring ShachoBdum
+
+
+npc no: 541
+func 0x47c330, surf ?fuFixNPC, X:832, Y:768, Width:96, Height:80, 0, 0, 0, 8, 16, #16, health 0, coin 0, bonus 0, nameptr0x4e4c54, namestring UzoBrain
+
+
+npc no: 542
+func 0x4795e0, surf ?fuFixNPC, X:640, Y:0, Width:32, Height:32, 1, 0, 10, 4, 10, #16, health 0, coin 0, bonus 0, nameptr0x4e43d0, namestring Sister
+
+
+npc no: 543
+func 0x4776d0, surf ?fuFixNPC, X:768, Y:0, Width:48, Height:64, 2, 1, 0, 0, 12, #26, health 0, coin 0, bonus 0, nameptr0x4e43dc, namestring Sasuke
+
+
+npc no: 544
+func 0x480ac0, surf ?CurrentNPCSheet, X:384, Y:0, Width:32, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c48, namestring Shacho06a
+
+
+npc no: 545
+func 0x480b10, surf ?CurrentNPCSheet, X:0, Y:128, Width:96, Height:96, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c3c, namestring Shacho06c
+
+
+npc no: 546
+func 0x47d890, surf ?/2, X:0, Y:192, Width:32, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c34, namestring Cake
+
+
+npc no: 547
+func 0x480b70, surf ?fuFixNPC, X:640, Y:208, Width:64, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c28, namestring ShachoLie
+
+
+npc no: 548
+func 0x4644f0, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 1, coin 0, bonus 0, nameptr0x4e4c20, namestring bbl1UP
+
+
+npc no: 549
+func 0x4650c0, surf ?fuFixChar, X:856, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c14, namestring VomitCoins
+
+
+npc no: 550
+func 0x47e460, surf ?localize, X:0, Y:512, Width:256, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c0c, namestring GoodJob
+
+
+npc no: 551
+func 0x47e540, surf ?CurrentNPCSheet, X:0, Y:336, Width:144, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4c00, namestring txtStart
+
+
+npc no: 552
+func 0x474e30, surf ?fuFixChar, X:768, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4bf0, namestring PinkHourLogo
+
+
+npc no: 553
+func 0x47e570, surf ?fuFixNPC, X:784, Y:800, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4be4, namestring FishInTank
+
+
+npc no: 554
+func 0x4696d0, surf ?fuFixNPC, X:768, Y:448, Width:48, Height:64, 0, 0, 0, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4bdc, namestring DoorA
+
+
+npc no: 555
+func 0x46a120, surf ?fuFixNPC, X:960, Y:896, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4bd4, namestring Books
+
+
+npc no: 556
+func 0x475120, surf ?CurrentNPCSheet, X:144, Y:432, Width:24, Height:24, 1, 0, 4, 4, 4, #4, health 1, coin 0, bonus 0, nameptr0x4e4bc8, namestring HeavyProc
+
+
+npc no: 557
+func 0x46a120, surf ?fuFixNPC, X:784, Y:768, Width:48, Height:32, 0, 0, 0, 0, 0, #8, health 0, coin 0, bonus 0, nameptr0x4e4bbc, namestring TeaTable
+
+
+npc no: 558
+func 0x475450, surf ?CurrentNPCSheet, X:416, Y:384, Width:32, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4bb4, namestring phRom
+
+
+npc no: 559
+func 0x476e20, surf ?/1, X:0, Y:240, Width:256, Height:16, 0, 0, 96, 8, 96, #0, health 0, coin 0, bonus 0, nameptr0x4e4ba8, namestring FallBridge2
+
+
+npc no: 560
+func 0x4651f0, surf ?fuFixChar, X:856, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4b98, namestring VomitSpecial
+
+
+npc no: 561
+func 0x47e5d0, surf ?fuFixNPC, X:720, Y:784, Width:64, Height:48, 0, 0, 30, 8, 14, #8, health 0, coin 0, bonus 0, nameptr0x4e4b90, namestring Trolley
+
+
+npc no: 562
+func 0x461120, surf ?/1, X:224, Y:192, Width:32, Height:64, 0, 0, 6, 32, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4b84, namestring WoodBarri19
+
+
+npc no: 563
+func 0x47f8d0, surf ?/1, X:840, Y:1008, Width:8, Height:8, 0, 0, 6, 32, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4b78, namestring Kokorona
+
+
+npc no: 564
+func 0x43a6b0, surf ?/0, X:448, Y:192, Width:64, Height:32, 0, 0, 24, 8, 24, #8, health 0, coin 0, bonus 0, nameptr0x4e4b70, namestring skLift0
+
+
+npc no: 565
+func 0x43a6b0, surf ?/1, X:0, Y:192, Width:64, Height:32, 0, 0, 24, 8, 24, #8, health 0, coin 0, bonus 0, nameptr0x4e4b68, namestring skLift1
+
+
+npc no: 566
+func 0x43c310, surf ?CurrentNPCSheet, X:0, Y:336, Width:48, Height:48, 0, 1, 8, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4b60, namestring skDesk
+
+
+npc no: 567
+func 0x43cbe0, surf ?fuFixNPC, X:960, Y:576, Width:32, Height:24, 0, 1, 8, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4b54, namestring skPillow
+
+
+npc no: 568
+func 0x4802d0, surf ?CurrentNPCSheet, X:0, Y:0, Width:128, Height:80, 0, 1, 0, 0, 0, #0, health 2, coin 1, bonus 0, nameptr0x4e4b48, namestring chptDesk
+
+
+npc no: 569
+func 0x46a120, surf ?CurrentNPCSheet, X:0, Y:160, Width:64, Height:64, 0, 1, 0, 0, 0, #0, health 2, coin 60, bonus 0, nameptr0x4e4b3c, namestring BabyBird
+
+
+npc no: 570
+func 0x4623c0, surf ?/0, X:256, Y:0, Width:32, Height:48, 0, 1, 6, 16, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4b34, namestring Gaishi
+
+
+npc no: 571
+func 0x426c30, surf ?/1, X:96, Y:160, Width:32, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4b28, namestring DesKuro_frg
+
+
+npc no: 572
+func 0x4515d0, surf ?CurrentNPCSheet, X:0, Y:368, Width:64, Height:48, 1, 0, 14, 14, 0, #0, health 64, coin 0, bonus 0, nameptr0x4e4b20, namestring Ekiin
+
+
+npc no: 573
+func 0x47eea0, surf ?fuFixNPC, X:720, Y:784, Width:64, Height:48, 0, 0, 30, 8, 24, #8, health 0, coin 0, bonus 0, nameptr0x4e4b10, namestring TrolleyHello
+
+
+npc no: 574
+func 0x4828b0, surf ?fuFixChar, X:880, Y:1008, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4b00, namestring FireworksPod
+
+
+npc no: 575
+func 0x480c70, surf ?CurrentNPCSheet, X:256, Y:320, Width:32, Height:64, 0, 0, 0, 0, 10, #24, health 0, coin 0, bonus 0, nameptr0x4e4af8, namestring zaNanao
+
+
+npc no: 576
+func 0x481610, surf ?/0, X:0, Y:192, Width:40, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4af0, namestring zaDoor
+
+
+npc no: 577
+func 0x4816f0, surf ?CurrentNPCSheet, X:320, Y:448, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4ae4, namestring zaNanaoType
+
+
+npc no: 578
+func 0x4821e0, surf ?/1, X:96, Y:160, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4adc, namestring zaTV
+
+
+npc no: 579
+func 0x481bd0, surf ?/0, X:416, Y:448, Width:32, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4ad0, namestring zaNotePC
+
+
+npc no: 580
+func 0x482260, surf ?/0, X:464, Y:80, Width:48, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4ac0, namestring zaNewscaster
+
+
+npc no: 581
+func 0x46a120, surf ?/0, X:416, Y:0, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 2, coin 1, bonus 0, nameptr0x4e4ab4, namestring zaTVLamp
+
+
+npc no: 582
+func 0x482310, surf ?/2, X:224, Y:224, Width:4, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4aa8, namestring zaFireworks
+
+
+npc no: 583
+func 0x46a120, surf ?CurrentNPCSheet, X:448, Y:192, Width:64, Height:32, 0, 0, 0, 0, 0, #8, health 2, coin 20, bonus 0, nameptr0x4e4a9c, namestring zaDatsuFire
+
+
+npc no: 584
+func 0x482af0, surf ?CurrentNPCSheet, X:384, Y:256, Width:32, Height:64, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4a90, namestring zaKurono
+
+
+npc no: 585
+func 0x482c30, surf ?CurrentNPCSheet, X:0, Y:0, Width:64, Height:80, 3, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4a80, namestring zaOshima_drk
+
+
+npc no: 586
+func 0x482cf0, surf ?CurrentNPCSheet, X:384, Y:400, Width:32, Height:32, 0, 0, 0, 0, 2, #16, health 0, coin 0, bonus 0, nameptr0x4e4a78, namestring zaAudi
+
+
+npc no: 587
+func 0x482ee0, surf ?CurrentNPCSheet, X:384, Y:304, Width:32, Height:32, 0, 0, 0, 0, 2, #16, health 0, coin 0, bonus 0, nameptr0x4e4a70, namestring zaCarry
+
+
+npc no: 588
+func 0x483110, surf ?CurrentNPCSheet, X:256, Y:320, Width:32, Height:80, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4a64, namestring zaKurono_up
+
+
+npc no: 589
+func 0x47ba30, surf ?CurrentNPCSheet, X:64, Y:416, Width:32, Height:32, 2, 1, 12, 8, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4a5c, namestring zaPhone
+
+
+npc no: 590
+func 0x483240, surf ?CurrentNPCSheet, X:0, Y:256, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4a50, namestring zaYubune
+
+
+npc no: 591
+func 0x483510, surf ?/1, X:0, Y:112, Width:16, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4a44, namestring zaSuimen
+
+
+npc no: 592
+func 0x46a120, surf ?/1, X:64, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 3, coin 30, bonus 0, nameptr0x4e4a38, namestring zaTansan
+
+
+npc no: 593
+func 0x4835c0, surf ?fuFixChar, X:0, Y:1008, Width:32, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4a30, namestring zaZabu
+
+
+npc no: 594
+func 0x483620, surf ?/1, X:0, Y:224, Width:48, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4a28, namestring zaSofa
+
+
+npc no: 595
+func 0x46a120, surf ?/1, X:0, Y:176, Width:32, Height:48, 0, 0, 0, 0, 6, #0, health 0, coin 0, bonus 0, nameptr0x4e4a1c, namestring zaBantou
+
+
+npc no: 596
+func 0x483660, surf ?CurrentNPCSheet, X:448, Y:0, Width:64, Height:48, 3, 0, 0, 0, 6, #0, health 0, coin 0, bonus 0, nameptr0x4e4a0c, namestring zaOshima_dsk
+
+
+npc no: 597
+func 0x45c180, surf ?/2, X:192, Y:0, Width:32, Height:32, 5, 0, 12, 12, 12, #12, health 0, coin 0, bonus 0, nameptr0x4e4a00, namestring zaOutsideK
+
+
+npc no: 598
+func 0x4837c0, surf ?CurrentNPCSheet, X:112, Y:416, Width:144, Height:96, 5, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e49f0, namestring zaPrinterBox
+
+
+npc no: 599
+func 0x47ba30, surf ?/0, X:256, Y:16, Width:32, Height:32, 5, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e49e4, namestring zaPhoneZero
+
+
+npc no: 600
+func 0x46a120, surf ?/1, X:64, Y:224, Width:32, Height:16, 0, 0, 0, 0, 8, #0, health 2, coin 1, bonus 0, nameptr0x4e49d4, namestring zaHendenLamp
+
+
+npc no: 601
+func 0x46a120, surf ?/1, X:48, Y:192, Width:80, Height:16, 0, 0, 0, 0, 0, #0, health 2, coin 4, bonus 0, nameptr0x4e49c4, namestring zaHendenWave
+
+
+npc no: 602
+func 0x483800, surf ?/2, X:128, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 2, coin 4, bonus 0, nameptr0x4e49b8, namestring zaWorkFalls
+
+
+npc no: 603
+func 0x46a120, surf ?localize, X:272, Y:544, Width:96, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e49ac, namestring zaNewsHero
+
+
+npc no: 604
+func 0x4838d0, surf ?CurrentNPCSheet, X:384, Y:0, Width:64, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e49a0, namestring zaBitoSleep
+
+
+npc no: 605
+func 0x464870, surf ?fuFixNPC, X:544, Y:672, Width:32, Height:32, 0, 0, 8, 8, 8, #8, health 0, coin 0, bonus 0, nameptr0x4e4994, namestring RollingSpk9
+
+
+npc no: 606
+func 0x475520, surf ?fuFixNPC, X:960, Y:768, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4988, namestring phPinkFall
+
+
+npc no: 607
+func 0x4755e0, surf ?fuFixNPC, X:896, Y:768, Width:64, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e497c, namestring phUmbreFall
+
+
+npc no: 608
+func 0x475630, surf ?fuFixNPC, X:832, Y:768, Width:64, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4970, namestring phSmallUFO
+
+
+npc no: 609
+func 0x475720, surf ?fuFixNPC, X:576, Y:0, Width:32, Height:32, 2, 0, 10, 4, 10, #16, health 0, coin 0, bonus 0, nameptr0x4e4964, namestring phTsubasa
+
+
+npc no: 610
+func 0x42e760, surf ?/0, X:0, Y:320, Width:32, Height:48, 8, 0, 8, 20, 2, #8, health 1, coin 0, bonus 0, nameptr0x4e4958, namestring phAdam_weed
+
+
+npc no: 611
+func 0x4758f0, surf ?localize, X:0, Y:160, Width:80, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4950, namestring phZubo
+
+
+npc no: 612
+func 0x47e4f0, surf ?CurrentNPCSheet, X:16, Y:224, Width:336, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x4e4948, namestring phRubi
+
+
+npc no: 613
+func 0x435d70, surf ?CurrentNPCSheet, X:0, Y:0, Width:128, Height:96, 3, 0, 32, 40, 0, #0, health 220, coin 128, bonus 0, nameptr0x4e4940, namestring Puddie
+
+
+npc no: 614
+func 0x438880, surf ?CurrentNPCSheet, X:0, Y:0, Width:128, Height:80, 3, 0, 1, 1, 30, #32, health 110, coin 0, bonus 0, nameptr0x4e4934, namestring ShieldPlant
+
+
+npc no: 615
+func 0x426d30, surf ?CurrentNPCSheet, X:0, Y:0, Width:80, Height:48, 3, 0, 20, 14, 26, #18, health 360, coin 0, bonus 0, nameptr0x4e492c, namestring Gorgon
+
+
+npc no: 616
+func 0x417ab0, surf ?CurrentNPCSheet, X:0, Y:0, Width:64, Height:64, 3, 0, 14, 22, 16, #28, health 120, coin 16, bonus 0, nameptr0x4e4920, namestring GiantMole
+
+
+npc no: 617
+func 0x4225e0, surf ?CurrentNPCSheet, X:0, Y:0, Width:112, Height:48, 3, 0, 30, 14, 48, #28, health 360, coin 0, bonus 0, nameptr0x4e4914, namestring Dekaigyo
+
+
+npc no: 618
+func 0x4181d0, surf ?CurrentNPCSheet, X:64, Y:128, Width:64, Height:64, 3, 0, 4, 12, 16, #28, health 120, coin 33, bonus 0, nameptr0x4e4908, namestring GiantMole2
+
+
+npc no: 619
+func 0x428680, surf ?CurrentNPCSheet, X:240, Y:0, Width:16, Height:16, 3, 0, 4, 4, 8, #8, health 440, coin 0, bonus 0, nameptr0x4e4900, namestring N577
+
+
+npc no: 620
+func 0x418990, surf ?CurrentNPCSheet, X:0, Y:0, Width:48, Height:48, 6, 0, 16, 16, 16, #16, health 180, coin 0, bonus 0, nameptr0x4e48f8, namestring Dark1
+
+
+npc no: 621
+func 0x4200a0, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 6, 0, 72, 64, 0, #0, health 240, coin 0, bonus 0, nameptr0x4e48f0, namestring Dark2
+
+
+npc no: 622
+func 0x41a8e0, surf ?CurrentNPCSheet, X:0, Y:0, Width:96, Height:80, 3, 0, 46, 32, 0, #0, health 420, coin 0, bonus 0, nameptr0x4e48e4, namestring ClockMan
+
+
+npc no: 623
+func 0x43e3f0, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:96, 6, 0, 24, 42, 0, #0, health 420, coin 0, bonus 0, nameptr0x4e48dc, namestring ShachoC
+
+
+npc no: 624
+func 0x42eaf0, surf ?CurrentNPCSheet, X:0, Y:0, Width:96, Height:144, 6, 0, 0, 0, 0, #0, health 1200, coin 0, bonus 0, nameptr0x4e48d0, namestring BossPlate
+
+
+npc no: 625
+func 0x43ce30, surf ?CurrentNPCSheet, X:0, Y:0, Width:64, Height:80, 6, 0, 12, 32, 14, #34, health 280, coin 0, bonus 0, nameptr0x4e48c8, namestring ShachoB
+
+
+npc no: 626
+func 0x43fc20, surf ?CurrentNPCSheet, X:400, Y:464, Width:32, Height:48, 3, 0, 16, 8, 16, #24, health 320, coin 0, bonus 0, nameptr0x4e48c0, namestring Titan
+
+
+npc no: 627
+func 0x436370, surf ?CurrentNPCSheet, X:0, Y:0, Width:128, Height:96, 3, 0, 32, 40, 0, #0, health 360, coin 128, bonus 0, nameptr0x4e48b8, namestring Puddie2
+
+
+npc no: 628
+func 0x4310e0, surf ?CurrentNPCSheet, X:64, Y:464, Width:24, Height:24, 6, 0, 0, 0, 0, #0, health 800, coin 0, bonus 0, nameptr0x4e48b0, namestring Printer
+
+
+npc no: 629
+func 0x42b000, surf ?CurrentNPCSheet, X:0, Y:0, Width:64, Height:80, 6, 0, 16, 28, 16, #28, health 800, coin 0, bonus 0, nameptr0x4e48a4, namestring BossOshima
+
+
+npc no: 630
+func 0x424030, surf ?CurrentNPCSheet, X:0, Y:0, Width:48, Height:80, 6, 0, 8, 16, 8, #18, health 480, coin 0, bonus 0, nameptr0x4e4898, namestring DesKurono
+
+
+npc no: 631
+func 0x41dc60, surf ?CurrentNPCSheet, X:64, Y:0, Width:96, Height:80, 3, 0, 46, 32, 0, #0, health 420, coin 0, bonus 0, nameptr0x4e4890, namestring Clock2
+
+
+npc no: 632
+func 0x440d00, surf ?CurrentNPCSheet, X:0, Y:0, Width:176, Height:32, 3, 0, 48, 20, 0, #0, health 5, coin 0, bonus 0, nameptr0x4e4884, namestring BossScr2
+
+
+npc no: 633
+func 0x42d5b0, surf ?CurrentNPCSheet, X:0, Y:0, Width:80, Height:64, 3, 0, 24, 14, 22, #18, health 100, coin 0, bonus 0, nameptr0x4e487c, namestring phAdam
+
+
+npc no: 634
+func 0x442bc0, surf ?fuFixPtcl, X:32, Y:0, Width:16, Height:16, 1, 0, 4, 4, 4, #2, health 1, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 635
+func 0x442be0, surf ?fuFixPtcl, X:0, Y:16, Width:16, Height:16, 1, 0, 4, 4, 4, #2, health 1, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 636
+func 0x4455b0, surf ?fuFixPtcl, X:0, Y:80, Width:16, Height:16, 1, 0, 8, 2, 6, #1, health 1, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 637
+func 0x445370, surf ?fuFixPtcl, X:16, Y:80, Width:16, Height:16, 1, 0, 1, 1, 1, #1, health 1, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 638
+func 0x4455b0, surf ?fuFixPtcl, X:160, Y:320, Width:16, Height:16, 1, 0, 8, 2, 6, #1, health 1, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 639
+func 0x445490, surf ?fuFixPtcl, X:64, Y:0, Width:24, Height:24, 1, 0, 1, 1, 1, #1, health 1, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 640
+func 0x442bc0, surf ?fuFixPtcl, X:736, Y:160, Width:32, Height:32, 1, 0, 4, 4, 6, #6, health 1, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 641
+func 0x444870, surf ?fuFixPtcl, X:256, Y:320, Width:32, Height:32, 2, 0, 3, 12, 4, #4, health 1, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 642
+func 0x444870, surf ?fuFixPtcl, X:800, Y:0, Width:48, Height:48, 2, 0, 5, 26, 4, #4, health 1, coin 3, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 643
+func 0x4437f0, surf ?fuFixPtcl, X:800, Y:288, Width:24, Height:24, 2, 0, 4, 4, 2, #2, health 1, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 644
+func 0x443c70, surf ?fuFixPtcl, X:176, Y:320, Width:24, Height:24, 2, 0, 4, 4, 2, #2, health 1, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 645
+func 0x443c70, surf ?fuFixPtcl, X:976, Y:0, Width:24, Height:24, 2, 0, 4, 4, 2, #2, health 1, coin 24, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 646
+func 0x444870, surf ?fuFixPtcl, X:800, Y:0, Width:48, Height:48, 2, 0, 5, 26, 4, #4, health 1, coin 4, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 647
+func 0x4433c0, surf ?fuFixPtcl, X:0, Y:208, Width:32, Height:32, 3, 0, 5, 5, 5, #5, health 1, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 648
+func 0x4434d0, surf ?fuFixPtcl, X:0, Y:304, Width:32, Height:32, 3, 0, 8, 8, 6, #6, health 1, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 649
+func 0x4435e0, surf ?fuFixPtcl, X:416, Y:160, Width:32, Height:32, 3, 0, 5, 5, 5, #5, health 10, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 650
+func 0x443720, surf ?fuFixPtcl, X:448, Y:0, Width:64, Height:64, 3, 0, 24, 24, 0, #0, health 10, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 651
+func 0x442c00, surf ?fuFixPtcl, X:912, Y:192, Width:32, Height:32, 3, 0, 8, 8, 4, #4, health 1, coin 3, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 652
+func 0x442c00, surf ?fuFixPtcl, X:912, Y:288, Width:32, Height:32, 3, 0, 8, 8, 4, #4, health 1, coin 4, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 653
+func 0x444f00, surf ?fuFixPtcl, X:152, Y:144, Width:24, Height:32, 4, 0, 4, 5, 4, #4, health 1, coin 3, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 654
+func 0x444f20, surf ?fuFixPtcl, X:320, Y:0, Width:32, Height:48, 4, 0, 6, 8, 6, #6, health 1, coin 4, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 655
+func 0x444f40, surf ?fuFixPtcl, X:320, Y:0, Width:32, Height:48, 4, 0, 6, 6, 6, #6, health 1, coin 4, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 656
+func 0x444f60, surf ?fuFixChar, X:640, Y:448, Width:32, Height:32, 4, 0, 8, 8, 8, #8, health 1, coin 3, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 657
+func 0x4440a0, surf ?fuFixPtcl, X:800, Y:192, Width:32, Height:32, 5, 0, 4, 4, 4, #2, health 1, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 658
+func 0x444290, surf ?fuFixPtcl, X:512, Y:400, Width:32, Height:32, 5, 0, 4, 4, 6, #4, health 1, coin 3, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 659
+func 0x4444b0, surf ?fuFixPtcl, X:512, Y:464, Width:32, Height:32, 5, 0, 8, 8, 8, #6, health 1, coin 3, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 660
+func 0x444c40, surf ?fuFixPtcl, X:464, Y:432, Width:32, Height:32, 0, 0, 16, 16, 0, #0, health 1, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 661
+func 0x444c40, surf ?fuFixPtcl, X:432, Y:384, Width:48, Height:48, 0, 0, 24, 24, 0, #0, health 1, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 662
+func 0x445740, surf ?fuFixPtcl, X:48, Y:48, Width:16, Height:16, 0, 0, 6, 2, 1, #1, health 1, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 663
+func 0x4457c0, surf ?fuFixPtcl, X:112, Y:256, Width:16, Height:16, 0, 0, 2, 2, 2, #2, health 1, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 664
+func 0x4457c0, surf ?fuFixPtcl, X:464, Y:288, Width:0, Height:48, 0, 0, 24, 24, 2, #2, health 1, coin 99, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 665
+func 0x4457c0, surf ?fuFixPtcl, X:80, Y:496, Width:64, Height:16, 0, 0, 32, 8, 0, #0, health 4, coin 32, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 666
+func 0x4457c0, surf ?fuFixPtcl, X:64, Y:200, Width:8, Height:8, 0, 0, 24, 24, 0, #0, health 4, coin 32, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 667
+func 0x445860, surf ?fuFixPtcl, X:64, Y:200, Width:8, Height:8, 0, 0, 16, 16, 0, #0, health 1, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 668
+func 0x4457c0, surf ?fuFixPtcl, X:0, Y:0, Width:0, Height:0, 0, 0, 4, 4, 1, #1, health 1, coin 99, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 669
+func 0x4457c0, surf ?fuFixPtcl, X:0, Y:0, Width:0, Height:0, 0, 0, 8, 8, 0, #0, health 1, coin 4, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 670
+func 0x484230, surf ?fuFixPtcl, X:944, Y:0, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 5, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 671
+func 0x484230, surf ?fuFixPtcl, X:352, Y:384, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 3, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 672
+func 0x485980, surf ?/0, X:0, Y:224, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 673
+func 0x485630, surf ?localize, X:0, Y:0, Width:160, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 674
+func 0x4843a0, surf ?fuFixPtcl, X:48, Y:32, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 675
+func 0x4843f0, surf ?fuFixPtcl, X:0, Y:112, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 676
+func 0x484540, surf ?fuFixPtcl, X:16, Y:104, Width:24, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 677
+func 0x4845b0, surf ?fuFixPtcl, X:80, Y:64, Width:8, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 678
+func 0x484660, surf ?fuFixPtcl, X:184, Y:0, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 679
+func 0x484230, surf ?fuFixPtcl, X:352, Y:128, Width:64, Height:64, 0, 0, 0, 0, 0, #0, health 4, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 680
+func 0x4846b0, surf ?fuFixPtcl, X:16, Y:128, Width:16, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 681
+func 0x484230, surf ?fuFixPtcl, X:416, Y:336, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 3, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 682
+func 0x4847a0, surf ?fuFixPtcl, X:0, Y:224, Width:32, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 683
+func 0x484230, surf ?fuFixPtcl, X:96, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 2, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 684
+func 0x4860c0, surf ?fuFixPtcl, X:896, Y:0, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 685
+func 0x484810, surf ?fuFixPtcl, X:0, Y:160, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 686
+func 0x484890, surf ?fuFixPtcl, X:0, Y:232, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 687
+func 0x4849b0, surf ?fuFixPtcl, X:208, Y:0, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 9, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 688
+func 0x484ad0, surf ?fuFixPtcl, X:32, Y:128, Width:32, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 689
+func 0x484bf0, surf ?fuFixPtcl, X:64, Y:272, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 690
+func 0x484dd0, surf ?fuFixPtcl, X:304, Y:0, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 691
+func 0x484230, surf ?fuFixPtcl, X:232, Y:0, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 5, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 692
+func 0x484eb0, surf ?fuFixPtcl, X:640, Y:0, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 693
+func 0x484230, surf ?CurrentNPCSheet, X:192, Y:64, Width:64, Height:80, 0, 0, 0, 0, 0, #0, health 3, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 694
+func 0x485850, surf ?fuFixPtcl, X:0, Y:272, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 695
+func 0x4858a0, surf ?localize, X:512, Y:0, Width:160, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 696
+func 0x485140, surf ?item, X:160, Y:400, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 697
+func 0x485510, surf ?fuFixPtcl, X:176, Y:144, Width:16, Height:16, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 698
+func 0x487310, surf ?localize, X:208, Y:928, Width:48, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 699
+func 0x484230, surf ?fuFixPtcl, X:0, Y:112, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 3, coin 6, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 700
+func 0x4842f0, surf ?fuFixPtcl, X:736, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 3, coin 6, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 701
+func 0x485690, surf ?fuFixPtcl, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 702
+func 0x4857d0, surf ?fuFixPtcl, X:32, Y:64, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 703
+func 0x4842f0, surf ?fuFixPtcl, X:640, Y:0, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 3, coin 6, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 704
+func 0x4842f0, surf ?fuFixPtcl, X:512, Y:0, Width:64, Height:64, 0, 0, 0, 0, 0, #0, health 3, coin 6, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 705
+func 0x484230, surf ?fuFixPtcl, X:0, Y:512, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 3, coin 3, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 706
+func 0x485f80, surf ?fuFixPtcl, X:128, Y:240, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 707
+func 0x485920, surf ?localize, X:928, Y:0, Width:96, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 708
+func 0x484a40, surf ?fuFixPtcl, X:208, Y:0, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 9, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 709
+func 0x484230, surf ?CurrentNPCSheet, X:128, Y:112, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 3, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 710
+func 0x486130, surf ?fuFixPtcl, X:112, Y:272, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 711
+func 0x4861b0, surf ?fuFixChar, X:0, Y:432, Width:64, Height:16, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 712
+func 0x4842f0, surf ?fuFixPtcl, X:768, Y:128, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 3, coin 6, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 713
+func 0x486280, surf ?fuFixPtcl, X:448, Y:336, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 714
+func 0x486430, surf ?fuFixPtcl, X:176, Y:64, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 715
+func 0x484230, surf ?CurrentNPCSheet, X:128, Y:384, Width:64, Height:32, 0, 0, 0, 0, 0, #0, health 4, coin 5, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 716
+func 0x4864c0, surf ?fuFixPtcl, X:32, Y:224, Width:16, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 717
+func 0x486540, surf ?fuFixPtcl, X:800, Y:384, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 718
+func 0x46a120, surf ?fuFixChar, X:896, Y:864, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 2, coin 40, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 719
+func 0x484230, surf ?fuFixPtcl, X:32, Y:368, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 3, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 720
+func 0x4865d0, surf ?item, X:320, Y:416, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 721
+func 0x484fe0, surf ?fuFixPtcl, X:0, Y:0, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 722
+func 0x485320, surf ?item, X:384, Y:192, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 723
+func 0x486690, surf ?fuFixPtcl, X:48, Y:176, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 724
+func 0x484230, surf ?/1, X:208, Y:0, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 3, coin 6, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 725
+func 0x422050, surf ?fuFixPtcl, X:0, Y:656, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 726
+func 0x4867f0, surf ?CurrentNPCSheet, X:0, Y:0, Width:0, Height:0, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 727
+func 0x486910, surf ?fuFixPtcl, X:32, Y:288, Width:32, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 728
+func 0x486a40, surf ?localize, X:160, Y:64, Width:80, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 729
+func 0x484230, surf ?fuFixPtcl, X:224, Y:256, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 2, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 730
+func 0x484230, surf ?fuFixPtcl, X:224, Y:320, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 2, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 731
+func 0x484230, surf ?fuFixPtcl, X:800, Y:96, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 2, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 732
+func 0x484230, surf ?fuFixPtcl, X:896, Y:96, Width:48, Height:48, 0, 0, 0, 0, 0, #0, health 2, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 733
+func 0x484230, surf ?CurrentNPCSheet, X:192, Y:384, Width:64, Height:32, 0, 0, 0, 0, 0, #0, health 4, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 734
+func 0x484230, surf ?CurrentNPCSheet, X:240, Y:0, Width:16, Height:32, 0, 0, 0, 0, 0, #0, health 3, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 735
+func 0x484230, surf ?CurrentNPCSheet, X:480, Y:384, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 4, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 736
+func 0x486980, surf ?fuFixPtcl, X:208, Y:64, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 737
+func 0x484230, surf ?fuFixPtcl, X:0, Y:496, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 3, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 738
+func 0x486b00, surf ?CurrentNPCSheet, X:80, Y:0, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 3, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 739
+func 0x484230, surf ?CurrentNPCSheet, X:176, Y:416, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 6, coin 4, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 740
+func 0x484230, surf ?CurrentNPCSheet, X:448, Y:320, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 6, coin 4, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 741
+func 0x484230, surf ?CurrentNPCSheet, X:224, Y:96, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 3, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 742
+func 0x486c70, surf ?fuFixPtcl, X:0, Y:64, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 743
+func 0x486ea0, surf ?/2, X:32, Y:224, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 744
+func 0x487070, surf ?/2, X:64, Y:224, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 745
+func 0x487260, surf ?localize, X:0, Y:96, Width:80, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 746
+func 0x4861b0, surf ?fuFixNPC, X:128, Y:176, Width:64, Height:16, 0, 1, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 747
+func 0x487560, surf ?fuFixChar, X:640, Y:416, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 748
+func 0x422050, surf ?fuFixPtcl, X:96, Y:656, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 749
+func 0x484230, surf ?fuFixPtcl, X:960, Y:384, Width:64, Height:80, 0, 0, 0, 0, 0, #0, health 3, coin 2, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 750
+func 0x484b80, surf ?fuFixPtcl, X:208, Y:656, Width:48, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 751
+func 0x487880, surf ?fuFixPtcl, X:0, Y:0, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 752
+func 0x4878b0, surf ?CurrentNPCSheet, X:448, Y:176, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 753
+func 0x487920, surf ?fuFixPtcl, X:144, Y:656, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 754
+func 0x486690, surf ?fuFixPtcl, X:56, Y:176, Width:8, Height:8, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 755
+func 0x484230, surf ?/1, X:96, Y:192, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 2, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 756
+func 0x487460, surf ?localize, X:320, Y:0, Width:64, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 757
+func 0x487460, surf ?localize, X:208, Y:896, Width:48, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 758
+func 0x4875d0, surf ?CurrentNPCSheet, X:32, Y:384, Width:32, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 759
+func 0x4876d0, surf ?fuFixPtcl, X:992, Y:96, Width:16, Height:16, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 760
+func 0x487820, surf ?CurrentNPCSheet, X:0, Y:288, Width:96, Height:96, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 761
+func 0x487820, surf ?CurrentNPCSheet, X:0, Y:0, Width:128, Height:128, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 762
+func 0x4174a0, surf ?fuFixChar, X:544, Y:448, Width:32, Height:32, 0, 0, 3, 3, 3, #7, health 1, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 763
+func 0x4174a0, surf ?fuFixChar, X:512, Y:448, Width:32, Height:32, 0, 0, 5, 5, 8, #9, health 3, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 764
+func 0x4177e0, surf ?fuFixChar, X:384, Y:512, Width:32, Height:32, 0, 0, 4, 4, 4, #14, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 765
+func 0x417990, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 0, 0, 3, 3, 3, #11, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 766
+func 0x417990, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 0, 0, 3, 3, 3, #12, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 767
+func 0x417990, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 0, 0, 3, 3, 3, #8, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 768
+func 0x417990, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 0, 0, 3, 3, 3, #10, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 769
+func 0x417990, surf ?CurrentNPCSheet, X:0, Y:0, Width:32, Height:32, 0, 0, 3, 3, 3, #10, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 770
+func 0x417020, surf ?fuFixChar, X:336, Y:512, Width:16, Height:16, 0, 0, 2, 2, 3, #8, health 0, coin 1, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 771
+func 0x417020, surf ?fuFixChar, X:352, Y:512, Width:32, Height:32, 0, 0, 4, 4, 6, #12, health 0, coin 10, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 772
+func 0x417300, surf ?fuFixChar, X:352, Y:704, Width:32, Height:32, 0, 0, 4, 4, 10, #12, health 0, coin 50, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 773
+func 0x483b00, surf ?fuFixPtcl, X:176, Y:240, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 774
+func 0x4839e0, surf ?item, X:400, Y:0, Width:64, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 775
+func 0x483f50, surf ?item, X:192, Y:128, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 776
+func 0x4840b0, surf ?item, X:0, Y:192, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 777
+func 0x483b00, surf ?fuFixPtcl, X:24, Y:368, Width:24, Height:24, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 778
+func 0x484150, surf ?item, X:0, Y:128, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 779
+func 0x487ac0, surf ?fuFixChar, X:0, Y:192, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 780
+func 0x487b10, surf ?fuFixNPC, X:0, Y:656, Width:32, Height:48, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 781
+func 0x487b10, surf ?fuFixNPC, X:64, Y:752, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 782
+func 0x487b90, surf ?localize, X:0, Y:0, Width:160, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 783
+func 0x487c70, surf ?fuFixNPC, X:576, Y:576, Width:32, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 784
+func 0x46a120, surf ?CurrentNPCSheet, X:0, Y:0, Width:128, Height:80, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 785
+func 0x487dc0, surf ?CurrentNPCSheet, X:128, Y:0, Width:48, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
+npc no: 786
+func 0x487e80, surf ?/0, X:0, Y:0, Width:64, Height:32, 0, 0, 0, 0, 0, #0, health 0, coin 0, bonus 0, nameptr0x0, namestring 0
+
+
