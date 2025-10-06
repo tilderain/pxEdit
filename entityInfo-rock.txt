@@ -1,0 +1,250 @@
+(000) -@@
+(001) Dummy@@
+(002) Crab@@
+(003) Event@@(p2: 0=stop 1=mv-h 2=mv-v 3=mv-H 4=mv-V 10=mem block)
+(004) Anchor@@( <swtN:2=up p2:speed )
+(005) Gate@@
+(006) Friend@@
+(007) Save@@
+(008) Piece@@
+(009) Worm@@
+(010) Egg@@
+(011) DuctPlant@@
+(012) Chest@@
+(013) Switch@@
+(014) mvRock@@
+(015) Tan@@
+(016) Pinky@@
+(017) Plant@@
+(018) mvRockV@@
+(019) Bublock@@
+(020) Shop@@
+(021) Coin@@
+(022) Beader@@
+(023) Octopus@@
+(024) Shrimp@@
+(025) Cthul@@
+(026) FallTrap@@
+(027) Snail@@
+(028) StarFish@@
+(029) SignBoard@@
+(030) Houbou@@
+(031) Mud@@
+(032) Namako@@
+(033) Boatcrab@@
+(034) Link@@
+(035) JellyDrop@@
+(036) BblFish@@
+(037) MetalFish@@
+(038) Heart@@
+(039) Boss_Octopus@@
+(040) Boss_Cell@@
+(041) BsPt_CellBeem@@
+(042) BsPt_CellBbl@@
+(043) BsPt_Rock@@
+(044) Boss_Blacky@@
+(045) bmInk@@
+(046) bmSpike@@
+(047) bmPoison@@
+(048) bmMeat@@
+(049) Pendant@@
+(050) DarkEgg@@
+(051) Demo Peter@@
+(052) Demo Ningyo@@
+(053) Demo Pendant@@
+(054) Demo NinPen@@
+(055) Demo DarkBall@@
+(056) Demo JVessel@@
+(057) Demo Jewel@@
+(058) Demo JPiece@@
+(059) Rolling Fiber@@
+(060) Barbwire@@
+(061) Domino@@
+(062) Explain@@
+(063) Door A@@
+(064) Walking Black@@
+(065) Focus Control@@(0=Nrml V 1=UnderMPC)
+(066) Uzo Flame@@(prm2: 0 = left 1 = top 2 = right 3 = bottom)
+(067) Creeper@@
+(068) Shacho Act stage 7 office@@
+(069) Room Locker@@
+(070) Bent Plate@@
+(071) Boss Desk@@
+(072) Barricade@@
+(073) Uzo Tank@@
+(074) Elevator 00@@
+(075) Kani@@
+(076) Tokobushi@@
+(077) Anemone@@
+(078) to Back@@
+(079) Position Half Up@@
+(080) Door Vertical@@
+(081) Line Censor@@
+(082) Route Arrow@@
+(083) Fly Wave@@
+(084) Spin@@
+(085) Altar@@
+(086) Call Small@@
+(087) Snow Setter@@
+(088) Icicle@@
+(089) Uzo Slime@@
+(090) Goldrush@@
+(091) Ebi Flower 7@@
+(092) Nikubae@@
+(093) Uzo Gray (layer0)@@
+(094) 4 Boss Barricade.@@
+(095) Quaker@@
+(096) Flag Mine@@
+(097) Uzo Red@@
+(098) Saucer@@
+(099) Uzo Over Fence@@
+(100) Fluo Lamp@@
+(101) Gravity Block 3@@
+(102) Uzo Chibi Red@@
+(103) Uzo Gray (layer2)@@
+(104) Sparker@@
+(105) Bacteria@@
+(106) Digesty@@
+(107) Roof Worm@@
+(108) Big Worm@@
+(109) Silhoette@@
+(110) Zombie@@
+(111) Leather@@
+(112) White Setter@@
+(113) Egg Worm@@(prm2: 0 = upper left 1 = upper right 2 = lower left 3 = lower right)
+(114) Stone Gate@@(swt 1:key coming, 2:keep close, 3:to open 4:key short)
+(115) Frog Plant@@
+(116) Weak Weed@@
+(117) Ebi Floser@@
+(118) Bubble 1UP@@
+(119) Shacho A@@
+(120) Frozen Fish@@
+(121) Uzo Elec@@
+(122) Flower Vase@@
+(123) Gray Spiral@@
+(124) Time Attack Display@@
+(125) Metalmushi@@
+(126) The Bar@@
+(127) Gravity Ice@@
+(128) EarthFly@@
+(129) Walking Moss@@
+(130) Mob Stand@@
+(131) Spike Plant@@
+(132) Sidewinder@@
+(133) Katanakaji@@
+(134) Chest2@@
+(135) Walk Plant@@
+(136) Blue Fish@@
+(137) Dragon Flower@@
+(138) Set Birds@@( 0:room 1:tree 2:two birds )
+(139) Fly Evade@@
+(140) Gravity Block 2@@
+(141) Doronko@@
+(142) Tumbleweed@@
+(143) New Arms@@
+(144) Bat ceiling@@
+(145) Strong Box@@
+(146) Chandelier@@
+(147) Bubble Lift@@
+(148) Call Bats@@
+(149) Booster@@
+(150) Bat Passing@@
+(151) Orange Fish@@
+(152) Echinus@@
+(153) KillerSensor@@
+(154) Moving Box Horizontal@@
+(155) BomBox@@
+(156) Edge Coin (s)@@
+(157) Edge Medal@@
+(158) Fall Light@@
+(159) Intro@@
+(160) Uzouzo@@
+(161) Office Fly@@
+(162) Sister@@
+(163) Sasuke@@
+(164) Hanger@@
+(165) Rolling Snow@@
+(166) Ball Flyer@@(prm2: I'm going to make you move around.)
+(167) Rolling Big@@
+(168) Refrigerator@@
+(169) Ice Hillock@@
+(170) Bear Core@@
+(171) Animal Bone@@
+(172) Kankisen 2@@
+(173) Carton Box L@@
+(174) Carton Box s@@
+(175) Broken Plant@@
+(176) Phone Dark@@
+(177) Core Debug@@
+(178) Spike Plant Fly@@
+(179) Call Glider Bird (Fire)@@
+(180) Spike Plant Side.@@
+(181) Doroman@@
+(182) Doronko Turn@@
+(183) Vertical Beam@@
+(184) Moving Box Vertical@@
+(185) Propeller Fish@@
+(186) Hopper@@
+(187) Zundou Lift@@
+(188) Slip Lift@@
+(189) Maruta Lift@@
+(190) Sliding Block@@
+(191) Frost Generic@@
+(192) zan Bito bag@@1=walk, 2~8=walk(cnt), 9=run, 10=run(swt)
+(193) Wind Hopper@@
+(194) zan Bito type@@
+(195) Hazy Worm@@
+(196) Pink Hopper@@
+(197) Rolling Spark@@(prm2: 1=slow 3=fast)
+(198) Spike Plant2@@
+(199) Puddie Lift@@
+(200) Walking Box@@
+(201) Steel Spiral@@
+(202) Junk Hopper@@
+(203) Togetoge@@
+(204) Masamune@@
+(205) Datsu@@
+(206) Carry(color)@@
+(207) Sheaf(color)@@
+(208) Seagull@@
+(209) Beach Mole@@
+(210) Sea Dragon@@
+(211) Garbage Bag@@
+(212) Tarai@@
+(213) za Crew@@1=run, 2=walk(slow), 3=talk, 4=walk, 6=nod, 10=run(swt)
+(214) Togemushi@@
+(215) Seagull Fly@@
+(216) za Nakai@@
+(217) Position@@(prm2: 3 = ypos-3)
+(218) Oshima@@
+(219) Ashidaka@@
+(220) Puti Step@@
+(221) Dark Ameba@@
+(222) Side Snail@@
+(223) Tower Cloud@@
+(224) Orange Fish 9@@
+(225) Umineko@@
+(226) Entrance@@
+(227) Spider@@
+(228) Weak Web@@
+(229) Hinotama@@
+(230) Cabinet Monster@@
+(231) Step Books@@
+(232) Step Desk@@
+(233) Step Cabinet1@@
+(234) Step Cabinet2@@
+(235) Circle Kurono@@
+(236) Sky Kurono@@
+(237) Sky Kurono cloud 0@@
+(238) Sky Kurono cloud 1@@
+(239) Random Flash.@@
+(240) Work Books(color)@@
+(241) effect Smokes@@
+(242) effect Dust@@
+(243) Hidden Sheaf(color)@@
+(244) Work Books(gray)@@
+(245) Carry(gray)@@
+(246) Sheaf(gray)@@
+(247) Hidden Sheaf(gray)@@
+(248) Uzo(car3)@@
+(249) Sky Kurono cloud 2@@

@@ -1,0 +1,250 @@
+(000) -@@
+(001) Empty@@
+(002) Purple Runner@@
+(003) Event@@
+(004) Anchor@@
+(005) Shutter@@
+(006) ??? (Unused)@@
+(007) Cat Bride@@
+(008) ??? (Unused)@@
+(009) Jail Cage@@
+(010) Bunny Lock (Unused)@@
+(011) Frog Actor@@
+(012) Chest@@
+(013) My Ship@@
+(014) Yellow Jumper@@
+(015) Sandcroc@@
+(016) Blue Bat@@
+(017) Small Yellow Jumper@@
+(018) Desert Conch@@
+(019) Sister@@
+(020) BigPress@@
+(021) Small Blue Bat@@
+(022) Drop@@
+(023) Fairy@@
+(024) Water Pipe Ell@@
+(025) Spring Cat (pr2:1 = Umbrella Ghost)@@
+(026) Relay@@
+(027) toL2@@
+(028) toU2@@
+(029) toR2@@
+(030) toD2@@
+(031) FirePlant@@
+(032) LadderBox@@
+(033) Debug Link@@
+(034) ComboCue@@
+(035) ??? (Unused)@@
+(036) Dog Frog@@
+(037) Orange Water Pipe Ell@@
+(038) Heart@@
+(039) Frog Ceiling@@
+(040) Lift V3@@
+(041) "Alert" Entity (Unused)@@
+(042) Shop Bubble@@
+(043) Hopping Entity (Unused)@@
+(044) Flying Entity (Unused)@@
+(045) Shop Upgrade@@
+(046) Block Eater@@
+(047) Umbrella Man@@
+(048) HiddenChest@@
+(049) Forest Bee@@
+(050) Rouge@@
+(051) Forest Bee Array@@
+(052) Lime Jumper@@
+(053) Propeller Cage@@
+(054) Forest Bee Spawner@@
+(055) Fire bubble Set@@
+(056) Mole@@
+(057) Underground Obake@@
+(058) Gunner@@
+(059) Tank@@
+(060) Barbwire@@
+(061) Domino@@
+(062) Explain@@
+(063) Scientist@@
+(064) Patrol Drone@@
+(065) Focus Control@@
+(066) Burner Man@@
+(067) Green Gel@@
+(068) Trash Can@@
+(069) Monster Dog (Unused)@@
+(070) ??? (Unused)@@
+(071) Pink Cloud@@
+(072) Barricade@@
+(073) Kopi's Space Ship@@
+(074) Kopi@@
+(075) Kani@@
+(076) Tokobushi@@
+(077) Anemone@@
+(078) Eye Fish@@
+(079) Pollen@@
+(080) Treant@@
+(081) Orange Gel Egg@@
+(082) Orange Gel@@
+(083) GrayEnemy@@
+(084) Spin@@
+(085) Red Gunner@@
+(086) Snowball Men@@
+(087) Snow Setter@@
+(088) Icicle@@
+(089) Yeti Froster@@
+(090) Goldrush@@
+(091) Snow Spiral@@
+(092) Small Froster@@
+(093) Froster@@
+(094) Boss Block Barricade@@
+(095) Quaker@@
+(096) Flag Mine@@
+(097) Rabbit People@@
+(098) Saucer@@
+(099) Robe Guards@@
+(100) Coin Spawner@@
+(101) Gravity Block 3@@
+(102) Guard Dog@@
+(103) Small Dog Frog@@
+(104) Sparker@@
+(105) Bacteria@@
+(106) Digesty@@
+(107) Roof Worm@@
+(108) Big Worm@@
+(109) Silhoette@@
+(110) Zombie@@
+(111) Leather@@
+(112) White Setter@@
+(113) Egg Worm@@
+(114) Stone Gate@@
+(115) Frog Plant@@
+(116) Weak Weed@@
+(117) Ebi Floser@@
+(118) Bubble 1UP@@
+(119) Shacho A@@
+(120) Frozen Fish@@
+(121) Uzo Elec@@
+(122) Flower Vase@@
+(123) Gray Spiral@@
+(124) Time Attack Display@@
+(125) Metalmushi@@
+(126) The Bar@@
+(127) Gravity Ice@@
+(128) EarthFly@@
+(129) Walking Moss@@
+(130) Mob Stand@@
+(131) Spike Plant@@
+(132) Sidewinder@@
+(133) Katanakaji@@
+(134) Chest2@@
+(135) Walk Plant@@
+(136) Blue Fish@@
+(137) Dragon Flower@@
+(138) Set Birds@@
+(139) Fly Evade@@
+(140) Gravity Block 2@@
+(141) Doronko@@
+(142) Tumbleweed@@
+(143) New Arms@@
+(144) Bat ceiling@@
+(145) Strong Box@@
+(146) Chandelier@@
+(147) Bubble Lift@@
+(148) Call Bats@@
+(149) Booster@@
+(150) Bat Passing@@
+(151) Orange Fish@@
+(152) Echinus@@
+(153) KillerSensor@@
+(154) Moving Box Horizontal@@
+(155) BomBox@@
+(156) Edge Coin (s)@@
+(157) Edge Medal@@
+(158) Fall Light@@
+(159) Intro@@
+(160) Uzouzo@@
+(161) Office Fly@@
+(162) Sister@@
+(163) Sasuke@@
+(164) Hanger@@
+(165) Rolling Snow@@
+(166) Ball Flyer@@
+(167) Rolling Big@@
+(168) Refrigerator@@
+(169) Ice Hillock@@
+(170) Bear Core@@
+(171) Animal Bone@@
+(172) Kankisen 2@@
+(173) Carton Box L@@
+(174) Carton Box s@@
+(175) Broken Plant@@
+(176) Phone Dark@@
+(177) Core Debug@@
+(178) Spike Plant Fly@@
+(179) Call Glider Bird (Fire)@@
+(180) Spike Plant Side.@@
+(181) Doroman@@
+(182) Doronko Turn@@
+(183) Vertical Beam@@
+(184) Moving Box Vertical@@
+(185) Propeller Fish@@
+(186) Hopper@@
+(187) Zundou Lift@@
+(188) Slip Lift@@
+(189) Maruta Lift@@
+(190) Sliding Block@@
+(191) Frost Generic@@
+(192) zan Bito bag@@
+(193) Wind Hopper@@
+(194) zan Bito type@@
+(195) Hazy Worm@@
+(196) Pink Hopper@@
+(197) Rolling Spark@@
+(198) Spike Plant2@@
+(199) Puddie Lift@@
+(200) Walking Box@@
+(201) Steel Spiral@@
+(202) Junk Hopper@@
+(203) Togetoge@@
+(204) Masamune@@
+(205) Datsu@@
+(206) Carry(color)@@
+(207) Sheaf(color)@@
+(208) Seagull@@
+(209) Beach Mole@@
+(210) Sea Dragon@@
+(211) Garbage Bag@@
+(212) Tarai@@
+(213) za Crew@@
+(214) Togemushi@@
+(215) Seagull Fly@@
+(216) za Nakai@@
+(217) Position@@
+(218) Oshima@@
+(219) Ashidaka@@
+(220) Puti Step@@
+(221) Dark Ameba@@
+(222) Side Snail@@
+(223) Tower Cloud@@
+(224) Orange Fish 9@@
+(225) Umineko@@
+(226) Entrance@@
+(227) Spider@@
+(228) Weak Web@@
+(229) Hinotama@@
+(230) Cabinet Monster@@
+(231) Step Books@@
+(232) Step Desk@@
+(233) Step Cabinet1@@
+(234) Step Cabinet2@@
+(235) Circle Kurono@@
+(236) Sky Kurono@@
+(237) Sky Kurono cloud 0@@
+(238) Sky Kurono cloud 1@@
+(239) Random Flash.@@
+(240) Work Books(color)@@
+(241) effect Smokes@@
+(242) effect Dust@@
+(243) Hidden Sheaf(color)@@
+(244) Work Books(gray)@@
+(245) Carry(gray)@@
+(246) Sheaf(gray)@@
+(247) Hidden Sheaf(gray)@@
+(248) Uzo(car3)@@
+(249) Sky Kurono cloud 2@@
