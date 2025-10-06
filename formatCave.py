@@ -155,13 +155,22 @@ def load_attrs(game_manager, tileset_name, tileset_surface):
     import const
     
     game = game_manager.get_current_game()
+    # For Cave Story, attributes are in the 'Stage' folder, which img_path_base points to.
     img_path_base = os.path.join(game.base_path, game.get('data_path'), game.get('image_path'))
     attr = PxMapAttr()
     attr_loaded_from_file = False
 
     attr_ext = game.get('attr_ext')
     if tileset_name:
-        attr_path = os.path.join(img_path_base, tileset_name + attr_ext)
+        # --- THE FIX ---
+        # The attribute filename is based on the map name, not the prefixed tileset name.
+        # We strip the common "Prt" prefix to get the base name.
+        attr_filename_base = tileset_name
+        if attr_filename_base.startswith("Prt"):
+            attr_filename_base = attr_filename_base[3:]
+        # ----------------
+
+        attr_path = os.path.join(img_path_base, attr_filename_base + attr_ext)
         if os.path.exists(attr_path):
             try:
                 with open(attr_path, 'rb') as f:
