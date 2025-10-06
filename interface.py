@@ -627,80 +627,62 @@ class TilePaletteWindow(UIWindow):
 
 	def render(self, gxEdit, stage):
 		UIWindow.render(self, gxEdit, stage)
-
 		mag = gxEdit.tilePaletteMag
 
-		if not stage.parts[gxEdit.currentLayer]: return
-
-		tileset_surface = stage.parts[gxEdit.currentLayer]
+		# --- THE FIX for PALETTE RENDERING ---
+		# Determine the correct tile width for rendering this specific palette.
+		if stage.is_attribute_stage:
+			tileset_surface = stage.parts[1]
+			attr_data_for_overlay = None 
+			palette_render_tilewidth = 16 # Attribute palettes are always 16x16
+		else:
+			tileset_surface = stage.parts[gxEdit.currentLayer]
+			attr_data_for_overlay = stage.attrs[gxEdit.currentLayer]
+			palette_render_tilewidth = gxEdit.tileWidth # Normal stages use game's tilewidth
+		# -------------------------------------
+		
+		if not tileset_surface: return
+		
 		tileset_width_pixels = tileset_surface.size[0]
 		tileset_height_pixels = tileset_surface.size[1]
-		
 		if not tileset_width_pixels: return
 
-		#reset width
 		self.w = tileset_width_pixels * mag
 		self.h = tileset_height_pixels * mag + 24 + 2 + 16
-
 		self.draghitbox = [0, 0, self.w, 24]
-
 		self.elements["buttonMinimize"].x = self.w - 24
-		##
 
 		srcrect = (0,0, tileset_width_pixels, tileset_height_pixels)
-		
 		dstx = self.x + self.elements["picker"].x
 		dsty = self.y + self.elements["picker"].y
+		dstrect = (dstx, dsty, tileset_width_pixels * mag, tileset_height_pixels * mag)
+		
+		gInterface.renderer.copy(tileset_surface, srcrect=srcrect, dstrect=dstrect)
 
-		dstrect = (dstx, dsty, tileset_width_pixels * mag, 
-							   tileset_height_pixels * mag)
-		gInterface.renderer.copy(stage.parts[gxEdit.currentLayer], srcrect=srcrect, dstrect=dstrect)
+		if gxEdit.visibleLayers[4] and attr_data_for_overlay and attr_data_for_overlay.tiles:
+			for y in range(attr_data_for_overlay.height):
+				for x in range(attr_data_for_overlay.width):
+					if y >= tileset_surface.size[1] // palette_render_tilewidth or x >= tileset_surface.size[0] // palette_render_tilewidth: continue
+					
+					dstxx = dstx + (x * palette_render_tilewidth * mag)
+					dstyy = dsty + (y * palette_render_tilewidth * mag)
+					tile = attr_data_for_overlay.tiles[y][x]
+					xxx, yyy = tile % 16, tile // 16
+					srcx, srcy = xxx * 16, yyy * 16
+					srcrect_attr = (srcx, srcy, 16, 16)
+					dstrect_attr = (dstxx, dstyy, palette_render_tilewidth*mag, palette_render_tilewidth*mag)
+					gRenderer.copy(gSurfaces[SURF_ATTRIBUTE], srcrect=srcrect_attr, dstrect=dstrect_attr)
 
-		if gxEdit.visibleLayers[4]:
-			try:
-				attr = stage.attrs[gxEdit.currentLayer]
-				mag = gxEdit.tilePaletteMag
-				for y in range(attr.height):
-					for x in range(attr.width):
-						dstxx = dstx + (x * gxEdit.tileWidth * mag)
-						dstyy = dsty + (y * gxEdit.tileWidth * mag)
-
-						tile = attr.tiles[y][x]
-
-						xxx = tile % 16 
-						yyy = tile // 16
-						srcx = xxx * 16
-						srcy = yyy * 16
-
-						srcrect = (srcx, srcy, 16, 16)
-						dstrect = (dstxx, dstyy, gxEdit.tileWidth*mag, gxEdit.tileWidth*mag)
-
-						gRenderer.copy(gSurfaces[SURF_ATTRIBUTE], srcrect=srcrect, dstrect=dstrect)
-			except AttributeError:
-				# The 'attrs' attribute was removed during refactoring and is no longer loaded.
-				# Pass silently to prevent a crash when attempting to display tile attributes.
-				pass
-				
-
-		#TODO: add selected tile border (properly)
 		if gxEdit.currentEditMode == const.EDIT_TILE:
 			start = stage.selectedTilesStart[:]
 			end = stage.selectedTilesEnd[:]
-
-			if start[0] > end[0]:
-				start[0], end[0] = end[0], start[0]
-			if end[1] < start[1]:
-				start[1], end[1] = end[1], start[1]
-
-			dstx = dstx + ((start[0] * gxEdit.tileWidth) * mag)
-			dsty = dsty + ((start[1] * gxEdit.tileWidth) * mag)
-			w = (end[0]+1 - start[0]) * gxEdit.tileWidth * mag
-			h =  (end[1]+1 - start[1]) * gxEdit.tileWidth * mag
-
-			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, w, h, 2)
-
-		#show current tile box
-		pass
+			if start[0] > end[0]: start[0], end[0] = end[0], start[0]
+			if end[1] < start[1]: start[1], end[1] = end[1], start[1]
+			sel_dstx = dstx + ((start[0] * palette_render_tilewidth) * mag)
+			sel_dsty = dsty + ((start[1] * palette_render_tilewidth) * mag)
+			w = (end[0]+1 - start[0]) * palette_render_tilewidth * mag
+			h =  (end[1]+1 - start[1]) * palette_render_tilewidth * mag
+			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, sel_dstx, sel_dsty, w, h, 2)
 
 	def handleMouse1(self, mouse, gxEdit):
 		return UIWindow.handleMouse1(self, mouse, gxEdit)
@@ -1661,25 +1643,40 @@ class Interface:
 				stg.renderTileToSurface(pos[0], pos[1], tile[0],
 											tile[1], bit[2])
 											
-		if len(stage.surfaces) < layerNo: return
+		if len(stage.surfaces) <= layerNo: return # Use <= to be safe
 		if not stage.surfaces[layerNo]: return
 		
 		gxEdit.tileRenderQueue = []
 
 		map_layer = stage.pack.layers[layerNo] if len(stage.pack.layers) > layerNo else None
-
 		if not map_layer: return
 
-		mag = gxEdit.magnification
+		# --- THE FIX ---
+		# Determine the correct magnification for this specific layer.
+		# For Layer 1 of a KB attribute stage, we render at half the normal magnification
+		# to make the 16px attribute tiles fit the 8px background grid.
+		current_game = gxEdit.game_manager.get_current_game()
+		if stage.is_attribute_stage and layerNo == 1 and current_game.name == 'kero_blaster':
+			mag = gxEdit.magnification * 0.5
+		else:
+			mag = gxEdit.magnification
+		# ---------------
 
+		# Use the game's base tileWidth for scroll calculations
 		srcx = int(stage.hscroll * gxEdit.tileWidth)
 		srcy = int(stage.scroll * gxEdit.tileWidth)
 
-		sizex = min(gWindowWidth*max(1, int(1/gxEdit.magnification)), stage.surfaces[layerNo].size[0], stage.surfaces[layerNo].size[0] - srcx)
-		sizey = min(gWindowHeight*max(1, int(1/gxEdit.magnification)), stage.surfaces[layerNo].size[1], stage.surfaces[layerNo].size[1] - srcy)
+		# The source rect must be scaled by the inverse of our special magnification
+		# This ensures we grab the correct area of the pre-rendered surface.
+		sizex = min(gWindowWidth / mag, stage.surfaces[layerNo].size[0], stage.surfaces[layerNo].size[0] - srcx)
+		sizey = min(gWindowHeight / mag, stage.surfaces[layerNo].size[1], stage.surfaces[layerNo].size[1] - srcy)
 
-		srcrect = (srcx, srcy, sizex, sizey)
-		dstrect = (0, 0, int(sizex*mag), int(sizey*mag))
+		# Make sure sizex and sizey are not negative
+		sizex = max(0, sizex)
+		sizey = max(0, sizey)
+
+		srcrect = (srcx, srcy, int(sizex), int(sizey))
+		dstrect = (0, 0, int(sizex * mag), int(sizey * mag))
 
 		self.renderer.copy(stage.surfaces[layerNo].texture, srcrect=srcrect, dstrect=dstrect)
 
@@ -1855,19 +1852,21 @@ class Interface:
 		for x in range(gWindowWidth // editorBg.size[0] + 1):
 			for y in range(gWindowHeight // editorBg.size[1] + 1):
 				self.renderer.copy(editorBg, dstrect=(x*editorBg.size[0], y*editorBg.size[1], editorBg.size[0], editorBg.size[1]))
-
 	def renderBgColor(self, gxEdit, curStage):
 		stage = curStage
 		srcx = int(stage.hscroll * gxEdit.tileWidth)
 		srcy = int(stage.scroll * gxEdit.tileWidth)
 
+		# This check handles the case where a stage has no layers yet
+		if not stage.surfaces or not stage.surfaces[0]:
+			return
+
 		sizex = min(gWindowWidth*max(1, int(1/gxEdit.magnification)), stage.surfaces[0].size[0], stage.surfaces[0].size[0] - srcx)
 		sizey = min(gWindowHeight*max(1, int(1/gxEdit.magnification)), stage.surfaces[0].size[1], stage.surfaces[0].size[1] - srcy)
 
-		#srcrect = (srcx, srcy, sizex, sizey)
 		dstrect = (0, 0, int(sizex*gxEdit.magnification), int(sizey*gxEdit.magnification))
 
-		color = sdl2.ext.Color(*stage.pack.bg_color)
+		color = sdl2.ext.Color(stage.pack.bg_r, stage.pack.bg_g, stage.pack.bg_b)
 		self.renderer.fill(dstrect, color)
 	
 

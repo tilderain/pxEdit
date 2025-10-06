@@ -40,6 +40,14 @@ class FormatManager:
         handler = self._get_handler()
         return handler.save_stage(self.game_manager, stage)
 
+    def save_attribute(self, stage, path):
+        """
+        Saves attribute data by dispatching to the current game's format handler.
+        """
+        handler = self._get_handler()
+        if hasattr(handler, 'save_attribute'):
+            return handler.save_attribute(self.game_manager, stage, path)
+        return False
     def load_attrs(self, tileset_name, tileset_surface):
         """
         Loads a PxMapAttr object by dispatching to the current game's format handler.

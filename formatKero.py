@@ -156,7 +156,7 @@ class PxPack:
         stage.area_x = self.area_x
         stage.area_y = self.area_y
         stage.area_no = self.area_no
-        stage.set_background_color(self.bg_r, self.bg_g, self.bg_b)
+        stage.bg_r, stage.bg_g, stage.bg_b = self.bg_r, self.bg_g, self.bg_b
         stage.eve = PxEve()
         for l in self.layers:
             new_layer = Layer(l.width, l.height)
@@ -179,7 +179,7 @@ class PxPack:
         pxpack.left_field, pxpack.right_field = stage.left_field, stage.right_field
         pxpack.up_field, pxpack.down_field = stage.up_field, stage.down_field
         pxpack.area_x, pxpack.area_y, pxpack.area_no = stage.area_x, stage.area_y, stage.area_no
-        pxpack.bg_r, pxpack.bg_g, pxpack.bg_b = stage.bg_color
+        pxpack.bg_r, pxpack.bg_g, pxpack.bg_b = stage.bg_r, stage.bg_g, stage.bg_b
         pxpack.layers = [cls.Layer() for _ in range(3)]
         for i, layer_model in enumerate(pxpack.layers):
             if i < len(stage.layers):
@@ -246,3 +246,25 @@ def load_attrs(game_manager, tileset_name, tileset_surface):
         attr.height = 0
         
     return attr
+
+def save_attribute(game_manager, layer, path):
+    """Saves a Kero Blaster .pxattr file with its pxMAP01 header."""
+    import struct
+    if not layer: return False
+    
+    try:
+        with open(path, 'wb') as f:
+            # --- THE FIX ---
+            # Write the mandatory pxMAP01 header for standalone attribute files.
+            f.write(b"pxMAP01\0")
+            # ----------------
+
+            f.write(struct.pack("<HH", layer.width, layer.height))
+            f.write(struct.pack("<B", 0)) # Type byte is usually 0 for attributes
+            for row in layer.tiles:
+                f.write(bytes(row))
+        print(f"Successfully saved attribute file: {os.path.basename(path)}")
+        return True
+    except (IOError, OSError) as e:
+        print(f"Error saving attribute file {path}: {e}")
+        return False

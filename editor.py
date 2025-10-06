@@ -37,7 +37,7 @@ format_manager = FormatManager(game_manager) # <-- CREATE the new manager
 
 # Default game and path for now
 # TODO: Make this user selectable
-if False:
+if True:
 	game_manager.set_game("cave_story")
 	game_manager.set_game_path("./CaveStory/")
 	defaultStage = "Almond"
@@ -65,6 +65,8 @@ class StagePrj:
 		self.stageName = stageName
 		self.pack = pack
 
+		self.is_attribute_stage = False
+		self.original_path = None # Store path for saving
 		#TODO: for multiplayer
 		self.oldEve = None
 		self.oldMap = None
@@ -181,17 +183,23 @@ class StagePrj:
 		return True
 	def save(self):
 		#if self.lastSavePos == self.undoPos: #TODO: and pxattr not modified
-		#	return False
-		print("--Saving stage {}...--".format(self.stageName))
-		format_manager.save_stage(self.pack)
+		if self.is_attribute_stage:
+			print(f"--Saving attribute file {self.stageName}...--")
+			# For attribute stages, the editable data is in Layer 1
+			result = format_manager.save_attribute(self.pack.layers[1], self.original_path)
+		else:
+			print(f"--Saving stage {self.stageName}...--")
+			# Use the existing pathway for normal stages
+			result = format_manager.save_stage(self.pack)
 		#TODO: save to _temp, rename existing to _temp2, rename _temp to orig and delete temp2
 
 		#TODO: for save as, open all pxpacks in folder and change all references to new name
-
-		self.lastSavePos = self.undoPos
-		self.lastBackupPos = self.undoPos
-		print("saved.")
-		return True
+		if result:
+			self.lastSavePos = self.undoPos
+			self.lastBackupPos = self.undoPos
+			print("saved.")
+		
+		return result
 		
 	def backup(self):
 		#periodic backup...
@@ -222,11 +230,19 @@ class StagePrj:
 
 		return True
 
+
 	def renderMapToSurface(self, layerNo):
 		# This needs to use the pack layers
 		map_layer = self.pack.layers[layerNo] if len(self.pack.layers) > layerNo else None
 
 		if not map_layer or len(map_layer.tiles) == 0: return
+
+		# --- THE FIX ---
+		# Determine the correct tile size for this specific rendering operation.
+		# For Layer 1 of an attribute stage, the tileset (attribute.png) is always 16x16.
+		# For all other cases, use the game's default tile width.
+		render_tile_size = 16 if self.is_attribute_stage and layerNo == 1 else self.tileWidth
+		# ---------------
 
 		print(f"DEBUG: map_layer.width: {map_layer.width}, map_layer.height: {map_layer.height}, len(map_layer.tiles): {len(map_layer.tiles)}")
 
@@ -234,25 +250,22 @@ class StagePrj:
 		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surfaces[layerNo].texture)
 		sdl2.SDL_SetTextureBlendMode(self.surfaces[layerNo].texture, sdl2.SDL_BLENDMODE_BLEND)
 
-		srcrect = sdl2.SDL_Rect(0,0,self.tileWidth,self.tileWidth)
-		dstrect = sdl2.SDL_Rect(0,0,self.tileWidth,self.tileWidth)
-
+		srcrect = sdl2.SDL_Rect(0, 0, render_tile_size, render_tile_size)
+		dstrect = sdl2.SDL_Rect(0, 0, render_tile_size, render_tile_size)
 
 		for y in range(map_layer.height):
 			for x in range(map_layer.width):
 				try:
 					#TODO: detect if blank tile
 					#if map.tiles[y][x] == 0: continue
-					dstx = x * self.tileWidth
-					dsty = y * self.tileWidth
+					dstx = x * render_tile_size
+					dsty = y * render_tile_size
 
 					xx = map_layer.tiles[y][x] % 16 #the magic number so that each 4 bits in a byte corresponds to the x, y position in the tileset
 					yy = map_layer.tiles[y][x] // 16
 
-
-					srcx = xx * self.tileWidth
-					srcy = yy * self.tileWidth
-
+					srcx = xx * render_tile_size
+					srcy = yy * render_tile_size
 
 					srcrect.x = srcx
 					srcrect.y = srcy
@@ -269,15 +282,18 @@ class StagePrj:
 			
 	
 	def renderTileToSurface(self, x, y, tx, ty, layerNo):
-		dstx = x * self.tileWidth
-		dsty = y * self.tileWidth
 
-		srcx = tx * self.tileWidth
-		srcy = ty * self.tileWidth
+		render_tile_size = 16 if self.is_attribute_stage and layerNo == 1 else self.tileWidth
+
+		dstx = x * render_tile_size
+		dsty = y * render_tile_size
+
+		srcx = tx * render_tile_size
+		srcy = ty * render_tile_size
 
 		sdlrenderer = interface.gRenderer.sdlrenderer
-		srcrect = (srcx, srcy, self.tileWidth, self.tileWidth)
-		dstrect = (dstx, dsty, self.tileWidth, self.tileWidth)
+		srcrect = (srcx, srcy, render_tile_size, render_tile_size)
+		dstrect = (dstx, dsty, render_tile_size, render_tile_size)
 
 		sdl2.SDL_SetRenderTarget(sdlrenderer, self.surfaces[layerNo].texture)
 
@@ -322,6 +338,7 @@ class Editor:
 		self.currentEditMode = const.EDIT_TILE
 		self.currentTilePaintMode = const.PAINT_NORMAL
 		self.currentLayer = 0
+		
 		self.visibleLayers = [True, True, True, True, False]
 		self.tileSelectionUpdate = False
 		#TODO: replace this with mouse1 behavior
@@ -517,6 +534,115 @@ class Editor:
 			if stage.stageNo == stageNo:
 				return stage
 
+
+
+	def loadAttributeFileAsStage(self, fName, fPath):
+		"""Loads a .pxa or .pxattr file and treats it as an editable stage."""
+		print(f"Loading attribute file as a stage: {fName}")
+		
+		attr_data = pxMap.PxMapAttr()
+		if not attr_data.load(fPath):
+			print(f"Failed to load attribute file: {fPath}")
+			return False
+
+		# --- CONTEXT TILESET LOADING ---
+		context_tileset = None
+		current_game_config = self.game_manager.get_current_game()
+		
+		if current_game_config.name == 'cave_story':
+			tileset_name = "Prt" + fName
+			bmp_path = os.path.join(imgPath, tileset_name + ".bmp")
+			pbm_path = os.path.join(imgPath, tileset_name + ".pbm")
+			try:
+				if os.path.exists(bmp_path):
+					context_tileset = interface.gSprfactory.from_image(bmp_path)
+				elif os.path.exists(pbm_path):
+					context_tileset = interface.gSprfactory.from_image(pbm_path)
+			except Exception as e:
+				print(f"Could not load context tileset '{tileset_name}': {e}")
+
+		elif current_game_config.name == 'kero_blaster':
+			# --- THE FIX FOR KERO BLASTER ---
+			# For KB, the attr filename (e.g. '01field') matches the tileset filename.
+			tileset_ext = current_game_config.get('tileset_ext')
+			tileset_path = os.path.join(imgPath, fName + tileset_ext)
+			try:
+				if os.path.exists(tileset_path):
+					context_tileset = interface.gSprfactory.from_image(tileset_path)
+					print(f"Loaded context tileset: {os.path.basename(tileset_path)}")
+			except Exception as e:
+				print(f"Could not load context tileset '{tileset_path}': {e}")
+		# -------------------------------
+
+		self.update_tile_dimensions()
+
+		# Use tileset dimensions if available, otherwise attr data dimensions
+		map_width = context_tileset.size[0] // self.tileWidth if context_tileset else attr_data.width
+		map_height = context_tileset.size[1] // self.tileWidth if context_tileset else attr_data.height
+
+		pack = Stage(fName, map_width, map_height)
+		pack.eve = pxMap.PxEve()
+
+		# Layer 0 (background): The visual stage tileset.
+		layer0 = Layer(map_width, map_height)
+		if context_tileset:
+			# Create a 1:1 map of the tileset
+			layer0.tiles = [[(y * map_width) + x for x in range(map_width)] for y in range(map_height)]
+		pack.layers.append(layer0)
+		
+		# Layer 1 (foreground): The attribute data we are editing.
+		layer1 = Layer(map_width, map_height)
+		attr_data.resize(map_width, map_height) # Ensure it matches background
+		layer1.tiles = attr_data.tiles
+		pack.layers.append(layer1)
+		
+		pack.layers.append(Layer(0,0))
+
+		stage = StagePrj(fName, pack, self.tileWidth)
+		stage.is_attribute_stage = True
+		stage.original_path = fPath
+		
+		stage.parts[0] = context_tileset # Main view
+		stage.parts[1] = interface.gSurfaces[interface.SURF_ATTRIBUTE] # Palette view
+
+		# Fallback: if still no context tileset, use attribute.png to prevent crash
+		if not stage.parts[0]:
+			stage.parts[0] = stage.parts[1]
+
+		# Setup attrs for Layer 0 (Context)
+		if stage.parts[0]:
+			attrs_for_layer0 = pxMap.PxMapAttr()
+			attrs_for_layer0.width = stage.parts[0].size[0] // self.tileWidth
+			attrs_for_layer0.height = stage.parts[0].size[1] // self.tileWidth
+			stage.attrs[0] = attrs_for_layer0
+
+		# Setup attrs for Layer 1 (Palette - always 16x16 tiles)
+		palette_source = stage.parts[1]
+		attrs_for_layer1 = pxMap.PxMapAttr()
+		palette_tile_width = 16 
+		attrs_for_layer1.width = palette_source.size[0] // palette_tile_width
+		attrs_for_layer1.height = palette_source.size[1] // palette_tile_width
+		stage.attrs[1] = attrs_for_layer1
+
+		# Render surfaces
+		stage.createMapSurface(0)
+		# Special render: copy the context tileset directly to the surface
+		if stage.parts[0]:
+			sdlrenderer = interface.gRenderer.sdlrenderer
+			sdl2.SDL_SetRenderTarget(sdlrenderer, stage.surfaces[0].texture)
+			# Clear first in case parts[0] has transparency
+			sdl2.SDL_SetRenderDrawColor(sdlrenderer, 0, 0, 0, 0)
+			sdl2.SDL_RenderClear(sdlrenderer)
+			interface.gRenderer.copy(stage.parts[0])
+			sdl2.SDL_SetRenderTarget(sdlrenderer, None)
+		
+		stage.createMapSurface(1)
+		stage.renderMapToSurface(1) # Render attribute data normally
+		
+		self.stages.append(stage)
+		self.currentLayer = 1
+		
+		return True
 	def executeUndo(self):
 		#TODO: temp, do smarter implementation
 		stage = self.stages[self.curStage]

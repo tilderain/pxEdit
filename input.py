@@ -60,8 +60,11 @@ def runMouse1(stage, mouse):
 	tilePalette = gxEdit.elements["tilePalette"]
 	if tilePalette.visible and util.inWindowBoundingBox(mouse, tilePalette):
 		#tile select
-		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // gxEdit.tileWidth // gxEdit.tilePaletteMag
-		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // gxEdit.tileWidth // gxEdit.tilePaletteMag
+		tileWidth = gxEdit.tileWidth
+		if stage.is_attribute_stage:
+			tileWidth = 16 # Attribute palettes are always 16x16
+		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // tileWidth // gxEdit.tilePaletteMag
+		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // tileWidth // gxEdit.tilePaletteMag
 		
 		if x >= stage.attrs[gxEdit.currentLayer].width:
 			return
@@ -311,8 +314,13 @@ def runMouseDrag(gxEdit, stage, mouse):
 
 	#Tiles selection
 	if util.inWindowBoundingBox(mouse, tilePalette):
-		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // gxEdit.tileWidth // gxEdit.tilePaletteMag
-		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // gxEdit.tileWidth // gxEdit.tilePaletteMag
+		tileWidth = gxEdit.tileWidth
+		if stage.is_attribute_stage:
+			tileWidth = 16 # Attribute palettes are always 16x16
+
+
+		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // tileWidth // gxEdit.tilePaletteMag
+		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // tileWidth // gxEdit.tilePaletteMag
 
 		if x < 0 or y < 0:
 			return

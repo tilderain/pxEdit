@@ -162,24 +162,27 @@ def main():
 		#TODO: placeholder
 		gui.renderEditorBg()
 
-		# --- RENDER TABS BAR ---
-		# Render tabs bar first, outside of the main map viewport
 		tabs_bar = gxEdit.elements.get("stageTabs")
 		if tabs_bar and tabs_bar.visible:
 			tabs_bar.render(gxEdit, curStage)
 
-		# --- SET VIEWPORT FOR MAP RENDERING ---
-		# This restricts all subsequent drawing to the area below the tabs bar
 		viewport = sdl2.SDL_Rect(0, gxEdit.content_y_offset, interface.gWindowWidth, interface.gWindowHeight - gxEdit.content_y_offset)
 		sdl2.SDL_RenderSetViewport(renderer.sdlrenderer, ctypes.byref(viewport))
 
-		# --- MAP RENDERING (within viewport) ---
-		gui.renderBgColor(gxEdit, curStage)
-		for i in reversed(range(3)):
-			if gxEdit.visibleLayers[i]:
-				gui.renderTiles(gxEdit, curStage, i)
-		if gxEdit.visibleLayers[4]:
-			# This needs to use the pack layers
+		# --- RENDER LOGIC CHANGE ---
+		if curStage.is_attribute_stage:
+			# For attribute stages, render Layer 0 (tileset) then Layer 1 (attributes) on top
+			gui.renderTiles(gxEdit, curStage, 0) # The visual tileset background
+			gui.renderTiles(gxEdit, curStage, 1) # The transparent attribute overlay
+		else:
+			# For normal stages, render as before
+			gui.renderBgColor(gxEdit, curStage)
+			for i in reversed(range(3)):
+				if gxEdit.visibleLayers[i]:
+					gui.renderTiles(gxEdit, curStage, i)
+		# ---------------------------
+
+		if not curStage.is_attribute_stage and gxEdit.visibleLayers[4]:
 			map_layer = curStage.pack.layers[gxEdit.currentLayer] if len(curStage.pack.layers) > gxEdit.currentLayer else None
 			if map_layer:
 				gui.renderTileAttr(gxEdit, curStage, map_layer)
@@ -188,16 +191,13 @@ def main():
 		gui.renderPlayers(gxEdit, curStage)
 		gui.renderTilePreview(gxEdit, curStage)
 
-		if gxEdit.visibleLayers[3] or gxEdit.currentEditMode == const.EDIT_ENTITY:
+		if not curStage.is_attribute_stage and (gxEdit.visibleLayers[3] or gxEdit.currentEditMode == const.EDIT_ENTITY):
 			gui.renderEntities(gxEdit, curStage)
 	
-		# --- RESET VIEWPORT FOR UI WINDOWS ---
-		# This allows UI windows to be drawn anywhere on the screen
 		sdl2.SDL_RenderSetViewport(renderer.sdlrenderer, None)
 
-		# --- UI WINDOW RENDERING (absolute coordinates) ---
 		for key, elem in gxEdit.elements.items():
-			if key == "stageTabs": continue # Already rendered
+			if key == "stageTabs": continue
 			if elem.visible and elem.type != const.WINDOW_TOOLTIP: 
 				gui.renderUIWindow(gxEdit, elem)
 				elem.render(gxEdit, curStage)
@@ -254,14 +254,30 @@ def main():
 				running = False
 				break
 			elif event.type == sdl2.SDL_DROPFILE:
-				#TODO: drop an exe or event/map to load singular
-				print("help")
+				dropped_file_path = event.drop.file.decode('utf-8')
+				
+				# Extract filename and extension
 				if sys.platform == "win32":
-					fName = str(event.drop.file).split("\\")[-1].split(".")[0]
+					fName_with_ext = os.path.basename(dropped_file_path)
 				else:
-					fName = str(event.drop.file).split("/")[-1].split(".")[0]
-				if gxEdit.loadStage(fName):
-					gxEdit.curStage = len(gxEdit.stages)
+					fName_with_ext = os.path.basename(dropped_file_path)
+				
+				fName, fExt = os.path.splitext(fName_with_ext)
+				
+				# Get the expected attribute extension for the current game
+				current_game_config = gxEdit.game_manager.get_current_game()
+				attr_ext = current_game_config.get('attr_ext')
+
+				# Decide which loader to use based on file extension
+				if fExt.lower() == attr_ext.lower():
+					# It's an attribute file, load it as a stage
+					if gxEdit.loadAttributeFileAsStage(fName, dropped_file_path):
+						gxEdit.curStage = len(gxEdit.stages) - 1
+				else:
+					# Assume it's a regular stage file
+					if gxEdit.loadStage(fName):
+						gxEdit.curStage = len(gxEdit.stages) - 1
+
 			elif event.type == sdl2.SDL_WINDOWEVENT:
 				if event.window.event == sdl2.SDL_WINDOWEVENT_ENTER:
 					mouseover = True

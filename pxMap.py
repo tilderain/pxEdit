@@ -91,9 +91,10 @@ class PxMapAttr: #use the same class for both
 	
 	def load(self, path):
 		"""
-		Loads tile data from a file, intelligently handling whether a
-		'pxMAP01' header is present or not. Also handles the 1-byte
-		type field present in Kero Blaster map/attribute formats.
+		Loads attribute/map data from a file, automatically detecting the format.
+		- Handles raw 256-byte Cave Story .pxa files.
+		- Handles files that start with a 'pxMAP01' header.
+		- Handles Kero Blaster .pxattr files (width/height/type header).
 		"""
 		try:
 			with open(path, 'rb') as f:
@@ -101,52 +102,46 @@ class PxMapAttr: #use the same class for both
 		except (OSError, IOError) as e:
 			print("Error while opening {}: {}".format(path, e))
 			return False
-		
-		offset = 0
 
-		# Check if the file starts with the 8-byte pxMAP01 header.
-		# Standalone .pxattr files do not have this header.
-		if data.startswith(b"pxMAP01\0"):
-			offset = 8
-		
 		try:
-			# Read width and height from the correct starting position.
+			offset = 0
+			# --- THE FIX ---
+			# First, check for the explicit 'pxMAP01' header and skip it if found.
+			if data.startswith(b"pxMAP01\0"):
+				offset = 8
+			# ----------------
+
+			# Next, check for the Cave Story raw format (only if no header was found).
+			if offset == 0 and len(data) == 256:
+				self.width = 16
+				self.height = 16
+				self.tiles = [list(data[i:i+16]) for i in range(0, 256, 16)]
+				return True
+			
+			# Otherwise, assume it's a Kero Blaster format (with or without the header).
 			self.width = int.from_bytes(data[offset:offset+2], byteorder='little')
 			self.height = int.from_bytes(data[offset+2:offset+4], byteorder='little')
 
-			# Ensure dimensions are sane before proceeding
 			if self.width <= 0 or self.height <= 0:
 				self.tiles = []
 				return True
 
-			# --- THE FIX ---
-			# Kero Blaster's map/attribute format has a 1-byte 'type' field after the dimensions.
-			# We must skip this byte to read the tile data correctly.
-			data_start = offset + 5  # Was offset + 4
-
-			self.tiles = [] # Clear any previous tile data
+			# Skip the 1-byte 'type' field
+			data_start = offset + 5
+			self.tiles = []
 			for i in range(self.height):
 				row_start = data_start + (i * self.width)
 				row_end = row_start + self.width
-				# Ensure we don't read past the end of the file data
-				if row_end > len(data):
-					print(f"Warning: Truncated data in {path} at row {i}. Padding with zeroes.")
-					row_data = list(data[row_start:])
-					row_data.extend([0] * (self.width - len(row_data)))
-					self.tiles.append(row_data)
-					break # Stop processing if data is truncated
-				else:
-					self.tiles.append(list(data[row_start:row_end]))
+				if row_end > len(data): break
+				self.tiles.append(list(data[row_start:row_end]))
 
-		except (struct.error, IndexError) as e:
-			print(f"Error parsing data in {path}. File might be corrupt: {e}")
-			self.width = 0
-			self.height = 0
-			self.tiles = []
+		except (struct.error, IndexError):
+			print(f"Error parsing attribute data in {path}. File might be corrupt or an unknown format.")
+			self.width, self.height, self.tiles = 0, 0, []
 			return False
 			
 		return True
-		
+
 	def save(self, path):
 		"""Saves as a raw .pxattr file (without header)."""
 		try:

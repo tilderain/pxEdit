@@ -75,7 +75,11 @@ class Stage:
 		self.height = height
 		
 		self.spritesheet = ""
-		self.bg_color = (0, 0, 0)
+		
+		self.bg_r = 0
+		self.bg_g = 0
+		self.bg_b = 0
+		# -----------------------
 		
 		# A list of Layer objects
 		self.layers = []
@@ -93,5 +97,4 @@ class Stage:
 		self.area_y = 0
 		self.area_no = 0
 
-	def set_background_color(self, r, g, b):
-		self.bg_color = (r, g, b)
+	# DELETE THE ENTIRE set_background_color METHOD
