@@ -52,8 +52,8 @@ def runMouse1(gxEdit, stage, mouse):
 	tilePalette = gxEdit.elements["tilePalette"]
 	if tilePalette.visible and util.inWindowBoundingBox(mouse, tilePalette):
 		#tile select
-		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // const.tileWidth // gxEdit.tilePaletteMag
-		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // const.tileWidth // gxEdit.tilePaletteMag
+		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // gxEdit.tileWidth // gxEdit.tilePaletteMag
+		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // gxEdit.tileWidth // gxEdit.tilePaletteMag
 		
 		if x >= stage.attrs[gxEdit.currentLayer].width:
 			return
@@ -73,8 +73,8 @@ def runMouse1(gxEdit, stage, mouse):
 	if tilePalette.visible and util.inWindowBoundingBox(mouse, tilePalette):
 		#entity select
 		#TODO: add mag
-		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // const.tileWidth2
-		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // const.tileWidth2
+		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // gxEdit.tileWidth2
+		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // gxEdit.tileWidth2
 
 		index = x + (y * 16)
 		if index > len(gxEdit.entityInfo):
@@ -85,12 +85,12 @@ def runMouse1(gxEdit, stage, mouse):
 		gxEdit.currentEntity = index
 
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
-		x = int(mouse.x + (stage.hscroll * const.tileWidth * mag))
-		y = int(mouse.y + (stage.scroll * const.tileWidth * mag))
+		x = int(mouse.x + (stage.hscroll * gxEdit.tileWidth * mag))
+		y = int(mouse.y + (stage.scroll * gxEdit.tileWidth * mag))
 
 		if stage.selectedEntities != []:
-			xe = int(mouse.x // (const.tileWidth2//2 * mag)) + stage.hscroll*const.ENTITY_SCALE
-			ye = int(mouse.y // (const.tileWidth2//2 * mag)) + stage.scroll*const.ENTITY_SCALE
+			xe = int(mouse.x // (gxEdit.tileWidth2//2 * mag)) + stage.hscroll*const.ENTITY_SCALE
+			ye = int(mouse.y // (gxEdit.tileWidth2//2 * mag)) + stage.scroll*const.ENTITY_SCALE
 			for o in stage.selectedEntities:
 				if o.x == xe and o.y == ye:
 					gxEdit.draggingEntities = True
@@ -111,8 +111,8 @@ def runMouse3(gxEdit, stage, mouse):
 
 	if gxEdit.currentEditMode == const.EDIT_TILE:
 		if not len(map.tiles): return
-		x = int(mouse.x // (const.tileWidth * mag) + stage.hscroll)
-		y = int(mouse.y // (const.tileWidth * mag) + stage.scroll)
+		x = int(mouse.x // (gxEdit.tileWidth * mag) + stage.hscroll)
+		y = int(mouse.y // (gxEdit.tileWidth * mag) + stage.scroll)
 
 		if x >= map.width or y >= map.height:
 			return
@@ -211,8 +211,8 @@ def runMouseUp(gxEdit, curStage, mouse):
 	elif gxEdit.currentEditMode == const.EDIT_TILE and gxEdit.currentTilePaintMode == const.PAINT_COPY:
 		stage = curStage
 		mag = gxEdit.magnification
-		x = int(mouse.x // (const.tileWidth * mag) + stage.hscroll)
-		y = int(mouse.y // (const.tileWidth * mag) + stage.scroll)
+		x = int(mouse.x // (gxEdit.tileWidth * mag) + stage.hscroll)
+		y = int(mouse.y // (gxEdit.tileWidth * mag) + stage.scroll)
 		stage.selectedTilesEnd[0] = x
 		stage.selectedTilesEnd[1] = y
 	
@@ -258,7 +258,7 @@ def runMouseDrag(gxEdit, stage, mouse):
 	map = stage.pack.layers[gxEdit.currentLayer]
 	mag = gxEdit.magnification
 
-	tileEndX = int(const.tileWidth * mag * map.width)
+	tileEndX = int(gxEdit.tileWidth * mag * map.width)
 
 	if gxEdit.draggedElem:
 		gxEdit.draggedElem.x = mouse.x - gxEdit.dragX
@@ -276,8 +276,8 @@ def runMouseDrag(gxEdit, stage, mouse):
 	tilePalette = gxEdit.elements["tilePalette"]
 	#Tiles selection
 	if util.inWindowBoundingBox(mouse, tilePalette):
-		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // const.tileWidth // gxEdit.tilePaletteMag
-		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // const.tileWidth // gxEdit.tilePaletteMag
+		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // gxEdit.tileWidth // gxEdit.tilePaletteMag
+		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // gxEdit.tileWidth // gxEdit.tilePaletteMag
 
 		if x < 0 or y < 0:
 			return
@@ -291,8 +291,8 @@ def runMouseDrag(gxEdit, stage, mouse):
 	#tiles Paint
 	elif gxEdit.currentEditMode == const.EDIT_TILE:
 		if not len(map.tiles): return
-		x = int(mouse.x // (const.tileWidth * mag) + stage.hscroll)
-		y = int(mouse.y // (const.tileWidth * mag) + stage.scroll)
+		x = int(mouse.x // (gxEdit.tileWidth * mag) + stage.hscroll)
+		y = int(mouse.y // (gxEdit.tileWidth * mag) + stage.scroll)
 
 		if x >= map.width or y >= map.height:
 			return
@@ -373,9 +373,9 @@ def runMouseDrag(gxEdit, stage, mouse):
 			gxEdit.tileHighlightTimer = 120
 		
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
-		x = int(mouse.x + (stage.hscroll * const.tileWidth * mag))
-		y = int(mouse.y + (stage.scroll * const.tileWidth * mag))
-		scale = (const.tileWidth2//2 * mag)
+		x = int(mouse.x + (stage.hscroll * gxEdit.tileWidth * mag))
+		y = int(mouse.y + (stage.scroll * gxEdit.tileWidth * mag))
+		scale = (gxEdit.tileWidth2//2 * mag)
 
 		if gxEdit.draggingEntities:
 			x = int((mouse.x // scale) + stage.hscroll*const.ENTITY_SCALE)
@@ -407,7 +407,7 @@ def runMouseDrag(gxEdit, stage, mouse):
 		#if x1 > map.width*2 or y1 > map.height*2: return
 		#if x2 > map.width*2 or y2 > map.height*2: return
 
-		#if x > int(map.width*const.tileWidth*mag)
+		#if x > int(map.width*gxEdit.tileWidth*mag)
 		gxEdit.selectionBoxEnd = [x, y]
 		
 		selectedEntities = []
@@ -482,8 +482,8 @@ def runMouse2(gxEdit, stage, mouse):
 	mag = gxEdit.magnification
 
 	if gxEdit.currentEditMode == const.EDIT_ENTITY:
-		x = int(mouse.x / (const.tileWidth2/2 * mag)) + stage.hscroll*const.ENTITY_SCALE
-		y = int(mouse.y / (const.tileWidth2/2 * mag)) + stage.scroll*const.ENTITY_SCALE
+		x = int(mouse.x / (gxEdit.tileWidth2/2 * mag)) + stage.hscroll*const.ENTITY_SCALE
+		y = int(mouse.y / (gxEdit.tileWidth2/2 * mag)) + stage.scroll*const.ENTITY_SCALE
 		x = math.floor(x) 
 		y = math.floor(y)
 
@@ -534,7 +534,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			else:
 				mouse = util.getMouseState()
 
-				scale = (const.tileWidth//const.ENTITY_SCALE * gxEdit.magnification)
+				scale = (gxEdit.tileWidth//const.ENTITY_SCALE * gxEdit.magnification)
 				x = int((mouse.x // scale) + stage.hscroll*const.ENTITY_SCALE)
 				y = int((mouse.y // scale) + stage.scroll*const.ENTITY_SCALE)
 
@@ -675,16 +675,16 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	#keyboard navigation mouse movement
 	elif sym == sdl2.SDL_SCANCODE_KP_8:
 		mouse = util.getMouseState()
-		sdl2.SDL_WarpMouseInWindow(None, mouse.x, int(mouse.y-const.tileWidth*gxEdit.magnification))
+		sdl2.SDL_WarpMouseInWindow(None, mouse.x, int(mouse.y-gxEdit.tileWidth*gxEdit.magnification))
 	elif sym == sdl2.SDL_SCANCODE_KP_4:
 		mouse = util.getMouseState()
-		sdl2.SDL_WarpMouseInWindow(None,  int(mouse.x-const.tileWidth*gxEdit.magnification), mouse.y)
+		sdl2.SDL_WarpMouseInWindow(None,  int(mouse.x-gxEdit.tileWidth*gxEdit.magnification), mouse.y)
 	elif sym == sdl2.SDL_SCANCODE_KP_5:
 		mouse = util.getMouseState()
-		sdl2.SDL_WarpMouseInWindow(None, mouse.x,  int(mouse.y+const.tileWidth*gxEdit.magnification))
+		sdl2.SDL_WarpMouseInWindow(None, mouse.x,  int(mouse.y+gxEdit.tileWidth*gxEdit.magnification))
 	elif sym == sdl2.SDL_SCANCODE_KP_6:
 		mouse = util.getMouseState()
-		sdl2.SDL_WarpMouseInWindow(None,  int(mouse.x+const.tileWidth*gxEdit.magnification), mouse.y)
+		sdl2.SDL_WarpMouseInWindow(None,  int(mouse.x+gxEdit.tileWidth*gxEdit.magnification), mouse.y)
 
 	#keyboard navigation scroll
 	elif sym == sdl2.SDL_SCANCODE_LEFT:
@@ -743,8 +743,8 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			mouse = util.getMouseState()
 			mag = gxEdit.magnification
 
-			x = int(mouse.x // (const.tileWidth//const.ENTITY_SCALE * mag)) + stage.hscroll* const.ENTITY_SCALE
-			y = int(mouse.y // (const.tileWidth//const.ENTITY_SCALE * mag)) + stage.scroll* const.ENTITY_SCALE
+			x = int(mouse.x // (gxEdit.tileWidth//const.ENTITY_SCALE * mag)) + stage.hscroll* const.ENTITY_SCALE
+			y = int(mouse.y // (gxEdit.tileWidth//const.ENTITY_SCALE * mag)) + stage.scroll* const.ENTITY_SCALE
 			if x >= stage.pack.layers[0].width*const.ENTITY_SCALE or y >= stage.pack.layers[0].height*const.ENTITY_SCALE:
 				return
 

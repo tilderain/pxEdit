@@ -8,15 +8,17 @@
         "stage_ext": ".pxpack",
         "script_ext": ".pxeve",
         "attr_ext": ".pxattr",
-        "entity_info": "entityinfo-kero.txt",
+        "entity_info": "entityInfo-kero.txt",
         "tile_size": 8,
-        "entity_scale": 1
+        "entity_scale": 1,
+        "tileset_ext": ".png",
+        "unittype_image": "unittype-kero.png"
     },
     "cave_story": {
         "name": "Cave Story",
         "data_path": "data/",
         "stage_path": "Stage/",
-        "image_path": "Npc/",
+        "image_path": "Stage/",
         "script_path": "Stage/",
         "stage_ext": ".pxm",
         "script_ext": ".tsc",
@@ -24,6 +26,8 @@
         "attr_ext": ".pxa",
         "entity_info": "entityinfo-cave.txt",
         "tile_size": 16,
-        "entity_scale": 2
+        "entity_scale": 2,
+        "tileset_ext": ".pbm",
+        "unittype_image": "unittype-cave.png"
     }
 }

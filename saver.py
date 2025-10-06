@@ -109,6 +109,29 @@ class PxPack:
             return False
         return True
 
+class PxMapSave:
+    def __init__(self):
+        self.width = 0
+        self.height = 0
+        self.tiles = []
+
+    def save(self, path):
+        try:
+            with open(path, 'wb') as f:
+                # Write the required header for .pxm files
+                f.write(b'PXM') # 3-byte magic number
+                f.write(b'\x01') # 1-byte dummy data
+
+                # Write dimensions and tile data
+                f.write(struct.pack("<h", self.width))
+                f.write(struct.pack("<h", self.height))
+                for y in self.tiles:
+                    f.write(bytes(y))
+        except (OSError, IOError) as e:
+            print(f"Error while saving {path}: {e}")
+            return False
+        return True
+
 class PxMapAttr:
     def __init__(self):
         self.width = 0
@@ -157,25 +180,25 @@ class Saver:
             pxpack.layers.append(PxPackLayer())
 
         # Convert universal Stage to PxPack format
-        if stage.layers['foreground']:
+        if len(stage.layers) > 0 and stage.layers[0]:
             layer = pxpack.layers[0]
-            layer.width = stage.layers['foreground'].width
-            layer.height = stage.layers['foreground'].height
-            layer.tiles = stage.layers['foreground'].tiles
+            layer.width = stage.layers[0].width
+            layer.height = stage.layers[0].height
+            layer.tiles = stage.layers[0].tiles
 
-        if stage.layers['background']:
+        if len(stage.layers) > 1 and stage.layers[1]:
             layer = pxpack.layers[1]
-            layer.width = stage.layers['background'].width
-            layer.height = stage.layers['background'].height
-            layer.tiles = stage.layers['background'].tiles
+            layer.width = stage.layers[1].width
+            layer.height = stage.layers[1].height
+            layer.tiles = stage.layers[1].tiles
 
-        if stage.layers['collision']:
+        if len(stage.layers) > 2 and stage.layers[2]:
             layer = pxpack.layers[2]
-            layer.width = stage.layers['collision'].width
-            layer.height = stage.layers['collision'].height
-            layer.tiles = stage.layers['collision'].tiles
+            layer.width = stage.layers[2].width
+            layer.height = stage.layers[2].height
+            layer.tiles = stage.layers[2].tiles
 
-        for entity in stage.entities:
+        for entity in stage.eve.units:
             unit = PxPackUnit(
                 entity.attributes.get('bits', 0),
                 entity.id,
@@ -201,25 +224,25 @@ class Saver:
         entities_path = os.path.join(base_path, game.get('stage_path'), stage.name + game.get('entity_ext'))
 
         # Save map data
-        if stage.layers['foreground']:
-            pxm = PxMapAttr()
-            pxm.width = stage.layers['foreground'].width
-            pxm.height = stage.layers['foreground'].height
-            pxm.tiles = stage.layers['foreground'].tiles
+        if len(stage.layers) > 0 and stage.layers[0]:
+            pxm = PxMapSave() # Use the correct class for saving .pxm files
+            pxm.width = stage.layers[0].width
+            pxm.height = stage.layers[0].height
+            pxm.tiles = stage.layers[0].tiles
             pxm.save(map_path)
             print(f"Saved map to {map_path}")
 
         # Save attribute data
-        if stage.layers['collision']:
+        if len(stage.layers) > 2 and stage.layers[2]:
             pxa = PxMapAttr()
-            pxa.width = stage.layers['collision'].width
-            pxa.height = stage.layers['collision'].height
-            pxa.tiles = stage.layers['collision'].tiles
+            pxa.width = stage.layers[2].width
+            pxa.height = stage.layers[2].height
+            pxa.tiles = stage.layers[2].tiles
             pxa.save(attr_path)
             print(f"Saved attributes to {attr_path}")
 
         # Save entities
-        self._save_cave_story_entities(stage.entities, entities_path)
+        self._save_cave_story_entities(stage.eve.units, entities_path)
 
         return True
 

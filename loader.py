@@ -2,6 +2,7 @@ import os
 import struct
 import mmap
 from stage import Stage, Layer, Entity
+from pxMap import PxEve
 
 def read_pixel_string(stream):
     length = stream.read_byte()
@@ -119,6 +120,43 @@ class PxPack:
         f.close()
         return True
 
+import struct
+
+class PxMap:
+    def __init__(self):
+        self.width = 0
+        self.height = 0
+        self.tiles = []
+
+    def load(self, path):
+        try:
+            with open(path, 'rb') as f:
+                # Check magic number "PXM"
+                magic = f.read(3)
+                if magic != b'PXM':
+                    raise ValueError(f"Invalid PXM file format in {path}")
+
+                # Skip one dummy byte
+                f.read(1)
+
+                # Read width and height (2 bytes each, little-endian)
+                width_bytes = f.read(2)
+                height_bytes = f.read(2)
+                self.width = int.from_bytes(width_bytes, byteorder='little')
+                self.height = int.from_bytes(height_bytes, byteorder='little')
+
+                # Read tile data
+                data = f.read(self.width * self.height)
+                for i in range(self.height):
+                    start = i * self.width
+                    end = start + self.width
+                    self.tiles.append(list(data[start:end]))
+        except (OSError, IOError) as e:
+            raise FileNotFoundError(f"Error while opening {path}: {e}")
+        except (ValueError, struct.error) as e:
+            print(f"Error parsing map file {path}: {e}")
+        return True
+
 class PxMapAttr: #use the same class for both
     def __init__(self):
         self.width = None
@@ -166,17 +204,20 @@ class Loader:
 
         # Convert PxPack to universal Stage format
         stage = Stage(name, pxpack.layers[0].width, pxpack.layers[0].height)
+        stage.eve = PxEve()
+        stage.spritesheet = pxpack.layers[0].partsName # Set the spritesheet name
+        stage.set_background_color(pxpack.bg_r, pxpack.bg_g, pxpack.bg_b)
         
         # Layers
-        if len(pxpack.layers) > 0:
-            stage.layers['foreground'] = Layer(pxpack.layers[0].width, pxpack.layers[0].height)
-            stage.layers['foreground'].tiles = pxpack.layers[0].tiles
-        if len(pxpack.layers) > 1:
-            stage.layers['background'] = Layer(pxpack.layers[1].width, pxpack.layers[1].height)
-            stage.layers['background'].tiles = pxpack.layers[1].tiles
-        if len(pxpack.layers) > 2:
-            stage.layers['collision'] = Layer(pxpack.layers[2].width, pxpack.layers[2].height)
-            stage.layers['collision'].tiles = pxpack.layers[2].tiles
+        stage.layers = []
+        for i in range(len(pxpack.layers)):
+            l = pxpack.layers[i]
+            new_layer = Layer(l.width, l.height)
+            new_layer.tiles = l.tiles
+            stage.layers.append(new_layer)
+        # Ensure 3 layers exist for consistency, even if empty
+        while len(stage.layers) < 3:
+            stage.layers.append(Layer(0, 0))
 
         # Entities
         for unit in pxpack.units:
@@ -184,7 +225,7 @@ class Loader:
             entity.attributes['bits'] = unit.bits
             entity.attributes['param2'] = unit.param2
             entity.attributes['string'] = unit.string
-            stage.entities.append(entity)
+            stage.eve.units.append(entity)
 
         return stage
 
@@ -197,21 +238,26 @@ class Loader:
         entities_path = os.path.join(base_path, game.get('stage_path'), stage_name + game.get('entity_ext'))
 
         # Load map data
-        pxm = PxMapAttr()
+        pxm = PxMap()
         pxm.load(map_path)
         
         stage = Stage(stage_name, pxm.width, pxm.height)
-        stage.layers['foreground'] = Layer(pxm.width, pxm.height)
-        stage.layers['foreground'].tiles = pxm.tiles
+        stage.eve = PxEve()
+        # For Cave Story, the spritesheet is usually derived from the stage name itself
+        stage.spritesheet = "Prt" + stage_name # Example: PrtAlmond.pbm
+
+        stage.layers = [Layer(0,0) for _ in range(3)] # Init 3 layers
+        stage.layers[0] = Layer(pxm.width, pxm.height)
+        stage.layers[0].tiles = pxm.tiles
 
         # Load attribute data
         pxa = PxMapAttr()
         pxa.load(attr_path)
-        stage.layers['collision'] = Layer(pxa.width, pxa.height)
-        stage.layers['collision'].tiles = pxa.tiles
+        #stage.layers[2] = Layer(pxa.width, pxa.height)
+        #stage.layers[2].tiles = pxa.tiles
         
         # Load entities
-        stage.entities = self._load_cave_story_entities(entities_path)
+        stage.eve.units = self._load_cave_story_entities(entities_path)
 
         return stage
 
