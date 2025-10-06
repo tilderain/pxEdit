@@ -745,8 +745,8 @@ class EntityPaletteWindow(UIWindow):
 		mag = gxEdit.entityPaletteMag
 		units = gSurfaces[SURF_UNITS]
 		srcrect = list(units.area)
-		recth = (len(gxEdit.entityInfo) + 1) // 16 * 32
-		srcrect[3] = recth
+		#recth = ((len(gxEdit.entityInfo) + 15) // 16) * gxEdit.tileWidth2
+		#srcrect[3] = recth
 
 		dstx = self.x + self.elements["picker"].x
 		dsty = self.y + self.elements["picker"].y
@@ -754,7 +754,7 @@ class EntityPaletteWindow(UIWindow):
 		#TODO: add dstrect mag
 
 		#dstrect = (dstx, dsty, units.size[0] * mag, units.size[1] * mag)
-		dstrect = [dstx, dsty, units.size[0] * mag, recth * mag]
+		dstrect = [dstx, dsty, units.size[0] * mag, units.size[1] * mag]
 		gInterface.renderer.copy(units, srcrect=srcrect, dstrect=dstrect)
 
 		#TODO: add selected ent border (properly)
@@ -784,12 +784,15 @@ class EntityPaletteWindow(UIWindow):
 
 		titleColor, descColor, paramColor = getEntityColors(index)
 		
-		if gxEdit.entityInfo[index][0] != "":
-			gxEdit.tooltipText = ([[gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD]])
-		if gxEdit.entityInfo[index][1] != "":
-			 gxEdit.tooltipText.append([gxEdit.entityInfo[index][1], descColor, TTF_STYLE_NORMAL])
-		if gxEdit.entityInfo[index][2] != "":
-			gxEdit.tooltipText.append([gxEdit.entityInfo[index][2], paramColor, TTF_STYLE_NORMAL])
+		entity_data = gxEdit.entityInfo[index]
+		gxEdit.tooltipText = []
+		
+		if len(entity_data) > 0 and entity_data[0] != "":
+			gxEdit.tooltipText.append([entity_data[0], titleColor, TTF_STYLE_BOLD])
+		if len(entity_data) > 1 and entity_data[1] != "":
+			 gxEdit.tooltipText.append([entity_data[1], descColor, TTF_STYLE_NORMAL])
+		if len(entity_data) > 2 and entity_data[2] != "":
+			gxEdit.tooltipText.append([entity_data[2], paramColor, TTF_STYLE_NORMAL])
 
 		gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
 		

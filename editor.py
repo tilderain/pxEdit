@@ -557,11 +557,8 @@ class Editor:
 
 		try:
 			with open(entity_info_path) as f:
-				# Assuming the format is spritesheet,x,y,id,name
-				self.entityInfo = []
-				for line in f.read().splitlines():
-					if line.strip() and not line.strip().startswith('#'):
-						self.entityInfo.append(line.split(','))
+				self.entityInfo = [line.split("@") for line in f.read().splitlines()]
+				
 				
 		except(IOError, FileNotFoundError) as e:
 			print("Error reading entityInfo! {}".format(e))
