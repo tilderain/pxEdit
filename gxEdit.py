@@ -21,8 +21,8 @@ import multi
 import util
 
 from game import GameManager
-from loader import Loader
-from saver import Saver
+from formats import FormatManager
+
 from stage import Stage, Layer, Entity
 
 from editor import gxEdit

@@ -82,268 +82,70 @@ class PxEve:
 		pass
 		
 	
-class PxPackLayer:
+
+class PxMapAttr: #use the same class for both
 	def __init__(self):
-
-		self.partsName = None
-		self.scrolltype = 0
-		self.visibility = 0
-
-		#max for an attr is 16*16
-		self.width = 16
-		self.height = 16
-
-		#TODO: compression
-		self.type = 0
-
-
-		self.tiles = [[0] * self.width] * self.height
-	
-	def loadFromPack(self, stream):
+		self.width = 0
+		self.height = 0
 		self.tiles = []
-
-		#TODO: verify header minus numbers
-		stream.read(8) #PXMAP01
-		self.width = readInt(stream, 2)
-		self.height = readInt(stream, 2)
-
-		if self.width * self.height == 0: return True
-
-		self.type = readInt(stream, 1)
-		if self.type == 0:
-			for i in range(self.height):
-				byt = stream.read(self.width)
-				self.tiles.append([tile for tile in byt])
-			return True
 	
-	def load(self, path, printError=True): #readEntities
+	def load(self, path):
+		"""
+		Loads tile data from a file, intelligently handling whether a
+		'pxMAP01' header is present or not.
+		"""
 		try:
-			f = open(path, 'rb')
-			stream = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+			with open(path, 'rb') as f:
+				data = f.read()
 		except (OSError, IOError) as e:
-			if printError:
-				print("Error while opening {}: {}".format(path, e))
+			print("Error while opening {}: {}".format(path, e))
 			return False
+		
+		offset = 0
 
-		return self.loadFromPack(stream)
-
-	def saveToPack(self, f):
-		f.write(bytes(pxmapMagic.encode("ascii")))
-		f.write(struct.pack("<H", self.width))
-		f.write(struct.pack("<H", self.height))
-
-		if self.width * self.height == 0: return
-
-		f.write(struct.pack("<B", self.type))
-
-		if self.type == 0:
-			for y in self.tiles:
-				f.write(bytes(y))
-
-	def save(self, path):
+		# Check if the file starts with the 8-byte pxMAP01 header.
+		if data.startswith(b"pxMAP01\0"):
+			# If it does, skip the header.
+			offset = 8
+		
 		try:
-			f = open(path, 'wb')
+			# Read width and height from the correct starting position.
+			self.width = int.from_bytes(data[offset:offset+2], byteorder='little')
+			self.height = int.from_bytes(data[offset+2:offset+4], byteorder='little')
+
+			# Ensure dimensions are sane before proceeding
+			if self.width <= 0 or self.height <= 0:
+				self.tiles = []
+				return True
+
+			data_start = offset + 4
+			self.tiles = [] # Clear any previous tile data
+			for i in range(self.height):
+				row_start = data_start + (i * self.width)
+				row_end = row_start + self.width
+				self.tiles.append(list(data[row_start:row_end]))
+
+		except (struct.error, IndexError):
+			print(f"Error parsing data in {path}. File might be corrupt.")
+			self.width = 0
+			self.height = 0
+			self.tiles = []
+			return False
+			
+		return True
+		
+	def save(self, path):
+		"""Saves as a raw .pxattr file (without header)."""
+		try:
+			with open(path, 'wb') as f:
+				f.write(struct.pack("<h", self.width))
+				f.write(struct.pack("<h", self.height))
+				for y in self.tiles:
+					f.write(bytes(y))
 		except (OSError, IOError) as e:
 			print("Error while saving {}: {}".format(path, e))
 			return False
-		else:
-			self.saveToPack(f)
-
-	def modify(self, tiles):
-		#[[x,y], [x, y]]
-
-		for tile in tiles:
-			#convert a spritesheet tile index to its representation in the tile array
-			if tile[0][0] >= self.width: continue
-			if tile[0][1] >= self.height: continue
-			x = tile[1][0]
-			y = tile[1][1] * 16
-			
-			self.tiles[tile[0][1]][tile[0][0]] = x+y
-	def resize(self, width, height):
-		if width <= 0: return
-		if height <= 0: return
-
-		tiles = []
-		for y in range(height):
-			if y > self.height-1:
-				tiles.append([0] * width)
-			else:
-				tiles.append( self.tiles[y][:width] + [0]*(width - self.width))
-			
-		self.tiles = tiles
-
-		self.width = width
-		self.height = height
-		
-pxpackMagic = "PXPACK121127a**\0"
-
-class PxPack:
-	def __init__(self):
-		self.description = None
-		self.left_field = None
-		self.right_field = None
-		self.up_field = None
-		self.down_field = None
-
-		self.spritesheet = None
-
-		self.area_x = None
-		self.area_y = None
-
-		self.area_no = None
-
-		self.bg_r = None
-		self.bg_g = None 
-		self.bg_b = None
-
-		self.layers = []
-
-		self.eve = PxEve()
-
-	def load(self, path): #readEntities
-		try:
-			f = open(path, 'rb')
-			stream = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-		except (OSError, IOError) as e:
-			print("Error while opening {}: {}".format(path, e))
-			return False
-
-		LAYER_COUNT = 3
-
-		#TODO: verify header
-		stream.seek(16)
-
-		self.description = readPixelString(stream)
-		self.left_field = readPixelString(stream)
-		self.right_field = readPixelString(stream)
-		self.up_field = readPixelString(stream)
-		self.down_field = readPixelString(stream)
-		self.spritesheet = readPixelString(stream)
-
-		self.area_x = readInt(stream, 2)
-		self.area_y = readInt(stream, 2)
-		self.area_no = readInt(stream, 1)
-
-		self.bg_r = readInt(stream, 1)
-		self.bg_g = readInt(stream, 1)
-		self.bg_b = readInt(stream, 1)
-
-		for i in range(LAYER_COUNT):
-			layer = PxPackLayer()
-
-			layer.partsName = readPixelString(stream)
-			layer.visibility = readInt(stream, 1)
-			layer.scrolltype = readInt(stream, 1)
-			self.layers.append(layer)
-
-		for i in range(LAYER_COUNT):
-			layer = self.layers[i]
-			layer.loadFromPack(stream)
-		
-		entityCount = readInt(stream, 2)
-		for i in range(entityCount):
-			bits = readInt(stream, 1)
-			code_char = readInt(stream, 1)
-			param2 = readInt(stream, 1)
-
-			x = readInt(stream, 2)
-			y = readInt(stream, 2)
-			flag = readInt(stream, 2)
-
-			string = readPixelString(stream)
-			self.eve.units.append(PxPackUnit(bits,code_char,param2,x,y,flag,string, self.eve._count))
-			self.eve._count += 1
-
-		stream.close()
-		f.close()
 		return True
-		
-	def save(self, path):
-		try:
-			f = open(path, 'wb')
-		except (OSError, IOError) as e:
-			print("Error while opening {}: {}".format(path, e))
-			return False
-		else:
-			f.write(bytes(pxpackMagic.encode("ascii")))
-			writePixelString(f, self.description)
-			writePixelString(f, self.left_field)
-			writePixelString(f, self.right_field)
-			writePixelString(f, self.up_field)
-			writePixelString(f, self.down_field)
-			writePixelString(f, self.spritesheet)
-
-			f.write(struct.pack("<H", self.area_x))
-			f.write(struct.pack("<H", self.area_y))
-			f.write(struct.pack("<B", self.area_no))
-
-			f.write(struct.pack("<B", self.bg_r))
-			f.write(struct.pack("<B", self.bg_g))
-			f.write(struct.pack("<B", self.bg_b))
-
-			LAYER_COUNT = 3
-
-			for i in range(LAYER_COUNT):
-				layer = self.layers[i]
-
-				writePixelString(f, layer.partsName)
-				f.write(struct.pack("<B", layer.visibility))
-				f.write(struct.pack("<B", layer.scrolltype))
-			for i in range(LAYER_COUNT):
-				self.layers[i].saveToPack(f)
-
-			f.write(struct.pack("<H", len(self.eve.units)))
-			for o in self.eve.units:
-				f.write(struct.pack("<B", o.bits))
-				f.write(struct.pack("<B", o.type1))
-				f.write(struct.pack("<B", o.param2))
-
-				f.write(struct.pack("<h", o.x))
-				f.write(struct.pack("<h", o.y))
-				f.write(struct.pack("<H", o.flag))
-				writePixelString(f, o.string)
-
-			f.close()
-
-			return True
-		
-# --- This is the class definition that matters ---
-class PxMapAttr:
-	def __init__(self):
-		self.width = 0   # <-- MUST be initialized to 0, not None
-		self.height = 0  # <-- MUST be initialized to 0, not None
-		self.tiles = []
-	def load(self, path):
-		try:
-			f = open(path, 'rb')
-			data = f.read()
-		except (OSError, IOError) as e:
-			print("Error while opening {}: {}".format(path, e))
-			return False
-		
-		self.width = int.from_bytes(data[0:2], byteorder='little')
-		self.height = int.from_bytes(data[2:4], byteorder='little')
-		for i in range(self.height):
-			self.tiles.append(list( data[4+i*self.width:\
-									4+(i*self.width)+self.width] ))
-		return True
-		
-	def save(self, path):
-		try:
-			f = open(path, 'wb')
-		except (OSError, IOError) as e:
-			print("Error while opening {}: {}".format(path, e))
-			return False
-		else:
-			f.write(struct.pack("<h", self.width))
-			f.write(struct.pack("<h", self.height))
-			for y in self.tiles:
-				f.write(bytes(y))
-
-			f.close()
-
-			return True
 		
 	def modify(self, tiles):
 		#[[x,y], [x, y]]
@@ -358,18 +160,21 @@ class PxMapAttr:
 			self.tiles[tile[0][1]][tile[0][0]] = x+y
 
 	def resize(self, width, height):
-		if width <= 0: return
-		if height <= 0: return
+		if width < 0 or height < 0: return
 
-		tiles = []
+		new_tiles = []
 		for y in range(height):
-			if y > self.height-1:
-				tiles.append([0] * width)
+			if y >= self.height:
+				# Add a new, empty row
+				new_tiles.append([0] * width)
 			else:
-				tiles.append( self.tiles[y][:width] + [0]*(width - self.width))
+				# Copy and adjust an existing row
+				row = self.tiles[y][:width]
+				if width > self.width:
+					row.extend([0] * (width - self.width))
+				new_tiles.append(row)
 			
-		self.tiles = tiles
-
+		self.tiles = new_tiles
 		self.width = width
 		self.height = height
 
@@ -409,5 +214,25 @@ class PxMap:
             return False
         except (ValueError, struct.error) as e:
             print(f"Error parsing map file {path}: {e}")
+            return False
+        return True
+
+    def save(self, path):
+        """Saves tile data to a Cave Story .pxm file."""
+        try:
+            with open(path, 'wb') as f:
+                # Write the PXM header and version/dummy byte
+                f.write(b'PXM\x01')
+                
+                # Write width and height as 2-byte little-endian integers
+                f.write(struct.pack("<h", self.width))
+                f.write(struct.pack("<h", self.height))
+                
+                # Write the tile data row by row
+                if self.width * self.height > 0:
+                    for row in self.tiles:
+                        f.write(bytes(row))
+        except (OSError, IOError) as e:
+            print(f"Error while saving {path}: {e}")
             return False
         return True

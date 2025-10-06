@@ -1,6 +1,7 @@
 {
     "kero_blaster": {
         "name": "Kero Blaster",
+        "format_handler": "formatKero",
         "data_path": "rsc_k/",
         "stage_path": "field/",
         "image_path": "img/",
@@ -16,6 +17,7 @@
     },
     "cave_story": {
         "name": "Cave Story",
+        "format_handler": "formatCave",
         "data_path": "data/",
         "stage_path": "Stage/",
         "image_path": "Stage/",

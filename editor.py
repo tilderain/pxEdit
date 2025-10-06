@@ -13,14 +13,13 @@ from dataclasses import dataclass
 from collections import Counter
 
 from game import GameManager
-from loader import Loader
-from saver import Saver
+from formats import FormatManager  # <-- IMPORT the new FormatManager
+
 from stage import Stage, Layer, Entity
 
 # Global instances of our new classes
 game_manager = GameManager()
-loader = Loader(game_manager)
-saver = Saver(game_manager)
+format_manager = FormatManager(game_manager) # <-- CREATE the new manager
 
 # Default game and path for now
 # TODO: Make this user selectable
@@ -133,11 +132,6 @@ class StagePrj:
 
 			self.parts[layerNo] = interface.gSprfactory.from_image(imgPath + tileset_name + tileset_ext)
 			
-			# If the layer dimensions were 0, update them from the image size.
-			if not self.pack.layers[layerNo].width and self.parts[layerNo]:
-				self.pack.layers[layerNo].width = self.parts[layerNo].size[0] // self.tileWidth
-				self.pack.layers[layerNo].height = self.parts[layerNo].size[1] // self.tileWidth
-					
 			return True
 		except (OSError, IOError, sdl2.ext.SDLError) as e:
 			print("Error while loading parts for layer {}: {}".format(layerNo, e))
@@ -176,7 +170,7 @@ class StagePrj:
 		#if self.lastSavePos == self.undoPos: #TODO: and pxattr not modified
 		#	return False
 		print("--Saving stage {}...--".format(self.stageName))
-		saver.save_stage(self.pack)
+		format_manager.save_stage(self.pack)
 		#TODO: save to _temp, rename existing to _temp2, rename _temp to orig and delete temp2
 
 		#TODO: for save as, open all pxpacks in folder and change all references to new name
@@ -204,7 +198,7 @@ class StagePrj:
 		# For now, hardcode for Kero Blaster
 		backup_stage = copy.deepcopy(self.pack)
 		backup_stage.name = dateMin + "_" + self.stageName
-		saver.save_stage(backup_stage)
+		format_manager.save_stage(backup_stage)
 		
 		self.lastBackupPos = self.undoPos
 
@@ -290,10 +284,10 @@ class StagePrj:
 
 class Editor:
 	
-	def __init__(self, game_manager, loader, saver):
+	def __init__(self, game_manager, format_manager):
 		self.game_manager = game_manager
-		self.loader = loader
-		self.saver = saver
+		self.format_manager = format_manager 
+
 		self.entityInfo = []
 		self.stages = []
 
@@ -421,11 +415,11 @@ class Editor:
 
 	def loadStage(self, stageName):
 		if not len(stageName): return False
-		self.update_tile_dimensions() # <-- Must be called FIRST
+		self.update_tile_dimensions()
 		print("Loading stage " + stageName)
 		try:
-			pack = self.loader.load_stage(stageName)
-			stage = StagePrj(stageName, pack, self.tileWidth) # <-- Pass the correct width
+			pack = self.format_manager.load_stage(stageName) # <-- CHANGE to use format_manager
+			stage = StagePrj(stageName, pack, self.tileWidth)
 			result = stage.load()
 			if result:
 				self.stages.append(stage)
@@ -556,4 +550,4 @@ class Editor:
 		print("backup complete.")
 
 
-gxEdit = Editor(game_manager, loader, saver)
+gxEdit = Editor(game_manager, format_manager) 
