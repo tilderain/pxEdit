@@ -200,14 +200,14 @@ class Saver:
 
         for entity in stage.eve.units:
             unit = PxPackUnit(
-                entity.attributes.get('bits', 0),
-                entity.id,
-                entity.attributes.get('param2', 0),
+                entity.bits,
+                entity.type1,
+                entity.param2,
                 entity.x,
                 entity.y,
-                entity.flags,
-                entity.attributes.get('string', ""),
-                0 # id is not saved in the same way
+                entity.flag,
+                entity.string,
+                entity.id # editor id, not used by file format but part of local class
             )
             pxpack.units.append(unit)
 
@@ -254,8 +254,8 @@ class Saver:
                 f.write(struct.pack('<I', len(entities)))
 
                 for entity in entities:
-                    bits = entity.attributes.get('bits', 0)
-                    data = struct.pack('<HHHHHH', entity.x, entity.y, entity.flags, entity.event, entity.id, bits)
+                    # Format: x, y, code_flag, code_event, code_char, bits
+                    data = struct.pack('<HHHHHH', entity.x, entity.y, entity.flag, entity.event, entity.type1, entity.bits)
                     f.write(data)
             print(f"Saved entities to {path}")
         except (ValueError, struct.error) as e:

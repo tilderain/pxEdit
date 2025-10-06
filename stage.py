@@ -1,16 +1,18 @@
-
 class Entity:
-	"""Represents a single entity in a stage."""
-	def __init__(self, bits, code_char, param2, x, y, flag=0, string="", id=0, attributes={}):
-		self.bits = bits
-		self.type1 = code_char
-		self.param2 = param2
-		self.x = x
-		self.y = y
-		self.flag = flag
-		self.string = string
-		self.id = id
-		self.attributes={}
+    """Represents a single, unified entity in a stage."""
+    def __init__(self, type1, x, y, flag=0, event=0, id=0):
+        # --- Common properties ---
+        self.type1 = type1      # The entity type ID (e.g., 4 for a Critter).
+        self.x = x
+        self.y = y
+        self.flag = flag        # `flag` in KB, `code_flag` in CS.
+        self.id = id            # A unique ID for editor operations (selection, undo, etc.).
+
+        # --- Game-specific or extended properties ---
+        self.bits = 0           # `bits` is used in both games.
+        self.event = event      # For Cave Story's `code_event`.
+        self.param2 = 0         # For Kero Blaster's `param2`.
+        self.string = ""        # For Kero Blaster's `string`.
 
 class Layer:
 	"""Represents a single tile layer in a stage."""

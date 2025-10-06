@@ -1413,20 +1413,19 @@ class Interface:
 		for o in stage.pack.eve.units:
 			#TODO: multiple entities
 			#TODO: highlight hovered in picker
-			if o.x == x + stage.hscroll*const.ENTITY_SCALE and o.y == y + stage.scroll*const.ENTITY_SCALE:
-				index = o.id
+			if o.x == x + stage.hscroll * const.ENTITY_SCALE and o.y == y + stage.scroll * const.ENTITY_SCALE:
+				index = o.type1
 
 				titleColor, descColor, paramColor = getEntityColors(index)
 
 				gxEdit.tooltipText.append([gxEdit.entityInfo[index][0], titleColor, TTF_STYLE_BOLD])
 				gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
 
-				if gxEdit.elements["entEdit"].visible:
-					if gxEdit.entityInfo[index][2] != "":
-						gxEdit.tooltipText.append([gxEdit.entityInfo[index][2], paramColor, TTF_STYLE_NORMAL])
+				if gxEdit.elements["entEdit"].visible and gxEdit.entityInfo[index][2] != "":
+					gxEdit.tooltipText.append([gxEdit.entityInfo[index][2], paramColor, TTF_STYLE_NORMAL])
 
-				gxEdit.tooltipText.append(["Param2: " + str(o.attributes.get('param2')), sdlColorWhite, TTF_STYLE_NORMAL])
-				gxEdit.tooltipText.append(["Id: " + str(o.id), sdlColorWhite, TTF_STYLE_NORMAL])
+				gxEdit.tooltipText.append(["Param2: " + str(o.param2), sdlColorWhite, TTF_STYLE_NORMAL])
+				gxEdit.tooltipText.append(["Id: " + str(o.type1), sdlColorWhite, TTF_STYLE_NORMAL])
 
 
 	def renderTilePreview(self, gxEdit, stage):
@@ -1712,8 +1711,8 @@ class Interface:
 			dstx = x * (gxEdit.tileWidth2 // 2)
 			dsty = y * (gxEdit.tileWidth2 // 2)
 
-			x = o.id % 16 #row size in units.bmp
-			y = o.id // 16
+			x = o.type1 % 16 #row size in units.bmp
+			y = o.type1 // 16
 			srcx = x * gxEdit.tileWidth2
 			srcy = y * gxEdit.tileWidth2
 
@@ -1725,14 +1724,14 @@ class Interface:
 			if o in stage.selectedEntities:
 				self.drawBox(self.renderer, SURF_SDLCOLOR_CYAN, int(dstx*mag)-3, int(dsty*mag)-3, int(gxEdit.tileWidth2//2*mag)+4, int(gxEdit.tileWidth2//2*mag)+4, 2)
 			else:
-				if o.id in const.entityCrashIds:
+				if o.type1 in const.entityCrashIds:
 					self.renderer.copy(gSurfaces[SURF_COLOR_RED_TRANSPARENT], dstrect=dstrect)
 
-				if o.id in const.entityCrashIds:
+				if o.type1 in const.entityCrashIds:
 					titleColor = SURF_SDLCOLOR_MAGENTA
-				elif o.id in const.entityGoodIds:
+				elif o.type1 in const.entityGoodIds:
 					titleColor = SURF_SDLCOLOR_GREEN
-				elif o.id in const.entityUtilIds:
+				elif o.type1 in const.entityUtilIds:
 					titleColor = SURF_SDLCOLOR_GOLD
 				else:
 					titleColor = SURF_SDLCOLOR_RED
@@ -1742,8 +1741,8 @@ class Interface:
 			if (dstx, dsty) in xys: #distinguish layered entities
 				 self.renderer.copy(gSurfaces[SURF_COLOR_ORANGE_TRANSPARENT], dstrect=dstrect)
 
-			if o.attributes.get('string'):
-				renderText(o.attributes.get('string'), sdlColorWhite, TTF_STYLE_NORMAL, dstrect[0] + (gxEdit.tileWidth*mag), dstrect[1] + 2*mag)
+			if o.string:
+				renderText(o.string, sdlColorWhite, TTF_STYLE_NORMAL, dstrect[0] + (gxEdit.tileWidth*mag), dstrect[1] + 2*mag)
 			xys.append((dstx, dsty))
 			
 	def drawBox(self, renderer, surf, dstx, dsty, w, h, size=1):

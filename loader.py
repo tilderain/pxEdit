@@ -221,11 +221,13 @@ class Loader:
 
         # Entities
         for unit in pxpack.units:
-            entity = Entity(unit.type1, unit.x, unit.y, unit.flag)
-            entity.attributes['bits'] = unit.bits
-            entity.attributes['param2'] = unit.param2
-            entity.attributes['string'] = unit.string
+            # unit.id is the unique editor id from the PxPack loader
+            entity = Entity(unit.type1, unit.x, unit.y, unit.flag, id=unit.id)
+            entity.bits = unit.bits
+            entity.param2 = unit.param2
+            entity.string = unit.string
             stage.eve.units.append(entity)
+        stage.eve._count = len(pxpack.units)
 
         return stage
 
@@ -258,6 +260,7 @@ class Loader:
         
         # Load entities
         stage.eve.units = self._load_cave_story_entities(entities_path)
+        stage.eve._count = len(stage.eve.units)
 
         return stage
 
@@ -272,15 +275,15 @@ class Loader:
                 
                 count = struct.unpack('<I', f.read(4))[0]
 
-                for _ in range(count):
+                for i in range(count):
                     data = f.read(12) # 6 * 2 bytes
                     if len(data) < 12:
                         break # End of file
                     
                     x, y, code_flag, code_event, code_char, bits = struct.unpack('<HHHHHH', data)
                     
-                    entity = Entity(code_char, x, y, code_flag, code_event)
-                    entity.attributes['bits'] = bits
+                    entity = Entity(code_char, x, y, code_flag, code_event, id=i)
+                    entity.bits = bits
                     entities.append(entity)
         except FileNotFoundError:
             print(f"Entity file not found: {path}")
