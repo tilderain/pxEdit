@@ -26,53 +26,49 @@ class StageInfo:
 
 from collections import Counter
 
-from game import GameManager
-from formats import FormatManager  # <-- IMPORT the new FormatManager
+from game import game_manager
+from formats import FormatManager
 
 from stage import Stage, Layer, Entity
 
 # Global instances of our new classes
-from game import game_manager # <-- IMPORT the instance
-format_manager = FormatManager(game_manager) # <-- CREATE the new manager
+format_manager = FormatManager(game_manager)
 
-# Default game and path for now
-# TODO: Make this user selectable
-GAME_CHOICE = "guxt" # Options: "cave_story", "kero_blaster", "rockfish"
+# --- GLOBAL STATE ---
+# Initialize global vars that will be set by the helper function
+dataPath = ""
+gamePath = ""
+fieldPath = ""
+imgPath = ""
+current_game_config = None
+defaultStage = ""
+pxPackExt = ""
+pxAttrExt = ""
+entityInfoName = ""
 
-if GAME_CHOICE == "guxt":
-	game_manager.set_game("guxt")
-	game_manager.set_game_path("./guxt/")
-	defaultStage = "1"
-elif GAME_CHOICE == "cave_story":
-	game_manager.set_game("cave_story")
-	game_manager.set_game_path("./CaveStory/")
-	defaultStage = "Almond"
-elif GAME_CHOICE == "kero_blaster":
-	game_manager.set_game("kero_blaster")
-	game_manager.set_game_path("./Kero Blaster/")
-	defaultStage = "01field1"
-elif GAME_CHOICE == "rockfish":
-	game_manager.set_game("rockfish")
-	game_manager.set_game_path("./RockfishExe111127-ron/") # Adjust this path as needed
-	defaultStage = "rmStart" # A common starting stage for Rockfish
-else: # Fallback to a default
-	game_manager.set_game("kero_blaster")
-	game_manager.set_game_path("./Kero Blaster/")
-	defaultStage = "01field1"
+def setup_game_environment(game_name):
+    """Sets the current game and updates all global path variables."""
+    global dataPath, gamePath, fieldPath, imgPath, current_game_config, defaultStage
+    global pxPackExt, pxAttrExt, entityInfoName
+    
+    game_manager.set_game(game_name)
+    current_game_config = game_manager.get_current_game()
+    game_manager.set_game_path(current_game_config.get("base_path"))
+    defaultStage = current_game_config.get("default_stage")
 
-current_game_config = game_manager.get_current_game()
-
-dataPath = os.path.join(game_manager.get_current_game().base_path, current_game_config.get('data_path'))
-gamePath = game_manager.get_current_game().base_path
-fieldPath = os.path.join(dataPath, current_game_config.get('stage_path'))
-imgPath = os.path.join(dataPath, current_game_config.get('image_path'))
-
-entityInfoName = current_game_config.get('entity_info')
+    # Now that the base path is set, calculate all other paths
+    base_path = game_manager.get_current_game().base_path
+    gamePath = base_path
+    dataPath = os.path.join(base_path, current_game_config.get('data_path'))
+    fieldPath = os.path.join(dataPath, current_game_config.get('stage_path'))
+    imgPath = os.path.join(dataPath, current_game_config.get('image_path'))
+    
+    # Also set other global config-dependent variables
+    pxPackExt = current_game_config.get('stage_ext')
+    pxAttrExt = current_game_config.get('attr_ext')
+    entityInfoName = current_game_config.get('entity_info')
 
 backupFolderName = "backup"
-
-pxPackExt = current_game_config.get('stage_ext')
-pxAttrExt = current_game_config.get('attr_ext')
 backupTimeFormat = "%Y%m%d-%H%M%S"
 
 class StagePrj:
@@ -337,6 +333,7 @@ class Editor:
 
 
 		self.entityInfo = []
+		self.attributeInfo = [] 
 		self.stage_table = []
 		self.stages = []
 
@@ -433,7 +430,35 @@ class Editor:
 
 		self.tileWidth = 16
 		self.tileWidth2 = 16
+	def switch_game(self):
+		"""Cycles to the next game, clears state, and reloads assets."""
+		game_list = list(self.game_manager.games.keys())
+		current_game_name = self.game_manager.get_current_game().name
+		
+		try:
+			current_index = game_list.index(current_game_name)
+		except ValueError:
+			current_index = 0
+		
+		next_index = (current_index + 1) % len(game_list)
+		next_game_name = game_list[next_index]
 
+		print(f"--- Switching game to: {next_game_name.upper()} ---")
+
+		# Clear all loaded stage data
+		self.stages.clear()
+		self.curStage = 0
+		
+		# Set the new game and update all global paths
+		setup_game_environment(next_game_name)
+		
+		# Reload all game-specific assets and settings
+		interface.reload_game_surfaces()
+		self.loadMeta(None)
+		self.update_tile_dimensions()
+		
+		# Load the default stage for the new game
+		self.loadStage(defaultStage)
 	def readEntityInfo(self):
 		# This needs to use the game_manager to get the correct entity info file
 		current_game_config = self.game_manager.get_current_game()
@@ -512,6 +537,26 @@ class Editor:
 		print(f"Successfully loaded {len(self.stage_table)} entries from stage.tbl.")
 		return True
 
+	def readAttributeInfo(self):
+		"""Loads attribute descriptions from assist/attribute.txt"""
+		self.attributeInfo = [""] * 256 # Pre-fill with empty strings
+		attribute_image_path = os.path.join("assist", current_game_config.get('attribute'))
+		try:
+			with open(attribute_image_path, 'r') as f:
+				for line in f:
+					if '@' not in line: continue
+					parts = line.strip().split('@', 1)
+					try:
+						attr_id = int(parts[0])
+						if 0 <= attr_id < 256:
+							self.attributeInfo[attr_id] = parts[1]
+					except (ValueError, IndexError):
+						continue # Skip malformed lines
+		except FileNotFoundError:
+			print("Warning: assist/attribute.txt not found. No attribute tooltips will be shown.")
+			return False
+		print("Successfully loaded attribute descriptions.")
+		return True
 
 
 	def update_tile_dimensions(self):
@@ -537,6 +582,7 @@ class Editor:
 	def loadMeta(self, sprfactory):
 		result = True
 		result &= self.readEntityInfo()
+		result &= self.readAttributeInfo() 
 		result &= self.readStageTable()
 		return result
 
@@ -590,7 +636,7 @@ class Editor:
 			except Exception as e:
 				print(f"Could not load context tileset '{tileset_name}': {e}")
 
-		elif current_game_config.name == 'kero_blaster':
+		elif current_game_config.name == 'kero_blaster' or current_game_config.name == 'rockfish':
 			tileset_ext = current_game_config.get('tileset_ext')
 			tileset_path = os.path.join(imgPath, fName + tileset_ext)
 			try:

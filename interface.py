@@ -16,7 +16,7 @@ import copy
 
 from sdl2.sdlttf import *
 
-from editor import game_manager, imgPath
+from editor import game_manager, imgPath, gxEdit
 
 #from gxEdit import gxEdit as gxEdit
 
@@ -625,9 +625,22 @@ class TilePaletteWindow(UIWindow):
 		self.elements["buttonMinimize"] = UIButton(0, 4, 16, 16, self, rects=rectsButtonMinimize)
 		self.elements["buttonMinimize"].onAction = minimizeButtonAction
 
+		# --- ADD THIS BLOCK ---
+		# Label and dynamic number for the current layer
+		#self.elements["textLayerLabelS"] = UIText(90, 8, "Layer:", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textLayerLabel"] = UIText(89, 6, "Layer", sdlColorBlack, TTF_STYLE_BOLD, self)
+
+		#self.elements["textLayerNumS"] = UIText(126, 8, "0", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textLayerNum"] = UIText(125, 6, "0", sdlColorBlack, TTF_STYLE_BOLD, self)
 	def render(self, gxEdit, stage):
 		UIWindow.render(self, gxEdit, stage)
 		mag = gxEdit.tilePaletteMag
+		
+		"""Updates dynamic elements and then calls the parent render method."""
+		# Update the current layer number text
+		current_layer_str = str(gxEdit.currentLayer)
+		#self.elements["textLayerNumS"].text = current_layer_str
+		self.elements["textLayerNum"].text = current_layer_str
 
 		# --- THE FIX for PALETTE RENDERING ---
 		# Determine the correct tile width for rendering this specific palette.
@@ -708,7 +721,32 @@ class TilePaletteWindow(UIWindow):
 
 	def handleMouseDrag(self, gxEdit):
 		return False
-		
+	def handleMouseOver(self, mouse, gxEdit):
+		# --- TOOLTIP LOGIC FOR ATTRIBUTES IN PALETTE ---
+		if gxEdit.visibleLayers[4]:
+			stage = gxEdit.stages[gxEdit.curStage]
+			attr_data = stage.attrs[gxEdit.currentLayer] if len(stage.attrs) > gxEdit.currentLayer else None
+			if attr_data and attr_data.tiles:
+				tile_width = 16 if stage.is_attribute_stage else gxEdit.tileWidth
+				try:
+					x = int((mouse.x - self.x - self.elements["picker"].x) / (tile_width * gxEdit.tilePaletteMag))
+					y = int((mouse.y - self.y - self.elements["picker"].y) / (tile_width * gxEdit.tilePaletteMag))
+
+					if 0 <= y < len(attr_data.tiles) and 0 <= x < len(attr_data.tiles[0]):
+						attr_id = attr_data.tiles[y][x]
+						description = gxEdit.attributeInfo[attr_id]
+						if description:
+							gxEdit.tooltipText = [
+								[f"Attr: 0x{attr_id:02X}", sdlColorYellow, TTF_STYLE_NORMAL],
+								[description, sdlColorWhite, TTF_STYLE_NORMAL]
+							]
+							gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
+							return True # Tooltip handled, stop further processing
+				except (IndexError, ValueError):
+					pass # Fail silently
+		# --- END OF TOOLTIP LOGIC ---
+
+		return UIWindow.handleMouseOver(self, mouse, gxEdit)
 def getEntityColors(index):
 	if index in const.entityCrashIds:
 		titleColor = sdlColorRed
@@ -993,7 +1031,42 @@ class MultiplayerWindow(UIWindow):
 		self.elements["buttonConnect"] = UIButton(54, 54, 16, 16, self)
 		self.elements["buttonConnect"].onAction = multi.connectButtonAction
 	
-	
+def open_attribute_editor_action(window, elem, gxEdit):
+    """Action handler to find and load the attribute file for the current stage's tileset."""
+    stage = gxEdit.stages[gxEdit.curStage]
+    current_layer_obj = stage.pack.layers[gxEdit.currentLayer]
+    tileset_name = current_layer_obj.partsName
+
+    if not tileset_name:
+        print("Error: Current layer has no tileset. Cannot open attribute file.")
+        return
+
+    current_game = gxEdit.game_manager.get_current_game()
+    attr_filename_base = tileset_name
+    
+    # Game-specific logic to derive the attribute filename from the tileset name
+    if current_game.name == 'cave_story' and attr_filename_base.startswith("Prt"):
+        attr_filename_base = attr_filename_base[3:]
+    elif current_game.name == 'guxt' and attr_filename_base.startswith("parts"):
+        # The attr file is also named "partsX", so no change is needed.
+        pass
+
+    attr_ext = current_game.get('attr_ext')
+    # Use the 'image_path' as the most common location for attribute files.
+    attr_path = os.path.join(
+        current_game.base_path,
+        current_game.get('data_path'),
+        current_game.get('image_path'),
+        attr_filename_base + attr_ext
+    )
+
+    if not os.path.exists(attr_path):
+        print(f"Attribute file not found, cannot open for editing: {attr_path}")
+        return
+    
+    # Load the attribute file as a new stage and switch to it
+    if gxEdit.loadAttributeFileAsStage(attr_filename_base, attr_path):
+        gxEdit.curStage = len(gxEdit.stages) - 1
 class ToolsWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLS, style=0, visible=True):
 		UIWindow.__init__(self, x, y, w, h, type, style, visible)
@@ -1058,6 +1131,11 @@ class ToolsWindow(UIWindow):
 										tooltip=[["Display tile attributes", sdlColorBlack, TTF_STYLE_NORMAL]])
 		self.elements["butAttr"].onAction = toggleLayerVisibility
 
+		self.elements["butEditAttr"] = UIButton(168, 36, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW, enum=BUTTON_EDITATTRIBUTE,
+										tooltip=[["Open attribute editor", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butEditAttr"].onAction = open_attribute_editor_action
+
+
 		self.elements["butToggleMultiplayer"] = UIButton(132, 60, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
 												enum=BUTTON_MULTIPLAYER,
 												tooltip=[["multiplayer", sdlColorBlack, TTF_STYLE_NORMAL]])
@@ -1067,8 +1145,6 @@ class ToolsWindow(UIWindow):
 												enum=BUTTON_SCRIPT,
 												tooltip=[["Edit pxpack attributes", sdlColorBlack, TTF_STYLE_NORMAL]])
 		self.elements["butTogglePackAttr"].onAction = togglePxPackAttributes
-
-
 def editEntityAttributes(control, gxEdit):
 	param = control.text
 	try:
@@ -1450,6 +1526,30 @@ class Interface:
 		map_layer = stage.pack.layers[gxEdit.currentLayer] if len(stage.pack.layers) > gxEdit.currentLayer else None
 
 		if not map_layer: return
+		
+		# --- TOOLTIP LOGIC FOR ATTRIBUTES IN MAIN VIEW ---
+		if gxEdit.currentEditMode == const.EDIT_TILE and gxEdit.visibleLayers[4] and stage.attrs[gxEdit.currentLayer]:
+			try:
+				attr_layer = stage.attrs[gxEdit.currentLayer]
+				tile_x = int(mouse.x // (gxEdit.tileWidth * mag) + stage.hscroll)
+				tile_y = int(offset_y // (gxEdit.tileWidth * mag) + stage.scroll)
+
+				if 0 <= tile_y < len(map_layer.tiles) and 0 <= tile_x < len(map_layer.tiles[0]):
+					tile_id = map_layer.tiles[tile_y][tile_x]
+					tileset_x, tileset_y = tile_id % 16, tile_id // 16
+
+					if 0 <= tileset_y < len(attr_layer.tiles) and 0 <= tileset_x < len(attr_layer.tiles[0]):
+						attr_id = attr_layer.tiles[tileset_y][tileset_x]
+						description = gxEdit.attributeInfo[attr_id]
+						if description:
+							gxEdit.tooltipText = [
+								[f"Attr: 0x{attr_id:02X}", sdlColorYellow, TTF_STYLE_NORMAL],
+								[description, sdlColorWhite, TTF_STYLE_NORMAL]
+							]
+							gxEdit.tooltipStyle = const.STYLE_TOOLTIP_BLACK
+			except (IndexError, ValueError):
+				pass # Fail silently if mouse is out of bounds
+		# --- END OF TOOLTIP LOGIC ---
 
 		if gxEdit.currentEditMode == const.EDIT_TILE:
 			if gxEdit.rectanglePaintBoxStart == [-1, -1]: #normal
@@ -1945,7 +2045,12 @@ class StageTabsBar(UIWindow):
 
         current_x = self.tab_start_x
         for i, stage_prj in enumerate(gxEdit.stages):
-            text_w, text_h = getTextSize(stage_prj.stageName, gFont)
+            name = stage_prj.stageName
+            saveAsterisk = ""
+            if stage_prj.lastSavePos != stage_prj.undoPos:
+                saveAsterisk = "*"
+            name += saveAsterisk
+            text_w, text_h = getTextSize(name, gFont)
             tab_width = text_w + self.tab_padding * 2
             
             # Determine tab color
@@ -1960,7 +2065,7 @@ class StageTabsBar(UIWindow):
             gRenderer.fill((current_x, self.y + 2, tab_width, self.tab_height), tab_color)
             
             # Draw tab text
-            renderText(stage_prj.stageName, text_color, TTF_STYLE_NORMAL, current_x + self.tab_padding, self.y + 5)
+            renderText(name, text_color, TTF_STYLE_NORMAL, current_x + self.tab_padding, self.y + 5)
 
             current_x += tab_width + 1 # A small gap between tabs
 
@@ -1992,3 +2097,22 @@ class StageTabsBar(UIWindow):
     # Override other handlers to prevent interaction with elements underneath
     def handleMouseOver(self, mouse, gxEdit):
         return util.inBoundingBox(mouse.x, mouse.y, self.x, self.y, self.w, self.h)
+
+
+def reload_game_surfaces():
+    """Reloads game-specific surfaces like unittype.png when the game is switched."""
+    print("Reloading game-specific UI surfaces...")
+    current_game_config = game_manager.get_current_game()
+    
+    unittype_image_path = os.path.join("assist", current_game_config.get('unittype_image'))
+    attribute_image_path = os.path.join("assist", current_game_config.get('attribute_image'))
+    
+    try:
+        gSurfaces[SURF_UNITS] = gSprfactory.from_image(unittype_image_path)
+    except Exception as e:
+        print(f"ERROR: Could not reload unittype image '{unittype_image_path}': {e}")
+
+    try:
+        gSurfaces[SURF_ATTRIBUTE] = gSprfactory.from_image(attribute_image_path)
+    except Exception as e:
+        print(f"ERROR: Could not reload attribute image '{attribute_image_path}': {e}")

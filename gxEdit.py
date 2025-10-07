@@ -75,9 +75,17 @@ windowName = "Doctor's Garage"
 
 
 
+from editor import gxEdit, setup_game_environment
 
 def main():
+	# --- NEW SETUP ---
+	GAME_CHOICE = "rockfish" # You can change the starting game here
+	setup_game_environment(GAME_CHOICE)
+	from editor import defaultStage # Now we can safely import it
+	# ---
+
 	sdl2.ext.init()
+
 	#To disable texture destruction on window resize
 	sdl2.SDL_SetHint(sdl2.SDL_HINT_RENDER_DRIVER, b"opengl")
 #	sdl2.SDL_SetHint(sdl2.SDL_HINT_DPI_SCALING "0"
@@ -147,7 +155,7 @@ def main():
 	# Make sure stage tabs are added first to be drawn under other windows
 	gxEdit.elements["stageTabs"] = interface.StageTabsBar(0, 0, interface.gWindowWidth, 24)
 
-	entityinfoheight = len(gxEdit.entityInfo) // 16 * 18
+	entityinfoheight = len(gxEdit.entityInfo) // 16 * 20
 	gxEdit.elements["tilePalette"] = interface.TilePaletteWindow(1200, 400, 256, 280, const.WINDOW_TILEPALETTE)
 	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(1450, 400, 256, entityinfoheight, const.WINDOW_ENTITYPALETTE)
 
@@ -246,7 +254,11 @@ def main():
 			multiwindowstring = "**Connected**"
 
 		#set windowname
-		interface.gWindow.title = windowName + " [" + "" + str(curStage.stageName) + "]" + " " + multiwindowstring
+		saveAsterisk = ""
+		stage = gxEdit.stages[gxEdit.curStage]
+		if stage.lastSavePos != stage.undoPos:
+			saveAsterisk = "*"
+		interface.gWindow.title = windowName + " [" + "" + str(curStage.stageName) + saveAsterisk + "]" + " " + multiwindowstring
 		
 		for event in events:
 			#TODO: really really fix this

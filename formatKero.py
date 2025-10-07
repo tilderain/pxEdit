@@ -214,6 +214,10 @@ class PxPack:
             entity.bits, entity.param2, entity.string = unit.bits, unit.param2, unit.string
             stage.eve.units.append(entity)
         stage.eve._count = len(self.units)
+
+        if(len(stage.layers) == 1):
+            stage.layers.append(Layer(0, 0))
+            stage.layers.append(Layer(0, 0))
         return stage
 
     @classmethod

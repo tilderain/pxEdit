@@ -1,0 +1,39 @@
+0@Background
+2@Background Water
+3@Background No NPC
+5@Background No Bullet
+33@No Display
+65@Foreground Solid
+66@Foreground Spike
+67@Shootable Block
+68@Foreground No NPC
+70@Foreground No PC
+77@Foreground
+80@Foreground Roof Slope Left Low
+81@Foreground Roof Slope Left High
+82@Foreground Roof Slope Right High
+83@Foreground Roof Slope Right Low
+84@Foreground Floor Slope Left High
+85@Foreground Floor Slope Left Low
+86@Foreground Floor Slope Right Low
+87@Foreground Floor Slope Right High
+96@Water
+97@Water Solid
+98@Water Spike
+100@Water No NPC
+112@Water Roof Slope Left Low
+113@Water Roof Slope Left High
+114@Water Roof Slope Right High
+115@Water Roof Slope Right Low
+116@Water Floor Slope Left High
+117@Water Floor Slope Left Low
+118@Water Floor Slope Right Low
+119@Water Floor Slope Right High
+128@Wind Left
+129@Wind Up
+130@Wind Right
+131@Wind Down
+160@Water Current Left
+161@Water Current Up
+162@Water Current Right
+163@Water Current Down

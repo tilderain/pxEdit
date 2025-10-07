@@ -1,6 +1,7 @@
 {
     "kero_blaster": {
         "name": "Kero Blaster",
+        "base_path": "Kero Blaster",
         "format_handler": "formatKero",
         "data_path": "rsc_k/",
         "stage_path": "field/",
@@ -15,10 +16,13 @@
         "tileset_ext": ".png",
         "unittype_image": "unittype-kero.png",
         "attribute_image": "attribute-kero.png",
-        "pxpack_layers": 3
+        "attribute": "attribute-kero.txt",
+        "pxpack_layers": 3,
+        "default_stage": "01field1"
     },
     "cave_story": {
         "name": "Cave Story",
+        "base_path": "CaveStory",
         "format_handler": "formatCave",
         "data_path": "data/",
         "stage_path": "Stage/",
@@ -33,11 +37,14 @@
         "entity_scale": 2,
         "tileset_ext": ".pbm",
         "unittype_image": "unittype-cave.png",
-        "attribute_image": "attribute-cave.png"
+        "attribute_image": "attribute-cave.png",
+        "attribute": "attribute-cave.txt",
+        "default_stage": "Almond"
     },
     "rockfish": {
         "name": "Rockfish",
         "format_handler": "formatKero",
+        "base_path": "RockfishExe111127-ron",
         "data_path": "Resource/",
         "stage_path": "field/",
         "image_path": "field/",
@@ -51,10 +58,15 @@
         "tileset_ext": ".bmp",
         "unittype_image": "unittype-rock.png",
         "attribute_image": "attribute-rock.png",
-        "pxpack_layers": 1
+        "attribute": "attribute-kero.txt",
+        "pxpack_layers": 1,
+        "default_stage": "rmStart"
+        
     },
     "guxt": {
         "name": "Guxt",
+        "default_stage": "1",
+        "base_path": "guxt",
         "format_handler": "formatGuxt",
         "data_path": "data/",
         "stage_path": "",
@@ -68,6 +80,7 @@
         "entity_scale": 1,
         "tileset_ext": ".bmp",
         "unittype_image": "unittype-guxt.png",
-        "attribute_image": "attribute-guxt.png"
+        "attribute_image": "attribute-guxt.png",
+        "attribute": "attribute-kero.txt"
     }
 }

@@ -1,4 +1,5 @@
 import os
+from types import NoneType
 os.environ["PYSDL2_DLL_PATH"] = "./"
 import sdl2.ext
 import const
@@ -66,6 +67,7 @@ def runMouse1(stage, mouse):
 		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // tileWidth // gxEdit.tilePaletteMag
 		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // tileWidth // gxEdit.tilePaletteMag
 		
+		if stage.attrs[gxEdit.currentLayer] is None: return
 		if x >= stage.attrs[gxEdit.currentLayer].width:
 			return
 		if y >= stage.attrs[gxEdit.currentLayer].height:
@@ -159,6 +161,14 @@ def runMouseUp(gxEdit, curStage, mouse):
 			if(gxEdit.activeElem.handleMouse1Up(mouse, gxEdit)):
 				gxEdit.activeElem = None
 			return
+
+	if mouse.y < gxEdit.content_y_offset:
+		# Still allow dragging of UI windows if one is selected
+		if gxEdit.draggedElem:
+			gxEdit.draggedElem.x = mouse.x - gxEdit.dragX
+			gxEdit.draggedElem.y = mouse.y - gxEdit.dragY
+		return
+
 	if gxEdit.currentEditMode == const.EDIT_ENTITY:
 		gxEdit.selectionBoxStart = [-1, -1]
 		gxEdit.selectionBoxEnd = [-1, -1]
@@ -323,6 +333,7 @@ def runMouseDrag(gxEdit, stage, mouse):
 
 		if x < 0 or y < 0:
 			return
+		if stage.attrs[gxEdit.currentLayer] is None: return
 		if x >= stage.attrs[gxEdit.currentLayer].width:
 			return
 		if y >= stage.attrs[gxEdit.currentLayer].height:
@@ -614,6 +625,8 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 
 				undo = UndoAction(const.UNDO_ENTITY_ADD, 0, ents)
 				stage.addUndo(undo)
+		elif sym == sdl2.SDL_SCANCODE_G and key.keysym.mod & sdl2.KMOD_CTRL:
+			gxEdit.switch_game()
 		elif sym == sdl2.SDL_SCANCODE_1:
 			gxEdit.elements["toolsWindow"].elements["butMap0"].handleMouse1(None, gxEdit)
 		elif sym == sdl2.SDL_SCANCODE_2:

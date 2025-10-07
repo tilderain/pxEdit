@@ -1,0 +1,128 @@
+0@Tile 0
+1@Solid
+2@Npc Block?
+3@Player Block?
+4@Destructable1?
+5@Spike
+6@Destructable2?
+7@Platform
+8@Upleft Slope Big
+9@Upleft Slope Small
+10@Upright Slope Small
+11@Upright Slope Big
+12@Downleft Slope Big
+13@Downleft Slope Small
+14@Downright Slope Small
+15@Downright Slope Big
+16@A
+17@B
+18@C
+19@D
+20@E
+21@A
+22@B
+23@1
+24@2
+25@3
+26@4
+27@5
+28@A
+29@B
+30@C
+31@D
+32@A
+33@B
+34@C
+35@D
+36@E
+37@None
+38@None
+39@None
+40@Topleft Corner
+41@TopRight Corner
+42@Bottomleft Corner
+43@Bottomright Corner
+44@Upslope helper
+45@Downslope helper
+46@None
+47@None
+48@Ice?
+49@Ladder
+50@Ladder Top
+51@PlayerBullet Block?
+52@PlayerNpc Block??
+53@None
+54@None
+55@None
+56@Mud
+57@Ice
+58@Snow?
+59@None
+60@None
+61@None
+62@None
+63@None
+64@Water
+65@Water Solid
+66@Water Npc Block?
+67@Water Player Block?
+68@Water Destructable1?
+69@Water Spike
+70@Water Destructable2?
+71@Water Platform
+72@Water Upleft Slope Big
+73@Water Upleft Slope Small
+74@Water Upright Slope Small
+75@Water Upright Slope Big
+76@Water Downleft Slope Big
+77@Water Downleft Slope Small
+78@Water Downright Slope Small
+79@Water Downright Slope Big
+80@A
+81@B
+82@C
+83@D
+84@E
+85@A
+86@B
+87@1
+88@2
+89@3
+90@4
+91@5
+92@A
+93@B
+94@C
+95@D
+96@A
+97@B
+98@C
+99@D
+100@E
+101@None
+102@None
+103@None
+104@WaterTopleft Corner
+105@WaterTopRight Corner
+106@WaterBottomleft Corner
+107@WaterBottomright Corner
+108@WaterUpslope helper
+109@WaterDownslope helper
+110@None
+111@Water Ladder
+112@Water Ladder Top
+113@Water PlayerBullet Block?
+114@Water PlayerNpc Block??
+115@None
+116@None
+117@None
+118@Water Mud?
+119@Water Ice?
+120@Water Snow?
+121@None
+122@None
+123@None
+124@None
+125@None
+126@Water
+127@Water Solid
