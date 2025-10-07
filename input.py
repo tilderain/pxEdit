@@ -283,12 +283,15 @@ def runMouseDrag(gxEdit, stage, mouse):
 
 	for i, elem in reversed(list(gxEdit.elements.items())):
 		if not elem.visible: continue
-
+		
+		if hasattr(elem, 'handleMouseDrag') and elem.handleMouseDrag(mouse, gxEdit):
+				return # The drag was handled by the UI element, so stop processing.
 		if util.inWindowBoundingBox(mouse, elem):
 			if elem.handleMouseOver(mouse, gxEdit):
 				break
 	else:
 		gxEdit.tooltipText = []
+	
 	
 	keystate = util.getKeyState()
 	if (mouse.button != sdl2.SDL_BUTTON_LEFT and not keystate[sdl2.SDL_SCANCODE_SPACE]): return False

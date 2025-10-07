@@ -189,6 +189,7 @@ def main():
 
 	gxEdit.elements["dialogMultiplayer"] = interface.MultiplayerWindow(0,0,220,80)
 
+	gxEdit.elements["stageSelection"] = interface.StageSelectionWindow(0, 0, 200, 250)
 
 	def renderEditor():
 		#TODO: placeholder
@@ -335,7 +336,16 @@ def main():
 			elif event.type == sdl2.SDL_MOUSEMOTION:
 				input.runMouseDrag(gxEdit, curStage, event.motion)
 			elif event.type == sdl2.SDL_MOUSEWHEEL:
-				input.runMouseWheel(curStage, event.wheel)
+				# --- THIS IS THE FIX: Pass mouse wheel events to UI windows ---
+				handled = False
+				for key, elem in reversed(list(gxEdit.elements.items())):
+					if elem.visible and util.inWindowBoundingBox(event.wheel, elem):
+						if hasattr(elem, 'handleMouseWheel'):
+							elem.handleMouseWheel(event.wheel)
+							handled = True
+							break
+				if not handled:
+					input.runMouseWheel(curStage, event.wheel)
 			elif event.type == sdl2.SDL_MOUSEBUTTONDOWN:
 				mouseHeld = True
 				mouse_triggered = (event.button.button == sdl2.SDL_BUTTON_LEFT)
