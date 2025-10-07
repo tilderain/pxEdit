@@ -353,6 +353,10 @@ class Editor:
 		self.tilePaletteMag = 2
 		self.entityPaletteMag = 1
 
+
+		self.statusBarHeight = 20
+		self.statusText = ""
+
 		self.export_connected_maps = False
 
 		self.currentEntity = 0

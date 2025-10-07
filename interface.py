@@ -194,6 +194,14 @@ gDrawBoxRect = sdl2.SDL_Rect(0,0,0,0)
 
 gFont = None
 
+PAINT_MODE_NAMES = {
+    const.PAINT_NORMAL: "Draw",
+    const.PAINT_ERASE: "Erase",
+    const.PAINT_COPY: "Copy",
+    const.PAINT_FILL: "Fill",
+    const.PAINT_REPLACE: "Replace",
+    const.PAINT_RECTANGLE: "Rectangle"
+}
 def getTextSize(text, font):
 	w = ctypes.c_int(0)
 	h = ctypes.c_int(0)
@@ -2048,6 +2056,61 @@ class Interface:
 		if self.magnification <= 0:
 			self.magnification = 1
 	'''
+	def renderStatusBar(self, gxEdit, stage):
+		"""Renders the status bar at the bottom of the window."""
+		bar_y = gWindowHeight - gxEdit.statusBarHeight
+		
+		# Draw background
+		gRenderer.fill((0, bar_y, gWindowWidth, gxEdit.statusBarHeight), sdl2.ext.Color(45, 45, 55))
+		# Draw top border
+		gRenderer.fill((0, bar_y, gWindowWidth, 1), sdl2.ext.Color(0, 0, 0))
+
+		# --- Gather Info ---
+		mouse = util.getMouseState()
+		mag = gxEdit.magnification
+		
+		tile_pixel_size = gxEdit.tileWidth * mag
+		# Mouse coordinates in tile space
+		map_x = int((mouse.x / tile_pixel_size) + stage.hscroll) if tile_pixel_size > 0 else 0
+		map_y = int(((mouse.y - gxEdit.content_y_offset) / tile_pixel_size) + stage.scroll) if tile_pixel_size > 0 else 0
+		
+		# Map dimensions
+		map_w, map_h = 0, 0
+		if stage.pack.layers and gxEdit.currentLayer < len(stage.pack.layers):
+			layer = stage.pack.layers[gxEdit.currentLayer]
+			map_w, map_h = layer.width, layer.height
+
+		# Selected tile
+		sel_tile_x, sel_tile_y = stage.selectedTilesStart
+		sel_tile_id = sel_tile_x + (sel_tile_y * 16)
+
+		# Current tool
+		tool_name = PAINT_MODE_NAMES.get(gxEdit.currentTilePaintMode, "Unknown")
+		
+		# --- Format Strings ---
+		coords_text = f"X: {map_x} Y: {map_y}"
+		map_size_text = f"Size: {map_w}x{map_h}"
+		tile_text = f"Tile: {sel_tile_id} ({sel_tile_x}, {sel_tile_y})"
+		layer_text = f"Layer: {gxEdit.currentLayer}"
+		tool_text = f"Tool: {tool_name}"
+
+		# --- THIS IS THE FIX: Render text at fixed positions ---
+		text_y = bar_y + 4
+		
+		# Define starting X coordinate for each section
+
+		pos_coords = 10
+		pos_map_size = 100  
+		pos_tile_info = 220
+		pos_layer = 380 
+		pos_tool = 460
+		
+		renderText(coords_text, sdlColorWhite, TTF_STYLE_NORMAL, pos_coords, text_y)
+		renderText(map_size_text, sdlColorWhite, TTF_STYLE_NORMAL, pos_map_size, text_y)
+		renderText(tile_text, sdlColorWhite, TTF_STYLE_NORMAL, pos_tile_info, text_y)
+		renderText(layer_text, sdlColorWhite, TTF_STYLE_NORMAL, pos_layer, text_y)
+		renderText(tool_text, sdlColorWhite, TTF_STYLE_NORMAL, pos_tool, text_y)
+		# --- END OF FIX ---
 
 class StageTabsBar(UIWindow):
     def __init__(self, x, y, w, h, type=const.WINDOW_NONE, style=0, visible=True):

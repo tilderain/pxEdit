@@ -186,6 +186,7 @@ def main():
 
 	gxEdit.elements["dialogMultiplayer"] = interface.MultiplayerWindow(0,0,220,80)
 
+
 	def renderEditor():
 		#TODO: placeholder
 		gui.renderEditorBg()
@@ -194,7 +195,10 @@ def main():
 		if tabs_bar and tabs_bar.visible:
 			tabs_bar.render(gxEdit, curStage)
 
-		viewport = sdl2.SDL_Rect(0, gxEdit.content_y_offset, interface.gWindowWidth, interface.gWindowHeight - gxEdit.content_y_offset)
+		# --- THIS IS THE FIX: Ensure the viewport height is never negative ---
+		viewport_height = max(0, interface.gWindowHeight - gxEdit.content_y_offset - gxEdit.statusBarHeight)
+		viewport = sdl2.SDL_Rect(0, gxEdit.content_y_offset, interface.gWindowWidth, viewport_height)
+		# --- END OF FIX ---
 		sdl2.SDL_RenderSetViewport(renderer.sdlrenderer, ctypes.byref(viewport))
 
 		# --- RENDER LOGIC CHANGE ---
@@ -221,8 +225,9 @@ def main():
 
 		if not curStage.is_attribute_stage and (gxEdit.visibleLayers[3] or gxEdit.currentEditMode == const.EDIT_ENTITY):
 			gui.renderEntities(gxEdit, curStage)
-	
 		sdl2.SDL_RenderSetViewport(renderer.sdlrenderer, None)
+
+		gui.renderStatusBar(gxEdit, curStage)
 
 		for key, elem in gxEdit.elements.items():
 			if key == "stageTabs": continue
