@@ -660,15 +660,20 @@ class TilePaletteWindow(UIWindow):
 		gInterface.renderer.copy(tileset_surface, srcrect=srcrect, dstrect=dstrect)
 
 		if gxEdit.visibleLayers[4] and attr_data_for_overlay and attr_data_for_overlay.tiles:
-			for y in range(attr_data_for_overlay.height):
-				for x in range(attr_data_for_overlay.width):
-					if y >= tileset_surface.size[1] // palette_render_tilewidth or x >= tileset_surface.size[0] // palette_render_tilewidth: continue
+			# Iterate over the actual loaded tile data to prevent crashes on truncated/malformed files.
+			for y, row in enumerate(attr_data_for_overlay.tiles):
+				for x, tile_value in enumerate(row):
+					# Ensure we don't try to draw an attribute for a tile that doesn't exist on the visual tileset surface.
+					if y >= tileset_surface.size[1] // palette_render_tilewidth or x >= tileset_surface.size[0] // palette_render_tilewidth:
+						continue
 					
 					dstxx = dstx + (x * palette_render_tilewidth * mag)
 					dstyy = dsty + (y * palette_render_tilewidth * mag)
-					tile = attr_data_for_overlay.tiles[y][x]
-					xxx, yyy = tile % 16, tile // 16
+					
+					# tile_value is the attribute ID (e.g., 0x01 for solid block)
+					xxx, yyy = tile_value % 16, tile_value // 16
 					srcx, srcy = xxx * 16, yyy * 16
+					
 					srcrect_attr = (srcx, srcy, 16, 16)
 					dstrect_attr = (dstxx, dstyy, palette_render_tilewidth*mag, palette_render_tilewidth*mag)
 					gRenderer.copy(gSurfaces[SURF_ATTRIBUTE], srcrect=srcrect_attr, dstrect=dstrect_attr)

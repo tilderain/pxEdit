@@ -294,21 +294,29 @@ def load_attrs(game_manager, tileset_name, tileset_surface):
     return attr
 
 def save_attribute(game_manager, layer, path):
-    """Saves a Kero Blaster .pxattr file with its pxMAP01 header."""
+    """Saves a .pxattr file, handling variants for Kero Blaster and Rockfish."""
     import struct
     if not layer: return False
     
     try:
+        game = game_manager.get_current_game()
         with open(path, 'wb') as f:
             # --- THE FIX ---
-            # Write the mandatory pxMAP01 header for standalone attribute files.
-            f.write(b"pxMAP01\0")
-            # ----------------
+            # Kero Blaster uses a header and type byte, Rockfish does not.
+            if game.name == 'rockfish':
+                # Rockfish Format: [width][height][data]
+                f.write(struct.pack("<HH", layer.width, layer.height))
+            else:
+                # Kero Blaster Format: [header][width][height][type][data]
+                f.write(b"pxMAP01\0")
+                f.write(struct.pack("<HH", layer.width, layer.height))
+                f.write(struct.pack("<B", 0)) # Type byte is usually 0
 
-            f.write(struct.pack("<HH", layer.width, layer.height))
-            f.write(struct.pack("<B", 0)) # Type byte is usually 0 for attributes
+            # The tile data is written the same way for both.
             for row in layer.tiles:
                 f.write(bytes(row))
+        # ----------------
+
         print(f"Successfully saved attribute file: {os.path.basename(path)}")
         return True
     except (IOError, OSError) as e:

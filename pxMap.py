@@ -1,6 +1,7 @@
 import io, os, struct
 import mmap
 from ctypes import c_short
+from game import game_manager # <-- IMPORT the instance
 
 def writePixelString(fp, string):
 	length = len(string.encode("shift-jis"))
@@ -88,14 +89,15 @@ class PxMapAttr: #use the same class for both
 		self.width = 0
 		self.height = 0
 		self.tiles = []
-	
+
 	def load(self, path):
 		"""
 		Loads attribute/map data from a file, automatically detecting the format.
 		- Handles raw 256-byte Cave Story .pxa files.
 		- Handles files that start with a 'pxMAP01' header.
-		- Handles Kero Blaster .pxattr files (width/height/type header).
+		- Handles Kero Blaster & Rockfish .pxattr files.
 		"""
+		from game import game_manager
 		try:
 			with open(path, 'rb') as f:
 				data = f.read()
@@ -105,20 +107,19 @@ class PxMapAttr: #use the same class for both
 
 		try:
 			offset = 0
-			# --- THE FIX ---
-			# First, check for the explicit 'pxMAP01' header and skip it if found.
+			game = game_manager.get_current_game()
+			# Rockfish doesn't have pxmap header
 			if data.startswith(b"pxMAP01\0"):
 				offset = 8
-			# ----------------
-
-			# Next, check for the Cave Story raw format (only if no header was found).
-			if offset == 0 and len(data) == 256:
+			
+			# Check for Cave Story raw format (only if no header was found).
+			if offset == 0 and len(data) == 256 and game.name == "cave_story":
 				self.width = 16
 				self.height = 16
 				self.tiles = [list(data[i:i+16]) for i in range(0, 256, 16)]
 				return True
 			
-			# Otherwise, assume it's a Kero Blaster format (with or without the header).
+			# Otherwise, assume it's a Kero Blaster/Rockfish format.
 			self.width = int.from_bytes(data[offset:offset+2], byteorder='little')
 			self.height = int.from_bytes(data[offset+2:offset+4], byteorder='little')
 
@@ -126,8 +127,14 @@ class PxMapAttr: #use the same class for both
 				self.tiles = []
 				return True
 
-			# Skip the 1-byte 'type' field
-			data_start = offset + 5
+			# --- THIS IS THE FIX ---
+			# Kero Blaster has a 1-byte 'type' field after the dimensions, but Rockfish does not.
+			if game.name == 'rockfish':
+				data_start = offset + 4  # Start data right after width/height
+			else:
+				data_start = offset + 5  # Skip the 'type' byte for other formats
+			# -----------------------
+
 			self.tiles = []
 			for i in range(self.height):
 				row_start = data_start + (i * self.width)

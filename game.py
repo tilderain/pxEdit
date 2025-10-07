@@ -38,3 +38,5 @@ class GameManager:
             self.current_game.base_path = path
         else:
             raise ValueError("No game selected.")
+            
+game_manager = GameManager()

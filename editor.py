@@ -32,7 +32,7 @@ from formats import FormatManager  # <-- IMPORT the new FormatManager
 from stage import Stage, Layer, Entity
 
 # Global instances of our new classes
-game_manager = GameManager()
+from game import game_manager # <-- IMPORT the instance
 format_manager = FormatManager(game_manager) # <-- CREATE the new manager
 
 # Default game and path for now
@@ -582,7 +582,7 @@ class Editor:
 			except Exception as e:
 				print(f"Could not load context tileset '{tileset_name}': {e}")
 
-		elif current_game_config.name == 'kero_blaster':
+		elif current_game_config.name == 'kero_blaster' or current_game_config.name == 'rockfish':
 			# --- THE FIX FOR KERO BLASTER ---
 			# For KB, the attr filename (e.g. '01field') matches the tileset filename.
 			tileset_ext = current_game_config.get('tileset_ext')
