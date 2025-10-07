@@ -144,6 +144,9 @@ def main():
 	windowBg2._size = (windowBg2.size[0] * 2, windowBg2.size[1] * 2)'''
 	#easy
 
+	gxEdit.v_scrollbar = interface.UIScrollbar(is_vertical=True)
+	gxEdit.h_scrollbar = interface.UIScrollbar(is_vertical=False)
+
 	gxEdit.loadMeta(sprfactory)
 
 	gxEdit.loadStage(defaultStage)
@@ -227,6 +230,11 @@ def main():
 			gui.renderEntities(gxEdit, curStage)
 		sdl2.SDL_RenderSetViewport(renderer.sdlrenderer, None)
 
+		if gxEdit.v_scrollbar.action_state != interface.SCROLL_ACTION_GRAY:
+			gxEdit.v_scrollbar.render(renderer)
+		if gxEdit.h_scrollbar.action_state != interface.SCROLL_ACTION_GRAY:
+			gxEdit.h_scrollbar.render(renderer)
+			
 		gui.renderStatusBar(gxEdit, curStage)
 
 		for key, elem in gxEdit.elements.items():
@@ -266,6 +274,8 @@ def main():
 		#height of window in tiles
 		scaleFactor = (interface.gWindowHeight // gxEdit.stages[gxEdit.curStage].tileWidth // gxEdit.magnification)
 		events = sdl2.ext.get_events()
+		
+		mouse_triggered = False
 
 		multiwindowstring = ""
 		if gxEdit.multiplayerState == const.MULTIPLAYER_HOST:
@@ -328,6 +338,8 @@ def main():
 				input.runMouseWheel(curStage, event.wheel)
 			elif event.type == sdl2.SDL_MOUSEBUTTONDOWN:
 				mouseHeld = True
+				mouse_triggered = (event.button.button == sdl2.SDL_BUTTON_LEFT)
+
 				input.runMouse1(curStage, event.button)
 				input.runMouse2(gxEdit, curStage, event.button)
 				input.runMouse3(gxEdit, curStage, event.button)
@@ -340,6 +352,63 @@ def main():
 				if gxEdit.focussedElem:
 					gxEdit.focussedElem.handleTextInput(event.text.text.decode("utf-8"), gxEdit)
 
+
+		h_scrollbar_h = interface.SCROLL_BUTTON_SIZE if gxEdit.h_scrollbar.action_state != interface.SCROLL_ACTION_GRAY else 0
+		view_rect = sdl2.SDL_Rect(
+			0, gxEdit.content_y_offset,
+			interface.gWindowWidth,
+			max(0, interface.gWindowHeight - gxEdit.content_y_offset - gxEdit.statusBarHeight - h_scrollbar_h)
+		)
+
+		h_needed = False
+		v_needed = False
+		if curStage.pack.layers and curStage.pack.layers[0]:
+			main_layer = curStage.pack.layers[0]
+			unpadded_content_w = main_layer.width * gxEdit.tileWidth * gxEdit.magnification
+			unpadded_content_h = main_layer.height * gxEdit.tileWidth * gxEdit.magnification
+			
+			# Check if horizontal scrollbar is needed
+			if unpadded_content_w > interface.gWindowWidth:
+				h_needed = True
+			# Check if vertical scrollbar is needed (account for horizontal bar's height if it will appear)
+			potential_h_bar_h = interface.SCROLL_BUTTON_SIZE if h_needed else 0
+			if unpadded_content_h > (interface.gWindowHeight - gxEdit.content_y_offset - gxEdit.statusBarHeight - potential_h_bar_h):
+				v_needed = True
+
+		h_scrollbar_h = interface.SCROLL_BUTTON_SIZE if h_needed else 0
+		view_rect = sdl2.SDL_Rect(
+			0, gxEdit.content_y_offset,
+			interface.gWindowWidth,
+			max(0, interface.gWindowHeight - gxEdit.content_y_offset - gxEdit.statusBarHeight - h_scrollbar_h)
+		)
+
+		if curStage.pack.layers and curStage.pack.layers[0]:
+			main_layer = curStage.pack.layers[0]
+			
+			# Add overscroll padding ONLY if the scrollbar is active
+			overscroll_padding_y = view_rect.h / 2 if v_needed else 0
+			overscroll_padding_x = view_rect.w / 2 if h_needed else 0
+
+			# Update Vertical Scrollbar with potentially padded content size
+			content_h_px = (main_layer.height * gxEdit.tileWidth * gxEdit.magnification) + overscroll_padding_y
+			gxEdit.v_scrollbar.set_properties(view_rect, content_h_px, curStage.scroll * gxEdit.tileWidth * gxEdit.magnification)
+			
+			# Update Horizontal Scrollbar with potentially padded content size
+			content_w_px = (main_layer.width * gxEdit.tileWidth * gxEdit.magnification) + overscroll_padding_x
+			gxEdit.h_scrollbar.set_properties(view_rect, content_w_px, curStage.hscroll * gxEdit.tileWidth * gxEdit.magnification)
+		# --- END OF FIX ---
+
+			# Handle mouse input for scrollbars
+			mouse = util.getMouseState()
+			new_v_offset_px = gxEdit.v_scrollbar.handle_mouse(mouse, mouseHeld, mouse_triggered)
+			new_h_offset_px = gxEdit.h_scrollbar.handle_mouse(mouse, mouseHeld, mouse_triggered)
+
+			# Apply changes back to stage scroll (converting pixels to tiles)
+			if gxEdit.tileWidth * gxEdit.magnification > 0:
+				curStage.scroll = new_v_offset_px / (gxEdit.tileWidth * gxEdit.magnification)
+				curStage.hscroll = new_h_offset_px / (gxEdit.tileWidth * gxEdit.magnification)
+		
+
 		#TODO figure out a better way to do this
 		def clampCurStage():
 			if gxEdit.curStage >= len(gxEdit.stages):
@@ -347,15 +416,21 @@ def main():
 			if gxEdit.curStage < 0:
 				gxEdit.curStage = 0
 		def clampScroll(stage):
-			if stage.scroll >= stage.pack.height - scaleFactor:
-				stage.scroll = stage.pack.height - scaleFactor
+			# --- THIS IS THE FIX: Adjust clamping to allow for overscroll ---
+			view_h_tiles = (interface.gWindowHeight - gxEdit.content_y_offset - gxEdit.statusBarHeight) / (gxEdit.tileWidth * gxEdit.magnification)
+			view_w_tiles = interface.gWindowWidth / (gxEdit.tileWidth * gxEdit.magnification)
+
+			# Calculate max scroll position with half-screen padding
+			max_scroll_y = stage.pack.height - (view_h_tiles / 2)
+			max_scroll_x = stage.pack.width - (view_w_tiles / 2)
 			
+			# Prevent scrolling beyond the map content entirely
+			stage.scroll = min(stage.scroll, max_scroll_y)
+			stage.hscroll = min(stage.hscroll, max_scroll_x)
+
+			# Prevent scrolling too far back (negative)
 			if stage.scroll < 0:
 				stage.scroll = 0
-
-			if stage.hscroll >= stage.pack.width - scaleFactor:
-				stage.hscroll = stage.pack.width - scaleFactor
-			
 			if stage.hscroll < 0:
 				stage.hscroll = 0
 		def clampMagnification():

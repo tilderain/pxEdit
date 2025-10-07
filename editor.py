@@ -353,6 +353,8 @@ class Editor:
 		self.tilePaletteMag = 2
 		self.entityPaletteMag = 1
 
+		self.v_scrollbar = None
+		self.h_scrollbar = None
 
 		self.statusBarHeight = 20
 		self.statusText = ""

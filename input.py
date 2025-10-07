@@ -34,6 +34,13 @@ def runMouse1(stage, mouse):
 		if tabs_bar.handleMouse1(mouse, gxEdit):
 			return True # The click was handled (or consumed) by the bar.
 
+	if (gxEdit.v_scrollbar.action_state != interface.SCROLL_ACTION_GRAY and
+	    util.inBoundingBox(mouse.x, mouse.y, gxEdit.v_scrollbar.rect_bar.x, gxEdit.v_scrollbar.rect_bar.y, gxEdit.v_scrollbar.rect_bar.w, gxEdit.v_scrollbar.rect_bar.h)):
+		return True # Mouse is over the vertical scrollbar, consume the click
+	
+	if (gxEdit.h_scrollbar.action_state != interface.SCROLL_ACTION_GRAY and
+	    util.inBoundingBox(mouse.x, mouse.y, gxEdit.h_scrollbar.rect_bar.x, gxEdit.h_scrollbar.rect_bar.y, gxEdit.h_scrollbar.rect_bar.w, gxEdit.h_scrollbar.rect_bar.h)):
+		return True # Mouse is over the horizontal scrollbar, consume the click
 	map = stage.pack.layers[gxEdit.currentLayer]
 	eve = stage.pack.eve.units
 
@@ -293,6 +300,19 @@ def runMouseDrag(gxEdit, stage, mouse):
 			gxEdit.draggedElem.y = mouse.y - gxEdit.dragY
 		return
 
+	if (gxEdit.v_scrollbar.action_state == interface.SCROLL_ACTION_DRAG or 
+	    gxEdit.h_scrollbar.action_state == interface.SCROLL_ACTION_DRAG):
+		return # A drag is active, so consume the event and do nothing else.
+		
+	if (gxEdit.v_scrollbar.action_state != interface.SCROLL_ACTION_GRAY and
+	    util.inBoundingBox(mouse.x, mouse.y, gxEdit.v_scrollbar.rect_bar.x, gxEdit.v_scrollbar.rect_bar.y, gxEdit.v_scrollbar.rect_bar.w, gxEdit.v_scrollbar.rect_bar.h)):
+		return # Mouse is over the vertical scrollbar, do nothing
+	
+	if (gxEdit.h_scrollbar.action_state != interface.SCROLL_ACTION_GRAY and
+	    util.inBoundingBox(mouse.x, mouse.y, gxEdit.h_scrollbar.rect_bar.x, gxEdit.h_scrollbar.rect_bar.y, gxEdit.h_scrollbar.rect_bar.w, gxEdit.h_scrollbar.rect_bar.h)):
+		return # Mouse is over the horizontal scrollbar, do nothing
+
+
 	offset_y = mouse.y - gxEdit.content_y_offset
 	map = stage.pack.layers[gxEdit.currentLayer]
 	mag = gxEdit.magnification
@@ -542,19 +562,25 @@ def runMouse2(gxEdit, stage, mouse):
 	offset_y = mouse.y - gxEdit.content_y_offset
 
 	if gxEdit.currentEditMode == const.EDIT_ENTITY:
-		# --- Game-specific scaling ---
+		# --- THIS IS THE FIX: Use correct smooth-scroll calculation for entity deletion ---
 		current_game_name = gxEdit.game_manager.get_current_game().name
-		if current_game_name == "cave_story" or current_game_name == "rockfish":
+		if current_game_name == "cave_story" or current_game_name == "rockfish" or "star_frog" in current_game_name:
 			entity_pos_scale = gxEdit.tileWidth
 		else: # kero_blaster
 			entity_pos_scale = gxEdit.tileWidth2 // 2
-		# ---------------------------
+		
+		scaled_entity_size = entity_pos_scale * mag
+		if scaled_entity_size <= 0: return
 
-		x = int(mouse.x / (entity_pos_scale * mag)) + stage.hscroll*const.ENTITY_SCALE
-		y = int(offset_y / (entity_pos_scale * mag)) + stage.scroll*const.ENTITY_SCALE
-		x = math.floor(x) 
-		y = math.floor(y)
+		scroll_x_px = stage.hscroll * gxEdit.tileWidth * mag
+		scroll_y_px = stage.scroll * gxEdit.tileWidth * mag
 
+		mouse_unscrolled_x = mouse.x + scroll_x_px
+		mouse_unscrolled_y = offset_y + scroll_y_px
+
+		x = int(mouse_unscrolled_x / scaled_entity_size)
+		y = int(mouse_unscrolled_y / scaled_entity_size)
+		
 		for o in stage.pack.eve.units:
 			if o.x == x and o.y == y:
 				stage.pack.eve.remove([o.id])
@@ -600,11 +626,29 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 				text = sdl2.SDL_GetClipboardText()
 				gxEdit.focussedElem.handleTextInput(text.decode("utf-8"), gxEdit)
 			else:
+				# --- THIS IS THE FIX: Use correct smooth-scroll calculation for entity pasting ---
 				mouse = util.getMouseState()
+				offset_y = mouse.y - gxEdit.content_y_offset
+				mag = gxEdit.magnification
 
-				scale = (gxEdit.tileWidth//const.ENTITY_SCALE * gxEdit.magnification)
-				x = int((mouse.x // scale) + stage.hscroll*const.ENTITY_SCALE)
-				y = int((mouse.y // scale) + stage.scroll*const.ENTITY_SCALE)
+				current_game_name = gxEdit.game_manager.get_current_game().name
+				if current_game_name == "cave_story" or current_game_name == "rockfish" or "star_frog" in current_game_name:
+					entity_pos_scale = gxEdit.tileWidth
+				else: # kero_blaster
+					entity_pos_scale = gxEdit.tileWidth2 // 2
+				
+				scaled_entity_size = entity_pos_scale * mag
+				if scaled_entity_size <= 0: return
+
+				scroll_x_px = stage.hscroll * gxEdit.tileWidth * mag
+				scroll_y_px = stage.scroll * gxEdit.tileWidth * mag
+
+				mouse_unscrolled_x = mouse.x + scroll_x_px
+				mouse_unscrolled_y = offset_y + scroll_y_px
+
+				x = int(mouse_unscrolled_x / scaled_entity_size)
+				y = int(mouse_unscrolled_y / scaled_entity_size)
+				# --- END OF FIX ---
 
 				#todo print Paste failed!
 				for o in gxEdit.copiedEntities:
@@ -810,19 +854,36 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 	#entity manipulation
 	elif sym == sdl2.SDL_SCANCODE_I:
 		if gxEdit.currentEditMode == const.EDIT_ENTITY:
+			# --- THIS IS THE FIX: Use correct smooth-scroll calculation for entity placement ---
 			mouse = util.getMouseState()
 			offset_y = mouse.y - gxEdit.content_y_offset
 			mag = gxEdit.magnification
 
-			x = int(mouse.x // (gxEdit.tileWidth//const.ENTITY_SCALE * mag)) + stage.hscroll* const.ENTITY_SCALE
-			y = int(offset_y // (gxEdit.tileWidth//const.ENTITY_SCALE * mag)) + stage.scroll* const.ENTITY_SCALE
+			current_game_name = gxEdit.game_manager.get_current_game().name
+			if current_game_name == "cave_story" or current_game_name == "rockfish" or "star_frog" in current_game_name:
+				entity_pos_scale = gxEdit.tileWidth
+			else: # kero_blaster
+				entity_pos_scale = gxEdit.tileWidth2 // 2
+			
+			scaled_entity_size = entity_pos_scale * mag
+			if scaled_entity_size <= 0: return
+
+			scroll_x_px = stage.hscroll * gxEdit.tileWidth * mag
+			scroll_y_px = stage.scroll * gxEdit.tileWidth * mag
+
+			mouse_unscrolled_x = mouse.x + scroll_x_px
+			mouse_unscrolled_y = offset_y + scroll_y_px
+
+			x = int(mouse_unscrolled_x / scaled_entity_size)
+			y = int(mouse_unscrolled_y / scaled_entity_size)
+			# --- END OF FIX ---
+			
 			if x >= stage.pack.layers[0].width*const.ENTITY_SCALE or y >= stage.pack.layers[0].height*const.ENTITY_SCALE:
 				return
 
 			o = stage.pack.eve.add(x, y, gxEdit.currentEntity)
 
 			undo = UndoAction(const.UNDO_ENTITY_ADD, 0, [o])
-			stage.addUndo(undo)
 
 	elif sym == sdl2.SDL_SCANCODE_DELETE or sym == sdl2.SDL_SCANCODE_BACKSPACE:
 		if stage.selectedEntities:
