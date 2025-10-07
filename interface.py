@@ -2408,6 +2408,44 @@ class Interface:
 		if self.magnification <= 0:
 			self.magnification = 1
 	'''
+	def render_popups(self, gxEdit):
+		"""Renders and manages active popups in the bottom right corner."""
+		if not gxEdit.popups:
+			return
+
+		popup_y = gWindowHeight - gxEdit.statusBarHeight - 50 # Start above the status bar
+		
+		# Iterate backwards to safely remove items
+		for i in range(len(gxEdit.popups) - 1, -1, -1):
+			text, timer = gxEdit.popups[i]
+			
+			# --- Animation ---
+			alpha = 255
+			# Fade out in the last quarter of its life
+			fade_start_time = gxEdit.popup_lifetime / 4
+			if timer < fade_start_time:
+				alpha = int(255 * (timer / fade_start_time))
+			
+			# --- Drawing ---
+			text_w, text_h = getTextSize(text, gFont)
+			#popup_x = gWindowWidth - text_w - 20
+			popup_x = 20
+			# Create a temporary color with the current alpha
+			color = sdl2.SDL_Color(r=sdlColorGold.r, g=sdlColorGold.g, b=sdlColorGold.b, a=alpha)
+			shadow_color = sdl2.SDL_Color(r=0, g=0, b=0, a=alpha)
+
+			# Render shadow then text
+			renderText(text, shadow_color, TTF_STYLE_BOLD, popup_x + 1, popup_y + 1)
+			renderText(text, color, TTF_STYLE_BOLD, popup_x, popup_y)
+			
+			# --- Update State ---
+			popup_y -= text_h + 5 # Move next popup up
+			gxEdit.popups[i][1] -= 1 # Decrement timer
+			
+			# Remove if timer is up
+			if gxEdit.popups[i][1] <= 0:
+				gxEdit.popups.pop(i)
+
 	def renderStatusBar(self, gxEdit, stage):
 		"""Renders the status bar at the bottom of the window."""
 		bar_y = gWindowHeight - gxEdit.statusBarHeight

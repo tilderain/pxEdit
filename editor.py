@@ -441,7 +441,14 @@ class Editor:
 
 		self.tileWidth = 16
 		self.tileWidth2 = 16
-	
+
+
+		self.popups = [] # Each item will be [text, timer]
+		self.popup_lifetime = 180 # Frames (approx. 2 seconds)
+
+	def add_popup(self, text):
+		"""Adds a new popup message to be displayed."""
+		self.popups.append([text, self.popup_lifetime])
 	def export_stages_as_jpg(self):
 		import export
 		export.export_stages(self)

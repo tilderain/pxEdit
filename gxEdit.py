@@ -247,6 +247,9 @@ def main():
 		for _, elem in gxEdit.elements.items():
 			if elem.type == const.WINDOW_TOOLTIP and elem.visible:
 				elem.render(gxEdit, curStage)
+
+			
+		gui.render_popups(gxEdit)
 	#for continuous resizing
 	def resizeEventWatch(data, event):
 		#TODO: recreate map textures for our poor software rendered boys

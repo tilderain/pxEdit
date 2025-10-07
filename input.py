@@ -283,7 +283,7 @@ def runMouseDrag(gxEdit, stage, mouse):
 
 	for i, elem in reversed(list(gxEdit.elements.items())):
 		if not elem.visible: continue
-		
+
 		if hasattr(elem, 'handleMouseDrag') and elem.handleMouseDrag(mouse, gxEdit):
 				return # The drag was handled by the UI element, so stop processing.
 		if util.inWindowBoundingBox(mouse, elem):
@@ -603,8 +603,10 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		if sym == sdl2.SDL_SCANCODE_S:
 			#TODO: show flash on save (goodly)
 			if stage.save():
+				gxEdit.add_popup("Saved")
 				gxEdit.saveTimer = 5
-
+			else:
+				gxEdit.add_popup("Save failed...")
 		elif sym == sdl2.SDL_SCANCODE_Z and not gxEdit.multiplayerState: #todo
 			if key.keysym.mod & sdl2.KMOD_SHIFT:
 				gxEdit.executeRedo()
