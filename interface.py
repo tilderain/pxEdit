@@ -2180,11 +2180,13 @@ class Interface:
 
 		mag = gxEdit.magnification
 		
+		# --- THIS IS THE FIX: Cast scroll values to integers for the range function ---
 		# Calculate the visible range of tiles on screen to avoid unnecessary looping
-		start_y = stage.scroll
-		end_y = stage.scroll + math.ceil(gWindowHeight / (gxEdit.tileWidth * mag)) + 1
-		start_x = stage.hscroll
-		end_x = stage.hscroll + math.ceil(gWindowWidth / (gxEdit.tileWidth * mag)) + 1
+		start_y = int(stage.scroll)
+		end_y = int(stage.scroll + math.ceil(gWindowHeight / (gxEdit.tileWidth * mag)) + 1)
+		start_x = int(stage.hscroll)
+		end_x = int(stage.hscroll + math.ceil(gWindowWidth / (gxEdit.tileWidth * mag)) + 1)
+		# --- END OF FIX ---
 
 		for y in range(start_y, min(end_y, map_layer.height)):
 			for x in range(start_x, min(end_x, map_layer.width)):
