@@ -127,6 +127,11 @@ def main():
 
 	gxEdit.loadStage(defaultStage)
 
+	if gxEdit.game_manager.get_current_game().name == "guxt":
+		# Stages are named "1" through "6". Stage "1" is already loaded.
+		for i in range(2, 7):
+			gxEdit.loadStage(str(i))
+			
 	introAnimTimer = 0
 
 	running = True

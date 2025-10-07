@@ -178,16 +178,20 @@ class PxMapAttr: #use the same class for both
 		if width < 0 or height < 0: return
 
 		new_tiles = []
+		# --- THIS IS THE FIX ---
+		# Iterate up to the new target height.
 		for y in range(height):
-			if y >= self.height:
-				# Add a new, empty row
+			# Check against the ACTUAL number of rows we have, not the old header height.
+			if y >= len(self.tiles):
+				# If we are past the end of the original data, add a new, empty row.
 				new_tiles.append([0] * width)
 			else:
-				# Copy and adjust an existing row
+				# Otherwise, copy and adjust the existing row.
 				row = self.tiles[y][:width]
 				if width > self.width:
 					row.extend([0] * (width - self.width))
 				new_tiles.append(row)
+		# ----------------------
 			
 		self.tiles = new_tiles
 		self.width = width

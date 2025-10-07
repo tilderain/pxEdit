@@ -37,9 +37,13 @@ format_manager = FormatManager(game_manager) # <-- CREATE the new manager
 
 # Default game and path for now
 # TODO: Make this user selectable
-GAME_CHOICE = "rockfish" # Options: "cave_story", "kero_blaster", "rockfish"
+GAME_CHOICE = "guxt" # Options: "cave_story", "kero_blaster", "rockfish"
 
-if GAME_CHOICE == "cave_story":
+if GAME_CHOICE == "guxt":
+	game_manager.set_game("guxt")
+	game_manager.set_game_path("./guxt/")
+	defaultStage = "1"
+elif GAME_CHOICE == "cave_story":
 	game_manager.set_game("cave_story")
 	game_manager.set_game_path("./CaveStory/")
 	defaultStage = "Almond"
@@ -517,14 +521,18 @@ class Editor:
 
 		# --- THE FIX ---
 		# Determine the size of icons on the unittype.png sheet.
-		# This is typically double the base tile size for Pixel's games.
+		# For CS, Rockfish, and Guxt, the icon size matches the tile size.
+		# For Kero Blaster, the icons are double the tile size.
 		current_game_name = gxEdit.game_manager.get_current_game().name
-		if current_game_name == "cave_story" or current_game_name == "rockfish":
+		if current_game_name in ("cave_story", "rockfish", "guxt"):
 			self.tileWidth2 = self.tileWidth # Standard for entities
 		else: # kero_blaster
-			self.tileWidth2 = self.tileWidth * 2 # Standard for entities
+			self.tileWidth2 = self.tileWidth * 2
 
-		const.ENTITY_SCALE = 1		
+		if current_game_name == 'guxt':
+			const.ENTITY_SCALE = 2
+		else:
+			const.ENTITY_SCALE = 1
 
 	def loadMeta(self, sprfactory):
 		result = True

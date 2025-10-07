@@ -52,5 +52,22 @@
         "unittype_image": "unittype-rock.png",
         "attribute_image": "attribute-rock.png",
         "pxpack_layers": 1
+    },
+    "guxt": {
+        "name": "Guxt",
+        "format_handler": "formatGuxt",
+        "data_path": "data/",
+        "stage_path": "",
+        "image_path": "",
+        "script_path": "",
+        "stage_ext": ".pxmap",
+        "script_ext": ".pxeve",
+        "attr_ext": ".pxatrb",
+        "entity_info": "entityInfo-guxt.txt",
+        "tile_size": 16,
+        "entity_scale": 1,
+        "tileset_ext": ".bmp",
+        "unittype_image": "unittype-guxt.png",
+        "attribute_image": "attribute-guxt.png"
     }
 }
