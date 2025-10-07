@@ -529,6 +529,8 @@ class UIWindow:
 	def handleMouse2():
 		return False
 
+	def handleMouseWheel(self, wheel):
+		return False
 	def render(self, gxEdit, stage):
 		for _, elem in self.elements.items():
 			elem.render(self.x, self.y)
@@ -1248,7 +1250,6 @@ class StageSelectionWindow(UIWindow):
         if UIWindow.handleMouse1(self, mouse, gxEdit):
             return True # Click was on a UI element like the close button
         
-        # --- THIS IS THE FIX: Check if the click is ON the scrollbar first ---
         is_on_scrollbar = (self.scrollbar.action_state != SCROLL_ACTION_GRAY and
                            util.inBoundingBox(mouse.x, mouse.y, self.scrollbar.rect_bar.x, self.scrollbar.rect_bar.y, self.scrollbar.rect_bar.w, self.scrollbar.rect_bar.h))
         
@@ -1256,10 +1257,15 @@ class StageSelectionWindow(UIWindow):
             mouse_state = util.getMouseState()
             new_offset = self.scrollbar.handle_mouse(mouse_state, mouse_state.button & sdl2.SDL_BUTTON_LMASK, mouse.button == sdl2.SDL_BUTTON_LEFT)
             self.list_offset = int(new_offset / self.item_height)
+            
+            # --- THIS IS THE FIX: Clamp the list_offset after calculation ---
+            max_offset = len(self.stage_names) - self.items_per_page
+            if max_offset < 0: max_offset = 0
+            self.list_offset = max(0, min(self.list_offset, max_offset))
+            # --- END OF FIX ---
+            
             return True # Consume the click because it was on the scrollbar
-        # --- END OF FIX ---
-
-        # Check for clicks on the list items (only if not on the scrollbar)
+        
         list_area_y = self.y + 30
         if mouse.x > self.x and mouse.x < self.x + self.w and mouse.y > list_area_y:
             item_index = self.list_offset + ((mouse.y - list_area_y) // self.item_height)
@@ -1267,36 +1273,47 @@ class StageSelectionWindow(UIWindow):
                 stage_to_load = self.stage_names[item_index]
                 print(f"Attempting to load stage: {stage_to_load}")
                 
-                # Check if stage is already loaded
                 for i, stage in enumerate(gxEdit.stages):
                     if stage.stageName == stage_to_load:
                         gxEdit.curStage = i
                         return True
                 
-                # If not loaded, try to load it
                 if gxEdit.loadStage(stage_to_load):
                     gxEdit.curStage = len(gxEdit.stages) - 1
                 return True
         return False
+
     def handleMouseDrag(self, mouse, gxEdit):
         """Handle continuous mouse drag events, specifically for the scrollbar."""
         is_on_scrollbar = (self.scrollbar.action_state != SCROLL_ACTION_GRAY and
                            util.inBoundingBox(mouse.x, mouse.y, self.scrollbar.rect_bar.x, self.scrollbar.rect_bar.y, self.scrollbar.rect_bar.w, self.scrollbar.rect_bar.h))
         
-        # Only handle the drag if the scrollbar is already in a drag or hold state
         if self.scrollbar.action_state in [SCROLL_ACTION_DRAG, SCROLL_ACTION_HOLD_1, SCROLL_ACTION_HOLD_2] or is_on_scrollbar:
             mouse_state = util.getMouseState()
             new_offset = self.scrollbar.handle_mouse(mouse_state, mouse_state.button & sdl2.SDL_BUTTON_LMASK, False) # is_triggered is False during a drag
             self.list_offset = int(new_offset / self.item_height)
+
+            # --- THIS IS THE FIX: Clamp the list_offset after calculation ---
+            max_offset = len(self.stage_names) - self.items_per_page
+            if max_offset < 0: max_offset = 0
+            self.list_offset = max(0, min(self.list_offset, max_offset))
+            # --- END OF FIX ---
+
             return True # Consume the drag event
         return False
     def handleMouseWheel(self, wheel):
         """Handle scrolling the list with the mouse wheel."""
-        self.list_offset -= wheel.y
-        # Clamp the offset
+        self.list_offset -= wheel.y * 2
+        
+        # --- THIS IS THE FIX: Correctly clamp the scroll offset ---
         max_offset = len(self.stage_names) - self.items_per_page
-        self.list_offset = max(0, min(self.list_offset, max_offset if max_offset > 0 else 0))
+        if max_offset < 0:
+            max_offset = 0 # Ensure max_offset is never negative
+            
+        self.list_offset = max(0, min(self.list_offset, max_offset))
+        # --- END OF FIX ---
         return True
+
 
     def render(self, gxEdit, stage):
         UIWindow.render(self, gxEdit, stage)

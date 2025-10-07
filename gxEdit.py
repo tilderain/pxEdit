@@ -336,10 +336,10 @@ def main():
 			elif event.type == sdl2.SDL_MOUSEMOTION:
 				input.runMouseDrag(gxEdit, curStage, event.motion)
 			elif event.type == sdl2.SDL_MOUSEWHEEL:
-				# --- THIS IS THE FIX: Pass mouse wheel events to UI windows ---
 				handled = False
+				mouse = util.getMouseState() # Get the mouse state to find its position
 				for key, elem in reversed(list(gxEdit.elements.items())):
-					if elem.visible and util.inWindowBoundingBox(event.wheel, elem):
+					if elem.visible and util.inWindowBoundingBox(mouse, elem):
 						if hasattr(elem, 'handleMouseWheel'):
 							elem.handleMouseWheel(event.wheel)
 							handled = True
