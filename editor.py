@@ -37,14 +37,25 @@ format_manager = FormatManager(game_manager) # <-- CREATE the new manager
 
 # Default game and path for now
 # TODO: Make this user selectable
-if True:
+GAME_CHOICE = "rockfish" # Options: "cave_story", "kero_blaster", "rockfish"
+
+if GAME_CHOICE == "cave_story":
 	game_manager.set_game("cave_story")
 	game_manager.set_game_path("./CaveStory/")
 	defaultStage = "Almond"
-else:
+elif GAME_CHOICE == "kero_blaster":
 	game_manager.set_game("kero_blaster")
 	game_manager.set_game_path("./Kero Blaster/")
 	defaultStage = "01field1"
+elif GAME_CHOICE == "rockfish":
+	game_manager.set_game("rockfish")
+	game_manager.set_game_path("./RockfishExe111127-ron/") # Adjust this path as needed
+	defaultStage = "rmStart" # A common starting stage for Rockfish
+else: # Fallback to a default
+	game_manager.set_game("kero_blaster")
+	game_manager.set_game_path("./Kero Blaster/")
+	defaultStage = "01field1"
+
 current_game_config = game_manager.get_current_game()
 
 dataPath = os.path.join(game_manager.get_current_game().base_path, current_game_config.get('data_path'))
@@ -119,12 +130,15 @@ class StagePrj:
 			#read last modified date
 			#Choose the backup you want to open.
 		
-		# For now, we assume 3 layers for parts/attrs
-		for i in range(3):
+		# --- THE FIX for LOOPING ---
+		# Loop over the actual number of layers in the pack, not a fixed number.
+		for i in range(len(self.pack.layers)):
 			if self.loadParts(i):
+				# Don't try to load attributes for a layer that has no tileset
 				self.loadAttrs(i)
 			self.createMapSurface(i)
 			self.renderMapToSurface(i)
+		# --------------------------
 		return True
 
 	def loadParts(self, layerNo):
@@ -325,6 +339,7 @@ class Editor:
 		self.curStage = 0
 
 		self.content_y_offset = 24
+		self.entity_sprite_size = 16 # Default, will be updated by update_tile_dimensions
 
 		# Game-specific dimensions
 		self.tileWidth = 16 # Default, will be updated
@@ -494,16 +509,22 @@ class Editor:
 		return True
 
 
+
 	def update_tile_dimensions(self):
 		current_game = self.game_manager.get_current_game()
-		base_tile_size = current_game.get('tile_size', 8) # Default to 8 if not in config
+		base_tile_size = current_game.get('tile_size', 8)
 		self.tileWidth = base_tile_size * const.tileScale
 
+		# --- THE FIX ---
+		# Determine the size of icons on the unittype.png sheet.
+		# This is typically double the base tile size for Pixel's games.
 		current_game_name = gxEdit.game_manager.get_current_game().name
-		if current_game_name == "cave_story":
+		if current_game_name == "cave_story" or current_game_name == "rockfish":
 			self.tileWidth2 = self.tileWidth # Standard for entities
 		else: # kero_blaster
 			self.tileWidth2 = self.tileWidth * 2 # Standard for entities
+
+		const.ENTITY_SCALE = 1		
 
 	def loadMeta(self, sprfactory):
 		result = True

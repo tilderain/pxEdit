@@ -4,6 +4,8 @@ import mmap
 from stage import Stage, Layer, Entity
 from pxMap import PxEve
 
+from editor import game_manager
+
 # --- Helper Functions for .pxpack format ---
 def read_pixel_string(stream):
     try:
@@ -49,17 +51,36 @@ class PxPack:
             self.tiles = []
 
         def load_from_pack(self, stream):
-            stream.read(8) # pxMAP01
+            game = game_manager.get_current_game()
+            layer_count = game.get('pxpack_layers', 3)
+
+            if layer_count > 1: # Kero Blaster has pxMAP header
+                stream.read(8) # pxMAP01
+                
             self.width, self.height = read_int(stream, 2), read_int(stream, 2)
             if self.width * self.height == 0: return True
-            self.type = read_int(stream, 1)
+            
+            if layer_count > 1: # Kero Blaster has type byte
+                self.type = read_int(stream, 1)
+            else:
+                self.type = 0 # Rockfish is always type 0
+
             if self.type == 0: self.tiles = [list(stream.read(self.width)) for _ in range(self.height)]
             return True
 
         def save_to_pack(self, f):
-            f.write(b"pxMAP01\0"); f.write(struct.pack("<HH", self.width, self.height))
+            game = game_manager.get_current_game()
+            layer_count = game.get('pxpack_layers', 3)
+
+            if layer_count > 1: # Kero Blaster
+                f.write(b"pxMAP01\0")
+            
+            f.write(struct.pack("<HH", self.width, self.height))
             if self.width * self.height == 0: return
-            f.write(struct.pack("<B", self.type))
+
+            if layer_count > 1: # Kero Blaster
+                f.write(struct.pack("<B", self.type))
+
             if self.type == 0: [f.write(bytes(y)) for y in self.tiles]
 
     def __init__(self):
@@ -72,17 +93,26 @@ class PxPack:
         self.units = []
 
     def load(self, path):
-        """Loads data from a .pxpack file into this object."""
+        """Loads data from a .pxpack file, handling both Kero Blaster and Rockfish variants."""
+        game = game_manager.get_current_game()
+        layer_count = game.get('pxpack_layers', 3)
+        entity_scale = game.get('entity_scale', 1)
+
         with open(path, 'rb') as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as stream:
-            stream.seek(16)
+            # Rockfish has no header, Kero Blaster has a 16-byte header.
+            if layer_count > 1:
+                stream.seek(16)
             
-            # --- THIS IS THE FIX: Read fields in the correct order ---
             self.description = read_pixel_string(stream)
+            # Kero Blaster reads 5 fields here, Rockfish reads 6. The 2nd is the spritesheet.
+            if layer_count == 1: # Rockfish
+                self.spritesheet = read_pixel_string(stream)
             self.left_field = read_pixel_string(stream)
             self.right_field = read_pixel_string(stream)
             self.up_field = read_pixel_string(stream)
             self.down_field = read_pixel_string(stream)
-            self.spritesheet = read_pixel_string(stream)
+            if layer_count > 1: # Kero Blaster
+                self.spritesheet = read_pixel_string(stream)
 
             self.area_x = read_int(stream, 2)
             self.area_y = read_int(stream, 2)
@@ -91,11 +121,14 @@ class PxPack:
             self.bg_g = read_int(stream, 1)
             self.bg_b = read_int(stream, 1)
             
-            self.layers = [self.Layer() for _ in range(3)]
-            for layer in self.layers:
-                layer.partsName = read_pixel_string(stream)
-                layer.visibility = read_int(stream, 1)
-                layer.scrolltype = read_int(stream, 1)
+            self.layers = [self.Layer() for _ in range(layer_count)]
+            if layer_count > 1: # Kero Blaster has per-layer metadata
+                for layer in self.layers:
+                    layer.partsName = read_pixel_string(stream)
+                    layer.visibility = read_int(stream, 1)
+                    layer.scrolltype = read_int(stream, 1)
+            else: # Rockfish uses the global spritesheet
+                self.layers[0].partsName = self.spritesheet
 
             for layer in self.layers:
                 layer.load_from_pack(stream)
@@ -109,38 +142,49 @@ class PxPack:
                 y = read_int(stream, 2)
                 flag = read_int(stream, 2)
                 string = read_pixel_string(stream)
+
                 self.units.append(self.Unit(bits, type1, param2, x, y, flag, string, i))
         return self
 
     def save(self, path):
-        """Saves data from this object into a .pxpack file."""
+        """Saves data to a .pxpack file, handling both Kero Blaster and Rockfish variants."""
+        game = game_manager.get_current_game()
+        layer_count = game.get('pxpack_layers', 3)
+        entity_scale = game.get('entity_scale', 1)
+        
         with open(path, 'wb') as f:
-            f.write(self.magic)
+            if layer_count > 1: # Kero Blaster
+                f.write(self.magic)
             
-            # --- THIS IS THE FIX: Write fields in the correct order ---
             write_pixel_string(f, self.description)
+            if layer_count == 1: # Rockfish
+                write_pixel_string(f, self.spritesheet)
             write_pixel_string(f, self.left_field)
             write_pixel_string(f, self.right_field)
             write_pixel_string(f, self.up_field)
             write_pixel_string(f, self.down_field)
-            write_pixel_string(f, self.spritesheet)
+            if layer_count > 1: # Kero Blaster
+                write_pixel_string(f, self.spritesheet)
 
             f.write(struct.pack("<H", self.area_x))
             f.write(struct.pack("<H", self.area_y))
             f.write(struct.pack("<B", self.area_no))
             f.write(struct.pack("<BBB", self.bg_r, self.bg_g, self.bg_b))
             
-            for layer in self.layers:
-                write_pixel_string(f, layer.partsName)
-                f.write(struct.pack("<BB", layer.visibility, layer.scrolltype))
+            if layer_count > 1: # Kero Blaster
+                for layer in self.layers:
+                    write_pixel_string(f, layer.partsName)
+                    f.write(struct.pack("<BB", layer.visibility, layer.scrolltype))
 
             for layer in self.layers:
                 layer.save_to_pack(f)
             
             f.write(struct.pack("<H", len(self.units)))
             for unit in self.units:
+                save_x, save_y = unit.x, unit.y
+
                 f.write(struct.pack("<BBB", unit.bits, unit.type1, unit.param2))
-                f.write(struct.pack("<hhH", unit.x, unit.y, unit.flag))
+                f.write(struct.pack("<hhH", save_x, save_y, unit.flag))
                 write_pixel_string(f, unit.string)
         return self
 
@@ -174,13 +218,16 @@ class PxPack:
 
     @classmethod
     def from_stage(cls, stage):
+        game = game_manager.get_current_game()
+        layer_count = game.get('pxpack_layers', 3)
+
         pxpack = cls()
         pxpack.description, pxpack.spritesheet = stage.description, stage.spritesheet
         pxpack.left_field, pxpack.right_field = stage.left_field, stage.right_field
         pxpack.up_field, pxpack.down_field = stage.up_field, stage.down_field
         pxpack.area_x, pxpack.area_y, pxpack.area_no = stage.area_x, stage.area_y, stage.area_no
         pxpack.bg_r, pxpack.bg_g, pxpack.bg_b = stage.bg_r, stage.bg_g, stage.bg_b
-        pxpack.layers = [cls.Layer() for _ in range(3)]
+        pxpack.layers = [cls.Layer() for _ in range(layer_count)]
         for i, layer_model in enumerate(pxpack.layers):
             if i < len(stage.layers):
                 layer = stage.layers[i]
@@ -204,7 +251,6 @@ class PxPack:
             unit = cls.Unit(entity.bits, entity.type1, entity.param2, entity.x, entity.y, entity.flag, entity.string, entity.id)
             pxpack.units.append(unit)
         return pxpack
-
 
 # --- Public Interface Functions ---
 

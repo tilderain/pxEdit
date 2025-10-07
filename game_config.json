@@ -14,7 +14,8 @@
         "entity_scale": 1,
         "tileset_ext": ".png",
         "unittype_image": "unittype-kero.png",
-        "attribute_image": "attribute-kero.png"
+        "attribute_image": "attribute-kero.png",
+        "pxpack_layers": 3
     },
     "cave_story": {
         "name": "Cave Story",
@@ -33,5 +34,23 @@
         "tileset_ext": ".pbm",
         "unittype_image": "unittype-cave.png",
         "attribute_image": "attribute-cave.png"
+    },
+    "rockfish": {
+        "name": "Rockfish",
+        "format_handler": "formatKero",
+        "data_path": "Resource/",
+        "stage_path": "field/",
+        "image_path": "field/",
+        "script_path": "script/",
+        "stage_ext": ".pxpack",
+        "script_ext": ".pxeve",
+        "attr_ext": ".pxattr",
+        "entity_info": "entityInfo-rock.txt",
+        "tile_size": 16,
+        "entity_scale": 2,
+        "tileset_ext": ".bmp",
+        "unittype_image": "unittype-rock.png",
+        "attribute_image": "attribute-rock.png",
+        "pxpack_layers": 1
     }
 }

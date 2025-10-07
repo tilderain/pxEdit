@@ -735,24 +735,25 @@ class EntityPaletteWindow(UIWindow):
 
 		mag = gxEdit.entityPaletteMag
 		units = gSurfaces[SURF_UNITS]
-		srcrect = list(units.area)
-		#recth = ((len(gxEdit.entityInfo) + 15) // 16) * gxEdit.tileWidth2
-		#srcrect[3] = recth
+		
+		# --- THE FIX ---
+		sprite_size = gxEdit.entity_sprite_size
+		# ---------------
+		#TODO: add dstrect mag
 
 		dstx = self.x + self.elements["picker"].x
 		dsty = self.y + self.elements["picker"].y
 		
-		#TODO: add dstrect mag
-
-		#dstrect = (dstx, dsty, units.size[0] * mag, units.size[1] * mag)
 		dstrect = [dstx, dsty, units.size[0] * mag, units.size[1] * mag]
-		gInterface.renderer.copy(units, srcrect=srcrect, dstrect=dstrect)
+		gInterface.renderer.copy(units, srcrect=units.area, dstrect=dstrect)
+
 
 		#TODO: add selected ent border (properly)
 		if gxEdit.currentEditMode == const.EDIT_ENTITY:
-			dstx = dstx + ((gxEdit.currentEntity % 16) * gxEdit.tileWidth2 * mag)
-			dsty = dsty + ((gxEdit.currentEntity // 16) * gxEdit.tileWidth2 * mag)
-			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, gxEdit.tileWidth2 * mag, gxEdit.tileWidth2 * mag)
+			# Use sprite_size for calculating the selection box position and size
+			dstx = dstx + ((gxEdit.currentEntity % 16) * sprite_size * mag)
+			dsty = dsty + ((gxEdit.currentEntity // 16) * sprite_size * mag)
+			gInterface.drawBox(gInterface.renderer, SURF_COLOR_GREEN, dstx, dsty, sprite_size * mag, sprite_size * mag)
 
 		#crashing entities
 		#for i in range (const.entityFuncCount):
@@ -1516,7 +1517,7 @@ class Interface:
 			if gxEdit.draggingEntities: return
 			# --- Game-specific scaling ---
 			current_game_name = gxEdit.game_manager.get_current_game().name
-			if current_game_name == "cave_story":
+			if current_game_name == "cave_story" or current_game_name == "rockfish":
 				entity_pos_scale = gxEdit.tileWidth
 			else: # kero_blaster
 				entity_pos_scale = gxEdit.tileWidth2 // 2
@@ -1743,6 +1744,9 @@ class Interface:
 		# --- Game-specific scaling ---
 		current_game_name = gxEdit.game_manager.get_current_game().name
 		if current_game_name == "cave_story":
+			entity_pos_scale = gxEdit.tileWidth
+			entity_render_size = gxEdit.tileWidth2
+		elif current_game_name == "rockfish":
 			entity_pos_scale = gxEdit.tileWidth
 			entity_render_size = gxEdit.tileWidth2
 		else:  # kero_blaster

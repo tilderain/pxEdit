@@ -103,7 +103,7 @@ def runMouse1(stage, mouse):
 		if stage.selectedEntities != []:
 			# --- Game-specific scaling ---
 			current_game_name = gxEdit.game_manager.get_current_game().name
-			if current_game_name == "cave_story":
+			if current_game_name == "cave_story" or current_game_name == "rockfish":
 				entity_pos_scale = gxEdit.tileWidth
 			else: # kero_blaster
 				entity_pos_scale = gxEdit.tileWidth2 // 2
@@ -421,7 +421,7 @@ def runMouseDrag(gxEdit, stage, mouse):
 
 		# --- Game-specific scaling ---
 		current_game_name = gxEdit.game_manager.get_current_game().name
-		if current_game_name == "cave_story":
+		if current_game_name == "cave_story" or current_game_name == "rockfish":
 			entity_pos_scale = gxEdit.tileWidth
 		else: # kero_blaster
 			entity_pos_scale = gxEdit.tileWidth2 // 2
@@ -534,7 +534,7 @@ def runMouse2(gxEdit, stage, mouse):
 	if gxEdit.currentEditMode == const.EDIT_ENTITY:
 		# --- Game-specific scaling ---
 		current_game_name = gxEdit.game_manager.get_current_game().name
-		if current_game_name == "cave_story":
+		if current_game_name == "cave_story" or current_game_name == "rockfish":
 			entity_pos_scale = gxEdit.tileWidth
 		else: # kero_blaster
 			entity_pos_scale = gxEdit.tileWidth2 // 2
