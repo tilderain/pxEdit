@@ -1212,14 +1212,17 @@ class ToolsWindow(UIWindow):
 
 class StageSelectionWindow(UIWindow):
     def __init__(self, x, y, w, h, type=const.WINDOW_NONE, style=0, visible=False):
+        h = 40 + 12 * 16 
         UIWindow.__init__(self, x, y, w, h, type, style, visible)
-        self.stage_names = []
+        # --- THIS IS THE FIX: Store structured data, not just strings ---
+        self.stage_items = [] # Will be a list of (display_name, load_name) tuples
+        # --- END OF FIX ---
         self.list_offset = 0
         self.items_per_page = 12
         self.item_height = 16
+
         self.scrollbar = UIScrollbar(is_vertical=True)
 
-        # Add a close button
         self.elements["close_button"] = UIButton(w - 20, 4, 16, 16, self,
                                                  enum=BUTTON_CLOSE,
                                                  tooltip=[["Close", sdlColorBlack, TTF_STYLE_NORMAL]])
@@ -1228,27 +1231,43 @@ class StageSelectionWindow(UIWindow):
         self.elements["title"] = UIText(8, 6, "Stage Select", sdlColorBlack, TTF_STYLE_BOLD, self)
 
     def refresh_list(self, gxEdit):
-        """Scans the stage directory and populates the stage list."""
-        self.stage_names = []
+        """Scans the stage directory or stage table and populates the stage list."""
+        self.stage_items = []
         current_game = gxEdit.game_manager.get_current_game()
-        stage_dir = os.path.join(current_game.base_path, current_game.get('data_path'), current_game.get('stage_path'))
-        stage_ext = current_game.get('stage_ext')
 
-        if not os.path.isdir(stage_dir):
-            print(f"Warning: Stage directory not found at '{stage_dir}'")
-            return
+        if current_game.name == 'cave_story':
+            if gxEdit.stage_table:
+                print("Populating stage list from stage.tbl for Cave Story...")
+                for entry in gxEdit.stage_table:
+                    if entry.map:
+                        # --- THIS IS THE FIX: Create a tuple with display and load names ---
+                        display_name = f"[{entry.index}] {entry.name} ({entry.map})"
+                        load_name = entry.map
+                        self.stage_items.append((display_name, load_name))
+                        # --- END OF FIX ---
+            else:
+                print("Warning: Cave Story is active, but stage.tbl data is missing.")
+        else:
+            stage_dir = os.path.join(current_game.base_path, current_game.get('data_path'), current_game.get('stage_path'))
+            stage_ext = current_game.get('stage_ext')
+
+            if not os.path.isdir(stage_dir):
+                print(f"Warning: Stage directory not found at '{stage_dir}'")
+                return
+            
+            for f in sorted(os.listdir(stage_dir)):
+                if f.endswith(stage_ext):
+                    # --- THIS IS THE FIX: Use the same tuple structure for consistency ---
+                    load_name = os.path.splitext(f)[0]
+                    self.stage_items.append((load_name, load_name))
+                    # --- END OF FIX ---
         
-        for f in sorted(os.listdir(stage_dir)):
-            if f.endswith(stage_ext):
-                self.stage_names.append(os.path.splitext(f)[0])
-        
-        # Adjust window height based on content
-        self.h = 40 + min(len(self.stage_names), self.items_per_page) * self.item_height
-        self.elements["close_button"].x = self.w - 20 # Reposition close button if width changes
+        self.h = 40 + min(len(self.stage_items), self.items_per_page) * self.item_height
+        self.elements["close_button"].x = self.w - 20
 
     def handleMouse1(self, mouse, gxEdit):
         if UIWindow.handleMouse1(self, mouse, gxEdit):
-            return True # Click was on a UI element like the close button
+            return True
         
         is_on_scrollbar = (self.scrollbar.action_state != SCROLL_ACTION_GRAY and
                            util.inBoundingBox(mouse.x, mouse.y, self.scrollbar.rect_bar.x, self.scrollbar.rect_bar.y, self.scrollbar.rect_bar.w, self.scrollbar.rect_bar.h))
@@ -1258,19 +1277,22 @@ class StageSelectionWindow(UIWindow):
             new_offset = self.scrollbar.handle_mouse(mouse_state, mouse_state.button & sdl2.SDL_BUTTON_LMASK, mouse.button == sdl2.SDL_BUTTON_LEFT)
             self.list_offset = int(new_offset / self.item_height)
             
-            # --- THIS IS THE FIX: Clamp the list_offset after calculation ---
-            max_offset = len(self.stage_names) - self.items_per_page
+            max_offset = len(self.stage_items) - self.items_per_page
             if max_offset < 0: max_offset = 0
             self.list_offset = max(0, min(self.list_offset, max_offset))
-            # --- END OF FIX ---
             
-            return True # Consume the click because it was on the scrollbar
+            return True
         
         list_area_y = self.y + 30
         if mouse.x > self.x and mouse.x < self.x + self.w and mouse.y > list_area_y:
             item_index = self.list_offset + ((mouse.y - list_area_y) // self.item_height)
-            if 0 <= item_index < len(self.stage_names):
-                stage_to_load = self.stage_names[item_index]
+            if 0 <= item_index < len(self.stage_items):
+                # --- THIS IS THE FIX: Directly retrieve the name to load from the tuple ---
+                display_name, stage_to_load = self.stage_items[item_index]
+                # --- END OF FIX ---
+
+                if not stage_to_load: return True
+
                 print(f"Attempting to load stage: {stage_to_load}")
                 
                 for i, stage in enumerate(gxEdit.stages):
@@ -1290,23 +1312,22 @@ class StageSelectionWindow(UIWindow):
         
         if self.scrollbar.action_state in [SCROLL_ACTION_DRAG, SCROLL_ACTION_HOLD_1, SCROLL_ACTION_HOLD_2] or is_on_scrollbar:
             mouse_state = util.getMouseState()
-            new_offset = self.scrollbar.handle_mouse(mouse_state, mouse_state.button & sdl2.SDL_BUTTON_LMASK, False) # is_triggered is False during a drag
+            new_offset = self.scrollbar.handle_mouse(mouse_state, mouse_state.button & sdl2.SDL_BUTTON_LMASK, False)
             self.list_offset = int(new_offset / self.item_height)
 
-            # --- THIS IS THE FIX: Clamp the list_offset after calculation ---
-            max_offset = len(self.stage_names) - self.items_per_page
+            max_offset = len(self.stage_items) - self.items_per_page
             if max_offset < 0: max_offset = 0
             self.list_offset = max(0, min(self.list_offset, max_offset))
-            # --- END OF FIX ---
 
-            return True # Consume the drag event
+            return True
         return False
+
     def handleMouseWheel(self, wheel):
         """Handle scrolling the list with the mouse wheel."""
         self.list_offset -= wheel.y * 2
         
         # --- THIS IS THE FIX: Correctly clamp the scroll offset ---
-        max_offset = len(self.stage_names) - self.items_per_page
+        max_offset = len(self.stage_items) - self.items_per_page
         if max_offset < 0:
             max_offset = 0 # Ensure max_offset is never negative
             
@@ -1314,33 +1335,34 @@ class StageSelectionWindow(UIWindow):
         # --- END OF FIX ---
         return True
 
-
     def render(self, gxEdit, stage):
+        # 1. Render the main window frame with the default style
         UIWindow.render(self, gxEdit, stage)
 
-        # --- THIS IS THE FIX: Update and render the scrollbar ---
-        list_view_rect = sdl2.SDL_Rect(self.x, self.y + 30, self.w, self.h - 40)
-
+        # 2. Render the concave background just for the list area
         list_bg_rect = UIElement(self.x + 4, self.y + 26, self.w - 8, self.h - 30, self)
         renderUIWindowConcave(list_bg_rect)
 
-        content_height = len(self.stage_names) * self.item_height
+        UIWindow.render(self, gxEdit, stage)
+
+        list_view_rect = sdl2.SDL_Rect(self.x, self.y + 30, self.w, self.h - 40)
+        content_height = len(self.stage_items) * self.item_height
         self.scrollbar.set_properties(list_view_rect, content_height, self.list_offset * self.item_height)
         if self.scrollbar.action_state != SCROLL_ACTION_GRAY:
             self.scrollbar.render(gRenderer)
-        # --- END OF FIX ---
         
-        # Render list items
         list_y = self.y + 30
         for i in range(self.items_per_page):
             item_index = self.list_offset + i
-            if item_index >= len(self.stage_names):
+            if item_index >= len(self.stage_items):
                 break
             
-            name = self.stage_names[item_index]
-            text_color = sdlColorYellow if any(s.stageName == name for s in gxEdit.stages) else sdlColorWhite
+            # --- THIS IS THE FIX: Unpack the tuple to get display and load names ---
+            display_name, load_name = self.stage_items[item_index]
+            text_color = sdlColorYellow if any(s.stageName == load_name for s in gxEdit.stages) else sdlColorWhite
+            # --- END OF FIX ---
             
-            renderText(name, text_color, TTF_STYLE_NORMAL, self.x + 10, list_y + (i * self.item_height))
+            renderText(display_name, text_color, TTF_STYLE_NORMAL, self.x + 10, list_y + (i * self.item_height))
 def editEntityAttributes(control, gxEdit):
 	param = control.text
 	try:
