@@ -128,8 +128,8 @@ class PxMapAttr: #use the same class for both
 				return True
 
 			# --- THIS IS THE FIX ---
-			# Kero Blaster has a 1-byte 'type' field after the dimensions, but Rockfish does not.
-			if game.name == 'rockfish':
+			# Single-layer pxpack games (Rockfish) do not have a 'type' byte in their attr files.
+			if game.get('pxpack_layers') == 1:
 				data_start = offset + 4  # Start data right after width/height
 			else:
 				data_start = offset + 5  # Skip the 'type' byte for other formats

@@ -79,7 +79,7 @@ from editor import gxEdit, setup_game_environment
 
 def main():
 	# --- NEW SETUP ---
-	GAME_CHOICE = "rockfish" # You can change the starting game here
+	GAME_CHOICE = "star_frog_11x" # You can change the starting game here
 	setup_game_environment(GAME_CHOICE)
 	from editor import defaultStage # Now we can safely import it
 	# ---
@@ -155,7 +155,9 @@ def main():
 	# Make sure stage tabs are added first to be drawn under other windows
 	gxEdit.elements["stageTabs"] = interface.StageTabsBar(0, 0, interface.gWindowWidth, 24)
 
-	entityinfoheight = len(gxEdit.entityInfo) // 16 * 20
+	entity_rows = math.ceil(len(gxEdit.entityInfo) / 16) if gxEdit.entityInfo else 1
+	entityinfoheight = (entity_rows * gxEdit.tileWidth2) + 24
+	
 	gxEdit.elements["tilePalette"] = interface.TilePaletteWindow(1200, 400, 256, 280, const.WINDOW_TILEPALETTE)
 	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(1450, 400, 256, entityinfoheight, const.WINDOW_ENTITYPALETTE)
 

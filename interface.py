@@ -1762,7 +1762,8 @@ class Interface:
 		# For Layer 1 of a KB attribute stage, we render at half the normal magnification
 		# to make the 16px attribute tiles fit the 8px background grid.
 		current_game = gxEdit.game_manager.get_current_game()
-		if stage.is_attribute_stage and layerNo == 1 and current_game.name == 'kero_blaster':
+		if stage.is_attribute_stage and layerNo == 1 and (current_game.name == 'kero_blaster' or \
+			current_game.name == 'star_frog_10x' or current_game.name == 'star_frog_11x'):
 			mag = gxEdit.magnification * 0.5
 		else:
 			mag = gxEdit.magnification

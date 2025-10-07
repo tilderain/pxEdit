@@ -636,7 +636,8 @@ class Editor:
 			except Exception as e:
 				print(f"Could not load context tileset '{tileset_name}': {e}")
 
-		elif current_game_config.name == 'kero_blaster' or current_game_config.name == 'rockfish':
+		elif current_game_config.name == 'kero_blaster' or current_game_config.name == 'rockfish' or \
+			current_game_config.name == 'star_frog_10x' or current_game_config.name == 'star_frog_11x':
 			tileset_ext = current_game_config.get('tileset_ext')
 			tileset_path = os.path.join(imgPath, fName + tileset_ext)
 			try:

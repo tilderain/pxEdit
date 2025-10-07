@@ -306,9 +306,10 @@ def save_attribute(game_manager, layer, path):
         game = game_manager.get_current_game()
         with open(path, 'wb') as f:
             # --- THE FIX ---
-            # Kero Blaster uses a header and type byte, Rockfish does not.
-            if game.name == 'rockfish':
-                # Rockfish Format: [width][height][data]
+            # Single-layer pxpack games (Rockfish, Star Frog 10x) have a simple attr format.
+            # Multi-layer pxpack games (Kero Blaster) use a header and type byte.
+            if game.get('pxpack_layers') == 1:
+                # Rockfish/StarFrog10x Format: [width][height][data]
                 f.write(struct.pack("<HH", layer.width, layer.height))
             else:
                 # Kero Blaster Format: [header][width][height][type][data]
