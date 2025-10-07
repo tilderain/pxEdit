@@ -590,9 +590,7 @@ class Editor:
 			except Exception as e:
 				print(f"Could not load context tileset '{tileset_name}': {e}")
 
-		elif current_game_config.name == 'kero_blaster' or current_game_config.name == 'rockfish':
-			# --- THE FIX FOR KERO BLASTER ---
-			# For KB, the attr filename (e.g. '01field') matches the tileset filename.
+		elif current_game_config.name == 'kero_blaster':
 			tileset_ext = current_game_config.get('tileset_ext')
 			tileset_path = os.path.join(imgPath, fName + tileset_ext)
 			try:
@@ -601,7 +599,19 @@ class Editor:
 					print(f"Loaded context tileset: {os.path.basename(tileset_path)}")
 			except Exception as e:
 				print(f"Could not load context tileset '{tileset_path}': {e}")
-		# -------------------------------
+		
+		# --- THIS IS THE FIX: Add Guxt context tileset loading ---
+		elif current_game_config.name == 'guxt':
+			tileset_name = fName
+			tileset_ext = current_game_config.get('tileset_ext')
+			tileset_path = os.path.join(imgPath, tileset_name + tileset_ext)
+			try:
+				if os.path.exists(tileset_path):
+					context_tileset = interface.gSprfactory.from_image(tileset_path)
+					print(f"Loaded context tileset: {os.path.basename(tileset_path)}")
+			except Exception as e:
+				print(f"Could not load context tileset '{tileset_path}': {e}")
+		# ----------------------------------------------------------
 
 		self.update_tile_dimensions()
 

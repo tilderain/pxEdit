@@ -116,11 +116,9 @@ def load_stage(game_manager, stage_name, stage_table=None):
     game = game_manager.get_current_game()
     base_path = os.path.join(game.base_path, game.get('data_path'), game.get('stage_path'))
     
-    # --- THIS IS THE FIX: Construct Guxt-specific filenames ---
     map_filename = "map" + stage_name
     eve_filename = "event" + stage_name
     tileset_name = "parts" + stage_name
-    # ---------------------------------------------------------
 
     map_path = os.path.join(base_path, map_filename + game.get('stage_ext'))
     eve_path = os.path.join(base_path, eve_filename + game.get('script_ext'))
@@ -130,22 +128,25 @@ def load_stage(game_manager, stage_name, stage_table=None):
     if not pxmap.load(map_path) or not pxeve.load(eve_path):
         raise FileNotFoundError(f"Could not load required stage files for '{stage_name}'")
 
-    # --- Translate to universal Stage object ---
     stage = Stage(stage_name, pxmap.width, pxmap.height)
     
-    # Main tile layer
+    # --- THIS IS THE FIX: Create 3 layers for editor compatibility ---
+    # Layer 0: Main tile layer
     layer0 = Layer(pxmap.width, pxmap.height)
     layer0.tiles = pxmap.tiles
-    # --- THIS IS THE FIX: Use the correct tileset name ---
     layer0.partsName = tileset_name
-    # ----------------------------------------------------
     stage.layers.append(layer0)
+    
+    # Layers 1 and 2: Empty placeholders
+    stage.layers.append(Layer(0, 0))
+    stage.layers.append(Layer(0, 0))
+    # -----------------------------------------------------------------
     
     # Entity data
     stage.eve = PxEve()
     for i, guxt_entity in enumerate(pxeve.entities):
         entity = Entity(guxt_entity.type1, guxt_entity.x, guxt_entity.y, id=i)
-        entity.param2 = guxt_entity.type2 # Map Guxt's 'type2' to the generic 'param2'
+        entity.param2 = guxt_entity.type2
         stage.eve.units.append(entity)
     stage.eve._count = len(stage.eve.units)
     
