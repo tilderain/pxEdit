@@ -168,6 +168,35 @@ def runMouseUp(gxEdit, curStage, mouse):
 			stage = gxEdit.stages[gxEdit.curStage]
 			undo = UndoAction(const.UNDO_ENTITY_MOVE, stage.selectedEntitiesDragStart, stage.selectedEntities)
 			stage.addUndo(undo)
+	elif gxEdit.currentEditMode == const.EDIT_TILE and gxEdit.currentTilePaintMode == const.PAINT_COPY:
+		stage = curStage
+		mag = gxEdit.magnification
+		x = int(mouse.x // (gxEdit.tileWidth * mag) + stage.hscroll)
+		y = int(mouse.y // (gxEdit.tileWidth * mag) + stage.scroll)
+		stage.selectedTilesEnd[0] = x
+		stage.selectedTilesEnd[1] = y
+	
+		tiles = []
+		start = stage.selectedTilesStart[:]
+		end = stage.selectedTilesEnd[:]
+
+		if end[0] < start[0]:
+			start[0], end[0] = end[0], start[0]
+		if end[1] < start[1]:
+			start[1], end[1] = end[1], start[1]
+		for y in range(start[1], end[1]+1):
+			if y >= stage.pack.layers[gxEdit.currentLayer].height: continue
+			for x in range(start[0], end[0]+1):
+				if x >= stage.pack.layers[gxEdit.currentLayer].width: continue
+				xx = stage.pack.layers[gxEdit.currentLayer].tiles[y][x] % 16
+				yy = stage.pack.layers[gxEdit.currentLayer].tiles[y][x] // 16
+				tiles.append([xx, yy])
+
+		if tiles != []: stage.selectedTiles = tiles
+
+		gxEdit.copyingTiles = False
+
+		gxEdit.elements["toolsWindow"].elements["butDraw"].handleMouse1(None, gxEdit)
 	elif gxEdit.currentEditMode == const.EDIT_TILE:
 		map = curStage.pack.layers[gxEdit.currentLayer]
 		if not len(map.tiles): return
@@ -230,36 +259,6 @@ def runMouseUp(gxEdit, curStage, mouse):
 
 		gxEdit.rectanglePaintBoxStart = [-1, -1]
 		gxEdit.rectanglePaintBoxEnd = [-1, -1]
-	elif gxEdit.currentEditMode == const.EDIT_TILE and gxEdit.currentTilePaintMode == const.PAINT_COPY:
-		stage = curStage
-		mag = gxEdit.magnification
-		x = int(mouse.x // (const.tileWidth * mag) + stage.hscroll)
-		y = int(mouse.y // (const.tileWidth * mag) + stage.scroll)
-		stage.selectedTilesEnd[0] = x
-		stage.selectedTilesEnd[1] = y
-	
-		tiles = []
-		start = stage.selectedTilesStart[:]
-		end = stage.selectedTilesEnd[:]
-
-		if end[0] < start[0]:
-			start[0], end[0] = end[0], start[0]
-		if end[1] < start[1]:
-			start[1], end[1] = end[1], start[1]
-		for y in range(start[1], end[1]+1):
-			if y >= stage.pack.layers[gxEdit.currentLayer].height: continue
-			for x in range(start[0], end[0]+1):
-				if x >= stage.pack.layers[gxEdit.currentLayer].width: continue
-				xx = stage.pack.layers[gxEdit.currentLayer].tiles[y][x] % 16
-				yy = stage.pack.layers[gxEdit.currentLayer].tiles[y][x] // 16
-				tiles.append([xx, yy])
-
-		if tiles != []: stage.selectedTiles = tiles
-
-		gxEdit.copyingTiles = False
-
-		gxEdit.elements["toolsWindow"].elements["butDraw"].handleMouse1(None, gxEdit)
-
 
 def runMouseDrag(gxEdit, stage, mouse):			
 	#mouse = util.getMouseState()
