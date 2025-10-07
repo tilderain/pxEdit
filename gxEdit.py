@@ -17,6 +17,9 @@ os.environ["PYSDL2_DLL_PATH"] = "./"
 import sdl2.ext
 from sdl2.sdlttf import *
 
+from sdl2 import sdlimage
+from editor import gxEdit, setup_game_environment
+
 import multi
 import util
 
@@ -79,12 +82,20 @@ from editor import gxEdit, setup_game_environment
 
 def main():
 	# --- NEW SETUP ---
-	GAME_CHOICE = "star_frog_11x" # You can change the starting game here
+	GAME_CHOICE = "star_frog_10x" # You can change the starting game here
 	setup_game_environment(GAME_CHOICE)
 	from editor import defaultStage # Now we can safely import it
 	# ---
 
 	sdl2.ext.init()
+
+	icon_surface = sdl2.ext.load_image("face.ico")
+
+
+
+
+
+	sdlimage.IMG_Init(sdlimage.IMG_INIT_JPG)
 
 	#To disable texture destruction on window resize
 	sdl2.SDL_SetHint(sdl2.SDL_HINT_RENDER_DRIVER, b"opengl")
@@ -112,6 +123,8 @@ def main():
 
 	window = interface.gWindow
 	window.show()
+
+	sdl2.SDL_SetWindowIcon(window.window, icon_surface)
 
 	interface.gRenderer = sdl2.ext.Renderer(window, flags=sdl2.SDL_RENDERER_ACCELERATED|sdl2.SDL_RENDERER_TARGETTEXTURE)
 	renderer = interface.gRenderer
@@ -157,7 +170,7 @@ def main():
 
 	entity_rows = math.ceil(len(gxEdit.entityInfo) / 16) if gxEdit.entityInfo else 1
 	entityinfoheight = (entity_rows * gxEdit.tileWidth2) + 24
-	
+
 	gxEdit.elements["tilePalette"] = interface.TilePaletteWindow(1200, 400, 256, 280, const.WINDOW_TILEPALETTE)
 	gxEdit.elements["entityPalette"] = interface.EntityPaletteWindow(1450, 400, 256, entityinfoheight, const.WINDOW_ENTITYPALETTE)
 

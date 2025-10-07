@@ -5,10 +5,13 @@ import copy
 import pxMap
 import interface
 import sdl2
+from sdl2 import sdlimage, SDL_Rect, surface, render
+
 
 from datetime import datetime
 
 from dataclasses import dataclass, field
+from collections import deque
 
 @dataclass
 class StageInfo:
@@ -324,7 +327,7 @@ class StagePrj:
 		self.undoStack = self.undoStack[:self.undoPos]
 		self.undoStack.append(undo)
 
-
+import shutil
 class Editor:
 	
 	def __init__(self, game_manager, format_manager):
@@ -349,6 +352,8 @@ class Editor:
 		self.magnification = 3
 		self.tilePaletteMag = 2
 		self.entityPaletteMag = 1
+
+		self.export_connected_maps = False
 
 		self.currentEntity = 0
 		self.currentEditMode = const.EDIT_TILE
@@ -430,6 +435,11 @@ class Editor:
 
 		self.tileWidth = 16
 		self.tileWidth2 = 16
+	
+	def export_stages_as_jpg(self):
+		import export
+		export.export_stages(self)
+
 	def switch_game(self):
 		"""Cycles to the next game, clears state, and reloads assets."""
 		game_list = list(self.game_manager.games.keys())

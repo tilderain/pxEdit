@@ -747,6 +747,15 @@ class TilePaletteWindow(UIWindow):
 		# --- END OF TOOLTIP LOGIC ---
 
 		return UIWindow.handleMouseOver(self, mouse, gxEdit)
+
+
+def export_action(window, elem, gxEdit):
+    """Triggers the JPG export process."""
+    gxEdit.export_stages_as_jpg()
+
+def toggle_export_connected_action(window, elem, gxEdit):
+    """Toggles the state for exporting a single connected map."""
+    gxEdit.export_connected_maps = (elem.state == BUTTON_STATE_ACTIVE)
 def getEntityColors(index):
 	if index in const.entityCrashIds:
 		titleColor = sdlColorRed
@@ -1145,6 +1154,16 @@ class ToolsWindow(UIWindow):
 												enum=BUTTON_SCRIPT,
 												tooltip=[["Edit pxpack attributes", sdlColorBlack, TTF_STYLE_NORMAL]])
 		self.elements["butTogglePackAttr"].onAction = togglePxPackAttributes
+
+		self.elements["butExport"] = UIButton(8, 80, 16, 16, self, style=const.STYLE_TOOLTIP_YELLOW,
+											  enum=BUTTON_EDITIMAGE,
+											  tooltip=[["Export Stage(s) as JPG", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butExport"].onAction = export_action
+
+		self.elements["butExportConnected"] = UIButton(28, 80, 16, 12, self, style=const.STYLE_TOOLTIP_YELLOW,
+													   rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX,
+													   tooltip=[["Connect maps on export", sdlColorBlack, TTF_STYLE_NORMAL]])
+		self.elements["butExportConnected"].onAction = toggle_export_connected_action
 def editEntityAttributes(control, gxEdit):
 	param = control.text
 	try:
