@@ -77,12 +77,12 @@
         "entity_info": "entityInfo-gero.txt",
         "tile_size": 8,
         "entity_scale": 2,
-        "tileset_ext": ".bmp",
+        "tileset_ext": ".png",
         "unittype_image": "unittype-gero.png",
         "attribute_image": "attribute-rock.png",
         "attribute": "attribute-kero.txt",
         "pxpack_layers": 1,
-        "default_stage": "01port"
+        "default_stage": "03right"
     },
     "star_frog_11x": {
         "name": "Star Frog 11x",

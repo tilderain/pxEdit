@@ -50,39 +50,6 @@ class PxPack:
             self.width, self.height, self.type = 0, 0, 0
             self.tiles = []
 
-        def load_from_pack(self, stream):
-            game = game_manager.get_current_game()
-            layer_count = game.get('pxpack_layers', 3)
-
-            if layer_count > 1: # Kero Blaster has pxMAP header
-                stream.read(8) # pxMAP01
-                
-            self.width, self.height = read_int(stream, 2), read_int(stream, 2)
-            if self.width * self.height == 0: return True
-            
-            if layer_count > 1: # Kero Blaster has type byte
-                self.type = read_int(stream, 1)
-            else:
-                self.type = 0 # Rockfish is always type 0
-
-            if self.type == 0: self.tiles = [list(stream.read(self.width)) for _ in range(self.height)]
-            return True
-
-        def save_to_pack(self, f):
-            game = game_manager.get_current_game()
-            layer_count = game.get('pxpack_layers', 3)
-
-            if layer_count > 1: # Kero Blaster
-                f.write(b"pxMAP01\0")
-            
-            f.write(struct.pack("<HH", self.width, self.height))
-            if self.width * self.height == 0: return
-
-            if layer_count > 1: # Kero Blaster
-                f.write(struct.pack("<B", self.type))
-
-            if self.type == 0: [f.write(bytes(y)) for y in self.tiles]
-
     def __init__(self):
         self.magic = b"PXPACK121127a**\0"
         self.description, self.spritesheet = "", ""
@@ -93,98 +60,133 @@ class PxPack:
         self.units = []
 
     def load(self, path):
-        """Loads data from a .pxpack file, handling both Kero Blaster and Rockfish variants."""
+        """Loads data from a .pxpack file, handling Kero Blaster, Rockfish, and Star Frog variants."""
         game = game_manager.get_current_game()
-        layer_count = game.get('pxpack_layers', 3)
-        entity_scale = game.get('entity_scale', 1)
+        is_starfrog10x = (game.name == 'star_frog_10x')
+        is_rockfish = (game.name == 'rockfish')
+        is_multilayer_format = game.get('pxpack_layers', 1) > 1
 
         with open(path, 'rb') as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as stream:
-            # Rockfish has no header, Kero Blaster has a 16-byte header.
-            if layer_count > 1:
+            # 1. Magic Header (Kero Blaster / Star Frog 11x only)
+            if is_multilayer_format and not is_rockfish:
                 stream.seek(16)
-            
+
+            # 2. Description and String Fields
             self.description = read_pixel_string(stream)
-            # Kero Blaster reads 5 fields here, Rockfish reads 6. The 2nd is the spritesheet.
-            if layer_count == 1: # Rockfish
+            if is_rockfish:
                 self.spritesheet = read_pixel_string(stream)
             self.left_field = read_pixel_string(stream)
             self.right_field = read_pixel_string(stream)
             self.up_field = read_pixel_string(stream)
             self.down_field = read_pixel_string(stream)
-            if layer_count > 1: # Kero Blaster
+            if not is_rockfish and not is_starfrog10x: # KB / SF11x
                 self.spritesheet = read_pixel_string(stream)
-
+            
+            # 3. Area Info and Background Color
             self.area_x = read_int(stream, 2)
             self.area_y = read_int(stream, 2)
             self.area_no = read_int(stream, 1)
             self.bg_r = read_int(stream, 1)
             self.bg_g = read_int(stream, 1)
             self.bg_b = read_int(stream, 1)
+
+            # 4. Layer Metadata
+            num_layers = 3 if is_starfrog10x else game.get('pxpack_layers', 1)
+            self.layers = [self.Layer() for _ in range(num_layers)]
             
-            self.layers = [self.Layer() for _ in range(layer_count)]
-            if layer_count > 1: # Kero Blaster has per-layer metadata
+            if is_rockfish:
+                self.layers[0].partsName = self.spritesheet
+            else: # KB, SF10x, SF11x have per-layer metadata
                 for layer in self.layers:
                     layer.partsName = read_pixel_string(stream)
                     layer.visibility = read_int(stream, 1)
                     layer.scrolltype = read_int(stream, 1)
-            else: # Rockfish uses the global spritesheet
-                self.layers[0].partsName = self.spritesheet
-
-            for layer in self.layers:
-                layer.load_from_pack(stream)
             
+            # 5. Layer Tile Data
+            for layer in self.layers:
+                has_pxmap_header = is_multilayer_format and not is_rockfish
+                if has_pxmap_header: stream.read(8)
+                
+                layer.width = read_int(stream, 2)
+                layer.height = read_int(stream, 2)
+                if layer.width * layer.height == 0: continue
+
+                layer.type = read_int(stream, 1) if has_pxmap_header else 0
+                if layer.type == 0:
+                    layer.tiles = [list(stream.read(layer.width)) for _ in range(layer.height)]
+
+            # 6. Entity Data
             entity_count = read_int(stream, 2)
             for i in range(entity_count):
                 bits = read_int(stream, 1)
                 type1 = read_int(stream, 1)
                 param2 = read_int(stream, 1)
-                x = read_int(stream, 2)
-                y = read_int(stream, 2)
+                x = struct.unpack('<h', stream.read(2))[0]
+                y = struct.unpack('<h', stream.read(2))[0]
                 flag = read_int(stream, 2)
                 string = read_pixel_string(stream)
-
                 self.units.append(self.Unit(bits, type1, param2, x, y, flag, string, i))
         return self
 
     def save(self, path):
-        """Saves data to a .pxpack file, handling both Kero Blaster and Rockfish variants."""
+        """Saves data to a .pxpack file, handling Kero Blaster, Rockfish, and Star Frog variants."""
         game = game_manager.get_current_game()
-        layer_count = game.get('pxpack_layers', 3)
-        entity_scale = game.get('entity_scale', 1)
-        
+        is_starfrog10x = (game.name == 'star_frog_10x')
+        is_rockfish = (game.name == 'rockfish')
+        is_multilayer_format = game.get('pxpack_layers', 1) > 1
+
         with open(path, 'wb') as f:
-            if layer_count > 1: # Kero Blaster
+            # 1. Magic Header
+            if is_multilayer_format and not is_rockfish:
                 f.write(self.magic)
-            
+
+            # 2. Description and String Fields
             write_pixel_string(f, self.description)
-            if layer_count == 1: # Rockfish
+            if is_rockfish:
                 write_pixel_string(f, self.spritesheet)
             write_pixel_string(f, self.left_field)
             write_pixel_string(f, self.right_field)
             write_pixel_string(f, self.up_field)
             write_pixel_string(f, self.down_field)
-            if layer_count > 1: # Kero Blaster
+            if not is_rockfish and not is_starfrog10x:
                 write_pixel_string(f, self.spritesheet)
 
+            # 3. Area Info and Background Color
             f.write(struct.pack("<H", self.area_x))
             f.write(struct.pack("<H", self.area_y))
             f.write(struct.pack("<B", self.area_no))
-            f.write(struct.pack("<BBB", self.bg_r, self.bg_g, self.bg_b))
-            
-            if layer_count > 1: # Kero Blaster
+            f.write(struct.pack("<B", self.bg_r))
+            f.write(struct.pack("<B", self.bg_g))
+            f.write(struct.pack("<B", self.bg_b))
+
+            # 4. Layer Metadata
+            if not is_rockfish:
                 for layer in self.layers:
                     write_pixel_string(f, layer.partsName)
-                    f.write(struct.pack("<BB", layer.visibility, layer.scrolltype))
+                    f.write(struct.pack("<B", layer.visibility))
+                    f.write(struct.pack("<B", layer.scrolltype))
 
+            # 5. Layer Tile Data
             for layer in self.layers:
-                layer.save_to_pack(f)
-            
+                has_pxmap_header = is_multilayer_format and not is_rockfish
+                if has_pxmap_header: f.write(b"pxMAP01\0")
+                
+                f.write(struct.pack("<H", layer.width))
+                f.write(struct.pack("<H", layer.height))
+                if layer.width * layer.height == 0: continue
+
+                if has_pxmap_header: f.write(struct.pack("<B", layer.type))
+                if layer.type == 0: [f.write(bytes(y)) for y in layer.tiles]
+
+            # 6. Entity Data
             f.write(struct.pack("<H", len(self.units)))
             for unit in self.units:
-                save_x, save_y = unit.x, unit.y
-
-                f.write(struct.pack("<BBB", unit.bits, unit.type1, unit.param2))
-                f.write(struct.pack("<hhH", save_x, save_y, unit.flag))
+                f.write(struct.pack("<B", unit.bits))
+                f.write(struct.pack("<B", unit.type1))
+                f.write(struct.pack("<B", unit.param2))
+                f.write(struct.pack("<h", unit.x))
+                f.write(struct.pack("<h", unit.y))
+                f.write(struct.pack("<H", unit.flag))
                 write_pixel_string(f, unit.string)
         return self
 
@@ -215,15 +217,17 @@ class PxPack:
             stage.eve.units.append(entity)
         stage.eve._count = len(self.units)
 
-        if(len(stage.layers) == 1):
-            stage.layers.append(Layer(0, 0))
+        # Pad layers to 3 for editor compatibility if needed
+        while len(stage.layers) < 3:
             stage.layers.append(Layer(0, 0))
         return stage
 
     @classmethod
     def from_stage(cls, stage):
         game = game_manager.get_current_game()
-        layer_count = game.get('pxpack_layers', 3)
+        
+        # Star Frog 10x always works with 3 layers for I/O
+        layer_count = 3 if game.name == 'star_frog_10x' else game.get('pxpack_layers', 3)
 
         pxpack = cls()
         pxpack.description, pxpack.spritesheet = stage.description, stage.spritesheet
@@ -236,8 +240,7 @@ class PxPack:
             if i < len(stage.layers):
                 layer = stage.layers[i]
                 
-                # --- THIS IS THE FIX ---
-                # An empty layer in Kero Blaster is defined by having no tileset assigned.
+                # An empty layer is defined by having no tileset assigned.
                 # If partsName is missing, we MUST force width and height to 0.
                 if layer.partsName and layer.width > 0 and layer.height > 0:
                     layer_model.width, layer_model.height = layer.width, layer.height
@@ -245,7 +248,6 @@ class PxPack:
                     layer_model.partsName = layer.partsName
                     layer_model.visibility, layer_model.scrolltype = layer.visibility, layer.scrolltype
                 else:
-                    # This is a guaranteed empty layer.
                     layer_model.width, layer_model.height = 0, 0
                     layer_model.tiles = []
                     layer_model.partsName = "" # Ensure partsName is empty
@@ -305,22 +307,21 @@ def save_attribute(game_manager, layer, path):
     try:
         game = game_manager.get_current_game()
         with open(path, 'wb') as f:
-            # --- THE FIX ---
-            # Single-layer pxpack games (Rockfish, Star Frog 10x) have a simple attr format.
-            # Multi-layer pxpack games (Kero Blaster) use a header and type byte.
-            if game.get('pxpack_layers') == 1:
-                # Rockfish/StarFrog10x Format: [width][height][data]
-                f.write(struct.pack("<HH", layer.width, layer.height))
-            else:
-                # Kero Blaster Format: [header][width][height][type][data]
+            is_multilayer_format = game.get('pxpack_layers', 1) > 1
+            
+            # Kero Blaster / SF11x have a header. Rockfish / SF10x do not.
+            if is_multilayer_format:
                 f.write(b"pxMAP01\0")
-                f.write(struct.pack("<HH", layer.width, layer.height))
+                f.write(struct.pack("<H", layer.width))
+                f.write(struct.pack("<H", layer.height))
                 f.write(struct.pack("<B", 0)) # Type byte is usually 0
+            else:
+                f.write(struct.pack("<H", layer.width))
+                f.write(struct.pack("<H", layer.height))
 
-            # The tile data is written the same way for both.
+            # The tile data is written the same way for all.
             for row in layer.tiles:
                 f.write(bytes(row))
-        # ----------------
 
         print(f"Successfully saved attribute file: {os.path.basename(path)}")
         return True
