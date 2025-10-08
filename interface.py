@@ -210,10 +210,37 @@ PAINT_MODE_NAMES = {
     const.PAINT_REPLACE: "Replace",
     const.PAINT_RECTANGLE: "Rectangle"
 }
+def draw_9_slice(renderer, texture, rect, slice_rects):
+    """Draws a resizable 9-slice box."""
+    fill, tl, tr, bl, br, t, r, b, l = slice_rects
+    
+    # Corners
+    renderer.copy(texture, srcrect=tl, dstrect=(rect.x, rect.y, tl[2], tl[3]))
+    renderer.copy(texture, srcrect=tr, dstrect=(rect.x + rect.w - tr[2], rect.y, tr[2], tr[3]))
+    renderer.copy(texture, srcrect=bl, dstrect=(rect.x, rect.y + rect.h - bl[3], bl[2], bl[3]))
+    renderer.copy(texture, srcrect=br, dstrect=(rect.x + rect.w - br[2], rect.y + rect.h - br[3], br[2], br[3]))
+    
+    # Edges
+    renderer.copy(texture, srcrect=t, dstrect=(rect.x + tl[2], rect.y, rect.w - tl[2] - tr[2], t[3])) # Top
+    renderer.copy(texture, srcrect=b, dstrect=(rect.x + bl[2], rect.y + rect.h - b[3], rect.w - bl[2] - br[2], b[3])) # Bottom
+    renderer.copy(texture, srcrect=l, dstrect=(rect.x, rect.y + tl[3], l[2], rect.h - tl[3] - bl[3])) # Left
+    renderer.copy(texture, srcrect=r, dstrect=(rect.x + rect.w - r[2], rect.y + tr[3], r[2], rect.h - tr[3] - br[3])) # Right
 
 def renderUIWindowConcave(elem):
     """Renders a UI window with the dark green 'concave' style."""
+    # --- THIS IS THE FIX ---
+    # Get the texture and enable alpha blending
+    texture = gSurfaces[SURF_UIWINDOW].texture
+    sdl2.SDL_SetTextureAlphaMod(texture, 255)
+
+    sdl2.SDL_SetTextureBlendMode(texture, sdl2.SDL_BLENDMODE_BLEND)
+
     renderWindowBox(elem, *rectsUIConcave)
+
+    # Reset the blend mode to avoid side effects
+    sdl2.SDL_SetTextureBlendMode(texture, sdl2.SDL_BLENDMODE_NONE)
+    sdl2.SDL_SetTextureAlphaMod(texture, 255)
+    # --- END OF FIX ---
 
 def getTextSize(text, font):
 	w = ctypes.c_int(0)
@@ -555,6 +582,7 @@ sdlColorBlack = sdl2.SDL_Color(0,0,0)
 
 
 def renderWindowBox(self, fill, topleft, topright, bottomleft, bottomright, top, right, bottom, left, xoff=0, yoff=0):
+
 	windowsurf = gSurfaces[SURF_UIWINDOW]
 	gInterface.renderer.copy(windowsurf, srcrect=fill, dstrect=(self.x+xoff+1, self.y+yoff, self.w-2, self.h))
 	gInterface.renderer.copy(windowsurf, srcrect=fill, dstrect=(self.x+xoff, self.y+yoff+1, self.w, self.h-2))
@@ -570,7 +598,6 @@ def renderWindowBox(self, fill, topleft, topright, bottomleft, bottomright, top,
 	gInterface.renderer.copy(windowsurf, srcrect=right, dstrect=(self.x+xoff+self.w-1, self.y+yoff+1, 1, self.h-2))
 	gInterface.renderer.copy(windowsurf, srcrect=bottom, dstrect=(self.x+xoff+1, self.y+yoff+self.h-1, self.w-2, 1))
 	gInterface.renderer.copy(windowsurf, srcrect=left, dstrect=(self.x+xoff, self.y+yoff+1, 1, self.h-2))
-
 
 class UITooltip(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLTIP, style=const.STYLE_TOOLTIP_BLACK, visible=True):
@@ -691,6 +718,7 @@ class TilePaletteWindow(UIWindow):
 		self.draghitbox = [0, 0, self.w, 24]
 		self.elements["buttonMinimize"].x = self.w - 24
 
+
 		srcrect = (0,0, tileset_width_pixels, tileset_height_pixels)
 		dstx = self.x + self.elements["picker"].x
 		dsty = self.y + self.elements["picker"].y
@@ -808,19 +836,28 @@ class EntityPaletteWindow(UIWindow):
 		self.elements["picker"] = UIElement(0, 24, 0, 0, self, (0,0,0,0))
 		self.elements["textPalette"] = UIElement(6, 6, 1, 1, self, rectWindowTextPalette)
 
-	def render(self, gxEdit, stage):
-		UIWindow.render(self, gxEdit, stage)
 
+	def render(self, gxEdit, stage):
 		mag = gxEdit.entityPaletteMag
 		units = gSurfaces[SURF_UNITS]
+		if not units: return
 		
-		# --- THE FIX ---
+		# --- THIS IS THE FIX ---
 		sprite_size = gxEdit.entity_sprite_size
-		# ---------------
-		#TODO: add dstrect mag
+		picker_w = 16 * sprite_size * mag
+		picker_h = math.ceil(len(gxEdit.entityInfo) / 16) * sprite_size * mag
+		
+		self.w = picker_w + 8 # Add padding
+		self.h = picker_h + 24 + 4 # Add padding and header
+		self.draghitbox = [0, 0, self.w, 24]
+		
 
-		dstx = self.x + self.elements["picker"].x
-		dsty = self.y + self.elements["picker"].y
+		# 3. Render other elements (title)
+		UIWindow.render(self, gxEdit, stage)
+		# --- END OF FIX ---
+
+		dstx = self.x + 4
+		dsty = self.y + 26
 		
 		dstrect = [dstx, dsty, units.size[0] * mag, units.size[1] * mag]
 		gInterface.renderer.copy(units, srcrect=units.area, dstrect=dstrect)
@@ -1337,11 +1374,9 @@ class StageSelectionWindow(UIWindow):
 
     def render(self, gxEdit, stage):
         # 1. Render the main window frame with the default style
-        UIWindow.render(self, gxEdit, stage)
 
         # 2. Render the concave background just for the list area
         list_bg_rect = UIElement(self.x + 4, self.y + 26, self.w - 8, self.h - 30, self)
-        renderUIWindowConcave(list_bg_rect)
 
         UIWindow.render(self, gxEdit, stage)
 
@@ -2362,31 +2397,49 @@ class Interface:
 		pass
 
 	def renderUIWindow(self, gxEdit, elem):
-		#TODO
+		"""Renders a UI window's frame, handling standard and 'hollow' (concave) styles."""
+		if not elem.visible or elem.type == const.WINDOW_TOOLTIP:
+			return
+
 		windowsurf = gSurfaces[SURF_UIWINDOW]
-		scale = 1
-		if not elem.visible: return
-		#TODO PLACEHOLDER AGAGHAGH
-		if elem.type == const.WINDOW_TOOLTIP: return
-		
-		#middle
-		self.renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x+1, elem.y, elem.w-2, elem.h))
-		self.renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x, elem.y+1, elem.w, elem.h-2))
-		
-		#corners
-		self.renderer.copy(windowsurf, srcrect=rectUIWindow2TopLeft, dstrect=(elem.x, elem.y, 2, 2))
-		self.renderer.copy(windowsurf, srcrect=rectUIWindow2TopRight, dstrect=(elem.x+elem.w-2, elem.y, 2, 2))
-		self.renderer.copy(windowsurf, srcrect=rectUIWindow2BottomLeft, dstrect=(elem.x, elem.y+elem.h-2, 2, 2))
-		self.renderer.copy(windowsurf, srcrect=rectUIWindow2BottomRight, dstrect=(elem.x+elem.w-2, elem.y+elem.h-2, 2, 2))
+		renderer = self.renderer
 
-		#border
-		self.renderer.copy(windowsurf, srcrect=rectUIWindow2Top, dstrect=(elem.x+1, elem.y, elem.w-2, 1))
-		self.renderer.copy(windowsurf, srcrect=rectUIWindow2Right, dstrect=(elem.x+elem.w-1, elem.y+1, 1, elem.h-2))
-		self.renderer.copy(windowsurf, srcrect=rectUIWindow2Bottom, dstrect=(elem.x+1, elem.y+elem.h-1, elem.w-2, 1))
-		self.renderer.copy(windowsurf, srcrect=rectUIWindow2Left, dstrect=(elem.x, elem.y+1, 1, elem.h-2))
+		# --- THIS IS THE FIX: A new, robust method for drawing hollow windows ---
+		is_hollow = isinstance(elem, (TilePaletteWindow, EntityPaletteWindow, StageSelectionWindow))
 
-		#render
+		if is_hollow:
+			# This is a "hollow" window with a transparent center.
+			
+			# 1. Define the dimensions of the hole and borders
+			header_h = 26
+			border_w = 3
+			footer_h = 3
+			
+			# 2. Draw the main grey frame border without a fill
+			frame_rect = sdl2.SDL_Rect(elem.x, elem.y, elem.w, elem.h)
+			draw_9_slice(renderer, windowsurf, frame_rect, rectsUIWindow2)
+			
+			# 3. Fill ONLY the header and footer parts of the grey frame
+			renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x + border_w, elem.y + border_w, elem.w - (border_w * 2), header_h - border_w))
+			renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x + border_w, elem.y + elem.h - footer_h, elem.w - (border_w * 2), 0))
 
+			# 4. Draw the inner concave border around the hole
+			hole_rect = sdl2.SDL_Rect(elem.x + border_w, elem.y + header_h, elem.w - (border_w * 2), elem.h - header_h - footer_h)
+			sdl2.SDL_SetTextureAlphaMod(windowsurf.texture, 126)
+			sdl2.SDL_SetTextureBlendMode(windowsurf.texture, sdl2.SDL_BLENDMODE_BLEND)
+			sdl2.SDL_SetTextureColorMod(windowsurf.texture, 255,0,255)
+
+			renderWindowBox(hole_rect, *rectsUIConcave)
+			sdl2.SDL_SetTextureAlphaMod(windowsurf.texture, 255)
+			sdl2.SDL_SetTextureColorMod(windowsurf.texture, 255,255,255)
+
+
+		else:
+			# This is a standard, solid window. Draw it the old way.
+			renderWindowBox(elem, rectUIWindow1ColorFill, rectUIWindow2TopLeft, rectUIWindow2TopRight, 
+							rectUIWindow2BottomLeft, rectUIWindow2BottomRight, rectUIWindow2Top, 
+							rectUIWindow2Right, rectUIWindow2Bottom, rectUIWindow2Left)
+		# --- END OF FIX ---
 
 	def fadeout(self, introAnimTimer):
 		colorBlack = gSurfaces[SURF_COLOR_BLACK]
