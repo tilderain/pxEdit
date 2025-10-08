@@ -4,6 +4,7 @@ import glob, os
 import copy
 import pxMap
 import interface
+import util
 import sdl2
 from sdl2 import sdlimage, SDL_Rect, surface, render
 
@@ -164,12 +165,12 @@ class StagePrj:
 		if current_game_config.name == 'cave_story':
 			# For Cave Story, prioritize .bmp then .pbm.
 			# We now correctly use the full tileset_name ('PrtAlmond'), not the stage name.
-			potential_paths.append(os.path.join(imgPath, tileset_name + ".bmp"))
-			potential_paths.append(os.path.join(imgPath, tileset_name + ".pbm"))
+			potential_paths.append(util.find_case_insensitive_path(imgPath, tileset_name + ".bmp"))
+			potential_paths.append(util.find_case_insensitive_path(imgPath, tileset_name + ".pbm"))
 		else:
 			# For other games (like Kero Blaster), use the configured extension.
 			tileset_ext = current_game_config.get('tileset_ext', '.png')
-			potential_paths.append(os.path.join(imgPath, tileset_name + tileset_ext))
+			potential_paths.append(util.find_case_insensitive_path(imgPath, tileset_name + tileset_ext))
 
 		# Loop through the paths and try to load the first one that exists.
 		for path in potential_paths:
@@ -490,10 +491,10 @@ class Editor:
 		# This needs to use the game_manager to get the correct entity info file
 		current_game_config = self.game_manager.get_current_game()
 		entity_info_file = current_game_config.get('entity_info')
-		entity_info_path = os.path.join(os.getcwd(), entity_info_file)
+		entity_info_path = util.find_case_insensitive_path(os.getcwd(), entity_info_file)
 
 		try:
-			with open(entity_info_path) as f:
+			with open(entity_info_path, encoding="utf-8") as f:
 				self.entityInfo = [line.split("@") for line in f.read().splitlines()]
 				
 				
@@ -522,9 +523,9 @@ class Editor:
 		if current_game_config.name != "cave_story":
 			return True # Not an error, just not applicable for this game.
 
-		stage_tbl_path = os.path.join(
+		stage_tbl_path = util.find_case_insensitive_path(os.path.join(
 			current_game_config.base_path,
-			current_game_config.get('data_path'),
+			current_game_config.get('data_path')),
 			'stage.tbl'
 		)
 
@@ -567,9 +568,9 @@ class Editor:
 	def readAttributeInfo(self):
 		"""Loads attribute descriptions from assist/attribute.txt"""
 		self.attributeInfo = [""] * 256 # Pre-fill with empty strings
-		attribute_image_path = os.path.join("assist", current_game_config.get('attribute'))
+		attribute_image_path = util.find_case_insensitive_path("assist", current_game_config.get('attribute'))
 		try:
-			with open(attribute_image_path, 'r') as f:
+			with open(attribute_image_path, 'r', encoding="utf-8") as f:
 				for line in f:
 					if '@' not in line: continue
 					parts = line.strip().split('@', 1)
@@ -653,8 +654,8 @@ class Editor:
 		
 		if current_game_config.name == 'cave_story':
 			tileset_name = "Prt" + fName
-			bmp_path = os.path.join(imgPath, tileset_name + ".bmp")
-			pbm_path = os.path.join(imgPath, tileset_name + ".pbm")
+			bmp_path = util.find_case_insensitive_path(imgPath, tileset_name + ".bmp")
+			pbm_path = util.find_case_insensitive_path(imgPath, tileset_name + ".pbm")
 			try:
 				if os.path.exists(bmp_path):
 					context_tileset = interface.gSprfactory.from_image(bmp_path)
@@ -666,7 +667,7 @@ class Editor:
 		elif current_game_config.name == 'kero_blaster' or current_game_config.name == 'rockfish' or \
 			current_game_config.name == 'star_frog_10x' or current_game_config.name == 'star_frog_11x':
 			tileset_ext = current_game_config.get('tileset_ext')
-			tileset_path = os.path.join(imgPath, fName + tileset_ext)
+			tileset_path = util.find_case_insensitive_path(imgPath, fName + tileset_ext)
 			try:
 				if os.path.exists(tileset_path):
 					context_tileset = interface.gSprfactory.from_image(tileset_path)
@@ -678,7 +679,7 @@ class Editor:
 		elif current_game_config.name == 'guxt':
 			tileset_name = fName
 			tileset_ext = current_game_config.get('tileset_ext')
-			tileset_path = os.path.join(imgPath, tileset_name + tileset_ext)
+			tileset_path = util.find_case_insensitive_path(imgPath, tileset_name + tileset_ext)
 			try:
 				if os.path.exists(tileset_path):
 					context_tileset = interface.gSprfactory.from_image(tileset_path)

@@ -1,6 +1,7 @@
 import io, os, struct
 import mmap
 from ctypes import c_short
+import util
 from game import game_manager # <-- IMPORT the instance
 
 def writePixelString(fp, string):
@@ -99,7 +100,7 @@ class PxMapAttr: #use the same class for both
 		"""
 		from game import game_manager
 		try:
-			with open(path, 'rb') as f:
+			with open(util.find_case_insensitive_path(os.path.dirname(path), os.path.basename(path)), 'rb') as f:
 				data = f.read()
 		except (OSError, IOError) as e:
 			print("Error while opening {}: {}".format(path, e))
@@ -212,7 +213,7 @@ class PxMap:
 
     def load(self, path, printError=True):
         try:
-            with open(path, 'rb') as f:
+            with open(util.find_case_insensitive_path(os.path.dirname(path), os.path.basename(path)), 'rb') as f:
                 magic = f.read(3)
                 if magic != b'PXM':
                     raise ValueError(f"Invalid PXM file format in {path}")

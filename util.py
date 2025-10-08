@@ -3,6 +3,38 @@ os.environ["PYSDL2_DLL_PATH"] = "./"
 import sdl2.ext
 import ctypes
 
+# --- ADD THIS ---
+_path_cache = {}
+
+def find_case_insensitive_path(directory, filename):
+    """
+    Finds a file in a directory regardless of case, caching the result.
+    Returns the full path with the correct casing if found, otherwise the original path.
+    """
+    if not filename:
+        return os.path.join(directory, "")
+        
+    cache_key = (directory.lower(), filename.lower())
+    if cache_key in _path_cache:
+        # Return cached path, even if it was None (not found)
+        path = _path_cache[cache_key]
+        return os.path.join(directory, filename) if path is None else path
+
+    target_lower = filename.lower()
+    try:
+        for item in os.listdir(directory):
+            if item.lower() == target_lower:
+                result = os.path.join(directory, item)
+                _path_cache[cache_key] = result
+                return result
+    except FileNotFoundError:
+        pass # Directory doesn't exist
+        
+    _path_cache[cache_key] = None
+    # If not found, return the original constructed path to allow for a standard FileNotFoundError
+    return os.path.join(directory, filename)
+# --- END OF ADDITION ---
+
 def lazybin(intt, places=32):
 #converts an int to binary str
 	binr = bin(intt)

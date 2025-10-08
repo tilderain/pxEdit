@@ -3,6 +3,7 @@ import struct
 import mmap
 from stage import Stage, Layer, Entity
 from pxMap import PxEve
+import util
 
 from editor import game_manager
 
@@ -66,7 +67,7 @@ class PxPack:
         is_rockfish = (game.name == 'rockfish')
         is_multilayer_format = game.get('pxpack_layers', 1) > 1
 
-        with open(path, 'rb') as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as stream:
+        with open(util.find_case_insensitive_path(os.path.dirname(path), os.path.basename(path)), 'rb') as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as stream:
             # 1. Magic Header (Kero Blaster / Star Frog 11x only)
             if is_multilayer_format and not is_rockfish:
                 stream.seek(16)
@@ -262,7 +263,7 @@ class PxPack:
 
 def load_stage(game_manager, stage_name, stage_table=None):
     game = game_manager.get_current_game()
-    path = os.path.join(game.base_path, game.get('data_path'), game.get('stage_path'), stage_name + game.get('stage_ext'))
+    path = util.find_case_insensitive_path(os.path.join(game.base_path, game.get('data_path'), game.get('stage_path')), stage_name + game.get('stage_ext'))
     return PxPack().load(path).to_stage(stage_name)
 
 def save_stage(game_manager, stage):
@@ -282,8 +283,8 @@ def load_attrs(game_manager, tileset_name, tileset_surface):
 
     attr_ext = game.get('attr_ext')
     if tileset_name:
-        attr_path = os.path.join(img_path_base, tileset_name + attr_ext)
-        if os.path.exists(attr_path):
+        attr_path = util.find_case_insensitive_path(img_path_base, tileset_name + attr_ext)
+        if os.path.exists(attr_path) and os.path.getsize(attr_path) > 0:
             attr.load(attr_path)
             return attr
 

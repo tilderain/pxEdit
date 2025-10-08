@@ -2,6 +2,7 @@ import os
 import struct
 from stage import Stage, Layer, Entity
 from pxMap import PxEve, PxMap, PxMapAttr
+import util
 
 # --- Cave Story Format Model ---
 
@@ -49,17 +50,17 @@ class CaveStoryFormat:
             self.tileset_name = "Prt" + stage_name
 
         # --- Load main map and entities ---
-        map_path = os.path.join(stage_files_path, map_filename + game.get('stage_ext'))
-        entities_path = os.path.join(stage_files_path, map_filename + game.get('entity_ext'))
+        map_path = util.find_case_insensitive_path(stage_files_path, map_filename + game.get('stage_ext'))
+        entities_path = util.find_case_insensitive_path(stage_files_path, map_filename + game.get('entity_ext'))
 
         if not self.pxm.load(map_path, printError=False):
-            raise FileNotFoundError(f"Could not load main map file: {map_path}")
+            raise FileNotFoundError(f"Could not load main map file: {os.path.join(stage_files_path, map_filename + game.get('stage_ext'))}")
         
         self.entities = self._load_entities(entities_path)
 
         # --- Load background map (if specified and exists) ---
         if back_map_filename:
-            back_map_path = os.path.join(stage_files_path, back_map_filename + game.get('stage_ext'))
+            back_map_path = util.find_case_insensitive_path(stage_files_path, back_map_filename + game.get('stage_ext'))
             # It's okay if this fails; many stages don't have a background layer.
             self.pxm_back.load(back_map_path, printError=False)
 
@@ -112,7 +113,7 @@ class CaveStoryFormat:
     def _load_entities(self, path):
         entities = []
         try:
-            with open(path, 'rb') as f:
+            with open(util.find_case_insensitive_path(os.path.dirname(path), os.path.basename(path)), 'rb') as f:
                 if f.read(3) != b'PXE': raise ValueError("Invalid PXE file format")
                 f.read(1)
                 count = struct.unpack('<I', f.read(4))[0]
@@ -171,9 +172,9 @@ def load_attrs(game_manager, tileset_name, tileset_surface):
         # ----------------
 
         attr_path = os.path.join(img_path_base, attr_filename_base + attr_ext)
-        if os.path.exists(attr_path):
+        if os.path.exists(util.find_case_insensitive_path(img_path_base, attr_filename_base + attr_ext)):
             try:
-                with open(attr_path, 'rb') as f:
+                with open(util.find_case_insensitive_path(img_path_base, attr_filename_base + attr_ext), 'rb') as f:
                     data = f.read()
                     if len(data) >= 256:
                         attr.width = 16

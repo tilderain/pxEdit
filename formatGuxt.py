@@ -5,6 +5,7 @@ import struct
 import mmap
 import math
 from stage import Stage, Layer, Entity
+import util
 from pxMap import PxEve
 
 # --- Helper functions for VLQ (Variable-Length Quantity) encoding ---
@@ -47,7 +48,7 @@ class PxMapGuxt:
 
     def load(self, path):
         try:
-            with open(path, 'rb') as f:
+            with open(util.find_case_insensitive_path(os.path.dirname(path), os.path.basename(path)), 'rb') as f:
                 data = f.read()
                 self.width = struct.unpack('<H', data[0:2])[0]
                 self.height = struct.unpack('<H', data[2:4])[0]
@@ -80,7 +81,7 @@ class PxEveGuxt:
 
     def load(self, path):
         try:
-            with open(path, 'rb') as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as stream:
+            with open(util.find_case_insensitive_path(os.path.dirname(path), os.path.basename(path)), 'rb') as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as stream:
                 entity_count = read_vlq(stream)
                 for _ in range(entity_count):
                     unused = read_vlq(stream)
@@ -120,13 +121,13 @@ def load_stage(game_manager, stage_name, stage_table=None):
     eve_filename = "event" + stage_name
     tileset_name = "parts" + stage_name
 
-    map_path = os.path.join(base_path, map_filename + game.get('stage_ext'))
-    eve_path = os.path.join(base_path, eve_filename + game.get('script_ext'))
+    map_path = util.find_case_insensitive_path(base_path, map_filename + game.get('stage_ext'))
+    eve_path = util.find_case_insensitive_path(base_path, eve_filename + game.get('script_ext'))
 
     pxmap = PxMapGuxt()
     pxeve = PxEveGuxt()
     if not pxmap.load(map_path) or not pxeve.load(eve_path):
-        raise FileNotFoundError(f"Could not load required stage files for '{stage_name}'")
+        raise FileNotFoundError(f"Could not load required stage files for '{stage_name}': {map_path} or {eve_path}")
 
     stage = Stage(stage_name, pxmap.width, pxmap.height)
     
@@ -187,10 +188,10 @@ def load_attrs(game_manager, tileset_name, tileset_surface):
     """Loads attributes for a Guxt tileset."""
     game = game_manager.get_current_game()
     img_path_base = os.path.join(game.base_path, game.get('data_path'), game.get('image_path'))
-    attr_path = os.path.join(img_path_base, tileset_name + game.get('attr_ext'))
+    attr_path = util.find_case_insensitive_path(img_path_base, tileset_name + game.get('attr_ext'))
 
     attr = PxMapGuxt()
-    if os.path.exists(attr_path):
+    if os.path.exists(attr_path) and os.path.getsize(attr_path) > 0:
         attr.load(attr_path)
     
     # Guxt's PxMapAttr is compatible with our internal PxMapAttr structure
