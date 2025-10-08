@@ -243,11 +243,23 @@ def export_stages(editor):
                 return
 
             all_map_files = [f for f in os.listdir(stage_dir) if f.endswith(stage_ext)]
-            maps_pass_0 = [os.path.splitext(f)[0] for f in all_map_files if f.startswith('0')]
-            maps_pass_1 = [os.path.splitext(f)[0] for f in all_map_files if f.startswith('1')]
             
-            _run_export_pass(editor, maps_pass_0, os.path.join("export", "connected_map_0.jpg"))
-            _run_export_pass(editor, maps_pass_1, os.path.join("export", "connected_map_1.jpg"))
+            # --- THIS IS THE FIX: Conditionally run two passes based on game name ---
+            if "kero_blaster" in current_game.name:
+                # Kero-style games get two passes
+                print("Kero Blaster detected. Running two export passes.")
+                maps_pass_0 = [os.path.splitext(f)[0] for f in all_map_files if f.startswith('0')]
+                maps_pass_1 = [os.path.splitext(f)[0] for f in all_map_files if f.startswith('1')]
+                
+                _run_export_pass(editor, maps_pass_0, os.path.join("export", "connected_map_0.jpg"))
+                _run_export_pass(editor, maps_pass_1, os.path.join("export", "connected_map_1.jpg"))
+            else:
+                # All other games get a single, consolidated pass
+                print(f"{current_game.name} detected. Running a single export pass.")
+                all_maps = [os.path.splitext(f)[0] for f in all_map_files]
+                _run_export_pass(editor, all_maps, os.path.join("export", "connected_map.jpg"))
+            # --- END OF FIX ---
+
         else:
             _export_separate_maps(editor)
         print("Export finished successfully.")
