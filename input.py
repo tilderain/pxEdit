@@ -889,6 +889,7 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 			o = stage.pack.eve.add(x, y, gxEdit.currentEntity)
 
 			undo = UndoAction(const.UNDO_ENTITY_ADD, 0, [o])
+			stage.addUndo(undo)
 
 	elif sym == sdl2.SDL_SCANCODE_DELETE or sym == sdl2.SDL_SCANCODE_BACKSPACE:
 		if stage.selectedEntities:
