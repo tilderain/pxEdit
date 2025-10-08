@@ -203,7 +203,9 @@ class StagePrj:
 		if self.is_attribute_stage:
 			print(f"--Saving attribute file {self.stageName}...--")
 			# For attribute stages, the editable data is in Layer 1
-			result = format_manager.save_attribute(self.pack.layers[1], self.original_path)
+			attr_to_save = self.attrs[0]
+			attr_to_save.tiles = self.pack.layers[1].tiles
+			result = format_manager.save_attribute(attr_to_save, self.original_path)
 		else:
 			print(f"--Saving stage {self.stageName}...--")
 			# Use the existing pathway for normal stages
@@ -299,7 +301,9 @@ class StagePrj:
 			
 	
 	def renderTileToSurface(self, x, y, tx, ty, layerNo):
-
+		
+		if not self.parts[layerNo]:
+			return
 		render_tile_size = 16 if self.is_attribute_stage and layerNo == 1 else self.tileWidth
 
 		dstx = x * render_tile_size

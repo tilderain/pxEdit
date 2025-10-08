@@ -199,30 +199,25 @@ def load_attrs(game_manager, tileset_name, tileset_surface):
     
     return attr
 
-def save_attribute(game_manager, layer, path):
+def save_attribute(game_manager, attr_data, path):
     """Saves a Cave Story .pxa file, padding it to 16x16 (256 bytes) if necessary."""
-    if not layer: return False
+    if not attr_data: return False
     
     TARGET_WIDTH = 16
     TARGET_HEIGHT = 16
         
     try:
         with open(path, 'wb') as f:
-            # --- THE FIX: PAD THE DATA ---
             for y in range(TARGET_HEIGHT):
                 row_data = []
-                if y < layer.height:
-                    # This row exists in the source data.
-                    # Copy the existing data and pad the width if necessary.
-                    row_data = layer.tiles[y][:TARGET_WIDTH]
+                if y < len(attr_data.tiles):
+                    row_data = attr_data.tiles[y][:TARGET_WIDTH]
                     if len(row_data) < TARGET_WIDTH:
                         row_data.extend([0] * (TARGET_WIDTH - len(row_data)))
                 else:
-                    # This row does not exist, so create a full row of zeroes.
                     row_data = [0] * TARGET_WIDTH
                 
                 f.write(bytes(row_data))
-            # ---------------------------
 
         print(f"Successfully saved attribute file: {os.path.basename(path)}")
         return True

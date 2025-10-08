@@ -299,32 +299,38 @@ def load_attrs(game_manager, tileset_name, tileset_surface):
         
     return attr
 
-def save_attribute(game_manager, layer, path):
-    """Saves a .pxattr file, handling variants for Kero Blaster and Rockfish."""
+def save_attribute(game_manager, attr_data, path):
+    """Saves a .pxattr file, forcing a 16x16 dimension."""
     import struct
-    if not layer: return False
+    if not attr_data: return False
     
+    TARGET_WIDTH = 16
+    TARGET_HEIGHT = 16
+        
     try:
         game = game_manager.get_current_game()
         with open(path, 'wb') as f:
-            is_multilayer_format = game.get('pxpack_layers', 1) > 1
-            
-            # Kero Blaster / SF11x have a header. Rockfish / SF10x do not.
-            if is_multilayer_format:
-                f.write(b"pxMAP01\0")
-                f.write(struct.pack("<H", layer.width))
-                f.write(struct.pack("<H", layer.height))
-                f.write(struct.pack("<B", 0)) # Type byte is usually 0
+            if game.get('pxpack_layers') == 1:
+                f.write(struct.pack("<HH", TARGET_WIDTH, TARGET_HEIGHT))
             else:
-                f.write(struct.pack("<H", layer.width))
-                f.write(struct.pack("<H", layer.height))
+                f.write(b"pxMAP01\0")
+                f.write(struct.pack("<HH", TARGET_WIDTH, TARGET_HEIGHT))
+                f.write(struct.pack("<B", 0))
 
-            # The tile data is written the same way for all.
-            for row in layer.tiles:
-                f.write(bytes(row))
+            # Pad or crop the tile data to fit 16x16
+            for y in range(TARGET_HEIGHT):
+                row_data = []
+                if y < len(attr_data.tiles):
+                    row_data = attr_data.tiles[y][:TARGET_WIDTH]
+                
+                # Pad the row if it's shorter than the target width
+                if len(row_data) < TARGET_WIDTH:
+                    row_data.extend([0] * (TARGET_WIDTH - len(row_data)))
+                
+                f.write(bytes(row_data))
 
         print(f"Successfully saved attribute file: {os.path.basename(path)}")
         return True
-    except (IOError, OSError) as e:
+    except (IOError, OSError, IndexError) as e:
         print(f"Error saving attribute file {path}: {e}")
         return False
