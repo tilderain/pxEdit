@@ -2112,7 +2112,14 @@ class Interface:
 
 			map_tile_x = int(mouse.x / (gxEdit.tileWidth * mag))
 			map_tile_y = int(offset_y / (gxEdit.tileWidth * mag))
-			self.setMapEntityTooltip(gxEdit, stage, map_tile_x, map_tile_y)
+			is_over_ui = any(
+				elem.visible and elem.type != const.WINDOW_TOOLTIP and util.inWindowBoundingBox(mouse, elem)
+				for elem in gxEdit.elements.values()
+			)
+			if not is_over_ui:
+				map_tile_x = int(mouse.x / (gxEdit.tileWidth * mag))
+				map_tile_y = int(offset_y / (gxEdit.tileWidth * mag))
+				self.setMapEntityTooltip(gxEdit, stage, map_tile_x, map_tile_y)
 
 			w = int(scaled_entity_size)
 			h = int(scaled_entity_size)
