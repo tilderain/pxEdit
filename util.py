@@ -3,6 +3,18 @@ os.environ["PYSDL2_DLL_PATH"] = "./"
 import sdl2.ext
 import ctypes
 
+
+def inResizeHitbox(mouse, window):
+    """Checks if the mouse is in the resize handle area at the bottom of a window."""
+    if not getattr(window, 'resizable', False):
+        return False
+    resize_handle_height = 8
+    hitbox_y = window.y + window.h - resize_handle_height
+    hitbox_x = window.x
+    hitbox_w = window.w
+    hitbox_h = resize_handle_height
+    return inBoundingBox(mouse.x, mouse.y, hitbox_x, hitbox_y, hitbox_w, hitbox_h)
+
 # --- ADD THIS ---
 _path_cache = {}
 

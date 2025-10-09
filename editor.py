@@ -342,6 +342,8 @@ class Editor:
 
 		self.entityInfo = []
 		self.attributeInfo = [] 
+		self.bitsInfo = []
+
 		self.stage_table = []
 		self.stages = []
 
@@ -394,6 +396,7 @@ class Editor:
 		self.elements = {}
 
 		self.draggedElem = None
+		self.resizingElem = None
 		self.dragX = 0
 		self.dragY = 0
 
@@ -564,7 +567,38 @@ class Editor:
 
 		print(f"Successfully loaded {len(self.stage_table)} entries from stage.tbl.")
 		return True
+		
+	def readBitsInfo(self):
+		"""Loads entity bit descriptions from the file specified in game_config.json."""
+		current_game_config = self.game_manager.get_current_game()
+		bits_info_file = current_game_config.get('bits_info')
+		if not bits_info_file:
+			print("Warning: No 'bits_info' file specified for this game.")
+			self.bitsInfo = ["(Bit not defined)"] * 8 # Provide a default for 16 bits
+			return False
 
+		bits_info_path = util.find_case_insensitive_path(os.getcwd(), bits_info_file)
+		self.bitsInfo = ["(Bit not defined)"] * 8 # Default size for up to 16 bits
+
+		try:
+			with open(bits_info_path, 'r', encoding="utf-8") as f:
+				for line in f:
+					if '@' not in line: continue
+					parts = line.strip().split('@', 1)
+					try:
+						bit_index = int(parts[0])
+						# Ensure the list is large enough
+						if bit_index >= len(self.bitsInfo):
+							self.bitsInfo.extend(["(Bit not defined)"] * (bit_index - len(self.bitsInfo) + 1))
+						self.bitsInfo[bit_index] = parts[1]
+					except (ValueError, IndexError):
+						continue # Skip malformed lines
+		except FileNotFoundError:
+			print(f"Warning: {bits_info_file} not found. No bit descriptions will be shown.")
+			return False
+		
+		print(f"Successfully loaded {len(self.bitsInfo)} bit descriptions from {os.path.basename(bits_info_path)}.")
+		return True
 	def readAttributeInfo(self):
 		"""Loads attribute descriptions from assist/attribute.txt"""
 		self.attributeInfo = [""] * 256 # Pre-fill with empty strings
@@ -611,6 +645,7 @@ class Editor:
 		result = True
 		result &= self.readEntityInfo()
 		result &= self.readAttributeInfo() 
+		result &= self.readBitsInfo()
 		result &= self.readStageTable()
 		return result
 

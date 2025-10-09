@@ -202,6 +202,11 @@ gDrawBoxRect = sdl2.SDL_Rect(0,0,0,0)
 
 gFont = None
 
+# Near the top, with other global definitions
+gCursorArrow = None
+gCursorResizeV = None
+gCursorIBeam = None
+
 PAINT_MODE_NAMES = {
     const.PAINT_NORMAL: "Draw",
     const.PAINT_ERASE: "Erase",
@@ -527,6 +532,7 @@ class UIWindow:
 		self.surface = gSprfactory.from_color(sdl2.ext.Color(0,0,0),(w,h))
 
 		self.visible = visible
+		self.resizable = False
 
 		self.priority = 0
 
@@ -580,6 +586,7 @@ sdlColorRed = sdl2.SDL_Color(255,100,100)
 sdlColorWhite = sdl2.SDL_Color(255,255,255)
 sdlColorBlack = sdl2.SDL_Color(0,0,0)
 
+SURF_VIGNETTE = 23
 
 def renderWindowBox(self, fill, topleft, topright, bottomleft, bottomright, top, right, bottom, left, xoff=0, yoff=0):
 
@@ -1251,6 +1258,7 @@ class StageSelectionWindow(UIWindow):
     def __init__(self, x, y, w, h, type=const.WINDOW_NONE, style=0, visible=False):
         h = 40 + 12 * 16 
         UIWindow.__init__(self, x, y, w, h, type, style, visible)
+        self.resizable = True
         # --- THIS IS THE FIX: Store structured data, not just strings ---
         self.stage_items = [] # Will be a list of (display_name, load_name) tuples
         # --- END OF FIX ---
@@ -1299,8 +1307,8 @@ class StageSelectionWindow(UIWindow):
                     self.stage_items.append((load_name, load_name))
                     # --- END OF FIX ---
         
-        self.h = 40 + min(len(self.stage_items), self.items_per_page) * self.item_height
         self.elements["close_button"].x = self.w - 20
+
 
     def handleMouse1(self, mouse, gxEdit):
         if UIWindow.handleMouse1(self, mouse, gxEdit):
@@ -1373,6 +1381,8 @@ class StageSelectionWindow(UIWindow):
         return True
 
     def render(self, gxEdit, stage):
+        # Recalculate how many items can fit in the current height
+        self.items_per_page = max(1, (self.h - 40) // self.item_height)
         # 1. Render the main window frame with the default style
 
         # 2. Render the concave background just for the list area
@@ -1398,6 +1408,7 @@ class StageSelectionWindow(UIWindow):
             # --- END OF FIX ---
             
             renderText(display_name, text_color, TTF_STYLE_NORMAL, self.x + 10, list_y + (i * self.item_height))
+
 def editEntityAttributes(control, gxEdit):
 	param = control.text
 	try:
@@ -1421,18 +1432,23 @@ def editEntityAttributes(control, gxEdit):
 
 	#stage.pack.eve.modify(ids, type2=int(param))
 
+# In the interface.py file's editEntityBits method
 def editEntityBits(window, elem, gxEdit):
 	stage = gxEdit.stages[gxEdit.curStage]
 	select = stage.selectedEntities
+	if not select: return
 
 	ids = [o.id for o in select]
-	if elem.state == BUTTON_STATE_ACTIVE:
-		stage.pack.eve.modify(ids, bits=select[0].bits | elem.var)
-	else:
-		stage.pack.eve.modify(ids, bits=select[0].bits & ~(elem.var))
+	num_bits_to_show = 16 if gxEdit.game_manager.get_current_game().name == 'cave_story' else 8
 
-	window.elements["textHexBitsS"].text = util.lazybin(select[0].bits, 8)
-	window.elements["textHexBits"].text = util.lazybin(select[0].bits, 8)
+	for o in select:
+		if elem.state == BUTTON_STATE_ACTIVE:
+			o.bits |= elem.var
+		else:
+			o.bits &= ~elem.var
+	
+	window.elements["textHexBitsS"].text = util.lazybin(select[0].bits, num_bits_to_show)
+	window.elements["textHexBits"].text = util.lazybin(select[0].bits, num_bits_to_show)
 
 
 
@@ -1451,6 +1467,7 @@ class EntityEditWindow(UIWindow):
 		UIWindow.__init__(self, x, y, w, h, type, style)
 
 		self.selectedEntities = []
+		self.last_bits_info_len = 0 # To track if we need to rebuild the UI
 
 		self.elements["textAppearShadow"] = UIText(6, 6, "Flag:", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textAppear"] = UIText(5, 5, "Flag:", sdlColorYellow, TTF_STYLE_NORMAL, self)
@@ -1476,7 +1493,7 @@ class EntityEditWindow(UIWindow):
 		self.elements["textHexBitsS"] = UIText(74, 70, "a", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textHexBits"] = UIText(73, 70, "a", sdlColorYellow, TTF_STYLE_NORMAL, self)
 
-		self.elements["butCheckBits1"] = UIButton(120, 90, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=1)
+'''
 		#seems to only have an effect when spawning, (is set during creation)
 		self.elements["textBitsDesc1"] = UIText(15, 88, "I don't know", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["butCheckBits2"] = UIButton(120, 110, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=2)
@@ -1490,21 +1507,44 @@ class EntityEditWindow(UIWindow):
 		self.elements["textBitsDesc5"] = UIText(15, 168, "Spawn with alt dir:", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["butCheckBits6"] = UIButton(120, 190, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=32)
 		#631, 446, 448, 447, 197, 179, 177 npc acts may use this
-		self.elements["textBitsDesc6"] = UIText(15, 188, "unused?", sdlColorYellow, TTF_STYLE_NORMAL, self)
-		
-		self.elements["butCheckBits7"] = UIButton(120, 210, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=64)
-		self.elements["textBitsDesc7"] = UIText(15, 208, "No appear if flag set", sdlColorYellow, TTF_STYLE_NORMAL, self)
-		self.elements["butCheckBits8"] = UIButton(120, 230, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=128)
-		self.elements["textBitsDesc8"] = UIText(15, 228, "Appear if flag set", sdlColorYellow, TTF_STYLE_NORMAL, self)
-		self.elements["butCheckBits1"].onAction = editEntityBits
-		self.elements["butCheckBits2"].onAction = editEntityBits
-		self.elements["butCheckBits3"].onAction = editEntityBits
-		self.elements["butCheckBits4"].onAction = editEntityBits
-		self.elements["butCheckBits5"].onAction = editEntityBits
-		self.elements["butCheckBits6"].onAction = editEntityBits
-		self.elements["butCheckBits7"].onAction = editEntityBits
-		self.elements["butCheckBits8"].onAction = editEntityBits
+'''
 
+	def build_bits_ui(self, gxEdit):
+		"""Dynamically creates UI elements for entity bits based on loaded info."""
+		# Clear existing bit UI elements
+		for i in range(16): # Clear up to max possible bits
+			self.elements.pop(f"butCheckBits{i}", None)
+			self.elements.pop(f"textBitsDesc{i}", None)
+		
+		y_offset = 90
+		bits_to_show = gxEdit.bitsInfo
+		
+		# --- THIS IS THE FIX: Base the number of bits on the loaded info file ---
+		num_bits = len(bits_to_show)
+		# --- END OF FIX ---
+
+		for i in range(num_bits):
+			bit_value = 1 << i
+			description = bits_to_show[i]
+
+			self.elements[f"textBitsDesc{i}"] = UIText(15, y_offset - 2, description, sdlColorYellow, TTF_STYLE_NORMAL, self)
+			
+			button = UIButton(self.w - 30, y_offset, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=bit_value)
+			button.onAction = editEntityBits
+			self.elements[f"butCheckBits{i}"] = button
+			
+			y_offset += 20
+		
+		# Adjust window height to fit all new elements
+		self.h = y_offset + 5
+		self.last_bits_info_len = len(gxEdit.bitsInfo)
+
+	def render(self, gxEdit, stage):
+		# If the number of bits has changed (e.g., switched games), rebuild the UI
+		if self.last_bits_info_len != len(gxEdit.bitsInfo):
+			self.build_bits_ui(gxEdit)
+		
+		UIWindow.render(self, gxEdit, stage)
 
 class YesNoCancelDialog(UIWindow):
 	pass
@@ -1906,6 +1946,19 @@ class Interface:
 			print(f"ERROR: Could not load scrollbar images: {e}")
 		#TODO error handling when can't find file
 
+		try:
+			gSurfaces[SURF_VIGNETTE] = self.sprfactory.from_image(RESOURCES + "vignette.png")
+			# Make sure the vignette can be transparent
+			sdl2.SDL_SetTextureBlendMode(gSurfaces[SURF_VIGNETTE].texture, sdl2.SDL_BLENDMODE_BLEND)
+		except Exception as e:
+			print(f"ERROR: Could not load vignette.png: {e}")
+
+		# Load system cursors
+		global gCursorArrow, gCursorResizeV, gCursorIBeam
+		gCursorArrow = sdl2.SDL_CreateSystemCursor(sdl2.SDL_SYSTEM_CURSOR_ARROW)
+		gCursorResizeV = sdl2.SDL_CreateSystemCursor(sdl2.SDL_SYSTEM_CURSOR_SIZENS)
+		gCursorIBeam = sdl2.SDL_CreateSystemCursor(sdl2.SDL_SYSTEM_CURSOR_IBEAM)
+
 	def RenderMapParts(self):
 		pass
 
@@ -1953,11 +2006,12 @@ class Interface:
 		if not map_layer: return
 		
 		# --- TOOLTIP LOGIC (unchanged) ---
-		# ...
 
 		if gxEdit.currentEditMode == const.EDIT_TILE:
+			if not stage.parts[gxEdit.currentLayer]:
+				return # No tileset loaded for this layer, so we can't draw a preview.
+
 			if gxEdit.rectanglePaintBoxStart == [-1, -1]: #normal
-				# --- THIS IS THE FIX: Calculate preview position respecting smooth scroll ---
 				scaled_tile_size = gxEdit.tileWidth * mag
 				if scaled_tile_size <= 0: return
 
@@ -1970,12 +2024,17 @@ class Interface:
 				target_tile_x = int(mouse_unscrolled_x / scaled_tile_size)
 				target_tile_y = int(mouse_unscrolled_y / scaled_tile_size)
 
+				# --- THIS IS THE FIX: Check if the target tile is within map bounds ---
+				if (target_tile_x < 0 or target_tile_x >= map_layer.width or
+				    target_tile_y < 0 or target_tile_y >= map_layer.height):
+					return # Do not render the preview if out of bounds
+				# --- END OF FIX ---
+
 				snapped_pixel_x = target_tile_x * scaled_tile_size
 				snapped_pixel_y = target_tile_y * scaled_tile_size
 
 				x = int(snapped_pixel_x - scroll_x_px)
 				y = int(snapped_pixel_y - scroll_y_px)
-				# --- END OF FIX ---
 
 				start = stage.selectedTilesStart[:]
 				end = stage.selectedTilesEnd[:]
@@ -2405,33 +2464,105 @@ class Interface:
 		renderer = self.renderer
 
 		# --- THIS IS THE FIX: A new, robust method for drawing hollow windows ---
-		is_hollow = isinstance(elem, (TilePaletteWindow, EntityPaletteWindow, StageSelectionWindow))
+		if True:
 
-		if is_hollow:
-			# This is a "hollow" window with a transparent center.
-			
-			# 1. Define the dimensions of the hole and borders
+			"""Captures the screen behind an element, blurs it using a multi-pass Kawase blur, and renders it."""
+			renderer = self.renderer.sdlrenderer
+
+			window_rect = sdl2.SDL_Rect(elem.x, elem.y, elem.w, elem.h)
+
+			pixels_surface = sdl2.SDL_CreateRGBSurfaceWithFormat(0, elem.w, elem.h, 32, sdl2.SDL_PIXELFORMAT_RGBA8888)
+			if not pixels_surface: return
+
+			result = sdl2.SDL_RenderReadPixels(renderer, window_rect, sdl2.SDL_PIXELFORMAT_RGBA8888, pixels_surface.contents.pixels, pixels_surface.contents.pitch)
+			if result != 0:
+				sdl2.SDL_FreeSurface(pixels_surface)
+				return
+
+			bg_capture_texture = sdl2.SDL_CreateTextureFromSurface(renderer, pixels_surface)
+			sdl2.SDL_FreeSurface(pixels_surface)
+			if not bg_capture_texture: return
+
+			sdl2.SDL_SetHint(sdl2.SDL_HINT_RENDER_SCALE_QUALITY, b"1")
+
+			# --- THIS IS THE FIX: Progressive Downscaling for Multi-Pass Blur ---
+
+			# Initial downscale
+			w, h = elem.w // 2, elem.h // 2
+			tex1 = sdl2.SDL_CreateTexture(renderer, sdl2.SDL_PIXELFORMAT_RGBA8888, sdl2.SDL_TEXTUREACCESS_TARGET, w, h)
+			if not tex1:
+				sdl2.SDL_DestroyTexture(bg_capture_texture)
+				return
+
+			sdl2.SDL_SetRenderTarget(renderer, tex1)
+			sdl2.SDL_RenderCopy(renderer, bg_capture_texture, None, None)
+
+			# Subsequent blur passes
+			blur_passes = 0
+			tex2 = None
+			for i in range(blur_passes):
+				# Downscale further in each pass
+				w, h = max(1, w // 2), max(1, h // 2)
+
+				if i % 2 == 0:
+					# Render from tex1 to tex2
+					if tex2: sdl2.SDL_DestroyTexture(tex2)
+					tex2 = sdl2.SDL_CreateTexture(renderer, sdl2.SDL_PIXELFORMAT_RGBA8888, sdl2.SDL_TEXTUREACCESS_TARGET, w, h)
+					sdl2.SDL_SetRenderTarget(renderer, tex2)
+					sdl2.SDL_RenderCopy(renderer, tex1, None, None)
+				else:
+					# Render from tex2 to tex1
+					if tex1: sdl2.SDL_DestroyTexture(tex1)
+					tex1 = sdl2.SDL_CreateTexture(renderer, sdl2.SDL_PIXELFORMAT_RGBA8888, sdl2.SDL_TEXTUREACCESS_TARGET, w, h)
+					sdl2.SDL_SetRenderTarget(renderer, tex1)
+					sdl2.SDL_RenderCopy(renderer, tex2, None, None)
+
+			final_blur_texture = tex2 if blur_passes % 2 != 0 else tex1
+
+			sdl2.SDL_SetRenderTarget(renderer, None)
+			sdl2.SDL_RenderCopy(renderer, final_blur_texture, None, window_rect)
+
+			# --- END OF FIX ---
+
+			# Clean up all textures
+			sdl2.SDL_DestroyTexture(bg_capture_texture)
+			if tex1: sdl2.SDL_DestroyTexture(tex1)
+			if tex2: sdl2.SDL_DestroyTexture(tex2)
+
+			sdl2.SDL_SetHint(sdl2.SDL_HINT_RENDER_SCALE_QUALITY, b"0")
+		if True:
+			windowsurf = gSurfaces[SURF_UIWINDOW]
+			renderer = self.renderer
+			texture = windowsurf.texture
+					# --- THIS IS THE FIX: Draw vignette inside hollow windows ---
 			header_h = 26
 			border_w = 3
 			footer_h = 3
 			
-			# 2. Draw the main grey frame border without a fill
+			# 1. Draw the main grey frame border
+			#sdl2.SDL_SetTextureColorMod(texture, 50, 55, 60)
 			frame_rect = sdl2.SDL_Rect(elem.x, elem.y, elem.w, elem.h)
 			draw_9_slice(renderer, windowsurf, frame_rect, rectsUIWindow2)
 			
-			# 3. Fill ONLY the header and footer parts of the grey frame
+			# 2. Fill the header
 			renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x + border_w, elem.y + border_w, elem.w - (border_w * 2), header_h - border_w))
-			renderer.copy(windowsurf, srcrect=rectUIWindow1ColorFill, dstrect=(elem.x + border_w, elem.y + elem.h - footer_h, elem.w - (border_w * 2), 0))
 
-			# 4. Draw the inner concave border around the hole
+			# 3. Draw the inner concave border around the hole
+			sdl2.SDL_SetTextureColorMod(texture, 70, 80, 90)
 			hole_rect = sdl2.SDL_Rect(elem.x + border_w, elem.y + header_h, elem.w - (border_w * 2), elem.h - header_h - footer_h)
-			sdl2.SDL_SetTextureAlphaMod(windowsurf.texture, 126)
-			sdl2.SDL_SetTextureBlendMode(windowsurf.texture, sdl2.SDL_BLENDMODE_BLEND)
-			sdl2.SDL_SetTextureColorMod(windowsurf.texture, 255,0,255)
+			draw_9_slice(renderer, windowsurf, hole_rect, rectsUIConcave)
 
-			renderWindowBox(hole_rect, *rectsUIConcave)
-			sdl2.SDL_SetTextureAlphaMod(windowsurf.texture, 255)
-			sdl2.SDL_SetTextureColorMod(windowsurf.texture, 255,255,255)
+			# 4. Stretch the single vignette texture over the hole
+			vignette_sprite = gSurfaces[SURF_VIGNETTE]
+			if vignette_sprite:
+				sdl2.SDL_SetTextureAlphaMod(vignette_sprite.texture, 180)
+				# The destination rect for the vignette is the same as the "hole"
+				# but slightly inset to stay within the concave border.
+				vignette_dest_rect = sdl2.SDL_Rect(hole_rect.x + 2, hole_rect.y + 2, hole_rect.w - 4, hole_rect.h - 4)
+				renderer.copy(vignette_sprite, dstrect=vignette_dest_rect)
+
+
+			sdl2.SDL_SetTextureColorMod(texture, 255, 255, 255)
 
 
 		else:
@@ -2439,7 +2570,6 @@ class Interface:
 			renderWindowBox(elem, rectUIWindow1ColorFill, rectUIWindow2TopLeft, rectUIWindow2TopRight, 
 							rectUIWindow2BottomLeft, rectUIWindow2BottomRight, rectUIWindow2Top, 
 							rectUIWindow2Right, rectUIWindow2Bottom, rectUIWindow2Left)
-		# --- END OF FIX ---
 
 	def fadeout(self, introAnimTimer):
 		colorBlack = gSurfaces[SURF_COLOR_BLACK]
@@ -2555,6 +2685,38 @@ class Interface:
 		renderText(tool_text, sdlColorWhite, TTF_STYLE_NORMAL, pos_tool, text_y)
 		# --- END OF FIX ---
 
+def is_mouse_over_text_input(mouse, window):
+    """Checks if the mouse is currently over a UITextInput within a given window."""
+    for sub_elem in window.elements.values():
+        if isinstance(sub_elem, UITextInput) and util.inWindowElemBoundingBox(mouse, window, sub_elem):
+            return True
+    return False
+
+def update_cursor(gxEdit):
+    """Checks editor state and sets the appropriate mouse cursor."""
+    # Default to arrow cursor
+    cursor_to_set = gCursorArrow
+
+    # If a resize operation is currently active, always show the resize cursor
+    if gxEdit.resizingElem:
+        cursor_to_set = gCursorResizeV
+    else:
+        # Otherwise, check for hover states on the topmost window
+        mouse = util.getMouseState()
+        # Iterate in drawing order (top-most window first)
+        for key, elem in reversed(list(gxEdit.elements.items())):
+            if elem.visible and util.inWindowBoundingBox(mouse, elem):
+                # Check for resize handle first, as it's on the window's edge
+                if util.inResizeHitbox(mouse, elem):
+                    cursor_to_set = gCursorResizeV
+                    break  # Found the topmost interactive element, stop checking
+                
+                # Check for text inputs within the window
+                if is_mouse_over_text_input(mouse, elem):
+                    cursor_to_set = gCursorIBeam
+                    break # Found the topmost interactive element, stop checking
+    
+    sdl2.SDL_SetCursor(cursor_to_set)
 class StageTabsBar(UIWindow):
     def __init__(self, x, y, w, h, type=const.WINDOW_NONE, style=0, visible=True):
         UIWindow.__init__(self, x, y, w, h, type, style, visible)

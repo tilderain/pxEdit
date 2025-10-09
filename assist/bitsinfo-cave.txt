@@ -1,0 +1,16 @@
+0@Solid (bouncy sides)
+1@Not affected by tile 44
+2@Invulnerable
+3@Ignore solid tiles
+4@Bouncy top
+5@Shootable
+6@Solid (hard sides)
+7@Rear & top no damage
+8@Run event on contact
+9@Run event on death
+10@(Unused)
+11@Appear if flag set
+12@Spawn with alt dir
+13@Interactable
+14@No appear if flag set
+15@Show damage #

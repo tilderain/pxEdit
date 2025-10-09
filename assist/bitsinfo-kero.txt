@@ -1,0 +1,8 @@
+0@Spawn alive
+1@(Unused?)
+2@Run script on touch
+3@Run script on death
+4@Spawn with alt dir
+5@(Unused?)
+6@No appear if flag set
+7@Appear if flag set

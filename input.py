@@ -41,30 +41,42 @@ def runMouse1(stage, mouse):
 	if (gxEdit.h_scrollbar.action_state != interface.SCROLL_ACTION_GRAY and
 	    util.inBoundingBox(mouse.x, mouse.y, gxEdit.h_scrollbar.rect_bar.x, gxEdit.h_scrollbar.rect_bar.y, gxEdit.h_scrollbar.rect_bar.w, gxEdit.h_scrollbar.rect_bar.h)):
 		return True # Mouse is over the horizontal scrollbar, consume the click
+
 	map = stage.pack.layers[gxEdit.currentLayer]
 	eve = stage.pack.eve.units
 
 	mag = gxEdit.magnification
 
 	for i, elem in reversed(list(gxEdit.elements.items())):
-		if i == "stageTabs": continue # Already handled
+		if i == "stageTabs": continue
 		if not elem.visible: continue
 
 		if util.inWindowBoundingBox(mouse, elem):
-			#move to top
+			# Window is under cursor, bring it to front.
 			gxEdit.elements[i] = gxEdit.elements.pop(i)
-			if elem.handleMouse1(mouse, gxEdit):
-				return
-		if util.inDragHitbox(mouse, elem):
-			#move to top
-			gxEdit.elements[i] = gxEdit.elements.pop(i)
-			
-			gxEdit.draggedElem = elem
-			gxEdit.dragX = mouse.x - elem.x
-			gxEdit.dragY = mouse.y - elem.y
-			return
 
-	#TODO: placeholder
+			# If no internal element was clicked, then check for frame interactions.
+			if util.inResizeHitbox(mouse, elem):
+				gxEdit.resizingElem = elem
+				return True # Consume click
+			# --- THIS IS THE FIX: Check for clicks on internal elements FIRST ---
+			# Try to handle the click within the window's content area.
+			if elem.handleMouse1(mouse, gxEdit):
+				return True # The click was on a button, text field, etc. Consume it.
+
+
+			if util.inDragHitbox(mouse, elem):
+				gxEdit.draggedElem = elem
+				gxEdit.dragX = mouse.x - elem.x
+				gxEdit.dragY = mouse.y - elem.y
+				return True # Consume click
+			
+			# If the click was inside the window but not on any specific control,
+			# it might be a "fall through" event (like for the tile palette).
+			# We don't return here, allowing subsequent checks to run.
+	
+	# --- THIS IS THE FIX: Check for tile palette interaction separately ---
+	# This code will now run if the palette's handleMouse1 returned False.
 	tilePalette = gxEdit.elements["tilePalette"]
 	if tilePalette.visible and util.inWindowBoundingBox(mouse, tilePalette):
 		#tile select
@@ -74,14 +86,12 @@ def runMouse1(stage, mouse):
 		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // tileWidth // gxEdit.tilePaletteMag
 		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // tileWidth // gxEdit.tilePaletteMag
 		
-		if stage.attrs[gxEdit.currentLayer] is None: return
-		if x >= stage.attrs[gxEdit.currentLayer].width:
-			return
-		if y >= stage.attrs[gxEdit.currentLayer].height:
-			return
-
+		if stage.attrs[gxEdit.currentLayer] is None: return True # Consume click if no attrs
+		if x >= stage.attrs[gxEdit.currentLayer].width or y >= stage.attrs[gxEdit.currentLayer].height:
+			return True # Consume click if outside palette bounds
 		if x < 0 or y < 0:
-			return
+			return True # Consume click if outside palette bounds
+
 		gxEdit.currentEditMode = const.EDIT_TILE
 		stage.selectedTilesStart = [x, y]
 		stage.selectedTilesEnd = [x, y]
@@ -89,20 +99,23 @@ def runMouse1(stage, mouse):
 
 		stage.lastTileEdit = [None, None]
 		gxEdit.tileSelectionUpdate = True
-	tilePalette = gxEdit.elements["entityPalette"]
-	if tilePalette.visible and util.inWindowBoundingBox(mouse, tilePalette):
+		return True # The click was handled by the palette, so consume it.
+		
+	entityPalette = gxEdit.elements["entityPalette"]
+	if entityPalette.visible and util.inWindowBoundingBox(mouse, entityPalette):
 		#entity select
 		#TODO: add mag
-		x = (mouse.x - tilePalette.x - tilePalette.elements["picker"].x) // gxEdit.tileWidth2
-		y = (mouse.y - tilePalette.y - tilePalette.elements["picker"].y) // gxEdit.tileWidth2
+		x = (mouse.x - entityPalette.x - entityPalette.elements["picker"].x) // gxEdit.tileWidth2
+		y = (mouse.y - entityPalette.y - entityPalette.elements["picker"].y) // gxEdit.tileWidth2
 
 		index = x + (y * 16)
 		if index > len(gxEdit.entityInfo):
-			return
+			return True
 		if index < 0:
-			return
+			return True
 		gxEdit.currentEditMode = const.EDIT_ENTITY
 		gxEdit.currentEntity = index
+		return True
 
 	elif gxEdit.currentEditMode == const.EDIT_ENTITY:
 		offset_y = mouse.y - gxEdit.content_y_offset
@@ -278,7 +291,14 @@ def runMouseUp(gxEdit, curStage, mouse):
 		gxEdit.rectanglePaintBoxEnd = [-1, -1]
 
 def runMouseDrag(gxEdit, stage, mouse):			
-	#mouse = util.getMouseState()
+	if gxEdit.resizingElem:
+		elem = gxEdit.resizingElem
+		# Calculate new height based on mouse position relative to window's top
+		new_h = mouse.y - elem.y
+		# Enforce a minimum height for the window
+		elem.h = max(80, new_h)
+		return True # Consume the drag event
+
 	mouse.button = mouse.state
 
 	for i, elem in reversed(list(gxEdit.elements.items())):
@@ -512,14 +532,17 @@ def runMouseDrag(gxEdit, stage, mouse):
 				elem.elements["stringEdit"].text = str(selectedEntities[0].string)
 				elem.elements["stringEdit"].placeholderText = ""
 
-				elem.elements["textHexBitsS"].text = util.lazybin(selectedEntities[0].bits, 8)
-				elem.elements["textHexBits"].text = util.lazybin(selectedEntities[0].bits, 8)
+				elem.elements["textHexBitsS"].text = util.lazybin(selectedEntities[0].bits, 16)
+				elem.elements["textHexBits"].text = util.lazybin(selectedEntities[0].bits, 16)
 
 				bit = 1
-				for i in range(1, 9):
-					elem.elements["butCheckBits" + str(i)].state = \
-						interface.BUTTON_STATE_ACTIVE if selectedEntities[0].bits & bit else \
-						interface.BUTTON_STATE_NORMAL
+				for i in range(16):
+					# Check if the button for this bit exists before trying to update it
+					button_key = f"butCheckBits{i}"
+					if button_key in elem.elements:
+						elem.elements[button_key].state = \
+							interface.BUTTON_STATE_ACTIVE if selectedEntities[0].bits & bit else \
+							interface.BUTTON_STATE_NORMAL
 					bit *= 2
 
 			else:
@@ -530,26 +553,36 @@ def runMouseDrag(gxEdit, stage, mouse):
 				elem.elements["textHexBitsS"].text = ""
 				elem.elements["textHexBits"].text = ""
 				bit = 1
-				for i in range(1, 9):
-					foundCount = 0
-					for o in selectedEntities:
-						if o.bits & bit:
-							foundCount += 1
-					if foundCount == len(selectedEntities):
-						elem.elements["butCheckBits" + str(i)].state = interface.BUTTON_STATE_ACTIVE
-						elem.elements["textHexBitsS"].text += "1"
-						elem.elements["textHexBits"].text += "1"
-					elif foundCount >= 1:
-						elem.elements["butCheckBits" + str(i)].state = interface.BUTTON_STATE_CLICKED
-						elem.elements["textHexBitsS"].text += "?"
-						elem.elements["textHexBits"].text += "?"
-					else:
-						elem.elements["butCheckBits" + str(i)].state = interface.BUTTON_STATE_NORMAL
-						elem.elements["textHexBitsS"].text += "0"
-						elem.elements["textHexBits"].text += "0"
+				num_bits_to_check = 16 if gxEdit.game_manager.get_current_game().name == 'cave_story' else 8
+				
+				bin_str_s = ""
+				bin_str = ""
+				
+				for i in range(num_bits_to_check):
+					button_key = f"butCheckBits{i}"
+					if button_key in elem.elements:
+						foundCount = 0
+						for o in selectedEntities:
+							if o.bits & bit:
+								foundCount += 1
+						
+						if foundCount == len(selectedEntities):
+							elem.elements[button_key].state = interface.BUTTON_STATE_ACTIVE
+							bin_str_s += "1"
+							bin_str += "1"
+						elif foundCount >= 1:
+							elem.elements[button_key].state = interface.BUTTON_STATE_CLICKED
+							bin_str_s += "?"
+							bin_str += "?"
+						else:
+							elem.elements[button_key].state = interface.BUTTON_STATE_NORMAL
+							bin_str_s += "0"
+							bin_str += "0"
+					
 					bit *= 2
-				elem.elements["textHexBitsS"].text = elem.elements["textHexBitsS"].text[::-1]
-				elem.elements["textHexBits"].text = elem.elements["textHexBits"].text[::-1]
+				
+				elem.elements["textHexBitsS"].text = bin_str_s[::-1]
+				elem.elements["textHexBits"].text = bin_str[::-1]
 
 			elem.visible = True
 			elem.x = mouse.x - elem.w - 8

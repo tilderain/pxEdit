@@ -361,6 +361,7 @@ def main():
 				input.runMouseUp(gxEdit, curStage, event.button)
 				mouseHeld = False
 				gxEdit.draggedElem = None
+				gxEdit.resizingElem = None
 			elif event.type == sdl2.SDL_TEXTINPUT:
 				if gxEdit.focussedElem:
 					gxEdit.focussedElem.handleTextInput(event.text.text.decode("utf-8"), gxEdit)
@@ -499,6 +500,7 @@ def main():
 		clampMagnification()
 		clampScroll(curStage)
 		clampUiWindows()
+		interface.update_cursor(gxEdit)
 
 		curStage = gxEdit.stages[gxEdit.curStage]
 		#input.runMouseDrag(gxEdit, curStage)

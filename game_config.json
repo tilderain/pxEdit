@@ -18,7 +18,8 @@
         "attribute_image": "attribute-kero.png",
         "attribute": "attribute-kero.txt",
         "pxpack_layers": 3,
-        "default_stage": "01field1"
+        "default_stage": "01field1",
+        "bits_info": "assist/bitsinfo-kero.txt"
     },
     "cave_story": {
         "name": "Cave Story",
@@ -39,7 +40,9 @@
         "unittype_image": "unittype-cave.png",
         "attribute_image": "attribute-cave.png",
         "attribute": "attribute-cave.txt",
-        "default_stage": "Almond"
+        "default_stage": "Start",
+        "bits_info": "assist/bitsinfo-cave.txt"
+
     },
     "rockfish": {
         "name": "Rockfish",
@@ -60,8 +63,8 @@
         "attribute_image": "attribute-rock.png",
         "attribute": "attribute-kero.txt",
         "pxpack_layers": 1,
-        "default_stage": "rmStart"
-        
+        "default_stage": "rmStart",
+        "bits_info": "assist/bitsinfo-kero.txt"
     },
     "star_frog_10x": {
         "name": "Star Frog 10x",
@@ -82,7 +85,8 @@
         "attribute_image": "attribute-rock.png",
         "attribute": "attribute-kero.txt",
         "pxpack_layers": 1,
-        "default_stage": "03right"
+        "default_stage": "03right",
+        "bits_info": "assist/bitsinfo-kero.txt"
     },
     "star_frog_11x": {
         "name": "Star Frog 11x",
@@ -103,7 +107,8 @@
         "attribute_image": "attribute-kero.png",
         "attribute": "attribute-kero.txt",
         "pxpack_layers": 3,
-        "default_stage": "01port"
+        "default_stage": "01port",
+        "bits_info": "assist/bitsinfo-kero.txt"
     },
     "guxt": {
         "name": "Guxt",
