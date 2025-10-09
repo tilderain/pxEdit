@@ -1493,7 +1493,7 @@ class EntityEditWindow(UIWindow):
 		self.elements["textHexBitsS"] = UIText(74, 70, "a", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textHexBits"] = UIText(73, 70, "a", sdlColorYellow, TTF_STYLE_NORMAL, self)
 
-'''
+	'''
 		#seems to only have an effect when spawning, (is set during creation)
 		self.elements["textBitsDesc1"] = UIText(15, 88, "I don't know", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["butCheckBits2"] = UIButton(120, 110, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=2)
@@ -1507,7 +1507,7 @@ class EntityEditWindow(UIWindow):
 		self.elements["textBitsDesc5"] = UIText(15, 168, "Spawn with alt dir:", sdlColorYellow, TTF_STYLE_NORMAL, self)
 		self.elements["butCheckBits6"] = UIButton(120, 190, 16, 12, self, rects=rectsButtonCheckbox, type=BUTTON_TYPE_CHECKBOX, var=32)
 		#631, 446, 448, 447, 197, 179, 177 npc acts may use this
-'''
+	'''
 
 	def build_bits_ui(self, gxEdit):
 		"""Dynamically creates UI elements for entity bits based on loaded info."""
