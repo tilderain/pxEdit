@@ -31,6 +31,12 @@ from stage import Stage, Layer, Entity
 from editor import gxEdit
 from editor import defaultStage
 
+
+if False:
+    import formatKero
+    import formatCave
+    import formatGuxt
+
 #You must agree to the terms of use to continue.
 #Terms of Use
 #THIS INDEPENDANT
@@ -89,10 +95,14 @@ def main():
 
 	sdl2.ext.init()
 
-	icon_surface = sdl2.ext.load_image("face.ico")
-
-
-
+	try:
+		icon_surface = sdlimage.IMG_Load(b"./face.png")
+		if not icon_surface:
+			print(f"Error loading icon: {sdlimage.IMG_GetError().decode()}")
+			icon_surface = None # Ensure it's None on failure
+	except Exception as e:
+		print(f"Exception while loading icon: {e}")
+		icon_surface = None
 
 
 	sdlimage.IMG_Init(sdlimage.IMG_INIT_JPG)
@@ -124,7 +134,9 @@ def main():
 	window = interface.gWindow
 	window.show()
 
-	sdl2.SDL_SetWindowIcon(window.window, icon_surface)
+	if icon_surface:
+		sdl2.SDL_SetWindowIcon(window.window, icon_surface.contents)
+		sdl2.SDL_FreeSurface(icon_surface) # Free the surface after setting the icon
 
 	interface.gRenderer = sdl2.ext.Renderer(window, flags=sdl2.SDL_RENDERER_ACCELERATED|sdl2.SDL_RENDERER_TARGETTEXTURE)
 	renderer = interface.gRenderer
@@ -191,6 +203,18 @@ def main():
 
 	gxEdit.elements["stageSelection"] = interface.StageSelectionWindow(0, 0, 200, 250)
 
+	gxEdit.elements["gameSelection"] = interface.GameSelectionWindow(0, 0, 250, 100, visible=True)
+	game_selection_win = gxEdit.elements["gameSelection"]
+	game_selection_win.refresh_list(gxEdit) # Populate with games
+
+	# Center it on screen
+	game_selection_win.x = (defaultWindowWidth - game_selection_win.w) // 2
+	game_selection_win.y = (defaultWindowHeight - game_selection_win.h) // 2
+
+	game_selection_win = gxEdit.elements["dialogMultiplayer"] 
+	# Center it on screen
+	game_selection_win.x = (defaultWindowWidth - game_selection_win.w) // 4
+	game_selection_win.y = (defaultWindowHeight - game_selection_win.h) // 4
 	def renderEditor():
 		#TODO: placeholder
 		gui.renderEditorBg()
@@ -272,6 +296,212 @@ def main():
 	while running:
 
 		tickCount = sdl2.timer.SDL_GetTicks()
+
+
+		# --- THIS IS THE FIX: Add a queue processing block ---
+		while gxEdit.main_thread_queue:
+			command, payload = gxEdit.main_thread_queue.popleft()
+			print(f"Main thread processing command: {command}")
+			if command == 'LOAD_SYNCED_STAGE':
+				from editor import StagePrj
+				s_data = payload
+
+				# 1. Create sprites for any newly received tilesets
+				for name, image_bytes in gxEdit.synced_tileset_data_raw.items():
+					try:
+						# ... (same sprite creation logic as in FINISH_SYNC)
+						rwops = sdl2.SDL_RWFromConstMem(image_bytes, len(image_bytes))
+						img_surface = sdlimage.IMG_Load_RW(rwops, 1)
+						if not img_surface: continue
+						
+						sprite = interface.gSprfactory.from_surface(img_surface.contents)
+						sdl2.SDL_FreeSurface(img_surface)
+						gxEdit.synced_tilesets[name] = sprite
+						print(f"  -> Created sprite for new tileset '{name}'")
+					except Exception as e:
+						print(f"Error creating sprite for new stage: {e}")
+				gxEdit.synced_tileset_data_raw.clear() # Clear after processing
+
+				# 2. Assemble the stage
+				stage_prj = StagePrj(s_data['stageName'], s_data['pack'], gxEdit.tileWidth)
+				stage_prj.is_attribute_stage = s_data['is_attribute_stage']
+				stage_prj.original_path = s_data['original_path']
+
+				for i, layer in enumerate(stage_prj.pack.layers):
+					if layer.partsName in gxEdit.synced_tilesets:
+						stage_prj.parts[i] = gxEdit.synced_tilesets[layer.partsName]
+				
+				for i in range(len(stage_prj.pack.layers)):
+					if stage_prj.parts[i]:
+						stage_prj.loadAttrs(i)
+					stage_prj.createMapSurface(i)
+					stage_prj.renderMapToSurface(i)
+				
+				# 3. Add to stages list at the correct index
+				stage_index = s_data['index']
+				if stage_index >= len(gxEdit.stages):
+					gxEdit.stages.append(stage_prj)
+				else:
+					gxEdit.stages.insert(stage_index, stage_prj)
+				
+				print(f"  -> Assembled and loaded synced stage '{s_data['stageName']}'")
+			if command == 'SWITCH_GAME_FOR_SYNC':
+				game_name = payload
+				
+				# All these functions now run safely on the main thread
+				setup_game_environment(game_name)
+				interface.reload_game_surfaces()
+				gxEdit.loadMeta(None)
+				gxEdit.update_tile_dimensions()
+				gxEdit.stages.clear()
+			if command == 'FINISH_SYNC':
+				# This block now runs safely in the main thread.
+				from editor import StagePrj
+
+				# 1. Create all Sprite objects from raw cached data
+				for name, image_bytes in gxEdit.synced_tileset_data_raw.items():
+					try:
+						rwops = sdl2.SDL_RWFromConstMem(image_bytes, len(image_bytes))
+						img_surface = sdlimage.IMG_Load_RW(rwops, 1)
+						if not img_surface: continue
+						
+						sprite = interface.gSprfactory.from_surface(img_surface.contents)
+						sdl2.SDL_FreeSurface(img_surface)
+						gxEdit.synced_tilesets[name] = sprite
+						print(f"  -> Created sprite for '{name}'")
+					except Exception as e:
+						print(f"Error creating sprite from synced data '{name}': {e}")
+				
+				# 2. Assemble the stages using the newly created sprites
+				if gxEdit.open_stages_info_from_sync:
+					stage_names = gxEdit.open_stages_info_from_sync["names"]
+					for name in stage_names:
+						if name not in gxEdit.synced_stage_data: continue
+						s_data = gxEdit.synced_stage_data[name]
+
+						stage_prj = StagePrj(s_data['stageName'], s_data['pack'], gxEdit.tileWidth)
+						stage_prj.is_attribute_stage = s_data['is_attribute_stage']
+						stage_prj.original_path = s_data['original_path']
+
+						for i, layer in enumerate(stage_prj.pack.layers):
+							if layer.partsName in gxEdit.synced_tilesets:
+								stage_prj.parts[i] = gxEdit.synced_tilesets[layer.partsName]
+						
+						# Finalize loading (this is where renderMapToSurface is called)
+						for i in range(len(stage_prj.pack.layers)):
+							if stage_prj.parts[i]:
+								stage_prj.loadAttrs(i)
+							stage_prj.createMapSurface(i)
+							stage_prj.renderMapToSurface(i)
+						
+						gxEdit.stages.append(stage_prj)
+						print(f"  -> Assembled stage '{name}'")
+
+					gxEdit.curStage = gxEdit.open_stages_info_from_sync["active_index"]
+				
+				# 3. Clean up and finish syncing state
+				gxEdit.synced_tileset_data_raw.clear()
+				gxEdit.synced_stage_data.clear()
+				gxEdit.open_stages_info_from_sync = None
+				gxEdit.is_syncing = False # <-- Unset flag here!
+				gxEdit.no_game_loaded = False # A game is now loaded!
+				
+				game_win = gxEdit.elements.get("gameSelection")
+				game_win.visible = False
+
+				print("--- Main thread assembly complete. ---")
+		# --- END OF FIX ---
+		if gxEdit.no_game_loaded and not gxEdit.is_syncing:
+			gui.fill()
+			
+			# --- RENDER AND INTERACT WITH BOTH WINDOWS ---
+			windows_to_process = []
+			game_win = gxEdit.elements.get("gameSelection")
+			multi_win = gxEdit.elements.get("dialogMultiplayer")
+			multi_win.visible = True
+
+			if game_win and game_win.visible: windows_to_process.append(game_win)
+			if multi_win and multi_win.visible: windows_to_process.append(multi_win)
+
+			# Render windows
+			for win in windows_to_process:
+				gui.renderUIWindow(gxEdit, win)
+				win.render(gxEdit, None)
+			gui.render_popups(gxEdit)
+
+			events = sdl2.ext.get_events()
+			for event in events:
+				if event.type == sdl2.SDL_QUIT:
+					running = False
+					break
+				
+				# Handle window dragging and clicking
+				if event.type == sdl2.SDL_MOUSEMOTION:
+					if gxEdit.draggedElem:
+						gxEdit.draggedElem.x = event.motion.x - gxEdit.dragX
+						gxEdit.draggedElem.y = event.motion.y - gxEdit.dragY
+				elif event.type == sdl2.SDL_MOUSEBUTTONDOWN:
+					# Check windows from top to bottom (reversed order)
+					clicked_on_window = False
+					for win in reversed(windows_to_process):
+						if util.inWindowBoundingBox(event.button, win):
+							win.handleMouse1(event.button, gxEdit)
+							if util.inDragHitbox(event.button, win):
+								gxEdit.draggedElem = win
+								gxEdit.dragX = event.button.x - win.x
+								gxEdit.dragY = event.button.y - win.y
+							
+								
+							clicked_on_window = True
+							break # Stop after handling the topmost window
+				elif event.type == sdl2.SDL_MOUSEBUTTONUP:
+					gxEdit.draggedElem = None
+					if gxEdit.activeElem:
+						gxEdit.activeElem.handleMouse1Up(event.button, gxEdit)
+						gxEdit.activeElem = None
+				elif event.type == sdl2.SDL_TEXTINPUT:
+					if gxEdit.focussedElem:
+						gxEdit.focussedElem.handleTextInput(event.text.text.decode("utf-8"), gxEdit)
+				elif event.type == sdl2.SDL_KEYDOWN:
+					if gxEdit.focussedElem and event.key.keysym.scancode == sdl2.SDL_SCANCODE_BACKSPACE:
+						gxEdit.focussedElem.text = gxEdit.focussedElem.text[:-1]
+
+			renderer.present()
+			sdl2.SDL_Delay(16)
+			continue # Skip the rest of the main loop
+		# --- END OF FIX ---
+
+		if gxEdit.is_syncing:
+			# If syncing, render a simple waiting screen and skip all game logic
+			gui.fill()
+			sync_text = "Synchronizing with host..."
+			text_w, text_h = interface.getTextSize(sync_text, interface.gFont)
+			text_x = (interface.gWindowWidth - text_w) // 2
+			text_y = (interface.gWindowHeight - text_h) // 2
+			interface.renderText(sync_text, interface.sdlColorWhite, sdl2.sdlttf.TTF_STYLE_NORMAL, text_x, text_y)
+			renderer.present()
+			sdl2.SDL_Delay(16) # Don't burn CPU while waiting
+			continue # Skip the rest of the loop
+		# --- END OF FIX ---
+		
+		# If the list of stages is empty for any reason, we can't proceed.
+		if not gxEdit.stages:
+			# This can happen on initial client startup before sync begins.
+			# Render a blank screen and wait.
+			gui.fill()
+			interface.renderText("Waiting for connection...", interface.sdlColorWhite, sdl2.sdlttf.TTF_STYLE_NORMAL, 10, 10)
+			renderer.present()
+			# We still need to process events to open the multiplayer menu.
+			events = sdl2.ext.get_events()
+			for event in events:
+				if event.type == sdl2.SDL_QUIT:
+					running = False
+					break
+				# Allow minimal UI interaction to open multiplayer window
+				if event.type == sdl2.SDL_MOUSEBUTTONDOWN:
+					input.runMouse1(None, event.button)
+			# Don't proceed to game logic
+			continue
 		
 		curStage = gxEdit.stages[gxEdit.curStage]
 		

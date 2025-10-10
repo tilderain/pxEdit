@@ -370,8 +370,7 @@ class UITextInput(UIElement):
 			if not text.isdigit() and not (self.text == "" and text == "-"):
 				return False
 			try:
-				if self.maxlen and int(self.text + text) > self.maxlen or \
-					self.maxlen and -int(self.text + text) > self.maxlen:
+				if self.maxlen and len(self.text + text) > self.maxlen:
 					return False
 			except:
 				pass
@@ -1083,16 +1082,32 @@ def changeTilePaintMode(window, elem, gxEdit):
 		gxEdit.currentTilePaintMode = const.PAINT_RECTANGLE
 	gxEdit.copyingTiles = False
 
+
+import json
 class MultiplayerWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_TOOLS, style=0,):
 		UIWindow.__init__(self, x, y, w, h, type, style)
 
-		self.elements["paramIP"] = UITextInput(40, 5, 160, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self)
+		defaults = {
+			"default_ip": "",
+			"default_port": "",
+			"default_name": ""
+		}
+		try:
+			if os.path.exists("user_config.json"):
+				with open("user_config.json", 'r') as f:
+					config = json.load(f)
+					# Update defaults with values from file, keeping original defaults as fallback
+					defaults.update(config.get("multiplayer", {}))
+		except (IOError, json.JSONDecodeError) as e:
+			print(f"Warning: Could not load or parse user_config.json: {e}")
+
+		self.elements["paramIP"] = UITextInput(40, 5, 160, 18, defaults["default_ip"], sdlColorGreen, TTF_STYLE_NORMAL, self)
 		self.elements["paramIP"].placeholderText = "pixeltellsthetruth.solutions"
-		self.elements["paramPort"] = UITextInput(40, 30, 40, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self, style=const.TEXTINPUTTYPE_NUMBER, maxlen=5)
+		self.elements["paramPort"] = UITextInput(40, 30, 40, 18, defaults["default_port"], sdlColorGreen, TTF_STYLE_NORMAL, self, style=const.TEXTINPUTTYPE_NUMBER, maxlen=5)
 		self.elements["paramPort"].placeholderText = "7777"
 
-		self.elements["paramName"] = UITextInput(120, 30, 80, 18, "", sdlColorGreen, TTF_STYLE_NORMAL, self, maxlen=16)
+		self.elements["paramName"] = UITextInput(120, 30, 80, 18, defaults["default_name"], sdlColorGreen, TTF_STYLE_NORMAL, self, maxlen=16)
 
 		self.elements["textXs"] = UIText(6, 6, "IP:", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textX"] = UIText(7, 7, "IP:", sdlColorYellow, TTF_STYLE_NORMAL, self)
@@ -1102,8 +1117,8 @@ class MultiplayerWindow(UIWindow):
 		self.elements["textNames"] = UIText(84, 30, "Name:", sdlColorBlack, TTF_STYLE_NORMAL, self)
 		self.elements["textName"] = UIText(85, 31, "Name:", sdlColorYellow, TTF_STYLE_NORMAL, self)
 
-		self.elements["textHost"] = UIText(12, 68, "Host", sdlColorBlack, TTF_STYLE_NORMAL, self)
-		self.elements["textConnect"] = UIText(48, 68, "Connect", sdlColorBlack, TTF_STYLE_NORMAL, self)
+		self.elements["textHost"] = UIText(12, 68, "Host", sdlColorOlive, TTF_STYLE_NORMAL, self)
+		self.elements["textConnect"] = UIText(48, 68, "Connect", sdlColorOlive, TTF_STYLE_NORMAL, self)
 
 		self.elements["buttonHost"] = UIButton(12, 54, 16, 16, self)
 		self.elements["buttonHost"].onAction = multi.hostButtonAction
@@ -1409,6 +1424,16 @@ class StageSelectionWindow(UIWindow):
             
             renderText(display_name, text_color, TTF_STYLE_NORMAL, self.x + 10, list_y + (i * self.item_height))
 
+def broadcast_entity_modification(gxEdit):
+    """Helper to broadcast the state of selected entities."""
+    if gxEdit.multiplayerState != const.MULTIPLAYER_NONE:
+        stage = gxEdit.stages[gxEdit.curStage]
+        packet = {
+            "type": multi.PACKET_MODIFY_ENTITY,
+            "stage_index": gxEdit.curStage,
+            "entities": stage.selectedEntities
+        }
+        multi.broadcast_action(gxEdit, packet)
 def editEntityAttributes(control, gxEdit):
 	param = control.text
 	try:
@@ -1432,6 +1457,8 @@ def editEntityAttributes(control, gxEdit):
 
 	#stage.pack.eve.modify(ids, type2=int(param))
 
+	broadcast_entity_modification(gxEdit) # <-- ADD THIS
+
 # In the interface.py file's editEntityBits method
 def editEntityBits(window, elem, gxEdit):
 	stage = gxEdit.stages[gxEdit.curStage]
@@ -1450,6 +1477,7 @@ def editEntityBits(window, elem, gxEdit):
 	window.elements["textHexBitsS"].text = util.lazybin(select[0].bits, num_bits_to_show)
 	window.elements["textHexBits"].text = util.lazybin(select[0].bits, num_bits_to_show)
 
+	broadcast_entity_modification(gxEdit) # <-- ADD THIS
 
 
 
@@ -1461,6 +1489,7 @@ def editEntityString(control, gxEdit):
 	ids = [o.id for o in select]
 	stage.pack.eve.modify(ids, string=param)
 
+	broadcast_entity_modification(gxEdit) # <-- ADD THIS
 
 class EntityEditWindow(UIWindow):
 	def __init__(self, x, y, w, h, type=const.WINDOW_ENTITYEDIT, style=0):
@@ -1545,7 +1574,41 @@ class EntityEditWindow(UIWindow):
 			self.build_bits_ui(gxEdit)
 		
 		UIWindow.render(self, gxEdit, stage)
+class GameSelectionWindow(UIWindow):
+    def __init__(self, x, y, w, h, type=const.WINDOW_NONE, style=0, visible=True):
+        UIWindow.__init__(self, x, y, w, h, type, style, visible)
+        self.draghitbox = [0, 0, w, 24]
+        self.item_height = 20
+        self.games_list = []
 
+        self.elements["title"] = UIText(8, 6, "Select a Game", sdlColorBlack, TTF_STYLE_BOLD, self)
+
+    def refresh_list(self, gxEdit):
+        """Populates the list of games from the game manager."""
+        self.games_list = list(gxEdit.game_manager.games.keys())
+        # Adjust window height based on number of games
+        self.h = 40 + len(self.games_list) * self.item_height
+
+    def handleMouse1(self, mouse, gxEdit):
+        list_area_y = self.y + 30
+        if mouse.y > list_area_y:
+            item_index = (mouse.y - list_area_y) // self.item_height
+            if 0 <= item_index < len(self.games_list):
+                game_to_load = self.games_list[item_index]
+                gxEdit.switch_game(game_name=game_to_load)
+                self.visible = False
+                return True
+        return False # Allow dragging
+
+    def render(self, gxEdit, stage):
+        # Render the window frame and title
+        UIWindow.render(self, gxEdit, stage)
+        
+        list_y = self.y + 30
+        for i, game_name in enumerate(self.games_list):
+            # Prettify the name for display
+            display_name = game_name.replace("_", " ").title()
+            renderText(display_name, sdlColorWhite, TTF_STYLE_NORMAL, self.x + 10, list_y + (i * self.item_height))
 class YesNoCancelDialog(UIWindow):
 	pass
 
@@ -2140,7 +2203,20 @@ class Interface:
 		
 	def renderPlayers(self, gxEdit, stage):
 		mag = gxEdit.magnification
-		for _, player in gxEdit.players.items():
+		
+		# --- THIS IS THE DEFINITIVE FIX ---
+		# Create a thread-safe copy of the player data before iterating.
+		# .items() creates a view, and list() turns that view into a new list (a snapshot).
+		try:
+			players_to_render = list(gxEdit.players.items())
+		except RuntimeError:
+			# In the ultra-rare case the dictionary is modified *during* the copy,
+			# just skip rendering players for this single frame.
+			return
+
+		for player_id, player in players_to_render:
+		# --- END OF FIX ---
+
 			if "mousepos" not in player: continue
 			if "curStage" not in player: continue
 			if player["curStage"] is not gxEdit.curStage: continue
@@ -2151,7 +2227,7 @@ class Interface:
 
 			xBound = int(stage.hscroll * gxEdit.tileWidth * mag)
 			yBound = int(stage.scroll * gxEdit.tileWidth * mag)
-			#TODO: interp
+
 			targetX = int(player["mousepos"][0] * mag) - xBound
 			targetY = int(player["mousepos"][1] * mag) - yBound
 			x = player["lerpmousepos"][0] 
@@ -2165,19 +2241,18 @@ class Interface:
 
 			if abs(player["lerpxm"]) > abs(int(dx * 0.1)): player["lerpxm"] = int(dx * 0.16)
 			if abs(player["lerpym"]) > abs(int(dy * 0.1)): player["lerpym"] = int(dy * 0.16)
-			
 
 			x += player["lerpxm"]
 			y += player["lerpym"]
 
 			player["lerpmousepos"] = [x, y]
 
-			#if it is offscreen
 			dir = -1
 			size = (0, 0)
-			if x > gWindowWidth or y > gWindowHeight \
-									or x < 0 or y < 0: 
-				size = getTextSize(player["name"], gFont)
+			player_name = player.get("name", "") # Use .get() for safety
+
+			if x > gWindowWidth or y > gWindowHeight or x < 0 or y < 0: 
+				size = getTextSize(player_name, gFont)
 				if x < 0: #left
 					x = 2
 					dir = 0
@@ -2207,8 +2282,8 @@ class Interface:
 				y -= 8
 				x -= size[0] // 2
 			
-			renderText(player["name"], sdlColorBlack, TTF_STYLE_NORMAL, x + 9, y + 1)
-			renderText(player["name"], sdlColorWhite, TTF_STYLE_NORMAL, x + 8, y)
+			renderText(player_name, sdlColorBlack, TTF_STYLE_NORMAL, x + 9, y + 1)
+			renderText(player_name, sdlColorWhite, TTF_STYLE_NORMAL, x + 8, y)
 
 	def renderEntitySelectionBox(self, gxEdit, stage):
 		mag = gxEdit.magnification

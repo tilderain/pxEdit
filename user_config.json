@@ -1,0 +1,7 @@
+{
+  "multiplayer": {
+    "default_ip": "",
+    "default_port": "7777",
+    "default_name": ""
+  }
+}

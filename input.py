@@ -196,6 +196,16 @@ def runMouseUp(gxEdit, curStage, mouse):
 			gxEdit.draggingEntities = False
 
 			stage = gxEdit.stages[gxEdit.curStage]
+			
+			# --- THIS IS THE FIX: Broadcast move ---
+			if gxEdit.multiplayerState != const.MULTIPLAYER_NONE:
+				packet = {
+					"type": multi.PACKET_MOVE_ENTITY,
+					"stage_index": gxEdit.curStage,
+					"entities": stage.selectedEntities
+				}
+				multi.broadcast_action(gxEdit, packet)
+
 			undo = UndoAction(const.UNDO_ENTITY_MOVE, stage.selectedEntitiesDragStart, stage.selectedEntities)
 			stage.addUndo(undo)
 	elif gxEdit.currentEditMode == const.EDIT_TILE and gxEdit.currentTilePaintMode == const.PAINT_COPY:
@@ -636,6 +646,9 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 		if sym == sdl2.SDL_SCANCODE_S:
 			#TODO: show flash on save (goodly)
 			if stage.save():
+				if gxEdit.multiplayerState == const.MULTIPLAYER_CLIENT:
+					gxEdit.add_popup("Saving is disabled in multiplayer.")
+					return
 				gxEdit.add_popup("Saved")
 				gxEdit.saveTimer = 5
 			else:
@@ -921,12 +934,27 @@ def runKeyboard(gxEdit, stage, scaleFactor, key):
 
 			o = stage.pack.eve.add(x, y, gxEdit.currentEntity)
 
+			if gxEdit.multiplayerState != const.MULTIPLAYER_NONE:
+				packet = {
+					"type": multi.PACKET_PLACE_ENTITY,
+					"stage_index": gxEdit.curStage,
+					"entity": o
+				}
+				multi.broadcast_action(gxEdit, packet)
 			undo = UndoAction(const.UNDO_ENTITY_ADD, 0, [o])
 			stage.addUndo(undo)
 
 	elif sym == sdl2.SDL_SCANCODE_DELETE or sym == sdl2.SDL_SCANCODE_BACKSPACE:
 		if stage.selectedEntities:
 			ids = [o.id for o in stage.selectedEntities]
+
+			if gxEdit.multiplayerState != const.MULTIPLAYER_NONE:
+				packet = {
+					"type": multi.PACKET_DELETE_ENTITY,
+					"stage_index": gxEdit.curStage,
+					"ids": ids
+				}
+				multi.broadcast_action(gxEdit, packet)
 			stage.pack.eve.remove(ids)
 			gxEdit.elements["entEdit"].visible = False
 

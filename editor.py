@@ -177,6 +177,7 @@ class StagePrj:
 			try:
 				if os.path.exists(path):
 					self.parts[layerNo] = interface.gSprfactory.from_image(path)
+					self.parts[layerNo].path = path # <<< ADD THIS LINE
 					print(f"Successfully loaded tileset: {os.path.basename(path)}")
 					return True
 			except (OSError, IOError, sdl2.ext.SDLError):
@@ -451,8 +452,23 @@ class Editor:
 		self.tileWidth2 = 16
 
 
+		self.synced_tilesets = {} # Cache for received tilesets
+		self.stages_to_load_from_sync = []
+		self.active_stage_index_from_sync = 0
+
+		self.is_syncing = False # <-- ADD THIS FLAG
+
+		self.main_thread_queue = deque()
+		self.synced_tileset_data_raw = {} # Cache for raw image bytes
+		# --- THIS IS THE FIX: Add caches for stage data ---
+		self.synced_stage_data = {} # Caches raw stage data before processing
+		self.open_stages_info_from_sync = None
+
 		self.popups = [] # Each item will be [text, timer]
 		self.popup_lifetime = 180 # Frames (approx. 2 seconds)
+
+		self.no_game_loaded = True # <-- ADD THIS FLAG
+
 
 	def add_popup(self, text):
 		"""Adds a new popup message to be displayed."""
@@ -461,27 +477,30 @@ class Editor:
 		import export
 		export.export_stages(self)
 
-	def switch_game(self):
-		"""Cycles to the next game, clears state, and reloads assets."""
-		game_list = list(self.game_manager.games.keys())
-		current_game_name = self.game_manager.get_current_game().name
-		
-		try:
-			current_index = game_list.index(current_game_name)
-		except ValueError:
-			current_index = 0
-		
-		next_index = (current_index + 1) % len(game_list)
-		next_game_name = game_list[next_index]
+	def switch_game(self, game_name=None):
+		"""Cycles to the next game or switches to a specific one, clears state, and reloads assets."""
+		if not game_name:
+			# Cycle to the next game if no name is provided
+			game_list = list(self.game_manager.games.keys())
+			current_game_obj = self.game_manager.get_current_game()
+			current_game_name = current_game_obj.name if current_game_obj else game_list[0]
+			
+			try:
+				current_index = game_list.index(current_game_name)
+			except ValueError:
+				current_index = 0
+			
+			next_index = (current_index + 1) % len(game_list)
+			game_name = game_list[next_index]
 
-		print(f"--- Switching game to: {next_game_name.upper()} ---")
+		print(f"--- Switching game to: {game_name.upper()} ---")
 
 		# Clear all loaded stage data
 		self.stages.clear()
 		self.curStage = 0
 		
 		# Set the new game and update all global paths
-		setup_game_environment(next_game_name)
+		setup_game_environment(game_name)
 		
 		# Reload all game-specific assets and settings
 		interface.reload_game_surfaces()
@@ -490,6 +509,10 @@ class Editor:
 		
 		# Load the default stage for the new game
 		self.loadStage(defaultStage)
+
+		# The editor now has a game loaded
+		self.no_game_loaded = False
+
 	def readEntityInfo(self):
 		# This needs to use the game_manager to get the correct entity info file
 		current_game_config = self.game_manager.get_current_game()
@@ -567,7 +590,7 @@ class Editor:
 
 		print(f"Successfully loaded {len(self.stage_table)} entries from stage.tbl.")
 		return True
-		
+
 	def readBitsInfo(self):
 		"""Loads entity bit descriptions from the file specified in game_config.json."""
 		current_game_config = self.game_manager.get_current_game()
@@ -660,6 +683,11 @@ class Editor:
 			result = stage.load()
 			if result:
 				self.stages.append(stage)
+				# --- THIS IS THE FIX: Broadcast if host ---
+				if self.multiplayerState == const.MULTIPLAYER_HOST:
+					import multi
+					new_stage_index = len(self.stages) - 1
+					multi.server_broadcast_open_stage(self, stage, new_stage_index)
 			else:
 				del stage
 			return result
