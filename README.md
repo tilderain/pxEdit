@@ -30,3 +30,10 @@ Make sure not to edit the map before the other player joins. You'll have to load
 
 Undos and entity editing not supported.
 
+
+## Acknowledgements 
+
+Pixel- Graphics (editor base from pxStage, scrollbar)
+Folderplug- Gero Blaster/Star Frog's unittype.png and entityinfo, Window graphics (vignette)
+Milon Luxy- Rockfish's entityinfo and unittype.png adjustments
+Noxid- Booster's lab entityinfo
